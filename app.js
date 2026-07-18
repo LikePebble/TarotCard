@@ -3,6 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const dotenv = require("dotenv");
 const cardRoutes = require("./routes/cardRoutes");
+const readingRoutes = require("./routes/readingRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/tarotdeck", express.static("images"));
 
 app.use("/cards", cardRoutes);
+app.use("/readings", readingRoutes);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "demo.html"));

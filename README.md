@@ -42,6 +42,16 @@ curl http://localhost:3000/cards/onecard
 | `GET`  | `/cards`              | Returns the entire 78 card deck              |
 | `GET`  | `/cards/onecard`      | Returns a single random card                 |
 | `GET`  | `/tarotdeck/:image`   | Serves the card artwork (e.g. `thefool.jpeg`)|
+| `GET`  | `/readings/meta`      | Themes (연애/금전/직장 등) and spread types   |
+| `POST` | `/readings`           | Start a reading: shuffles a session deck (`{ theme, spread, kick? }`) |
+| `POST` | `/readings/:id/draw`  | Reveal the card the user picked from the face-down deck (`{ deckIndex }`) |
+| `GET`  | `/readings/:id`       | Full reading state (drawn cards + interpretations) |
+
+### Reading flow
+
+1. `POST /readings` with a theme (`general`, `love`, `money`, `career`, `study`, `health`, `relationship`) and a spread (`single` or `ppf` = past/present/future). Optional `kick` object is mixed into the shuffle seed.
+2. Show the user 78 face-down cards; for each pick, `POST /readings/:id/draw` with the chosen `deckIndex` (0–77).
+3. Each reveal returns the card, its orientation (upright/reversed), keywords, the general meaning, and the theme-specific interpretation. Card meanings include both the original A. E. Waite (1911) text and Korean interpretations.
 
 ### Example response
 
