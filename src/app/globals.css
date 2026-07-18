@@ -170,4 +170,178 @@ body {
     transition: none;
   }
 }
+
+/* Shuffle: cards gather into a center stack, slip out alternately left and
+   right, and reinsert. Pure CSS decoration; phase advance is timer-driven. */
+.draw-fan.is-shuffling .fan-card {
+  transform: translateX(-50%) translateY(calc(var(--shuf-i) * -2.5px));
+  animation: shuf-cycle 1.15s ease-in-out 2;
+  animation-delay: calc(var(--shuf-i) * 85ms);
+  transition: none;
+}
+@keyframes shuf-cycle {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(calc(var(--shuf-i) * -2.5px))
+      rotate(0deg);
+  }
+  22% {
+    transform: translateX(calc(-50% + var(--shuf-dir) * 96px))
+      translateY(-26px) rotate(calc(var(--shuf-dir) * 13deg));
+  }
+  46% {
+    transform: translateX(-50%) translateY(calc(var(--shuf-i) * -2.5px))
+      rotate(0deg);
+  }
+  68% {
+    transform: translateX(calc(-50% + var(--shuf-dir) * -70px))
+      translateY(-14px) rotate(calc(var(--shuf-dir) * -9deg));
+  }
+}
+
+/* Gacha pick: the chosen card rises while gold light gathers behind it.
+   Layers animate opacity/transform only; no per-frame shadows or filters. */
+.draw-fan .fan-card.charging {
+  --fan-lift: -56px;
+  scale: 1.07;
+  z-index: 5;
+  transition: translate 0.5s cubic-bezier(0.16, 1, 0.3, 1), scale 0.5s ease;
+}
+.draw-fan .fan-card.dimmed {
+  opacity: 0.1;
+  transition: opacity 0.4s ease;
+}
+.gacha-aura {
+  position: absolute;
+  inset: -42%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(224, 192, 120, 0.5),
+    rgba(201, 162, 75, 0.22) 48%,
+    transparent 72%
+  );
+  opacity: 0;
+  animation: aura-in 0.85s ease-out forwards;
+  pointer-events: none;
+}
+.gacha-aura.fast {
+  animation: aura-pulse 0.38s ease-out forwards;
+}
+.gacha-rays {
+  position: absolute;
+  inset: -70%;
+  z-index: -2;
+  background: repeating-conic-gradient(
+    rgba(224, 192, 120, 0.16) 0deg 7deg,
+    transparent 7deg 26deg
+  );
+  -webkit-mask-image: radial-gradient(closest-side, #000 26%, transparent 68%);
+  mask-image: radial-gradient(closest-side, #000 26%, transparent 68%);
+  opacity: 0;
+  will-change: transform;
+  animation: rays-spin 5.5s linear infinite, aura-in 0.85s ease-out forwards;
+  pointer-events: none;
+}
+.gacha-flash {
+  position: absolute;
+  inset: -34%;
+  z-index: 2;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 245, 220, 0.9),
+    rgba(224, 192, 120, 0.4) 55%,
+    transparent 75%
+  );
+  opacity: 0;
+  animation: flash-pop 0.75s ease-in forwards;
+  pointer-events: none;
+}
+.gacha-bloom {
+  position: absolute;
+  inset: -28%;
+  z-index: 2;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(224, 192, 120, 0.55),
+    transparent 70%
+  );
+  opacity: 0;
+  animation: bloom-pop 0.55s ease-out forwards;
+  animation-delay: var(--bloom-delay, 0s);
+  pointer-events: none;
+}
+@keyframes aura-in {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes aura-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  60% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+@keyframes rays-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes flash-pop {
+  0%,
+  78% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  88% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+@keyframes bloom-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  45% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .draw-fan.is-shuffling .fan-card {
+    animation: none;
+  }
+  .gacha-aura,
+  .gacha-rays,
+  .gacha-flash,
+  .gacha-bloom {
+    animation: none;
+    opacity: 0;
+  }
+}
 }

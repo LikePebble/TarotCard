@@ -21,7 +21,20 @@ import {
 const POSITIONS = ["과거", "현재", "미래"] as const;
 const FAN_SIZE = 7;
 
-type Phase = "picking" | "flipping" | "revealed";
+/*
+ * Choreography timings. Every phase transition is timer-driven; the CSS and
+ * Motion animations are decoration on top. rAF pauses in background tabs, so
+ * nothing in the flow may depend on an animation actually playing.
+ */
+const SHUFFLE_MS = 2400;
+const CHARGE_MS = 800; // gold light gathers on the chosen card
+const FLIP_MS = 700;
+const SETTLE_MS = 500; // pause on the revealed face before the panel
+const MINI_CHARGE_MS = 380; // three-card: quick pulse before the slot flight
+const ONE_WATCHDOG_MS = CHARGE_MS + FLIP_MS + SETTLE_MS + 700;
+const THREE_WATCHDOG_MS = MINI_CHARGE_MS + 450 + 1800 + 600 + 800;
+
+type Phase = "shuffling" | "picking" | "flipping" | "revealed";
 
 function shuffle(list: Card[]): Card[] {
   const next = [...list];
@@ -52,26 +65,52 @@ export default function DrawPage() {
   const [pickedFanIds, setPickedFanIds] = useState<number[]>([]);
   const [phase, setPhase] = useState<Phase>("picking");
   const [flippingFanId, setFlippingFanId] = useState<number | null>(null);
+  const [chosenFanId, setChosenFanId] = useState<number | null>(null);
   const [count, setCount] = useState<number | null>(null);
   const recordedRef = useRef(false);
   const watchdogRef = useRef<number | null>(null);
+  const timersRef = useRef<number[]>([]);
+  const reducedRef = useRef(false);
+
+  useEffect(() => {
+    reducedRef.current = !!reducedMotion;
+  }, [reducedMotion]);
+
+  const later = useCallback((ms: number, fn: () => void) => {
+    timersRef.current.push(window.setTimeout(fn, ms));
+  }, []);
+
+  const clearTimers = useCallback(() => {
+    for (const id of timersRef.current) window.clearTimeout(id);
+    timersRef.current = [];
+  }, []);
 
   const setup = useCallback(() => {
+    clearTimers();
     setDeck(shuffle(cards));
     setFan(Array.from({ length: FAN_SIZE }, (_, i) => i));
     setPickedFanIds([]);
-    setPhase("picking");
     setFlippingFanId(null);
+    setChosenFanId(null);
     setCount(null);
     recordedRef.current = false;
     if (watchdogRef.current !== null) {
       window.clearTimeout(watchdogRef.current);
       watchdogRef.current = null;
     }
-  }, []);
+    if (reducedRef.current) {
+      setPhase("picking");
+      return;
+    }
+    setPhase("shuffling");
+    later(SHUFFLE_MS, () =>
+      setPhase((p) => (p === "shuffling" ? "picking" : p)),
+    );
+  }, [clearTimers, later]);
 
   useEffect(
     () => () => {
+      for (const id of timersRef.current) window.clearTimeout(id);
       if (watchdogRef.current !== null) window.clearTimeout(watchdogRef.current);
     },
     [],
@@ -115,39 +154,66 @@ export default function DrawPage() {
     [record],
   );
 
+  const skipShuffle = () => {
+    if (phase !== "shuffling") return;
+    clearTimers();
+    setPhase("picking");
+  };
+
   const need = spread === "one" ? 1 : 3;
   const picked = deck.slice(0, pickedFanIds.length);
 
   const pick = (fanId: number) => {
-    if (phase !== "picking" || pickedFanIds.length >= need) return;
-    const nextPicked = [...pickedFanIds, fanId];
-    setPickedFanIds(nextPicked);
+    if (
+      phase !== "picking" ||
+      chosenFanId !== null ||
+      pickedFanIds.length >= need
+    ) {
+      return;
+    }
     if (spread === "one") {
       const slug = deck[0].slug;
+      setPickedFanIds([fanId]);
       if (reducedMotion) {
         record([slug], spread, focus);
         setPhase("revealed");
-      } else {
+        return;
+      }
+      // Gacha buildup: light gathers on the card, then flash, then flip.
+      setChosenFanId(fanId);
+      armRevealWatchdog([slug], spread, focus, ONE_WATCHDOG_MS);
+      later(CHARGE_MS, () => {
         setFlippingFanId(fanId);
         setPhase("flipping");
-        armRevealWatchdog([slug], spread, focus, 2000);
+      });
+      return;
+    }
+    if (reducedMotion) {
+      const nextPicked = [...pickedFanIds, fanId];
+      setPickedFanIds(nextPicked);
+      setFan((current) => current.filter((id) => id !== fanId));
+      if (nextPicked.length === 3) {
+        record(deck.slice(0, 3).map((c) => c.slug), spread, focus);
+        setPhase("revealed");
       }
       return;
     }
-    setFan((current) => current.filter((id) => id !== fanId));
-    if (nextPicked.length === 3) {
-      const slugs = deck.slice(0, 3).map((c) => c.slug);
-      if (reducedMotion) {
-        record(slugs, spread, focus);
-        setPhase("revealed");
-      } else {
-        window.setTimeout(() => {
+    // Quick pulse on the tapped card, then it flies to its slot.
+    setChosenFanId(fanId);
+    later(MINI_CHARGE_MS, () => {
+      setChosenFanId(null);
+      const nextPicked = [...pickedFanIds, fanId];
+      setPickedFanIds(nextPicked);
+      setFan((current) => current.filter((id) => id !== fanId));
+      if (nextPicked.length === 3) {
+        const slugs = deck.slice(0, 3).map((c) => c.slug);
+        armRevealWatchdog(slugs, spread, focus, THREE_WATCHDOG_MS);
+        later(450, () => {
           record(slugs, spread, focus);
           setPhase("flipping");
-          armRevealWatchdog(slugs, spread, focus, 3400);
-        }, 450);
+        });
       }
-    }
+    });
   };
 
   const onOneCardFlipDone = () => {
@@ -194,17 +260,23 @@ export default function DrawPage() {
       )}
 
       {phase !== "revealed" ? (
-          <main className="flex flex-1 flex-col pb-6 pt-3 text-center lg:pt-14">
+          <main
+            className="flex flex-1 flex-col pb-6 pt-3 text-center lg:pt-14"
+            onPointerDown={skipShuffle}
+          >
             <p className="px-6 text-[13px] text-muted lg:text-[14px]">
               {spreadLabel}{" "}
               <b className="font-medium text-gold">{focus}</b>
             </p>
             <h1 className="mt-1.5 px-6 font-serif text-[27px] font-semibold leading-[1.35] lg:text-[40px]">
-              {phase === "flipping"
-                ? "카드를 공개합니다"
-                : spread === "three" && pickedFanIds.length > 0
-                  ? "한 장 더 고르세요"
-                  : "마음이 가는 카드를 고르세요"}
+              {phase === "shuffling"
+                ? "카드를 섞고 있습니다"
+                : phase === "flipping" ||
+                    (spread === "one" && chosenFanId !== null)
+                  ? "카드를 공개합니다"
+                  : spread === "three" && pickedFanIds.length > 0
+                    ? "한 장 더 고르세요"
+                    : "마음이 가는 카드를 고르세요"}
             </h1>
 
             {spread === "three" ? (
@@ -220,8 +292,32 @@ export default function DrawPage() {
                               ? undefined
                               : `fan-card-${pickedFanIds[i]}`
                           }
-                          className="aspect-[2/3.4] [perspective:700px]"
+                          className="relative aspect-[2/3.4] [perspective:700px]"
                         >
+                          {!reducedMotion ? (
+                            <span
+                              aria-hidden
+                              key={`land-${card.slug}`}
+                              className="gacha-bloom"
+                              style={
+                                {
+                                  "--bloom-delay": "0.3s",
+                                } as React.CSSProperties
+                              }
+                            />
+                          ) : null}
+                          {!reducedMotion && phase === "flipping" ? (
+                            <span
+                              aria-hidden
+                              key={`flip-${card.slug}`}
+                              className="gacha-bloom"
+                              style={
+                                {
+                                  "--bloom-delay": `${i * 0.55}s`,
+                                } as React.CSSProperties
+                              }
+                            />
+                          ) : null}
                           <motion.div
                             className="relative h-full w-full [transform-style:preserve-3d]"
                             animate={{
@@ -266,12 +362,20 @@ export default function DrawPage() {
             <div
               className={`draw-fan mt-2.5 flex-1 overflow-hidden ${
                 spread === "three" ? "min-h-[300px]" : "min-h-[380px]"
-              } lg:h-[430px] lg:min-h-0 lg:flex-none lg:overflow-visible`}
+              } lg:h-[430px] lg:min-h-0 lg:flex-none lg:overflow-visible ${
+                phase === "shuffling" ? "is-shuffling" : ""
+              }`}
             >
               {fan.map((fanId, i) => {
                 const offset = i - (fan.length - 1) / 2;
-                const lifted = offset === 0;
+                const lifted = offset === 0 && phase !== "shuffling";
                 const isFlipping = flippingFanId === fanId;
+                const isChosen = chosenFanId === fanId;
+                const dimmed =
+                  spread === "one" &&
+                  (chosenFanId !== null || phase === "flipping") &&
+                  !isChosen &&
+                  !isFlipping;
                 return (
                   <motion.button
                     key={fanId}
@@ -282,18 +386,36 @@ export default function DrawPage() {
                         : undefined
                     }
                     onClick={() => pick(fanId)}
-                    disabled={phase !== "picking"}
+                    disabled={phase !== "picking" || chosenFanId !== null}
                     aria-label={`덮인 카드 ${i + 1}`}
-                    animate={
-                      phase === "flipping" && spread === "one" && !isFlipping
-                        ? { opacity: 0.12 }
-                        : { opacity: 1 }
-                    }
                     className={`fan-card aspect-[2/3.4] ${
                       spread === "three" ? "w-[100px]" : "w-28"
-                    } lg:w-[170px] ${lifted ? "lifted" : ""}`}
-                    style={{ "--fan-i": offset } as React.CSSProperties}
+                    } lg:w-[170px] ${lifted ? "lifted" : ""} ${
+                      isChosen && spread === "one" ? "charging" : ""
+                    } ${dimmed ? "dimmed" : ""}`}
+                    style={
+                      {
+                        "--fan-i": offset,
+                        "--shuf-i": i,
+                        "--shuf-dir": i % 2 === 0 ? 1 : -1,
+                      } as React.CSSProperties
+                    }
                   >
+                    {!reducedMotion && (isChosen || isFlipping) ? (
+                      <span aria-hidden>
+                        {spread === "one" ? (
+                          <span className="gacha-rays" />
+                        ) : null}
+                        <span
+                          className={`gacha-aura ${
+                            spread === "three" ? "fast" : ""
+                          }`}
+                        />
+                        {spread === "one" ? (
+                          <span className="gacha-flash" />
+                        ) : null}
+                      </span>
+                    ) : null}
                     <div className="h-full w-full [perspective:700px]">
                       <motion.div
                         className="relative h-full w-full [transform-style:preserve-3d]"
@@ -326,9 +448,11 @@ export default function DrawPage() {
               })}
             </div>
             <p className="px-6 text-[13px] text-muted lg:hidden">
-              {spread === "three"
-                ? "고른 카드는 슬롯으로 이동합니다"
-                : "카드를 눌러 뒤집습니다"}
+              {phase === "shuffling"
+                ? "화면을 누르면 건너뜁니다"
+                : spread === "three"
+                  ? "고른 카드는 슬롯으로 이동합니다"
+                  : "카드를 눌러 뒤집습니다"}
             </p>
           </main>
         ) : spread === "one" ? (
