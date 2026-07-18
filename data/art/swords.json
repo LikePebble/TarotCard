@@ -1,0 +1,218 @@
+{
+  "ace-of-swords": {
+    "title": { "ko": "소드 에이스", "en": "Ace of Swords" },
+    "essence": "혼란을 단숨에 가르는 명료한 진실의 힘",
+    "scene": "구름 사이에서 뻗어 나온 손이 한 자루의 검을 하늘을 향해 곧게 치켜들고 있다. 검 끝은 황금 왕관을 꿰뚫고, 왕관에는 월계수 가지와 올리브 가지가 드리워져 있다. 검날 주위로 작은 금빛 불꽃이 흩날리고, 저 아래로는 험준한 산맥이 아득하게 펼쳐진다.",
+    "symbols": [
+      "구름에서 나온 손",
+      "곧게 선 검 한 자루",
+      "검 끝에 꿰인 황금 왕관",
+      "왕관에 드리운 월계수·올리브 가지",
+      "흩날리는 금빛 불꽃",
+      "저 멀리 험준한 산맥"
+    ],
+    "mood": "차고 맑은 긴장감, 새벽의 예리한 첫 빛",
+    "palette": "차가운 청회색 하늘에 강철빛 은색, 왕관의 금색 포인트",
+    "promptEn": "A hand emerging from a cloud holding a single upright sword, its tip piercing a golden crown draped with laurel and olive branches, small golden sparks drifting around the blade, rugged mountains far below, crisp clear air of a sharp cold dawn, centered subject, vertical card composition, {STYLE}"
+  },
+  "two-of-swords": {
+    "title": { "ko": "소드 2", "en": "Two of Swords" },
+    "essence": "눈을 가린 채 지키는 위태로운 균형",
+    "scene": "주인공 캐릭터가 눈가리개를 한 채 밤바다를 등지고 돌 벤치에 앉아 있다. 가슴 앞에 팔을 엇갈려 두 자루의 검을 서로 반대 방향으로 비껴 들고, 미동도 없이 균형을 지킨다. 등 뒤 잔잔한 바다에는 바위섬들이 떠 있고 하늘에는 가는 초승달이 걸려 있다.",
+    "symbols": [
+      "눈가리개를 한 주인공 캐릭터",
+      "가슴 앞에 엇갈려 든 검 두 자루",
+      "등 뒤의 잔잔한 밤바다",
+      "물 위의 바위섬들",
+      "가는 초승달"
+    ],
+    "mood": "숨을 죽인 정적과 팽팽한 긴장, 서늘한 달밤",
+    "palette": "짙은 남색과 청회색, 달빛의 창백한 은백색",
+    "promptEn": "The main character seated blindfolded on a stone bench with their back to a calm night sea, arms crossed over the chest holding exactly two long swords angled in opposite directions, rocky islets dotting the dark water behind, a thin crescent moon above, tense breathless stillness under cool moonlight, centered subject, vertical card composition, {STYLE}"
+  },
+  "three-of-swords": {
+    "title": { "ko": "소드 3", "en": "Three of Swords" },
+    "essence": "마음을 관통하는 아픔과 피할 수 없는 진실",
+    "scene": "폭풍이 몰려온 잿빛 하늘 한가운데에 커다란 상징적 심장 도상이 떠 있다. 세 자루의 검이 그 심장을 위에서 아래로 깨끗하게 관통하고 있으며, 피는 전혀 보이지 않는다. 주위의 짙은 먹구름에서 곧은 빗줄기가 화면 가득 내리꽂힌다.",
+    "symbols": [
+      "상징적 심장 도상 (유혈 없음)",
+      "심장을 관통한 검 세 자루",
+      "짙은 먹구름",
+      "곧게 내리꽂히는 빗줄기",
+      "잿빛 폭풍 하늘"
+    ],
+    "mood": "정화하듯 쏟아지는 슬픔, 비에 씻긴 흐린 낮",
+    "palette": "잿빛과 짙은 청회색, 심장의 깊고 차분한 붉은색",
+    "promptEn": "A large symbolic heart shape floating at the center of a stormy gray sky, pierced cleanly from above by exactly three straight swords, no blood, heavy rain falling in straight lines from dense dark clouds surrounding it, sorrowful cleansing atmosphere in dim rain-washed daylight, centered subject, vertical card composition, {STYLE}"
+  },
+  "four-of-swords": {
+    "title": { "ko": "소드 4", "en": "Four of Swords" },
+    "essence": "다음 장을 위한 고요한 휴식과 재정비",
+    "scene": "주인공 캐릭터가 조용한 예배당 안 돌 벤치 위에 두 손을 가슴에 모은 채 평온하게 누워 쉬고 있다. 머리맡 벽에는 정확히 세 자루의 검이 가로로 걸려 있고, 벤치 아래에는 한 자루의 검이 나란히 놓여 있다. 스테인드글라스 창으로 부드러운 색색의 빛이 스며들어 캐릭터를 감싼다.",
+    "symbols": [
+      "돌 벤치 위에 평온하게 누운 주인공 캐릭터",
+      "가슴에 모은 두 손",
+      "벽에 걸린 검 세 자루",
+      "벤치 아래 놓인 검 한 자루",
+      "빛이 스며드는 스테인드글라스 창"
+    ],
+    "mood": "회복의 깊은 정적, 어스름한 실내에 스민 온화한 빛",
+    "palette": "차분한 회청색 석조 톤에 스테인드글라스의 은은한 색빛",
+    "promptEn": "The main character lying in peaceful rest on a stone bench inside a quiet chapel, hands folded over the chest, exactly three swords hanging horizontally on the wall above and one sword resting lengthwise beneath the bench, soft colored light streaming from a glowing stained-glass window, serene hush of deep recovery in dim tranquil interior light, centered subject, vertical card composition, {STYLE}"
+  },
+  "five-of-swords": {
+    "title": { "ko": "소드 5", "en": "Five of Swords" },
+    "essence": "이겨도 남는 것 없는 상처뿐인 승리",
+    "scene": "주인공 캐릭터가 화면 앞쪽에서 의기양양한 곁눈질로 정확히 세 자루의 검을 품에 그러모으고 있다. 발치에는 두 자루의 검이 버려진 채 놓여 있고, 저만치 두 인물이 어깨를 늘어뜨리고 거친 물가 쪽으로 걸어간다. 하늘에는 들쭉날쭉한 조각구름이 바람에 찢기며 흘러간다.",
+    "symbols": [
+      "검 세 자루를 그러모은 주인공 캐릭터",
+      "땅에 버려진 검 두 자루",
+      "등을 돌리고 떠나는 두 인물",
+      "바람에 찢긴 들쭉날쭉한 구름",
+      "거친 물가"
+    ],
+    "mood": "승리 뒤의 공허한 뒷맛, 차고 세찬 바람의 낮",
+    "palette": "탁한 청록색 하늘과 회갈색 땅, 서늘한 강철빛",
+    "promptEn": "The main character standing in the foreground with a sly sidelong glance, gathering exactly three swords into their arms while exactly two more swords lie abandoned on the ground, two dejected figures walking away toward a rough shoreline, jagged wind-torn clouds racing overhead, hollow aftermath of a quarrel in cold gusty daylight, centered subject, vertical card composition, {STYLE}"
+  },
+  "six-of-swords": {
+    "title": { "ko": "소드 6", "en": "Six of Swords" },
+    "essence": "험한 물을 뒤로하고 건너가는 조용한 전환",
+    "scene": "주인공 캐릭터가 작은 나룻배의 고물에 서서 삿대를 밀며 거친 물을 뒤로하고 잔잔한 건너편 기슭으로 나아간다. 뱃머리에는 망토를 두른 동행자가 웅크리고 앉아 있고, 배 안에는 정확히 여섯 자루의 검이 곧게 꽂혀 있다. 앞쪽 수면은 매끄럽고, 멀리 안개 낀 기슭이 어렴풋이 보인다.",
+    "symbols": [
+      "삿대를 미는 주인공 캐릭터",
+      "웅크린 동행자",
+      "배 안에 꽂힌 검 여섯 자루",
+      "뒤쪽의 거친 물과 앞쪽의 잔잔한 물",
+      "멀리 보이는 건너편 기슭"
+    ],
+    "mood": "쓸쓸하지만 안도가 스미는 이행, 안개 낀 이른 아침",
+    "palette": "부드러운 회청색과 안개빛 은회색, 물빛 청색",
+    "promptEn": "The main character standing at the stern of a small wooden boat, poling it away from rough water toward a calm far shore, a cloaked passenger sitting huddled in the bow, exactly six swords standing upright inside the boat, smooth gray water ahead and misty banks in the distance, gentle melancholy relief in early morning haze, centered subject, vertical card composition, {STYLE}"
+  },
+  "seven-of-swords": {
+    "title": { "ko": "소드 7", "en": "Seven of Swords" },
+    "essence": "정면 대신 우회를 택한 위태로운 지략",
+    "scene": "주인공 캐릭터가 진영의 천막들을 등지고 발끝으로 살금살금 빠져나가며 어깨 너머를 흘끔 돌아본다. 두 팔에는 정확히 다섯 자루의 검을 어설프게 끌어안았고, 등 뒤 땅에는 두 자루의 검이 그대로 꽂혀 남아 있다. 멀리 천막 위 깃발들이 바람에 나부낀다.",
+    "symbols": [
+      "발끝으로 빠져나가는 주인공 캐릭터",
+      "품에 안은 검 다섯 자루",
+      "땅에 남겨진 검 두 자루",
+      "뒤쪽의 천막 진영",
+      "나부끼는 깃발",
+      "어깨 너머로 돌아보는 시선"
+    ],
+    "mood": "들킬 듯 말 듯한 긴장과 능청, 노르스름한 늦은 오후",
+    "palette": "모래빛 황토색 바탕에 서늘한 강철 회색 대비",
+    "promptEn": "The main character tiptoeing away from a cluster of camp tents, glancing back over one shoulder, carrying exactly five swords bundled awkwardly in both arms while exactly two swords remain planted upright in the ground behind, banners fluttering above the distant tents, sly suspenseful mischief in warm late-afternoon light, centered subject, vertical card composition, {STYLE}"
+  },
+  "eight-of-swords": {
+    "title": { "ko": "소드 8", "en": "Eight of Swords" },
+    "essence": "스스로 만든 생각의 감옥과 가까운 출구",
+    "scene": "주인공 캐릭터가 눈가리개를 하고 몸에 느슨하게 감긴 끈에 묶인 채 습지 위에 홀로 서 있다. 주위에는 정확히 여덟 자루의 검이 울타리처럼 땅에 꽂혀 캐릭터를 에워싸지만, 앞쪽으로는 빠져나갈 틈이 열려 있다. 발치의 얕은 물웅덩이가 잿빛 하늘을 비추고, 멀리 절벽 위 성이 보인다.",
+    "symbols": [
+      "눈가리개와 느슨한 결박의 주인공 캐릭터",
+      "울타리처럼 꽂힌 검 여덟 자루",
+      "앞쪽으로 열린 틈",
+      "얕은 물웅덩이가 있는 습지",
+      "멀리 절벽 위의 성"
+    ],
+    "mood": "갇힌 듯하나 풀릴 듯한 긴장, 잿빛으로 흐린 낮",
+    "palette": "흐린 회색과 습지의 청회색, 붉은 기 도는 결박 끈 포인트",
+    "promptEn": "The main character standing loosely bound and blindfolded in a marshy field, encircled by exactly eight swords planted upright in the ground like a fence with an open gap in front, shallow puddles reflecting a gray sky, a castle on a distant cliff behind, trapped yet quietly hopeful tension in overcast muted daylight, centered subject, vertical card composition, {STYLE}"
+  },
+  "nine-of-swords": {
+    "title": { "ko": "소드 9", "en": "Nine of Swords" },
+    "essence": "밤이 깊을수록 부풀어 오르는 걱정",
+    "scene": "주인공 캐릭터가 한밤중 침대에서 상체를 일으켜 두 손에 얼굴을 파묻고 있다. 등 뒤 어두운 벽에는 정확히 아홉 자루의 검이 가로로 나란히 걸려 있고, 무릎 위에는 장미 무늬 조각보 이불이 덮여 있다. 창가에는 새벽이 다가오는 희미한 첫 빛이 어른거린다.",
+    "symbols": [
+      "얼굴을 감싼 채 침대에 일어나 앉은 주인공 캐릭터",
+      "벽에 가로로 걸린 검 아홉 자루",
+      "장미 무늬 조각보 이불",
+      "깊은 밤의 어두운 방",
+      "창가의 희미한 새벽빛"
+    ],
+    "mood": "잠 못 드는 불안이 새벽으로 풀려 가는 시간, 깊은 밤",
+    "palette": "먹빛에 가까운 짙은 남색, 이불의 장미색과 새벽의 옅은 청빛",
+    "promptEn": "The main character sitting upright in bed in the middle of the night, face buried in both hands, exactly nine swords hanging horizontally on the dark wall behind, a quilt patterned with roses draped over the legs, a faint pale glow of approaching dawn at the window, heavy sleepless anxiety easing toward morning in deep night darkness, centered subject, vertical card composition, {STYLE}"
+  },
+  "ten-of-swords": {
+    "title": { "ko": "소드 10", "en": "Ten of Swords" },
+    "essence": "바닥에 닿은 끝, 그 너머로 밝아 오는 새벽",
+    "scene": "주인공 캐릭터가 밤이 끝나 가는 물가에 엎드려 미동 없이 누워 있고, 등을 따라 정확히 열 자루의 검이 상징적인 짐처럼 가지런히 꽂혀 있다. 상처나 피는 전혀 보이지 않는다. 눈앞의 바다는 잔잔하고, 수평선에서는 황금빛 새벽이 터져 나와 낮게 깔린 구름을 물들이기 시작한다.",
+    "symbols": [
+      "엎드려 누운 주인공 캐릭터 (유혈 없음)",
+      "등을 따라 꽂힌 검 열 자루",
+      "잔잔한 바다",
+      "수평선의 황금빛 새벽",
+      "새벽빛에 물드는 낮은 구름"
+    ],
+    "mood": "장엄한 끝맺음에 스미는 조용한 희망, 동트기 직전",
+    "palette": "검은 밤빛에서 수평선의 금색·주황으로 번지는 그러데이션",
+    "promptEn": "The main character lying face-down and still at the water's edge as night ends, exactly ten swords standing in a neat row along their back like a symbolic burden, no wound and no blood, a calm sea beyond, golden dawn breaking across the horizon and coloring the low clouds, solemn ending touched by quiet hope in the first light of daybreak, centered subject, vertical card composition, {STYLE}"
+  },
+  "page-of-swords": {
+    "title": { "ko": "소드 시종", "en": "Page of Swords" },
+    "essence": "진실을 캐묻는 날쌘 호기심의 시선",
+    "scene": "주인공 캐릭터가 젊은 관찰자의 원형으로, 바람 부는 언덕 위에 서서 한 자루의 검을 두 손으로 비스듬히 세워 들고 있다. 머리카락과 옷자락이 세찬 바람에 나부끼는 가운데 시선은 경계하듯 옆쪽 먼 곳을 살핀다. 하늘에는 빠르게 흐르는 구름과 멀리 새 떼가 날고, 언덕 아래 나무들이 바람에 휘어 있다.",
+    "symbols": [
+      "언덕 위에 선 젊은 관찰자 원형의 주인공 캐릭터",
+      "두 손으로 세워 든 검 한 자루",
+      "옆을 살피는 경계의 시선",
+      "세찬 바람에 나부끼는 머리카락과 옷자락",
+      "빠르게 흐르는 구름과 새 떼",
+      "바람에 휜 나무들"
+    ],
+    "mood": "예리하고 재빠른 호기심, 바람 세찬 맑은 낮",
+    "palette": "청명한 하늘색과 연둣빛 언덕, 강철빛 은색",
+    "promptEn": "The main character as a youthful watcher standing on a windswept hill, holding a single sword upright in both hands while glancing alertly to one side, hair and clothes streaming in a strong wind, fast-moving clouds and a distant flock of birds overhead, wind-bent trees below, keen curious energy in bright breezy daylight, centered subject, vertical card composition, {STYLE}"
+  },
+  "knight-of-swords": {
+    "title": { "ko": "소드 기사", "en": "Knight of Swords" },
+    "essence": "확신을 향해 바람처럼 내달리는 추진력",
+    "scene": "주인공 캐릭터가 돌진하는 기사의 원형으로, 전력으로 질주하는 탈것 위에서 몸을 앞으로 기울인 채 한 자루의 검을 높이 치켜들고 있다. 망토가 바람에 길게 휘날리고, 하늘에는 폭풍 구름과 흩어지는 새들이 빠르게 스쳐 간다. 지상의 나무들도 바람에 세차게 휘어 속도감을 더한다.",
+    "symbols": [
+      "질주하는 탈것 위의 기사 원형 주인공 캐릭터",
+      "높이 치켜든 검 한 자루",
+      "앞으로 기운 자세와 휘날리는 망토",
+      "폭풍 구름",
+      "흩어지는 새들",
+      "바람에 휜 나무들"
+    ],
+    "mood": "멈출 수 없는 맹렬한 기세, 폭풍 전의 거센 낮",
+    "palette": "폭풍의 회청색 하늘에 은백색 섬광, 차가운 강철빛",
+    "promptEn": "The main character as a charging knight galloping at full speed on a swift mount, leaning forward with a single sword raised high, cloak streaming behind in the wind, storm clouds and scattered birds racing across the sky, wind-whipped trees along the ground below, fierce unstoppable momentum in turbulent cool daylight, centered subject, vertical card composition, {STYLE}"
+  },
+  "queen-of-swords": {
+    "title": { "ko": "소드 여왕", "en": "Queen of Swords" },
+    "essence": "슬픔을 통과해 단단해진 명철한 시선",
+    "scene": "주인공 캐릭터가 명철한 여왕의 원형으로, 나비 문양이 새겨진 돌 왕좌에 옆모습으로 앉아 있다. 한 손에는 검 한 자루를 곧게 세워 들고, 다른 손은 앞을 향해 활짝 펴서 진실을 맞이하듯 내밀고 있다. 왕좌 아래에는 낮은 구름이 깔려 있고, 맑은 하늘 높이 새 한 마리가 날고 있다.",
+    "symbols": [
+      "왕좌에 앉은 여왕 원형의 주인공 캐릭터",
+      "곧게 세워 든 검 한 자루",
+      "앞으로 내민 펼친 손",
+      "나비 문양이 새겨진 돌 왕좌",
+      "왕좌 아래의 낮은 구름",
+      "높이 나는 새 한 마리"
+    ],
+    "mood": "단호하지만 맑은 위엄, 서늘하고 청명한 오후",
+    "palette": "옅은 하늘색과 흰 구름빛, 차분한 은회색과 청보라",
+    "promptEn": "The main character as a stern clear-eyed queen seated in profile on a stone throne carved with butterflies, holding a single sword upright in one hand and extending the other hand open as if welcoming the truth, low clouds gathered beneath the throne, a single bird flying high in a clear sky, composed honest authority in cool crisp afternoon light, centered subject, vertical card composition, {STYLE}"
+  },
+  "king-of-swords": {
+    "title": { "ko": "소드 왕", "en": "King of Swords" },
+    "essence": "이성과 원칙으로 다스리는 공정한 판단",
+    "scene": "주인공 캐릭터가 위엄 있는 왕의 원형으로, 나비 문양이 새겨진 높은 돌 왕좌에 정면을 향해 앉아 있다. 한 손에는 검 한 자루를 곧게 세우되 살짝 기울여 들었고, 다른 손은 팔걸이 위에 고요히 얹혀 있다. 등 뒤 맑고 푸른 하늘에는 구름 몇 점과 새 두 마리가 높이 떠 있다.",
+    "symbols": [
+      "정면으로 앉은 왕 원형의 주인공 캐릭터",
+      "살짝 기울여 세워 든 검 한 자루",
+      "나비 문양이 새겨진 높은 돌 왕좌",
+      "팔걸이에 얹은 고요한 손",
+      "맑은 하늘의 새 두 마리",
+      "구름 몇 점"
+    ],
+    "mood": "흔들림 없는 공정한 위엄, 맑고 고요한 한낮",
+    "palette": "깊은 청색과 회청색 기조, 왕좌의 차분한 석회색",
+    "promptEn": "The main character as a resolute king seated squarely and facing forward on a high stone throne carved with butterflies, holding a single sword upright with a slight tilt in one hand, the other hand resting calmly on the armrest, two birds high in a clear blue sky with a few drifting clouds behind, stern fair judgment in clear steady daylight, centered subject, vertical card composition, {STYLE}"
+  }
+}
