@@ -1,0 +1,128 @@
+{
+  "ace-of-wands": {
+    "title": { "ko": "완드 에이스", "en": "Ace of Wands" },
+    "essence": "새 열정이 움트는 창조의 첫 불씨",
+    "scene": "화면 중앙, 구름 사이로 내민 손이 잎이 돋아난 살아 있는 나무 지팡이 하나를 힘 있게 움켜쥐고 있다. 지팡이에서 갓 돋은 잎사귀 몇 장이 주위로 흩날리고, 아래로는 강이 흐르는 들판과 멀리 언덕 위의 성이 보인다. 하늘은 위쪽에, 대지는 아래쪽에 두어 지팡이가 화면 세로 중앙을 곧게 가로지른다.",
+    "symbols": ["구름에서 나온 손", "잎이 돋아난 완드 정확히 1개", "흩날리는 새잎", "강이 흐르는 들판", "멀리 보이는 성"],
+    "mood": "영감이 번쩍이는 순간, 맑고 환한 대낮의 빛",
+    "palette": "생명력 있는 초록 새잎에 따뜻한 주황·금빛 하늘",
+    "promptEn": "A hand emerging from a soft cloud, firmly gripping exactly one living wooden wand with fresh green leaves sprouting from it, a few small leaves drifting in the air, a river valley and a distant castle on a hill below, bright clear daylight full of inspiration, centered subject, vertical card composition, {STYLE}"
+  },
+  "two-of-wands": {
+    "title": { "ko": "완드 2", "en": "Two of Wands" },
+    "essence": "이룬 것 위에서 더 넓은 세계를 그리는 전망",
+    "scene": "주인공 캐릭터가 성의 옥상 난간에 서서 한 손에 작은 지구본을 들고 먼 바다와 산맥을 내려다본다. 다른 손은 잎이 돋은 나무 지팡이 하나를 짚고 있으며, 또 하나의 지팡이는 난간 옆 벽에 고정되어 서 있다. 화면에는 완드가 정확히 두 개만 보이고, 위쪽은 넓은 하늘, 아래쪽은 성벽과 풍경이 받친다.",
+    "symbols": ["완드 정확히 2개(하나는 손에, 하나는 벽에 고정)", "손에 든 지구본", "성의 옥상 난간", "내려다보이는 바다와 먼 풍경"],
+    "mood": "야망과 미묘한 갈망이 교차하는 고요한 늦은 오후",
+    "palette": "잿빛 석조에 붉은 노을 기운, 바다의 짙은 청록 대비",
+    "promptEn": "The main character standing on a castle rooftop, holding a small globe in one hand and gripping one leafy living wooden wand, a second wand fixed upright against the parapet beside them, exactly two wands in the scene, gazing out over a distant sea and mountains, quiet contemplative late afternoon light of ambition and longing, centered subject, vertical card composition, {STYLE}"
+  },
+  "three-of-wands": {
+    "title": { "ko": "완드 3", "en": "Three of Wands" },
+    "essence": "노력의 결실이 배처럼 돌아오는 확장의 조짐",
+    "scene": "주인공 캐릭터가 언덕 꼭대기에서 등을 보인 채 서서 황금빛 바다를 항해하는 배들을 바라본다. 한 손은 잎이 돋은 나무 지팡이 하나를 잡고 있고, 나머지 두 개의 지팡이는 좌우 땅에 곧게 꽂혀 캐릭터를 감싼다. 화면에 완드는 정확히 세 개이며, 위쪽 하늘과 아래쪽 언덕 사면이 여백을 이룬다.",
+    "symbols": ["완드 정확히 3개(하나는 손에, 둘은 땅에)", "등을 보이고 선 캐릭터", "언덕 꼭대기", "바다 위의 배들", "넓은 수평선"],
+    "mood": "기대에 찬 차분한 응시, 황금빛으로 물든 이른 아침 바다",
+    "palette": "황금·주황의 바다와 하늘, 따뜻한 갈색 언덕",
+    "promptEn": "The main character seen from behind, standing on a hilltop and holding one living wooden wand while exactly two more leafy wands stand planted in the ground beside them, exactly three wands total, watching ships sailing across a golden sea toward the wide horizon, calm expectant golden morning light, centered subject, vertical card composition, {STYLE}"
+  },
+  "four-of-wands": {
+    "title": { "ko": "완드 4", "en": "Four of Wands" },
+    "essence": "결실을 함께 나누는 축하와 안식의 터전",
+    "scene": "잎이 돋은 네 개의 나무 지팡이가 땅에 곧게 세워져 있고, 그 위에 꽃과 과일로 엮은 화환이 걸려 작은 문처럼 서 있다. 그 아래에서 주인공 캐릭터가 꽃다발을 높이 들어 올리며 기쁘게 맞이하고, 뒤로는 안정된 성채와 축제 분위기의 사람들이 보인다. 완드는 정확히 네 개이며 화환 구조물이 화면 중앙을 차지한다.",
+    "symbols": ["완드 정확히 4개(기둥처럼 세워짐)", "꽃과 과일 화환", "꽃다발을 든 캐릭터", "축제 분위기", "뒤편의 안정된 성채"],
+    "mood": "환영과 화합의 기쁨, 맑고 따뜻한 한낮",
+    "palette": "노랑·주황의 축제빛에 화환의 초록과 꽃색 포인트",
+    "promptEn": "Exactly four living wooden wands standing upright like pillars, crowned with a welcoming garland of flowers and fruit, the main character beneath the garland joyfully raising a bouquet in celebration, a festive gathering and a stable castle in the background, warm bright midday light of homecoming and harmony, centered subject, vertical card composition, {STYLE}"
+  },
+  "five-of-wands": {
+    "title": { "ko": "완드 5", "en": "Five of Wands" },
+    "essence": "서로 다른 열정이 부딪히는 경쟁의 소란",
+    "scene": "다섯 명의 캐릭터가 탁 트인 언덕 위에서 각자 잎이 돋은 나무 지팡이를 하나씩 치켜들고 뒤엉켜 겨루고 있다. 지팡이들은 공중에서 어지럽게 엇갈리지만 누구도 다치지 않는, 힘겨루기 놀이 같은 소란이다. 완드는 정확히 다섯 개이며 인물들의 몸짓이 화면 중앙에 모여 역동적인 덩어리를 이룬다.",
+    "symbols": ["완드 정확히 5개(각자 하나씩)", "다섯 캐릭터의 뒤엉킨 겨루기", "공중에서 엇갈리는 지팡이", "탁 트인 언덕"],
+    "mood": "소란스럽지만 악의 없는 활기, 쨍한 대낮의 빛",
+    "palette": "선명한 원색 대비, 흙빛 언덕과 파란 하늘",
+    "promptEn": "Five characters on an open hillside, each raising one leafy living wooden wand, exactly five wands clashing and crossing in mid-air in a rowdy but harmless mock contest, dynamic tangled poses gathered at the center, energetic bright midday light of spirited rivalry, centered subject, vertical card composition, {STYLE}"
+  },
+  "six-of-wands": {
+    "title": { "ko": "완드 6", "en": "Six of Wands" },
+    "essence": "노력의 결실이 인정받는 승리의 행진",
+    "scene": "주인공 캐릭터가 머리에 월계관을 쓰고 말에 올라 개선 행진을 하고 있다. 손에 든 잎 돋은 지팡이 끝에도 월계 화환이 걸려 있고, 길가의 사람들이 다섯 개의 지팡이를 치켜들어 환호한다. 화면의 완드는 정확히 여섯 개이며, 말 탄 캐릭터가 세로 중앙에 우뚝 선다.",
+    "symbols": ["완드 정확히 6개(주인공 1개, 환호하는 이들 5개)", "머리의 월계관", "지팡이 끝의 월계 화환", "말을 탄 개선 행진", "환호하는 군중"],
+    "mood": "자랑스럽고 벅찬 승리의 순간, 화창한 오후의 빛",
+    "palette": "승리의 금빛과 월계수 초록, 붉은 망토 포인트",
+    "promptEn": "The main character wearing a laurel wreath, riding a horse in a triumphant procession, holding one living wooden wand crowned with a laurel garland, while cheering figures alongside raise exactly five more leafy wands, exactly six wands in total, proud jubilant parade under bright sunny afternoon light, centered subject, vertical card composition, {STYLE}"
+  },
+  "seven-of-wands": {
+    "title": { "ko": "완드 7", "en": "Seven of Wands" },
+    "essence": "높은 자리에서 소신을 지켜 내는 용기",
+    "scene": "주인공 캐릭터가 언덕 꼭대기의 유리한 고지에 서서 잎이 돋은 지팡이 하나를 두 손으로 비껴 잡고 아래를 향해 맞서고 있다. 화면 아래쪽 절벽 너머에서 여섯 개의 지팡이가 도전하듯 솟아오르지만 그 주인들은 보이지 않는다. 완드는 정확히 일곱 개이며 캐릭터의 버티는 자세가 중앙을 지킨다.",
+    "symbols": ["완드 정확히 7개(주인공 1개, 아래에서 솟는 6개)", "언덕 위의 유리한 위치", "두 손으로 맞서는 방어 자세", "아래에서 솟아오르는 도전"],
+    "mood": "긴장 속의 결연함, 구름 낀 하늘 아래 또렷한 빛",
+    "palette": "차분한 청회색 하늘에 캐릭터와 지팡이의 따뜻한 갈색·초록 대비",
+    "promptEn": "The main character standing firm on high ground atop a hill, gripping one leafy living wooden wand in both hands in a defensive stance, while exactly six more wands rise up challengingly from below the slope with their bearers unseen, exactly seven wands in total, tense but resolute mood under a cloudy sky with clear determined light, centered subject, vertical card composition, {STYLE}"
+  },
+  "eight-of-wands": {
+    "title": { "ko": "완드 8", "en": "Eight of Wands" },
+    "essence": "순풍을 탄 소식과 일의 빠른 진행",
+    "scene": "잎이 돋은 여덟 개의 나무 지팡이가 나란히 대각선을 그리며 맑은 하늘을 화살처럼 빠르게 가로질러 날아간다. 아래로는 강이 흐르는 평화로운 들판과 작은 언덕 위의 집이 펼쳐진다. 인물 없이 여덟 개의 완드 무리가 화면 중앙을 채우며, 속도감이 그대로 느껴지는 구도다.",
+    "symbols": ["하늘을 나는 완드 정확히 8개", "나란한 대각선 궤적", "강이 흐르는 들판", "탁 트인 맑은 하늘"],
+    "mood": "거침없는 속도감과 설렘, 맑게 갠 대낮",
+    "palette": "청명한 하늘색 바탕에 지팡이의 갈색과 새잎 초록",
+    "promptEn": "Exactly eight living wooden wands with sprouting green leaves flying swiftly through a clear open sky in a parallel diagonal streak like arrows in motion, a peaceful river landscape with green fields and a small house on a hill far below, sense of rushing speed and momentum, fresh clear midday light, centered subject, vertical card composition, {STYLE}"
+  },
+  "nine-of-wands": {
+    "title": { "ko": "완드 9", "en": "Nine of Wands" },
+    "essence": "마지막 고비 앞에서 버티는 끈기와 저력",
+    "scene": "머리에 붕대를 감은 주인공 캐릭터가 잎 돋은 지팡이 하나에 몸을 기대고 서서 경계하듯 어깨 너머를 돌아본다. 등 뒤로는 여덟 개의 지팡이가 울타리처럼 나란히 땅에 꽂혀 있다. 완드는 정확히 아홉 개이며, 지친 몸으로도 자리를 지키는 캐릭터가 화면 중앙에 선다.",
+    "symbols": ["완드 정확히 9개(손에 1개, 울타리처럼 선 8개)", "머리의 붕대", "지팡이에 기댄 자세", "경계하며 돌아보는 시선"],
+    "mood": "지쳤지만 물러서지 않는 결기, 해 질 녘의 묵직한 빛",
+    "palette": "노을빛 황갈색 바탕에 붕대의 흰색, 지팡이의 짙은 갈색",
+    "promptEn": "The main character with a bandaged head leaning wearily on one living wooden wand, glancing warily over their shoulder, exactly eight more leafy wands planted upright behind them like a defensive fence, exactly nine wands in total, tired yet unyielding resolve in heavy late-day light near dusk, centered subject, vertical card composition, {STYLE}"
+  },
+  "ten-of-wands": {
+    "title": { "ko": "완드 10", "en": "Ten of Wands" },
+    "essence": "홀로 짊어진 성취의 무게와 과중한 책임",
+    "scene": "주인공 캐릭터가 잎이 돋은 열 개의 나무 지팡이를 한 아름 끌어안고 허리를 깊이 숙인 채 힘겹게 걸어간다. 지팡이 다발이 시야를 가릴 만큼 크지만, 멀지 않은 곳에 목적지인 마을과 집이 보인다. 완드는 정확히 열 개이며, 짐을 진 캐릭터의 굽은 실루엣이 화면 중앙을 차지한다.",
+    "symbols": ["한 아름 안은 완드 정확히 10개", "깊이 숙인 허리와 굽은 실루엣", "무거운 발걸음", "멀지 않은 마을과 집"],
+    "mood": "무겁지만 끝이 보이는 인내, 노을 지는 늦은 오후",
+    "palette": "따뜻한 황토·갈색 바탕에 낮게 깔린 주황 노을",
+    "promptEn": "The main character bent forward under the weight of exactly ten living wooden wands gathered in their arms, carrying the heavy leafy bundle step by step along a path, a village with warm houses visible not far ahead, burdened but persevering mood in low orange late-afternoon light, centered subject, vertical card composition, {STYLE}"
+  },
+  "page-of-wands": {
+    "title": { "ko": "완드 시종", "en": "Page of Wands" },
+    "essence": "새 소식과 도전을 향한 순수한 호기심",
+    "scene": "완드 시종의 호기심과 열의를 지닌 주인공 캐릭터가 탁 트인 들판에 서서, 자기 키보다 큰 잎 돋은 지팡이 하나를 두 손으로 세워 잡고 그 끝에 갓 돋은 새잎을 신기한 듯 올려다본다. 배경은 메마른 언덕과 먼 산이 있는 넓은 벌판으로, 완드는 정확히 한 개다. 위쪽은 밝은 하늘, 아래쪽은 들판이 받치는 안정된 구도다.",
+    "symbols": ["잎이 돋은 완드 정확히 1개(두 손으로 세워 잡음)", "지팡이 끝을 올려다보는 시선", "메마른 언덕과 넓은 벌판", "가벼운 여행 차림"],
+    "mood": "호기심과 설렘이 반짝이는 밝은 한낮",
+    "palette": "모래빛 대지에 노랑·주황 의상, 새잎의 싱그러운 초록",
+    "promptEn": "The main character embodying the curious page of wands archetype, standing in a wide open field with dry hills in the distance, holding one tall living wooden wand upright with both hands and gazing up in wonder at the fresh green leaves sprouting from its tip, exactly one wand, bright cheerful midday light of curiosity, centered subject, vertical card composition, {STYLE}"
+  },
+  "knight-of-wands": {
+    "title": { "ko": "완드 기사", "en": "Knight of Wands" },
+    "essence": "설렘을 안고 내달리는 추진력과 모험",
+    "scene": "완드 기사의 기백을 지닌 주인공 캐릭터가 앞발을 치켜든 말 위에서 잎 돋은 지팡이 하나를 높이 들고 힘차게 출발하려 한다. 망토와 장식이 불꽃처럼 바람에 휘날리고, 배경은 메마른 사막 벌판과 먼 언덕이다. 완드는 정확히 한 개이며, 도약 직전의 역동적인 순간이 화면 중앙에 담긴다.",
+    "symbols": ["잎이 돋은 완드 정확히 1개(높이 치켜듦)", "앞발을 치켜든 말", "불꽃처럼 휘날리는 망토", "메마른 사막 벌판"],
+    "mood": "질주 직전의 뜨거운 설렘, 강렬한 한낮의 태양",
+    "palette": "불꽃의 주황·빨강이 주조, 사막의 황토색 바탕",
+    "promptEn": "The main character with the bold spirit of the knight of wands, mounted on a rearing horse and raising exactly one leafy living wooden wand high, cloak streaming in the wind like flames, a dry desert plain with distant hills behind, caught in the dynamic instant before charging forward, blazing passionate midday sun, centered subject, vertical card composition, {STYLE}"
+  },
+  "queen-of-wands": {
+    "title": { "ko": "완드 여왕", "en": "Queen of Wands" },
+    "essence": "따뜻하고 당당하게 주변을 밝히는 카리스마",
+    "scene": "완드 여왕의 따뜻한 카리스마를 지닌 주인공 캐릭터가 사자 문양이 새겨진 옥좌에 당당하고 편안하게 앉아 있다. 한 손에는 잎 돋은 지팡이 하나를, 다른 손에는 활짝 핀 해바라기 한 송이를 들었고, 발치에는 검은 고양이 한 마리가 정면을 바라보고 앉아 있다. 완드는 정확히 한 개이며 옥좌와 인물이 화면 중앙에 좌우 대칭으로 자리한다.",
+    "symbols": ["잎이 돋은 완드 정확히 1개", "활짝 핀 해바라기", "발치의 검은 고양이", "사자 문양 옥좌", "당당하고 편안한 좌상"],
+    "mood": "따뜻하고 자신감 넘치는 환대, 풍성한 오후의 햇살",
+    "palette": "해바라기 노랑과 불의 주황 주조, 옥좌의 금빛",
+    "promptEn": "The main character radiating the warm charisma of the queen of wands, seated confidently on a throne carved with lion motifs, holding exactly one leafy living wooden wand in one hand and a bright blooming sunflower in the other, a black cat sitting alert at their feet, generous sunny afternoon light of warmth and confidence, centered subject, vertical card composition, {STYLE}"
+  },
+  "king-of-wands": {
+    "title": { "ko": "완드 왕", "en": "King of Wands" },
+    "essence": "경험과 정직으로 이끄는 비전의 리더십",
+    "scene": "완드 왕의 위엄을 지닌 주인공 캐릭터가 도마뱀(샐러맨더) 문양이 새겨진 옥좌에 앉아, 잎이 돋은 지팡이 하나를 홀처럼 곧게 세워 잡고 먼 곳을 바라본다. 몸은 옆을 향하되 시선은 앞으로 나아갈 방향을 향하고, 발치에는 작은 도마뱀 한 마리가 함께 있다. 완드는 정확히 한 개이며 옥좌에 앉은 인물이 화면 세로 중앙에 안정적으로 자리한다.",
+    "symbols": ["잎이 돋은 완드 정확히 1개(홀처럼 세워 잡음)", "샐러맨더(도마뱀) 문양 옥좌", "발치의 작은 도마뱀", "먼 곳을 향한 결단의 시선", "불꽃 모티프의 의상 장식"],
+    "mood": "무게 있는 확신과 열정, 따뜻하게 타오르는 저녁 빛",
+    "palette": "깊은 빨강·주황 주조에 금빛 장식, 차분한 배경 대비",
+    "promptEn": "The main character bearing the commanding presence of the king of wands, seated on a throne adorned with salamander motifs, holding exactly one leafy living wooden wand upright like a scepter, gazing decisively into the distance, a small salamander resting near their feet, flame motifs on their garments, warm glowing evening light of assured passion, centered subject, vertical card composition, {STYLE}"
+  }
+}
