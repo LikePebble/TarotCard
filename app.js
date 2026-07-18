@@ -22,6 +22,10 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "demo.html"));
 });
 
+app.get("/reading", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "reading.html"));
+});
+
 app.use(errorHandler);
 
 app.listen(port, () => {
