@@ -1,27 +1,27 @@
 {
-  "name": "tarotapi",
-  "version": "1.1.0",
-  "description": "A comprehensive Tarot card API built with Node.js, providing developers with easy access to a vast collection of Tarot card meanings, interpretations, and symbolism. This API allows users to retrieve Tarot card details, including card images, descriptions, upright and reversed meanings, and associated keywords. Harness the power of Tarot to enhance your applications, websites, or personal projects with this intuitive and versatile API.",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
-  },
-  "keywords": [
-    "tarotcard",
-    "tarot",
-    "tarot-api",
-    "divination",
-    "cards"
-  ],
-  "author": "Kushagra Srivastava",
+  "name": "arcana",
+  "version": "1.0.0",
+  "private": true,
   "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
   "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "@phosphor-icons/react": "^2.1.10",
+    "motion": "^12.23.0",
+    "next": "^15.4.1",
+    "pretendard": "^1.3.9",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.8.3"
   }
 }

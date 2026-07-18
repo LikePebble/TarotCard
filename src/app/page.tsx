@@ -1,0 +1,57 @@
+import Image from "next/image";
+import Link from "next/link";
+import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
+import { TabBar } from "@/components/TabBar";
+
+const heroCards = [
+  { src: "/tarotdeck/themoon.jpeg", alt: "달 The Moon", cls: "hc1" },
+  { src: "/tarotdeck/thestar.jpeg", alt: "별 The Star", cls: "hc2" },
+  { src: "/tarotdeck/thesun.jpeg", alt: "태양 The Sun", cls: "hc3" },
+];
+
+export default function HomePage() {
+  return (
+    <div className="flex min-h-[100dvh] flex-col">
+      <DesktopNav active="reading" />
+      <MobileTopBar />
+      <main className="mx-auto flex w-full max-w-[1280px] flex-1 flex-col px-6 pt-5 lg:grid lg:min-h-[620px] lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-10 lg:px-12 lg:py-[72px]">
+        <div>
+          <h1 className="mt-3 font-serif text-[34px] font-semibold leading-[1.3] lg:mt-0 lg:text-[58px] lg:leading-[1.22] lg:tracking-[-0.01em]">
+            하루 한 장,
+            <br />
+            나를 비추는 <em className="not-italic text-gold-soft">카드</em>
+          </h1>
+          <p className="mt-3.5 max-w-[300px] text-[15px] text-muted lg:max-w-[420px] lg:text-[17px]">
+            카드를 뽑고 해석을 읽으며 78장의 컬렉션을 완성해 보세요.
+          </p>
+          <div className="mt-6 lg:mt-9 lg:flex lg:gap-3.5">
+            <Link href="/reading" className="btn btn-gold w-full lg:w-auto">
+              리딩 시작하기
+            </Link>
+            <Link
+              href="/collection"
+              className="btn btn-ghost hidden lg:inline-flex"
+            >
+              컬렉션
+            </Link>
+          </div>
+        </div>
+        <div className="hero-fan mt-2 min-h-[300px] flex-1 lg:h-[480px] lg:flex-none">
+          {heroCards.map((card) => (
+            <div key={card.src} className={`fan-card ${card.cls}`}>
+              <Image
+                src={card.src}
+                alt={card.alt}
+                fill
+                sizes="(min-width: 1024px) 240px, 140px"
+                className="object-cover"
+                priority
+              />
+            </div>
+          ))}
+        </div>
+      </main>
+      <TabBar />
+    </div>
+  );
+}

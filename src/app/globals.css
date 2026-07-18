@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink-0: #14110d;
+  --color-ink-1: #1a1611;
+  --color-ink-2: #221d16;
+  --color-gold: #c9a24b;
+  --color-gold-soft: #e0c078;
+  --color-cream: #ece5d8;
+  --color-muted: #9a8f7c;
+  --color-body: #c8bfae;
+  --color-line: rgba(236, 229, 216, 0.1);
+  --color-line-gold: rgba(201, 162, 75, 0.35);
+  --font-serif: var(--font-noto-serif-kr), "Noto Serif KR", serif;
+  --font-sans: "Pretendard", "Pretendard Variable", -apple-system, "Segoe UI",
+    sans-serif;
+}
+
+body {
+  background: var(--color-ink-0);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Card back: dark gradient, gold border, inset border, rotated-square motif */
+@layer components {
+.cardback {
+  position: relative;
+  border-radius: 12px;
+  background: linear-gradient(160deg, #1e1912 0%, #16120c 100%);
+  border: 1px solid var(--color-line-gold);
+}
+.cardback::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(201, 162, 75, 0.22);
+  border-radius: 7px;
+}
+.cardback::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 1px solid rgba(201, 162, 75, 0.55);
+}
+}
+
+/* Pill buttons */
+@layer components {
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  min-height: 52px;
+  padding: 0 30px;
+  cursor: pointer;
+}
+.btn-gold {
+  background: var(--color-gold);
+  color: #201808;
+}
+.btn-gold:hover {
+  background: var(--color-gold-soft);
+}
+.btn-ghost {
+  border: 1px solid var(--color-line-gold);
+  color: var(--color-cream);
+  font-weight: 500;
+}
+.btn-ghost:hover {
+  border-color: var(--color-gold);
+}
+}
+
+/* Home hero fan */
+@layer components {
+.hero-fan {
+  position: relative;
+}
+.hero-fan .fan-card {
+  position: absolute;
+  left: 50%;
+  top: 34px;
+  width: 140px;
+  aspect-ratio: 2 / 3.4;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--color-ink-2);
+  box-shadow: 0 18px 44px rgba(8, 5, 0, 0.6);
+}
+.hero-fan .hc1 {
+  transform: translateX(calc(-50% - 96px)) rotate(-13deg) translateY(16px);
+  opacity: 0.85;
+}
+.hero-fan .hc2 {
+  transform: translateX(-50%) translateY(-6px);
+  z-index: 2;
+}
+.hero-fan .hc3 {
+  transform: translateX(calc(-50% + 96px)) rotate(13deg) translateY(16px);
+  opacity: 0.85;
+}
+@media (min-width: 1024px) {
+  .hero-fan .fan-card {
+    width: 240px;
+    top: 50px;
+    border-radius: 14px;
+  }
+  .hero-fan .hc1 {
+    transform: translateX(calc(-50% - 160px)) rotate(-9deg) translateY(12px);
+  }
+  .hero-fan .hc3 {
+    transform: translateX(calc(-50% + 160px)) rotate(8deg) translateY(12px);
+  }
+}
+
+/* Draw fan: rotation driven by --fan-i (integer offset from center) */
+.draw-fan {
+  position: relative;
+  --fan-step: 12deg;
+}
+.draw-fan .fan-card {
+  position: absolute;
+  left: 50%;
+  bottom: 48px;
+  transform-origin: 50% 115%;
+  transform: translateX(-50%) rotate(calc(var(--fan-i, 0) * var(--fan-step)));
+  translate: 0 var(--fan-lift, 0px);
+  transition: transform 0.35s ease, translate 0.25s ease;
+  box-shadow: 0 10px 30px rgba(8, 5, 0, 0.55);
+  border-radius: 12px;
+}
+.draw-fan .fan-card:hover,
+.draw-fan .fan-card:focus-visible {
+  translate: 0 calc(var(--fan-lift, 0px) - 10px);
+}
+.draw-fan .fan-card.lifted {
+  --fan-lift: -28px;
+}
+@media (min-width: 1024px) {
+  .draw-fan {
+    --fan-step: 8deg;
+  }
+  .draw-fan .fan-card {
+    bottom: 8px;
+    transform-origin: 50% 120%;
+  }
+  .draw-fan .fan-card.lifted {
+    --fan-lift: -34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draw-fan .fan-card {
+    transition: none;
+  }
+}
+}
