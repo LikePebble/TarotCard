@@ -1,0 +1,15 @@
+{
+  "_comment": "이미지 생성 공통 설정. 캐릭터 컨셉 확정 시 style만 교체하면 78장 전체에 반영된다. scripts/build-generation-manifest.js가 이 파일과 data/art/*.json을 합쳐 생성용 매니페스트를 만든다.",
+  "style": "REPLACE_ME — 확정된 스타일 문자열 (예: soft watercolor storybook illustration, warm linework, gentle gradients)",
+  "promptSuffix": "no text, no lettering, clean edges, high detail",
+  "negativePrompt": "text, letters, numbers, typography, watermark, signature, logo, border, frame, caption, blood, gore, photorealistic human face",
+  "params": {
+    "aspectRatio": "4:7",
+    "width": 800,
+    "height": 1400,
+    "outputFormat": "webp"
+  },
+  "safety": {
+    "note": "소드 수트 등 어두운 카드도 유혈·잔혹 묘사 금지 — negativePrompt의 blood/gore 유지"
+  }
+}

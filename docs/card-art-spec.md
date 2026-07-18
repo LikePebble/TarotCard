@@ -72,6 +72,27 @@
 - `symbols`는 **전통 상징 중 해석 정확성에 필수적인 것만** 추린 목록이다. 캐릭터·배경 연출은 자유지만 이 요소들이 빠지면 카드 의미가 훼손된다.
 - `promptEn` 사용법: `{STYLE}`을 확정된 스타일 문자열(예: `"soft watercolor, storybook children's illustration"`)로 치환해 이미지 생성 모델에 입력. 네거티브 프롬프트에 `text, letters, numbers, watermark, borders` 권장 (§2 문자 금지 규칙).
 
+## 5.5 이미지 생성 파이프라인 — 세 층의 조립
+
+`promptEn`만으로는 생성할 수 없다. 실제 생성 입력은 세 층을 합쳐 만든다:
+
+| 층 | 내용 | 위치 |
+|---|---|---|
+| ① 카드별 프롬프트 | 장면·상징·무드·구도 | `data/art/{group}.json` → `promptEn` |
+| ② 스타일 (전 카드 공통) | 화풍 문자열(`{STYLE}` 치환), 품질 서픽스 | `data/art/style.config.json` |
+| ③ 기술 스펙 | **비율·해상도 = 생성기 파라미터**, **문자 금지 = 네거티브 프롬프트** | `style.config.json` → `params` / `negativePrompt` |
+
+조립은 스크립트가 한다:
+
+```bash
+# 1. style.config.json 의 "style" 을 확정 문자열로 교체 (1회)
+# 2. 매니페스트 생성
+node scripts/build-generation-manifest.js
+# → data/art/generation-manifest.json (78건)
+```
+
+매니페스트 각 항목에는 생성기에 바로 넣을 `prompt`(스타일 치환 완료) / `negativePrompt` / `aspectRatio·width·height` / 출력 파일명, 그리고 생성 후 검수용 `reviewChecklist`(필수 상징 포함 여부·세이프존·문자 없음·회전 내성)가 들어 있다. 스타일이 바뀌면 config만 고치고 재실행하면 78장 전체에 반영된다.
+
 ## 6. 납품 체크리스트 (장당)
 
 - [ ] 4:7 비율, 800×1400 WebP, sRGB, 150KB 이하
