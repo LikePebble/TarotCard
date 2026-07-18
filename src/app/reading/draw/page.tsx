@@ -21,7 +21,34 @@ import {
 const POSITIONS = ["과거", "현재", "미래"] as const;
 const FAN_SIZE = 7;
 
-type Phase = "picking" | "flipping" | "revealed";
+/*
+ * Choreography timeline (all phase transitions are setTimeout-driven; the
+ * Motion animations are decoration layered on top of timer-driven state,
+ * because rAF pauses in background tabs and completion callbacks may never
+ * fire there).
+ */
+const SHUFFLE_MS = 2400; // first shuffle on page entry
+const SHUFFLE_REPEAT_MS = 1300; // shorter shuffle after 다시 뽑기
+const CHARGE_MS = 700; // gold glow buildup after tapping a card
+const FLASH_MS = 130; // bright flash at the peak
+const FLIP_MS = 650; // card flip duration
+const ONE_REVEAL_PAUSE_MS = 350; // pause on the revealed face
+const ONE_TOTAL_MS = CHARGE_MS + FLASH_MS + FLIP_MS + ONE_REVEAL_PAUSE_MS; // 1830
+const THREE_FLIP_STAGGER_S = 0.55; // delay between sequential slot flips
+const THREE_REVEAL_MS = 2300; // flipping -> revealed (last flip ends ~1750ms)
+
+/** Which shuffle-stack cards run which loop animation (index = fan slot). */
+const SHUFFLE_CARD_CLASSES = [
+  "shuf-static-a",
+  "shuf-loop-left",
+  "shuf-static-b",
+  "shuf-loop-right",
+  "shuf-static-a",
+  "shuf-loop-left-late",
+  "shuf-static-c",
+];
+
+type Phase = "shuffling" | "picking" | "flipping" | "revealed";
 
 function shuffle(list: Card[]): Card[] {
   const next = [...list];
@@ -41,6 +68,21 @@ function descriptionOf(card: Card): string[] {
   return (ko && ko.length > 0 ? ko : card.en.description).split("\n\n");
 }
 
+/**
+ * Pre-rendered gold light layers for the gacha buildup. Only transform and
+ * opacity are animated; blurs and gradients are static. The ray disc is a
+ * single element and unmounts as soon as the charge ends.
+ */
+function GachaGlow() {
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+      <div className="glow-rays" />
+      <div className="glow-radial" />
+      <div className="glow-ring" />
+    </div>
+  );
+}
+
 export default function DrawPage() {
   const router = useRouter();
   const reducedMotion = useReducedMotion();
@@ -52,26 +94,59 @@ export default function DrawPage() {
   const [pickedFanIds, setPickedFanIds] = useState<number[]>([]);
   const [phase, setPhase] = useState<Phase>("picking");
   const [flippingFanId, setFlippingFanId] = useState<number | null>(null);
+  const [chargingFanId, setChargingFanId] = useState<number | null>(null);
+  const [flashing, setFlashing] = useState(false);
+  const [dealt, setDealt] = useState(true);
   const [count, setCount] = useState<number | null>(null);
   const recordedRef = useRef(false);
   const watchdogRef = useRef<number | null>(null);
+  const timersRef = useRef<number[]>([]);
+  const hasShuffledRef = useRef(false);
+
+  const clearTimers = useCallback(() => {
+    for (const id of timersRef.current) window.clearTimeout(id);
+    timersRef.current = [];
+  }, []);
+
+  /** setTimeout with automatic cleanup on reset/unmount. */
+  const later = useCallback((ms: number, fn: () => void) => {
+    timersRef.current.push(window.setTimeout(fn, ms));
+  }, []);
+
+  const beginPicking = useCallback(() => {
+    setPhase((p) => (p === "shuffling" ? "picking" : p));
+    later(40, () => setDealt(true));
+  }, [later]);
 
   const setup = useCallback(() => {
-    setDeck(shuffle(cards));
-    setFan(Array.from({ length: FAN_SIZE }, (_, i) => i));
-    setPickedFanIds([]);
-    setPhase("picking");
-    setFlippingFanId(null);
-    setCount(null);
-    recordedRef.current = false;
+    clearTimers();
     if (watchdogRef.current !== null) {
       window.clearTimeout(watchdogRef.current);
       watchdogRef.current = null;
     }
-  }, []);
+    setDeck(shuffle(cards));
+    setFan(Array.from({ length: FAN_SIZE }, (_, i) => i));
+    setPickedFanIds([]);
+    setFlippingFanId(null);
+    setChargingFanId(null);
+    setFlashing(false);
+    setCount(null);
+    recordedRef.current = false;
+    if (reducedMotion) {
+      setPhase("picking");
+      setDealt(true);
+      return;
+    }
+    setPhase("shuffling");
+    setDealt(false);
+    const ms = hasShuffledRef.current ? SHUFFLE_REPEAT_MS : SHUFFLE_MS;
+    hasShuffledRef.current = true;
+    later(ms, beginPicking);
+  }, [beginPicking, clearTimers, later, reducedMotion]);
 
   useEffect(
     () => () => {
+      for (const id of timersRef.current) window.clearTimeout(id);
       if (watchdogRef.current !== null) window.clearTimeout(watchdogRef.current);
     },
     [],
@@ -101,8 +176,8 @@ export default function DrawPage() {
   );
 
   // Flow state must never depend solely on animation completion: rAF pauses
-  // when the tab is backgrounded, so onAnimationComplete may never fire.
-  // The watchdog forces the reveal after the animation's expected duration.
+  // when the tab is backgrounded, so animation callbacks may never fire.
+  // The watchdog forces the reveal after the choreography's expected duration.
   const armRevealWatchdog = useCallback(
     (slugs: string[], s: SpreadType, f: string, ms: number) => {
       if (watchdogRef.current !== null) window.clearTimeout(watchdogRef.current);
@@ -115,50 +190,82 @@ export default function DrawPage() {
     [record],
   );
 
+  const skipShuffle = () => {
+    if (phase !== "shuffling") return;
+    clearTimers();
+    beginPicking();
+  };
+
   const need = spread === "one" ? 1 : 3;
   const picked = deck.slice(0, pickedFanIds.length);
 
   const pick = (fanId: number) => {
-    if (phase !== "picking" || pickedFanIds.length >= need) return;
-    const nextPicked = [...pickedFanIds, fanId];
-    setPickedFanIds(nextPicked);
+    if (
+      phase !== "picking" ||
+      chargingFanId !== null ||
+      pickedFanIds.length >= need
+    ) {
+      return;
+    }
     if (spread === "one") {
       const slug = deck[0].slug;
+      setPickedFanIds([fanId]);
       if (reducedMotion) {
         record([slug], spread, focus);
         setPhase("revealed");
-      } else {
+        return;
+      }
+      // Timeline: charge glow -> flash -> flip -> reveal. Timer-driven.
+      setPhase("flipping");
+      setChargingFanId(fanId);
+      later(CHARGE_MS, () => setFlashing(true));
+      later(CHARGE_MS + FLASH_MS, () => {
+        setFlashing(false);
+        setChargingFanId(null);
         setFlippingFanId(fanId);
-        setPhase("flipping");
-        armRevealWatchdog([slug], spread, focus, 2000);
+      });
+      later(ONE_TOTAL_MS, () => {
+        record([slug], spread, focus);
+        setPhase((p) => (p === "flipping" ? "revealed" : p));
+      });
+      armRevealWatchdog([slug], spread, focus, ONE_TOTAL_MS + 600);
+      return;
+    }
+    const nextPicked = [...pickedFanIds, fanId];
+    if (reducedMotion) {
+      setPickedFanIds(nextPicked);
+      setFan((current) => current.filter((id) => id !== fanId));
+      if (nextPicked.length === 3) {
+        record(
+          deck.slice(0, 3).map((c) => c.slug),
+          spread,
+          focus,
+        );
+        setPhase("revealed");
       }
       return;
     }
-    setFan((current) => current.filter((id) => id !== fanId));
-    if (nextPicked.length === 3) {
-      const slugs = deck.slice(0, 3).map((c) => c.slug);
-      if (reducedMotion) {
-        record(slugs, spread, focus);
-        setPhase("revealed");
-      } else {
-        window.setTimeout(() => {
+    // Timeline per pick: charge glow -> flash -> fly to slot. After the third
+    // pick: pause -> sequential flips -> reveal. Timer-driven throughout.
+    setChargingFanId(fanId);
+    later(CHARGE_MS, () => setFlashing(true));
+    later(CHARGE_MS + FLASH_MS, () => {
+      setFlashing(false);
+      setChargingFanId(null);
+      setPickedFanIds(nextPicked);
+      setFan((current) => current.filter((id) => id !== fanId));
+      if (nextPicked.length === 3) {
+        const slugs = deck.slice(0, 3).map((c) => c.slug);
+        later(450, () => {
           record(slugs, spread, focus);
           setPhase("flipping");
-          armRevealWatchdog(slugs, spread, focus, 3400);
-        }, 450);
+          later(THREE_REVEAL_MS, () =>
+            setPhase((p) => (p === "flipping" ? "revealed" : p)),
+          );
+          armRevealWatchdog(slugs, spread, focus, THREE_REVEAL_MS + 800);
+        });
       }
-    }
-  };
-
-  const onOneCardFlipDone = () => {
-    if (spread !== "one" || phase !== "flipping") return;
-    record([deck[0].slug], spread, focus);
-    window.setTimeout(() => setPhase("revealed"), 500);
-  };
-
-  const onThreeCardFlipDone = () => {
-    if (spread !== "three" || phase !== "flipping") return;
-    window.setTimeout(() => setPhase("revealed"), 600);
+    });
   };
 
   if (!ready) {
@@ -166,6 +273,7 @@ export default function DrawPage() {
   }
 
   const spreadLabel = spread === "one" ? "오늘의 카드" : "과거 · 현재 · 미래";
+  const activeFanId = chargingFanId ?? flippingFanId;
 
   return (
     <div className="flex min-h-[100dvh] flex-col">
@@ -200,14 +308,16 @@ export default function DrawPage() {
               <b className="font-medium text-gold">{focus}</b>
             </p>
             <h1 className="mt-1.5 px-6 font-serif text-[27px] font-semibold leading-[1.35] lg:text-[40px]">
-              {phase === "flipping"
-                ? "카드를 공개합니다"
-                : spread === "three" && pickedFanIds.length > 0
-                  ? "한 장 더 고르세요"
-                  : "마음이 가는 카드를 고르세요"}
+              {phase === "shuffling"
+                ? "카드를 섞고 있습니다"
+                : phase === "flipping"
+                  ? "카드를 공개합니다"
+                  : spread === "three" && pickedFanIds.length > 0
+                    ? "한 장 더 고르세요"
+                    : "마음이 가는 카드를 고르세요"}
             </h1>
 
-            {spread === "three" ? (
+            {spread === "three" && phase !== "shuffling" ? (
               <div className="mt-[22px] flex justify-center gap-3.5 px-6">
                 {POSITIONS.map((position, i) => {
                   const card = picked[i];
@@ -220,20 +330,39 @@ export default function DrawPage() {
                               ? undefined
                               : `fan-card-${pickedFanIds[i]}`
                           }
-                          className="aspect-[2/3.4] [perspective:700px]"
+                          className="relative aspect-[2/3.4] [perspective:700px]"
                         >
+                          {!reducedMotion ? (
+                            <div
+                              aria-hidden
+                              className="glow-burst"
+                              style={
+                                { "--burst-delay": "280ms" } as React.CSSProperties
+                              }
+                            />
+                          ) : null}
+                          {phase === "flipping" && !reducedMotion ? (
+                            <div
+                              aria-hidden
+                              className="glow-burst"
+                              style={
+                                {
+                                  "--burst-delay": `${i * THREE_FLIP_STAGGER_S}s`,
+                                } as React.CSSProperties
+                              }
+                            />
+                          ) : null}
                           <motion.div
-                            className="relative h-full w-full [transform-style:preserve-3d]"
+                            className="relative z-[1] h-full w-full [transform-style:preserve-3d]"
                             animate={{
                               rotateY: phase === "flipping" ? 180 : 0,
                             }}
                             transition={{
-                              duration: reducedMotion ? 0 : 0.7,
-                              delay: reducedMotion ? 0 : i * 0.55,
+                              duration: reducedMotion ? 0 : FLIP_MS / 1000,
+                              delay: reducedMotion
+                                ? 0
+                                : i * THREE_FLIP_STAGGER_S,
                             }}
-                            onAnimationComplete={
-                              i === 2 ? onThreeCardFlipDone : undefined
-                            }
                           >
                             <CardBack className="absolute inset-0 [backface-visibility:hidden]" />
                             <div className="absolute inset-0 overflow-hidden rounded-xl bg-ink-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
@@ -268,68 +397,102 @@ export default function DrawPage() {
                 spread === "three" ? "min-h-[300px]" : "min-h-[380px]"
               } lg:h-[430px] lg:min-h-0 lg:flex-none lg:overflow-visible`}
             >
-              {fan.map((fanId, i) => {
-                const offset = i - (fan.length - 1) / 2;
-                const lifted = offset === 0;
-                const isFlipping = flippingFanId === fanId;
-                return (
-                  <motion.button
-                    key={fanId}
-                    type="button"
-                    layoutId={
-                      spread === "three" && !reducedMotion
-                        ? `fan-card-${fanId}`
-                        : undefined
-                    }
-                    onClick={() => pick(fanId)}
-                    disabled={phase !== "picking"}
-                    aria-label={`덮인 카드 ${i + 1}`}
-                    animate={
-                      phase === "flipping" && spread === "one" && !isFlipping
-                        ? { opacity: 0.12 }
-                        : { opacity: 1 }
-                    }
-                    className={`fan-card aspect-[2/3.4] ${
-                      spread === "three" ? "w-[100px]" : "w-28"
-                    } lg:w-[170px] ${lifted ? "lifted" : ""}`}
-                    style={{ "--fan-i": offset } as React.CSSProperties}
-                  >
-                    <div className="h-full w-full [perspective:700px]">
-                      <motion.div
-                        className="relative h-full w-full [transform-style:preserve-3d]"
-                        animate={{ rotateY: isFlipping ? 180 : 0 }}
-                        transition={{ duration: 0.7 }}
-                        onAnimationComplete={
-                          isFlipping ? onOneCardFlipDone : undefined
-                        }
-                      >
-                        <CardBack
-                          className={`absolute inset-0 [backface-visibility:hidden] ${
-                            lifted ? "border-gold" : ""
-                          }`}
-                        />
-                        <div className="absolute inset-0 overflow-hidden rounded-xl bg-ink-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                          {isFlipping && deck[0] ? (
-                            <Image
-                              src={deck[0].image}
-                              alt={`${nameKoOf(deck[0])} ${deck[0].nameEn}`}
-                              fill
-                              sizes="170px"
-                              className="object-cover"
-                            />
-                          ) : null}
-                        </div>
-                      </motion.div>
-                    </div>
-                  </motion.button>
-                );
-              })}
+              {phase === "shuffling" ? (
+                <button
+                  type="button"
+                  onClick={skipShuffle}
+                  aria-label="카드 섞기 건너뛰기"
+                  className="shuffle-stage"
+                >
+                  {SHUFFLE_CARD_CLASSES.map((cls, i) => (
+                    <CardBack
+                      key={i}
+                      className={`shuffle-card ${cls} aspect-[2/3.4] w-28 lg:w-[170px]`}
+                    />
+                  ))}
+                </button>
+              ) : (
+                fan.map((fanId, i) => {
+                  const offset = i - (fan.length - 1) / 2;
+                  const lifted = offset === 0;
+                  const isFlipping = flippingFanId === fanId;
+                  const isCharging = chargingFanId === fanId;
+                  const dimmed =
+                    spread === "one"
+                      ? phase === "flipping" && fanId !== activeFanId
+                      : chargingFanId !== null && fanId !== chargingFanId;
+                  return (
+                    <motion.button
+                      key={fanId}
+                      type="button"
+                      layoutId={
+                        spread === "three" && !reducedMotion
+                          ? `fan-card-${fanId}`
+                          : undefined
+                      }
+                      onClick={() => pick(fanId)}
+                      disabled={phase !== "picking" || chargingFanId !== null}
+                      aria-label={`덮인 카드 ${i + 1}`}
+                      animate={{
+                        opacity: dimmed ? (spread === "one" ? 0.12 : 0.35) : 1,
+                      }}
+                      className={`fan-card aspect-[2/3.4] ${
+                        spread === "three" ? "w-[100px]" : "w-28"
+                      } lg:w-[170px] ${lifted ? "lifted" : ""} ${
+                        !dealt ? "stacked" : ""
+                      } ${isCharging || isFlipping ? "charging" : ""}`}
+                      style={
+                        {
+                          "--fan-i": offset,
+                          "--deal-delay": `${Math.abs(offset) * 55}ms`,
+                        } as React.CSSProperties
+                      }
+                    >
+                      {isCharging && !reducedMotion ? <GachaGlow /> : null}
+                      <div className="relative z-[1] h-full w-full [perspective:700px]">
+                        <motion.div
+                          className="relative h-full w-full [transform-style:preserve-3d]"
+                          animate={{ rotateY: isFlipping ? 180 : 0 }}
+                          transition={{ duration: FLIP_MS / 1000 }}
+                        >
+                          <CardBack
+                            className={`absolute inset-0 [backface-visibility:hidden] ${
+                              lifted ? "border-gold" : ""
+                            }`}
+                          />
+                          <div className="absolute inset-0 overflow-hidden rounded-xl bg-ink-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                            {isFlipping && deck[0] ? (
+                              <Image
+                                src={deck[0].image}
+                                alt={`${nameKoOf(deck[0])} ${deck[0].nameEn}`}
+                                fill
+                                sizes="170px"
+                                className="object-cover"
+                              />
+                            ) : null}
+                          </div>
+                        </motion.div>
+                      </div>
+                      {(isCharging && flashing) || isFlipping ? (
+                        <div aria-hidden className="glow-flash" />
+                      ) : null}
+                    </motion.button>
+                  );
+                })
+              )}
             </div>
             <p className="px-6 text-[13px] text-muted lg:hidden">
-              {spread === "three"
-                ? "고른 카드는 슬롯으로 이동합니다"
-                : "카드를 눌러 뒤집습니다"}
+              {phase === "shuffling"
+                ? null
+                : spread === "three"
+                  ? "고른 카드는 슬롯으로 이동합니다"
+                  : "카드를 눌러 뒤집습니다"}
             </p>
+            {phase === "shuffling" ? (
+              <p className="px-6 text-[13px] text-muted">
+                화면을 누르면 바로 펼칩니다
+              </p>
+            ) : null}
           </main>
         ) : spread === "one" ? (
           <OneCardResult

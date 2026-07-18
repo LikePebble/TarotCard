@@ -141,7 +141,9 @@ body {
   transform-origin: 50% 115%;
   transform: translateX(-50%) rotate(calc(var(--fan-i, 0) * var(--fan-step)));
   translate: 0 var(--fan-lift, 0px);
-  transition: transform 0.35s ease, translate 0.25s ease;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) var(--deal-delay, 0ms),
+    translate 0.25s ease;
   box-shadow: 0 10px 30px rgba(8, 5, 0, 0.55);
   border-radius: 12px;
 }
@@ -151,6 +153,15 @@ body {
 }
 .draw-fan .fan-card.lifted {
   --fan-lift: -28px;
+}
+/* Deal-in start state: stacked at center, spread staggers via --deal-delay */
+.draw-fan .fan-card.stacked {
+  transform: translateX(-50%) translateY(14px) rotate(0deg);
+}
+/* Gacha charge: chosen card lifts above the fan while the glow builds */
+.draw-fan .fan-card.charging {
+  translate: 0 calc(var(--fan-lift, 0px) - 26px);
+  z-index: 30;
 }
 @media (min-width: 1024px) {
   .draw-fan {
@@ -168,6 +179,241 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .draw-fan .fan-card {
     transition: none;
+  }
+}
+
+/* ===== Shuffle stage ===== */
+.shuffle-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  cursor: pointer;
+  animation: shuf-stage-in 0.25s ease-out both;
+}
+.shuffle-card {
+  position: absolute;
+  left: 50%;
+  bottom: 90px;
+  translate: -50% 0;
+  box-shadow: 0 10px 30px rgba(8, 5, 0, 0.55);
+}
+.shuffle-card.shuf-static-a {
+  rotate: -2deg;
+}
+.shuffle-card.shuf-static-b {
+  rotate: 1.5deg;
+  translate: -50% -3px;
+}
+.shuffle-card.shuf-static-c {
+  rotate: 0.5deg;
+  translate: -50% -6px;
+}
+.shuffle-card.shuf-loop-left {
+  animation: shuf-out-left 1.15s ease-in-out 0.1s infinite;
+}
+.shuffle-card.shuf-loop-right {
+  animation: shuf-out-right 1.15s ease-in-out 0.48s infinite;
+}
+.shuffle-card.shuf-loop-left-late {
+  animation: shuf-out-left 1.15s ease-in-out 0.86s infinite;
+}
+@media (min-width: 1024px) {
+  .shuffle-card {
+    bottom: 40px;
+  }
+}
+@keyframes shuf-stage-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes shuf-out-left {
+  0% {
+    translate: -50% 0;
+    rotate: 0deg;
+    z-index: 2;
+  }
+  35% {
+    translate: calc(-50% - 86px) -32px;
+    rotate: -12deg;
+    z-index: 9;
+  }
+  70% {
+    translate: -50% -8px;
+    rotate: 2deg;
+    z-index: 9;
+  }
+  100% {
+    translate: -50% 0;
+    rotate: 0deg;
+    z-index: 2;
+  }
+}
+@keyframes shuf-out-right {
+  0% {
+    translate: -50% 0;
+    rotate: 0deg;
+    z-index: 2;
+  }
+  35% {
+    translate: calc(-50% + 86px) -32px;
+    rotate: 12deg;
+    z-index: 9;
+  }
+  70% {
+    translate: -50% -8px;
+    rotate: -2deg;
+    z-index: 9;
+  }
+  100% {
+    translate: -50% 0;
+    rotate: 0deg;
+    z-index: 2;
+  }
+}
+
+/* ===== Gacha glow layers (gold only; transform/opacity animation only) ===== */
+.glow-rays {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 240%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    rgba(224, 192, 120, 0.14) 0deg 9deg,
+    rgba(224, 192, 120, 0) 9deg 26deg
+  );
+  -webkit-mask-image: radial-gradient(closest-side, black 15%, transparent 72%);
+  mask-image: radial-gradient(closest-side, black 15%, transparent 72%);
+  will-change: transform;
+  animation:
+    gacha-spin 7s linear infinite,
+    gacha-fade-in 0.5s ease-out both;
+}
+.glow-radial {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 190%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(224, 192, 120, 0.5),
+    rgba(201, 162, 75, 0.18) 50%,
+    transparent 72%
+  );
+  animation: gacha-charge 0.7s ease-in-out both;
+}
+.glow-ring {
+  position: absolute;
+  inset: -10px;
+  border: 1px solid rgba(224, 192, 120, 0.8);
+  border-radius: 16px;
+  animation: gacha-ring 0.36s ease-out infinite;
+}
+.glow-flash {
+  position: absolute;
+  inset: -22%;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: 24px;
+  background: radial-gradient(
+    closest-side,
+    rgba(244, 231, 199, 0.95),
+    rgba(224, 192, 120, 0.5) 55%,
+    transparent 78%
+  );
+  animation: gacha-flash 0.14s ease-out both;
+}
+.glow-burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 170%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    rgba(224, 192, 120, 0.6),
+    rgba(201, 162, 75, 0.22) 55%,
+    transparent 75%
+  );
+  opacity: 0;
+  animation: gacha-burst 0.55s ease-out both;
+  animation-delay: var(--burst-delay, 0ms);
+}
+@keyframes gacha-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes gacha-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes gacha-charge {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  55% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+  75% {
+    opacity: 0.62;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+@keyframes gacha-ring {
+  from {
+    opacity: 0.85;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.16);
+  }
+}
+@keyframes gacha-flash {
+  0% {
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes gacha-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
   }
 }
 }
