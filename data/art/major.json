@@ -1,0 +1,200 @@
+{
+  "the-fool": {
+    "title": { "ko": "바보", "en": "The Fool" },
+    "essence": "아무것도 정해지지 않은 출발선의 자유",
+    "scene": "주인공 캐릭터가 절벽 끝에서 하늘을 향해 고개를 들고 가볍게 발을 내딛기 직전이다. 어깨에 멘 막대 끝에 작은 보따리가 매달려 있고, 한 손에는 흰 장미를 들었다. 발치에서 작은 동물이 함께 뛰며 화면 위쪽에는 밝은 태양이 빛난다.",
+    "symbols": ["절벽 끝", "막대에 매단 보따리", "흰 장미", "따르는 작은 동물", "밝은 태양"],
+    "mood": "설렘과 순수, 맑은 아침 빛",
+    "palette": "밝은 노랑과 하늘색 중심의 경쾌한 톤",
+    "promptEn": "The main character stepping lightly toward the edge of a cliff, head lifted to the sky, carrying a small bundle on a stick over one shoulder and a white rose in hand, a small animal companion leaping at their feet, bright sun above, joyful carefree morning light, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-magician": {
+    "title": { "ko": "마법사", "en": "The Magician" },
+    "essence": "이미 손안에 있는 도구와 실현의 의지",
+    "scene": "주인공 캐릭터가 탁자 앞에 서서 한 손은 하늘을, 다른 손은 땅을 가리키고 있다. 탁자 위에는 지팡이·잔·검·오각별 동전 네 가지 도구가 놓여 있고, 머리 위에는 무한대 기호가 빛난다. 주변에는 붉은 장미와 흰 백합이 피어 있다.",
+    "symbols": ["하늘과 땅을 잇는 양손 자세", "탁자 위 네 도구(지팡이·잔·검·오각별 동전)", "머리 위 무한대 기호", "붉은 장미와 흰 백합"],
+    "mood": "확신에 찬 집중, 선명한 한낮의 빛",
+    "palette": "붉은색과 순백, 금빛 포인트",
+    "promptEn": "The main character standing before a table, one hand raising a wand toward the sky while the other points to the ground, four tools laid on the table - a wand, a cup, a sword and a pentacle coin, an infinity symbol glowing above their head, red roses and white lilies blooming around, confident focused daylight, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-high-priestess": {
+    "title": { "ko": "여사제", "en": "The High Priestess" },
+    "essence": "고요 속에 감춰진 직관의 지혜",
+    "scene": "여사제의 신비를 지닌 주인공 캐릭터가 밝은 기둥과 어두운 기둥 사이에 고요히 앉아 있다. 무릎 위에는 반쯤 감춰진 두루마리를 얹고 발치에는 초승달이 놓여 있으며, 머리에는 달 모양 관을 썼다. 뒤편에는 석류 무늬 장막이 드리워 있고 그 너머로 잔잔한 물이 비친다.",
+    "symbols": ["흑백의 두 기둥", "반쯤 감춰진 두루마리", "발치의 초승달", "달 모양 관", "석류 무늬 장막", "장막 너머의 잔잔한 물"],
+    "mood": "신비로운 정적, 서늘한 달빛",
+    "palette": "깊은 파랑과 은백색의 차분한 톤",
+    "promptEn": "The main character embodying the high priestess archetype seated serenely between a light pillar and a dark pillar, a half-hidden scroll resting on their lap, a crescent moon at their feet, wearing a moon crown, a veil patterned with pomegranates hanging behind and calm water glimpsed beyond it, mysterious still moonlit silence, cool silvery-blue night, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-empress": {
+    "title": { "ko": "여황제", "en": "The Empress" },
+    "essence": "무르익은 결실과 따뜻한 돌봄의 품",
+    "scene": "여황제의 풍요를 지닌 주인공 캐릭터가 무성한 숲과 시냇물을 등지고 푹신한 옥좌에 편안히 기대어 있다. 머리에는 별 열두 개로 이루어진 관을 쓰고, 옥좌 곁에는 하트 모양 방패가 세워져 있다. 발아래로는 황금빛 밀밭이 넉넉하게 펼쳐진다.",
+    "symbols": ["별 열두 개의 관", "하트 모양 방패", "황금빛 밀밭", "흐르는 시냇물과 숲", "푹신한 옥좌"],
+    "mood": "풍요로운 편안함, 따뜻한 오후 햇살",
+    "palette": "따뜻한 초록과 밀밭의 금색",
+    "promptEn": "The main character embodying the empress archetype reclining at ease on a cushioned throne, wearing a crown of twelve stars, a heart-shaped shield resting beside the throne, a lush forest and flowing stream behind, a ripe golden wheat field spreading in the foreground, warm nurturing abundance, gentle afternoon sunlight, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-emperor": {
+    "title": { "ko": "황제", "en": "The Emperor" },
+    "essence": "흔들리지 않는 기반과 질서의 권위",
+    "scene": "황제의 위엄을 지닌 주인공 캐릭터가 숫양 머리 장식이 새겨진 석조 옥좌에 정면으로 앉아 있다. 한 손에는 홀을, 다른 손에는 보주를 들고 갑옷 위에 붉은 망토를 둘렀다. 뒤편으로는 험준한 붉은 바위산이 굳건하게 솟아 있다.",
+    "symbols": ["숫양 머리 장식의 석조 옥좌", "홀과 보주", "갑옷과 붉은 망토", "붉은 바위산 배경"],
+    "mood": "단단한 위엄, 붉게 물든 정오의 빛",
+    "palette": "짙은 붉은색과 회색 석조 톤",
+    "promptEn": "The main character embodying the emperor archetype seated squarely on a stone throne carved with ram heads, holding a scepter in one hand and an orb in the other, armor showing beneath a deep red mantle, rugged red rocky mountains rising behind the throne, firm commanding presence, strong steady midday light, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-hierophant": {
+    "title": { "ko": "교황", "en": "The Hierophant" },
+    "essence": "전통이 건네는 검증된 가르침",
+    "scene": "교황의 권위를 지닌 주인공 캐릭터가 두 기둥 사이 단상에 앉아 삼중 십자 지팡이를 들고 축복의 손짓을 하고 있다. 머리에는 삼중관을 쓰고 발치에는 교차된 두 개의 열쇠가 놓여 있다. 단 아래에는 가르침을 청하는 두 작은 캐릭터가 등을 보이며 앉아 있다.",
+    "symbols": ["삼중관", "삼중 십자 지팡이", "축복의 손짓", "교차된 두 열쇠", "두 기둥", "경청하는 두 캐릭터"],
+    "mood": "엄숙한 안정감, 성소의 은은한 빛",
+    "palette": "붉은 예복과 회백색 석조의 대비",
+    "promptEn": "The main character embodying the hierophant archetype seated on a raised dais between two pillars, wearing a triple crown, one hand lifted in blessing and the other holding a triple cross staff, two crossed keys lying at their feet, two smaller characters seated below listening reverently, solemn sanctuary calm, soft warm interior light, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-lovers": {
+    "title": { "ko": "연인", "en": "The Lovers" },
+    "essence": "진심이 이끄는 선택과 마음의 조화",
+    "scene": "주인공 캐릭터가 또 다른 캐릭터와 마주 보며 서로에게 손을 내밀고 있다. 두 캐릭터의 머리 위로 커다란 날개를 펼친 축복의 존재가 구름 사이에서 두 팔을 벌리고, 그 위에서 밝은 태양이 빛난다. 한쪽 뒤에는 뱀이 감긴 열매 나무가, 다른 쪽 뒤에는 불꽃 모양 잎의 나무가 서 있다.",
+    "symbols": ["마주 선 두 캐릭터", "날개를 펼친 축복의 존재", "뱀이 감긴 열매 나무", "불꽃 모양 잎의 나무", "밝은 태양"],
+    "mood": "설레는 교감, 눈부신 한낮",
+    "palette": "맑은 하늘색과 초록, 금빛 햇살",
+    "promptEn": "The main character and a second character facing each other and reaching out their hands, a great winged figure with open arms blessing them from parted clouds above, a bright sun shining overhead, a fruit tree with a coiled serpent behind one character and a tree of flame-shaped leaves behind the other, radiant harmonious midday warmth, centered subjects, vertical card composition, {STYLE}"
+  },
+  "the-chariot": {
+    "title": { "ko": "전차", "en": "The Chariot" },
+    "essence": "고삐를 쥔 의지가 이끄는 승리",
+    "scene": "주인공 캐릭터가 별이 수놓인 차양 아래 갑옷을 입고 전차 위에 당당히 서 있다. 전차 앞에는 흑백의 두 스핑크스가 서로 다른 쪽을 바라보며 엎드려 있고, 캐릭터는 홀을 쥔 채 정면을 응시한다. 뒤편으로는 성벽으로 둘러싸인 도시와 강이 펼쳐진다.",
+    "symbols": ["전차", "흑백의 두 스핑크스", "별이 수놓인 차양", "갑옷과 홀", "성벽 도시와 강 배경"],
+    "mood": "결연한 추진력, 맑고 강한 아침 빛",
+    "palette": "청회색 갑주와 금빛, 흑백 대비",
+    "promptEn": "The main character in armor standing tall in a chariot beneath a canopy embroidered with stars, holding a scepter and gazing straight ahead, one black sphinx and one white sphinx crouched before the chariot facing slightly apart, a walled city and a river stretching in the background, determined forward-driving momentum, clear strong morning light, centered subject, vertical card composition, {STYLE}"
+  },
+  "strength": {
+    "title": { "ko": "힘", "en": "Strength" },
+    "essence": "부드러움으로 다스리는 진짜 용기",
+    "scene": "주인공 캐릭터가 두려움 없는 온화한 표정으로 사자의 머리를 감싸며 입을 부드럽게 어루만지고 있다. 캐릭터의 머리 위에는 무한대 기호가 떠 있고, 허리와 머리에는 꽃으로 엮은 화환을 둘렀다. 배경에는 평화로운 들판과 낮은 산이 이어진다.",
+    "symbols": ["사자의 입을 어루만지는 손길", "머리 위 무한대 기호", "꽃 화환과 꽃 허리띠", "평화로운 들판과 낮은 산"],
+    "mood": "고요한 확신, 부드러운 황금빛 오후",
+    "palette": "따뜻한 크림색과 황금빛",
+    "promptEn": "The main character gently cradling a lion's head and softly closing its jaws with calm fearless tenderness, an infinity symbol floating above the character's head, garlands of flowers woven around their waist and hair, a peaceful meadow and a low mountain in the background, quiet inner confidence, soft golden afternoon light, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-hermit": {
+    "title": { "ko": "은둔자", "en": "The Hermit" },
+    "essence": "홀로 밝힌 등불이 비추는 한 걸음",
+    "scene": "주인공 캐릭터가 회색 망토와 두건을 두르고 눈 덮인 산봉우리 위에 홀로 서 있다. 한 손에는 육각별이 빛나는 등불을 눈높이로 들어 올리고, 다른 손으로는 긴 지팡이를 짚었다. 고개를 살짝 숙인 채 등불이 비추는 발밑의 길을 조용히 내려다본다.",
+    "symbols": ["육각별이 빛나는 등불", "회색 망토와 두건", "긴 지팡이", "눈 덮인 산봉우리"],
+    "mood": "사색의 고요, 어스름 속 등불 빛",
+    "palette": "잿빛과 남색, 등불의 노란 점광",
+    "promptEn": "The main character wrapped in a grey hooded cloak standing alone on a snowy mountain peak, lifting a lantern glowing with a six-pointed star in one hand and leaning on a tall staff with the other, head bowed while gazing at the small lit path below, contemplative solitude, dim twilight pierced by warm lantern glow, centered subject, vertical card composition, {STYLE}"
+  },
+  "wheel-of-fortune": {
+    "title": { "ko": "운명의 수레바퀴", "en": "Wheel Of Fortune" },
+    "essence": "돌고 도는 흐름이 데려오는 전환점",
+    "scene": "하늘 한가운데 거대한 황금 바퀴가 떠서 천천히 돌고 있고, 주인공 캐릭터가 그 아래에서 바퀴를 올려다보며 손을 뻗고 있다. 바퀴 위에는 검을 든 스핑크스가 앉아 있고, 바퀴를 따라 올라가는 존재와 미끄러져 내려가는 뱀이 얽혀 있다. 네 모서리 구름 속에서는 날개 달린 네 상징 존재가 지켜본다.",
+    "symbols": ["거대한 황금 바퀴", "바퀴 위의 검을 든 스핑크스", "바퀴를 오르는 존재와 내려가는 뱀", "네 모서리의 날개 달린 네 존재", "구름"],
+    "mood": "운명적 역동, 구름 사이로 번지는 빛",
+    "palette": "하늘색 바탕에 금색과 주황 포인트",
+    "promptEn": "A great golden wheel turning slowly in the middle of the sky, the main character below looking up and reaching toward it, a sphinx holding a sword seated on top of the wheel, one figure climbing up the wheel while a serpent slides down, four winged symbolic beings watching from clouds in the corners, dynamic fateful motion, light spreading between clouds, centered subject, vertical card composition, {STYLE}"
+  },
+  "justice": {
+    "title": { "ko": "정의", "en": "Justice" },
+    "essence": "치우침 없는 저울과 곧은 진실",
+    "scene": "정의의 위엄을 지닌 주인공 캐릭터가 두 기둥 사이 옥좌에 정면으로 앉아 있다. 한 손에는 하늘을 향해 곧게 세운 검을, 다른 손에는 수평을 이룬 저울을 들고 있다. 머리에는 관을 쓰고 붉은 예복을 둘렀으며 뒤편에는 보랏빛 장막이 드리워 있다.",
+    "symbols": ["곧게 세운 검", "수평을 이룬 저울", "두 기둥과 보랏빛 장막", "관과 붉은 예복"],
+    "mood": "엄정한 균형감, 치우침 없는 고른 빛",
+    "palette": "붉은 예복과 보라, 차분한 금속빛",
+    "promptEn": "The main character embodying the archetype of justice seated squarely on a throne between two pillars, holding an upright sword pointing to the sky in one hand and perfectly balanced scales in the other, wearing a crown and a red robe, a violet veil hanging behind the throne, stern impartial stillness, even neutral light, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-hanged-man": {
+    "title": { "ko": "매달린 사람", "en": "The Hanged Man" },
+    "essence": "거꾸로 매달려 얻는 새로운 눈",
+    "scene": "주인공 캐릭터가 잎이 돋아 있는 살아 있는 나무 가로대에 한쪽 발이 묶인 채 거꾸로 매달려 있다. 다른 쪽 다리는 무릎을 접어 편안하게 걸치고 두 손은 등 뒤로 모았으며, 표정은 놀랍도록 평온하다. 거꾸로 된 머리 주위로 은은한 후광이 둥글게 빛난다.",
+    "symbols": ["잎이 돋은 나무 가로대", "한쪽 발을 묶은 밧줄", "접어 올린 다른 쪽 다리", "머리 주위의 후광", "평온한 표정"],
+    "mood": "평온한 몰입, 정지된 듯 고요한 빛",
+    "palette": "차분한 청록과 후광의 연노랑",
+    "promptEn": "The main character hanging upside down from a living wooden beam sprouting green leaves, one ankle bound by a rope, the other leg bent casually at the knee, hands folded behind the back, face perfectly serene, a soft round halo glowing around the inverted head, tranquil suspended stillness, calm diffuse light, centered subject, vertical card composition, {STYLE}"
+  },
+  "death": {
+    "title": { "ko": "죽음", "en": "Death" },
+    "essence": "끝맺음이 열어 주는 새로운 문",
+    "scene": "죽음의 기사 원형을 맡은 주인공 캐릭터가 검은 갑옷을 입고 흰 말 위에 올라 천천히 나아간다. 손에는 흰 장미가 그려진 검은 깃발을 들었고, 말 앞 땅에는 왕관이 떨어져 있다. 저 멀리 두 탑 사이로 새벽 태양이 떠오르고 있다.",
+    "symbols": ["검은 갑옷", "흰 말", "흰 장미 문양의 검은 깃발", "떨어진 왕관", "두 탑 사이로 떠오르는 태양"],
+    "mood": "장엄한 고요, 새벽의 여명",
+    "palette": "흑백 대비와 지평선의 연금빛",
+    "promptEn": "The main character embodying the rider of death in black armor advancing slowly on a white horse, carrying a black banner emblazoned with a white rose, a fallen crown lying on the ground before the horse, the dawn sun rising between two distant towers on the horizon, solemn quiet grandeur, pale first light of daybreak, centered subject, vertical card composition, {STYLE}"
+  },
+  "temperance": {
+    "title": { "ko": "절제", "en": "Temperance" },
+    "essence": "섞고 고르며 찾아가는 중용의 길",
+    "scene": "커다란 날개를 지닌 주인공 캐릭터가 두 개의 잔 사이로 물줄기를 흘려보내며 신중하게 섞고 있다. 한 발은 잔잔한 연못에, 다른 발은 물가의 땅에 딛고 서 있다. 곁에는 노란 붓꽃이 피어 있고, 멀리 산등성이 너머로 빛나는 길이 이어진다.",
+    "symbols": ["두 잔 사이로 흐르는 물줄기", "물과 뭍에 걸친 두 발", "커다란 날개", "노란 붓꽃", "산 너머 빛나는 길"],
+    "mood": "차분한 조화, 부드러운 해질녘 빛",
+    "palette": "맑은 하늘색과 흰색, 노랑 포인트",
+    "promptEn": "The main character with large wings pouring water in a continuous stream between two cups with careful focus, one foot resting in a calm pool and the other on the grassy bank, yellow irises blooming nearby, a shining path leading over distant hills toward a glowing light, calm harmonious balance, soft late-afternoon glow, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-devil": {
+    "title": { "ko": "악마", "en": "The Devil" },
+    "essence": "느슨한 사슬을 스스로 붙든 속박",
+    "scene": "어두운 배경의 검은 받침대 위에 뿔과 박쥐 날개를 지닌 어둠의 존재가 웅크리고 앉아 있고, 그 머리 위로 거꾸로 선 오각별이 떠 있다. 받침대 아래에는 주인공 캐릭터가 또 다른 캐릭터와 나란히 목에 느슨한 사슬을 건 채 서 있다. 사슬은 헐거워 언제든 벗을 수 있어 보인다.",
+    "symbols": ["뿔과 박쥐 날개의 어둠의 존재", "거꾸로 선 오각별", "느슨하게 걸린 사슬", "검은 받침대", "사슬에 묶인 두 캐릭터"],
+    "mood": "무겁고 짙은 어둠, 횃불의 붉은 빛",
+    "palette": "짙은 검정과 어두운 갈색, 붉은 불빛",
+    "promptEn": "A horned shadowy being with bat-like wings crouching on a black pedestal beneath an inverted five-pointed star, the main character and a second character standing chained below, the loose chains around their necks clearly slack enough to slip off, oppressive darkness lit by a red torch glow, heavy brooding air, centered subjects, vertical card composition, {STYLE}"
+  },
+  "the-tower": {
+    "title": { "ko": "탑", "en": "The Tower" },
+    "essence": "번개 한 줄기에 무너지는 낡은 확신",
+    "scene": "바위산 꼭대기의 높은 탑에 번개가 내리쳐 꼭대기가 불타며 무너지고, 왕관 모양 지붕이 공중으로 튕겨 나간다. 주인공 캐릭터가 또 다른 캐릭터와 함께 탑에서 떨어지고 있다. 검은 밤하늘에는 번개와 불꽃이 흩날린다.",
+    "symbols": ["내리치는 번개", "불타며 무너지는 탑", "튕겨 나가는 왕관 모양 지붕", "떨어지는 두 캐릭터", "검은 하늘의 불꽃"],
+    "mood": "격렬한 붕괴의 순간, 밤의 섬광",
+    "palette": "짙은 남색 바탕에 번개의 노랑과 주황",
+    "promptEn": "A tall tower on a rocky peak struck by a bolt of lightning, its crown-shaped top blasted off in flames, the main character and a second character falling headlong from the tower, sparks and flames scattering across a black night sky, violent moment of sudden collapse, harsh lightning flash against darkness, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-star": {
+    "title": { "ko": "별", "en": "The Star" },
+    "essence": "폭풍 뒤에 돌아온 조용한 희망",
+    "scene": "주인공 캐릭터가 연못가에 한쪽 무릎을 꿇고 두 항아리의 물을 하나는 연못에, 하나는 땅에 붓고 있다. 밤하늘 한가운데에는 커다란 별 하나가 빛나고 그 둘레를 일곱 개의 작은 별이 감싸고 있다. 뒤편 나무 위에는 작은 새 한 마리가 앉아 있다.",
+    "symbols": ["커다란 별과 일곱 개의 작은 별", "두 개의 물 항아리", "연못과 땅에 동시에 붓는 물", "연못가", "나무 위의 작은 새"],
+    "mood": "치유의 평온, 맑은 별밤",
+    "palette": "깊은 파랑 밤하늘과 은백색 별빛",
+    "promptEn": "The main character kneeling by a calm pool at night, pouring water from two jugs, one onto the land and one into the pool, a single large radiant star surrounded by seven smaller stars in the sky above, a small bird perched in a tree behind, serene healing stillness, clear gentle starlit night, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-moon": {
+    "title": { "ko": "달", "en": "The Moon" },
+    "essence": "안개 속을 더듬어 걷는 직관의 밤",
+    "scene": "커다란 달이 은은한 빛을 흘리는 밤, 주인공 캐릭터가 두 개의 탑 사이로 이어진 구불구불한 길을 조심스럽게 걸어간다. 길 양옆에서는 개와 늑대가 달을 향해 울부짖고, 앞쪽 연못에서는 가재가 물 밖으로 기어 나온다. 달에서는 이슬 방울이 빛처럼 떨어져 내린다.",
+    "symbols": ["커다란 달", "두 개의 탑", "구불구불한 길", "울부짖는 개와 늑대", "연못에서 나오는 가재", "떨어지는 이슬 방울"],
+    "mood": "몽롱한 불안과 신비, 짙은 달밤",
+    "palette": "푸른 회색과 창백한 노란 달빛",
+    "promptEn": "The main character walking cautiously along a winding path that passes between two distant towers under a large glowing moon, a dog and a wolf howling upward on either side of the path, a crayfish crawling out of a pool in the foreground, droplets of light drifting down from the moon, uneasy dreamlike mystery, deep hazy night, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-sun": {
+    "title": { "ko": "태양", "en": "The Sun" },
+    "essence": "숨김없이 쏟아지는 기쁨과 활력",
+    "scene": "주인공 캐릭터가 두 팔을 활짝 벌린 채 흰 말 위에 올라 환하게 웃고 있다. 한 손에 든 커다란 붉은 깃발이 바람에 펄럭이고, 뒤편 담장 위로는 해바라기가 줄지어 피어 있다. 하늘 한가운데에서 곧은 광선을 뻗는 태양이 눈부시게 빛난다.",
+    "symbols": ["광선을 뻗는 큰 태양", "흰 말", "활짝 벌린 두 팔", "붉은 깃발", "담장 위 해바라기"],
+    "mood": "터질 듯한 기쁨, 쨍한 한낮의 햇살",
+    "palette": "샛노랑과 주황, 맑은 하늘색",
+    "promptEn": "The main character riding a white horse with both arms flung wide in open joy, a large red banner streaming in the breeze, a row of sunflowers blooming along a wall behind, a great sun with straight radiating beams blazing at the top of the sky, exuberant celebratory energy, brilliant midday sunshine, centered subject, vertical card composition, {STYLE}"
+  },
+  "judgement": {
+    "title": { "ko": "심판", "en": "Judgement" },
+    "essence": "지난 장을 덮고 깨어나는 부름",
+    "scene": "구름 사이로 나타난 날개 달린 존재가 십자 문양 깃발이 걸린 나팔을 힘차게 불고 있다. 그 아래에서 주인공 캐릭터가 열린 관에서 일어나 두 팔을 벌리고 하늘을 올려다본다. 주변의 다른 캐릭터들도 함께 깨어나고, 뒤편에는 잔잔한 물과 눈 덮인 산맥이 펼쳐진다.",
+    "symbols": ["나팔을 부는 날개 달린 존재", "십자 문양 깃발", "열린 관에서 일어나는 캐릭터들", "하늘을 향해 벌린 두 팔", "잔잔한 물과 눈 덮인 산맥"],
+    "mood": "장엄한 깨어남, 구름을 가르는 빛",
+    "palette": "회청색 구름과 눈부신 흰빛",
+    "promptEn": "A winged figure emerging from parted clouds sounding a great trumpet hung with a cross-emblem banner, the main character rising from an open coffin below with arms spread wide gazing upward, other characters awakening around them, calm water and snowy mountains in the far background, solemn awakening grandeur, radiant light breaking through clouds, centered subject, vertical card composition, {STYLE}"
+  },
+  "the-world": {
+    "title": { "ko": "세계", "en": "The World" },
+    "essence": "한 바퀴를 완성한 충만한 마무리",
+    "scene": "주인공 캐릭터가 하늘에 떠 있는 커다란 타원형 월계수 화환 한가운데에서 가볍게 춤추듯 떠 있다. 양손에는 짧은 지팡이를 하나씩 들고 몸에는 긴 천이 부드럽게 휘감겨 있다. 네 모서리 구름 속에서 네 상징 존재가 완성의 순간을 지켜본다.",
+    "symbols": ["타원형 월계수 화환", "양손의 두 지팡이", "몸을 휘감은 긴 천", "네 모서리의 네 상징 존재", "구름"],
+    "mood": "충만한 성취감, 환하고 개운한 빛",
+    "palette": "보랏빛 하늘과 월계수 초록, 금빛",
+    "promptEn": "The main character floating in a light dancing pose at the center of a great oval laurel wreath suspended in the sky, holding a short wand in each hand, a long ribbon of cloth swirling gently around them, four symbolic beings watching from clouds at the four corners, fulfilled triumphant serenity, bright clear celebratory light, centered subject, vertical card composition, {STYLE}"
+  }
+}
