@@ -5,6 +5,8 @@ const cards = require("../data");
 const { THEMES, byCardId } = require("../data/themes");
 const { makeSeed, shuffleDeck } = require("../services/deck");
 const store = require("../services/readingStore");
+const requireUser = require("../middlewares/requireUser");
+const { generateReading } = require("../services/premium");
 
 const SPREADS = {
   single: { key: "single", label: { ko: "한 장 뽑기" }, positions: ["card"] },
@@ -138,6 +140,42 @@ router.get("/:id", (req, res) => {
     drawsRemaining: positions.length - reading.draws.length,
     complete: reading.draws.length === positions.length,
   });
+});
+
+// POST /readings/:id/premium { question } — LLM personalized reading
+// grounded in the drawn cards' Waite source text + our dictionaries.
+// TODO: gate on req.user.isPremium once billing lands.
+router.post("/:id/premium", requireUser, async (req, res, next) => {
+  try {
+    const reading = store.get(req.params.id);
+    if (!reading) return res.status(404).json({ error: "reading not found or expired" });
+
+    const positions = SPREADS[reading.spread].positions;
+    if (reading.draws.length < positions.length) {
+      return res.status(409).json({ error: "draw all cards before requesting a premium reading" });
+    }
+
+    const question = (req.body?.question || "").trim();
+    if (!question) return res.status(400).json({ error: "question is required" });
+    if (question.length > 500) return res.status(400).json({ error: "question too long (max 500 chars)" });
+
+    const draws = reading.draws.map((d) => ({
+      position: { key: d.position, label: POSITION_LABELS[d.position] },
+      card: cards[reading.order[d.deckIndex]],
+      orientation: reading.orientations[d.deckIndex],
+    }));
+
+    const result = await generateReading({
+      themeKey: reading.theme,
+      spreadLabel: SPREADS[reading.spread].label.ko,
+      question,
+      draws,
+    });
+    if (result.error) return res.status(422).json({ error: result.error });
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

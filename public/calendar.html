@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>나의 타로 캘린더</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231d1740'/%3E%3Ctext x='16' y='23' font-size='18' text-anchor='middle' fill='%23d4af37'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/public/styles/tokens.css" />
+  <link rel="stylesheet" href="/public/styles/reading.css" />
+  <style>
+    /* Calendar-only components — tokens.css 변수만 사용 */
+    .cal-nav { display: flex; align-items: center; justify-content: center; gap: var(--sp-4); margin: var(--sp-4) 0; }
+    .cal-nav h2 { font-size: 1.2rem; min-width: 9rem; text-align: center; font-variant-numeric: tabular-nums; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-dow { text-align: center; font-size: var(--fs-micro); color: var(--text-muted); padding: var(--sp-1) 0; letter-spacing: 0.08em; }
+    .cal-day {
+      aspect-ratio: 1;
+      border: 1px solid var(--border-muted);
+      border-radius: var(--radius-btn);
+      background: var(--surface-veil);
+      padding: 0.3rem;
+      font-size: var(--fs-caption);
+      color: var(--text-muted);
+      cursor: pointer;
+      position: relative;
+      transition: border-color var(--ease-fast);
+      font-variant-numeric: tabular-nums;
+    }
+    .cal-day:hover { border-color: var(--brand); }
+    .cal-day.empty { visibility: hidden; }
+    .cal-day.today { border-color: var(--brand-2); }
+    .cal-day.has-entry { border-color: var(--border-brand); color: var(--text); }
+    .cal-day.has-entry::after { content: "✦"; position: absolute; bottom: 0.2rem; right: 0.35rem; color: var(--brand); font-size: 0.8rem; }
+    .cal-day.selected { border-color: var(--brand); box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+    .entry-cards { display: flex; gap: var(--sp-2); margin: var(--sp-3) 0; flex-wrap: wrap; }
+    .entry-cards .mini { width: 64px; text-align: center; font-size: var(--fs-micro); color: var(--text-muted); }
+    .entry-cards .mini img { width: 64px; aspect-ratio: var(--card-ratio); object-fit: cover; border-radius: 6px; border: 1px solid var(--border-brand); }
+    .entry-cards .mini img.reversed { transform: rotate(180deg); }
+    .entry-meta { font-size: var(--fs-caption); color: var(--text-muted); margin-bottom: var(--sp-2); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <h1>타로 캘린더</h1>
+      <p>뽑은 카드와 그날의 기록</p>
+      <nav class="header-nav"><a href="/reading">🔮 리딩 하러 가기</a></nav>
+    </header>
+
+    <div class="cal-nav">
+      <button class="btn btn-ghost" id="prevMonth">←</button>
+      <h2 id="monthTitle"></h2>
+      <button class="btn btn-ghost" id="nextMonth">→</button>
+    </div>
+
+    <div class="cal-grid" id="calGrid"></div>
+
+    <div class="panel" id="entryPanel" hidden>
+      <h3 id="entryDate"></h3>
+      <div class="entry-meta" id="entryMeta"></div>
+      <div class="entry-cards" id="entryCards"></div>
+      <textarea id="entryMemo" rows="3" placeholder="이 날의 메모"></textarea>
+      <button class="btn btn-primary" id="entrySave">메모 저장</button>
+      <button class="btn btn-ghost" id="entryDelete">기록 삭제</button>
+      <span class="status" id="entryStatus"></span>
+    </div>
+  </div>
+
+  <script src="/public/js/calendar.js"></script>
+</body>
+</html>

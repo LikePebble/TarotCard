@@ -42,10 +42,20 @@ curl http://localhost:3000/cards/onecard
 | `GET`  | `/cards`              | Returns the entire 78 card deck              |
 | `GET`  | `/cards/onecard`      | Returns a single random card                 |
 | `GET`  | `/tarotdeck/:image`   | Serves the card artwork (e.g. `thefool.jpeg`)|
+| `GET`  | `/reading`            | Interactive reading frontend (theme → shuffle → pick → results) |
+| `GET`  | `/calendar`           | Tarot calendar frontend (saved readings + daily memos) |
 | `GET`  | `/readings/meta`      | Themes (연애/금전/직장 등) and spread types   |
 | `POST` | `/readings`           | Start a reading: shuffles a session deck (`{ theme, spread, kick? }`) |
 | `POST` | `/readings/:id/draw`  | Reveal the card the user picked from the face-down deck (`{ deckIndex }`) |
 | `GET`  | `/readings/:id`       | Full reading state (drawn cards + interpretations) |
+| `POST` | `/readings/:id/premium` | LLM personalized reading for a completed spread (`{ question }`, `X-User-Id`) |
+| `POST` | `/users`              | Issue an anonymous user identity (client stores the id) |
+| `GET`  | `/users/me`           | Identity check + premium flag (`X-User-Id`)   |
+| `PUT`  | `/journal/:date`      | Save the day's reading snapshot + memo (`X-User-Id`) |
+| `GET`  | `/journal?month=YYYY-MM` | Month's entries for the calendar (`X-User-Id`) |
+| `GET`/`DELETE` | `/journal/:date` | Read / delete one day's entry (`X-User-Id`) |
+
+Premium readings call the Claude API (`ANTHROPIC_API_KEY` required); without a key the endpoint runs in a deterministic mock mode (`mock: true` in the response) so the flow stays testable. Journal data persists in SQLite (`data/app.db`, via the Node built-in driver — no native deps). Frontend structure and design tokens are documented in `docs/ui-spec.md` for the upcoming redesign.
 
 ### Reading flow
 

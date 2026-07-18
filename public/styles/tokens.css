@@ -1,0 +1,66 @@
+/* ============================================================
+   Design Tokens — 리디자인 시 이 파일만 교체하면 전체 룩이 바뀐다.
+   컴포넌트 CSS(reading.css)는 반드시 이 토큰만 참조할 것.
+   ============================================================ */
+:root {
+  /* Color — surface */
+  --surface-0: #0b0820;      /* 페이지 배경 최하단 */
+  --surface-1: #14102e;      /* 패널 */
+  --surface-2: #1d1740;      /* 카드 뒷면 등 상위 표면 */
+  --surface-veil: rgba(26, 20, 56, 0.55); /* 반투명 패널 */
+
+  /* Color — brand */
+  --brand: #d4af37;          /* 주 강조 (골드) */
+  --brand-soft: #f2d97a;
+  --brand-2: #8a5cff;        /* 보조 강조 (바이올렛) */
+
+  /* Color — text */
+  --text: #f0ebff;
+  --text-muted: #a89dc8;
+  --text-on-brand: #1a0f00;
+
+  /* Color — semantic (정/역방향 등 상태 표기, 브랜드 색과 분리) */
+  --positive: #7dd8a0;       /* 정방향 */
+  --caution: #e8a06a;        /* 역방향 */
+
+  /* Border */
+  --border-brand: rgba(212, 175, 55, 0.25);
+  --border-muted: rgba(168, 157, 200, 0.35);
+
+  /* Typography */
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Malgun Gothic", sans-serif;
+  --fs-display: 1.6rem;
+  --fs-title: 1.05rem;
+  --fs-body: 0.95rem;
+  --fs-caption: 0.8rem;
+  --fs-micro: 0.72rem;
+
+  /* Spacing scale */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+
+  /* Radius */
+  --radius-card: 10px;
+  --radius-panel: 14px;
+  --radius-pill: 999px;
+  --radius-btn: 8px;
+
+  /* Card geometry — 카드 아트 규격은 4:7 비율 기준 (docs/ui-spec.md 참고) */
+  --card-ratio: 4 / 7;
+  --card-w-slot: 96px;       /* 스프레드 슬롯 */
+  --card-w-fan: 74px;        /* 부채꼴 덱 */
+  --card-w-result: 132px;    /* 결과 카드 */
+  --fan-overlap: -52px;      /* 부채꼴 겹침 */
+
+  /* Elevation */
+  --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.5);
+  --shadow-float: 0 8px 24px rgba(212, 175, 55, 0.35);
+
+  /* Motion */
+  --ease-fast: 0.18s ease;
+  --ease-med: 0.4s ease;
+}
