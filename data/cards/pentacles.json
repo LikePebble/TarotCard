@@ -1,0 +1,548 @@
+[
+  {
+    "id": "ace-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 1,
+    "name": {
+      "en": "Ace of Pentacles",
+      "ko": "펜타클 에이스"
+    },
+    "image": "/tarotdeck/aceofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/aceofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["새로운 기회", "물질적 풍요", "안정의 씨앗", "현실적 시작"]
+      },
+      "reversed": {
+        "ko": ["기회 지연", "물욕", "불안정한 재정", "우선순위 점검"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Perfect contentment, felicity, ecstasy; also speedy intelligence; gold.",
+        "ko": "펜타클 에이스는 물질적인 풍요와 안정으로 이어질 새로운 기회의 씨앗이 손에 들어오는 순간을 의미합니다. 새로운 일이나 수입, 건강한 습관 등 현실에 뿌리내릴 수 있는 시작을 알리는 반가운 신호입니다. 좋은 기운이 흐를 때이니, 떠오른 계획을 미루지 말고 작게라도 첫 삽을 떠 보세요."
+      },
+      "reversed": {
+        "en": "The evil side of wealth, bad intelligence; also great riches. In any case it shews prosperity, comfortable material conditions, but whether these are of advantage to the possessor will depend on whether the card is reversed or not.",
+        "ko": "역방향의 펜타클 에이스는 풍요가 오히려 마음을 흐리게 하거나, 좋은 기회가 손안에서 미끄러지고 있지 않은지 돌아보게 합니다. 물질 자체보다 그것을 어디에 쓰려 하는지가 더 중요한 때입니다. 지출과 계획을 차분히 점검하면 흔들리던 기반이 다시 단단해질 수 있습니다."
+      }
+    },
+    "narrative": {
+      "en": "The Ace of Pentacles represents new opportunities in the material world, fresh foundations, and the seed of something stable and enduring. It speaks of beginnings rooted in the practical and tangible.\n\nWhen this card appears, it invites you to plant what you wish to grow. Whether starting a project, settling into a new space, or beginning a fresh routine, the soil is ready."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "two-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 2,
+    "name": {
+      "en": "Two of Pentacles",
+      "ko": "펜타클 2"
+    },
+    "image": "/tarotdeck/twoofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/twoofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["균형 잡기", "유연한 대처", "동시 진행", "변화의 리듬"]
+      },
+      "reversed": {
+        "ko": ["과부하", "우선순위 혼란", "억지 여유", "재정 관리 필요"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "On the one hand it is represented as a card of gaiety, recreation and its connexions, which is the subject of the design; but it is read also as news and messages in writing, as obstacles, agitation, trouble, embroilment.",
+        "ko": "펜타클 2는 여러 가지 일과 책임 사이에서 리듬을 타며 균형을 잡아 가는 시기를 의미합니다. 일과 생활, 수입과 지출처럼 두 가지를 동시에 굴려야 하지만, 지금은 그 자체를 즐길 수 있는 유연함이 있습니다. 완벽하게 해내려 하기보다 우선순위를 정하고 가볍게 움직여 보세요."
+      },
+      "reversed": {
+        "en": "Enforced gaiety, simulated enjoyment, literal sense, handwriting, composition, letters of exchange.",
+        "ko": "역방향의 펜타클 2는 겉으로는 괜찮은 척하지만 속으로는 버겁게 버티고 있지 않은지 돌아보게 합니다. 감당할 수 있는 양을 넘어서면 어느 쪽도 제대로 돌보기 어려워집니다. 잠시 멈추어 일정을 정리하고, 내려놓아도 되는 짐부터 하나씩 덜어 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Two of Pentacles represents balance, adaptability, and the skill of managing many things at once. It speaks of juggling responsibilities while staying light on your feet.\n\nThis card reminds you that life moves in waves. Stay flexible, prioritise wisely, and remember that grace under pressure is its own quiet achievement."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "three-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 3,
+    "name": {
+      "en": "Three of Pentacles",
+      "ko": "펜타클 3"
+    },
+    "image": "/tarotdeck/threeofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/threeofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["협업", "숙련된 솜씨", "인정받는 노력", "함께 만드는 성과"]
+      },
+      "reversed": {
+        "ko": ["완성도 부족", "협력 부재", "동기 저하", "안일함"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Métier, trade, skilled labour; usually, however, regarded as a card of nobility, aristocracy, renown, glory.",
+        "ko": "펜타클 3은 갈고닦은 실력이 주변의 인정을 받고, 함께 일하는 사람들과 좋은 결과를 만들어 가는 시기를 의미합니다. 혼자 애쓰기보다 각자의 재능을 모을 때 성과가 훨씬 커집니다. 자신의 역할에 자부심을 갖되, 동료의 의견에도 귀를 열어 두세요."
+      },
+      "reversed": {
+        "en": "Mediocrity, in work and otherwise, puerility, pettiness, weakness.",
+        "ko": "역방향의 펜타클 3은 일이 평범한 수준에 머물거나, 사소한 다툼으로 협력이 흐트러지고 있지 않은지 돌아보게 합니다. 기본기를 건너뛴 채 결과만 서두르면 완성도가 떨어지기 쉽습니다. 실력을 다시 다듬고 소통의 방식을 정비하면 흐름은 충분히 되살아납니다."
+      }
+    },
+    "narrative": {
+      "en": "The Three of Pentacles represents collaboration, craftsmanship, and the satisfaction of building something well with others. It speaks of skill being recognised and effort being valued.\n\nWhen this card appears, it suggests that working together will bring better results than going it alone. Share your ideas, listen to others, and take pride in what you create as a team."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "four-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 4,
+    "name": {
+      "en": "Four of Pentacles",
+      "ko": "펜타클 4"
+    },
+    "image": "/tarotdeck/fourofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/fourofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["안정된 소유", "지키려는 마음", "저축", "물려받는 것"]
+      },
+      "reversed": {
+        "ko": ["집착", "지연과 답답함", "변화 거부", "움켜쥔 손"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "The surety of possessions, cleaving to that which one has, gift, legacy, inheritance.",
+        "ko": "펜타클 4는 지금까지 모아 온 것을 안전하게 지키고 싶은 마음과 든든한 소유의 안정감을 의미합니다. 저축이나 유산, 확보된 자리처럼 손에 쥔 것이 힘이 되어 주는 시기입니다. 다만 지키는 데에만 힘을 쏟기보다, 무엇을 위해 지키는지도 함께 떠올려 보세요."
+      },
+      "reversed": {
+        "en": "Suspense, delay, opposition.",
+        "ko": "역방향의 펜타클 4는 잃을까 하는 두려움에 손을 너무 꽉 쥐어, 오히려 일이 지체되고 답답해지는 상황을 돌아보게 합니다. 돈이든 사람이든 움켜쥘수록 흐름은 막히기 마련입니다. 놓으라는 뜻이 아니라, 쥐는 힘을 조금 풀어 숨통을 틔워 주라는 신호입니다."
+      }
+    },
+    "narrative": {
+      "en": "The Four of Pentacles represents holding on, security, and the desire to protect what you have. It speaks of stability, but also of the risk of clinging too tightly.\n\nThis card asks you to consider what you are guarding and why. Some things deserve to be kept safe. Others grow only when given space. Find the balance between caution and openness."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "five-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 5,
+    "name": {
+      "en": "Five of Pentacles",
+      "ko": "펜타클 5"
+    },
+    "image": "/tarotdeck/fiveofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/fiveofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["물질적 어려움", "겨울의 시간", "소외감", "함께 견디는 시련"]
+      },
+      "reversed": {
+        "ko": ["혼란 정리", "회복의 실마리", "도움 받아들이기", "재정비"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "The card foretells material trouble above all, whether in the form illustrated--that is, destitution--or otherwise. For some cartomancists, it is a card of love and lovers-wife, husband, friend, mistress; also concordance, affinities. These alternatives cannot be harmonized.",
+        "ko": "펜타클 5는 금전이나 건강 면에서 겨울처럼 시린 시기를 지나고 있음을 의미합니다. 다만 이 카드에는 어려움 속에서도 곁을 지켜 주는 사람의 온기가 함께 담겨 있습니다. 혼자 견디려 하지 말고 도움을 청해 보세요. 문은 생각보다 가까운 곳에 열려 있습니다."
+      },
+      "reversed": {
+        "en": "Disorder, chaos, ruin, discord, profligacy.",
+        "ko": "역방향의 펜타클 5는 무질서한 소비나 정리되지 않은 상황이 어려움을 키우고 있지 않은지 돌아보게 합니다. 지금 필요한 것은 자책이 아니라 흐트러진 것들을 하나씩 제자리에 놓는 일입니다. 작은 것부터 정돈해 가면 회복의 실마리가 분명히 보이기 시작합니다."
+      }
+    },
+    "narrative": {
+      "en": "The Five of Pentacles represents hardship, feeling left out, or going through a period of lack. It honours the loneliness that can come when times are difficult.\n\nThis card also reminds you that help is closer than it may seem. Look for the light. Reach out when you need to, and trust that this passage is temporary."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "six-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 6,
+    "name": {
+      "en": "Six of Pentacles",
+      "ko": "펜타클 6"
+    },
+    "image": "/tarotdeck/sixofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/sixofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["나눔", "관대함", "주고받는 균형", "때맞은 도움"]
+      },
+      "reversed": {
+        "ko": ["일방적인 관계", "조건 붙은 호의", "시기심", "겉치레 나눔"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Presents, gifts, gratification another account says attention, vigilance now is the accepted time, present prosperity, etc.",
+        "ko": "펜타클 6은 가진 것을 나누고 필요한 도움을 받는, 주고받음의 건강한 순환을 의미합니다. 선물이나 지원, 좋은 제안처럼 때맞은 풍요가 오가는 시기입니다. 베풀 수 있다면 기꺼이 나누고, 받는 입장이라면 미안해하기보다 감사히 받아들여 보세요."
+      },
+      "reversed": {
+        "en": "Desire, cupidity, envy, jealousy, illusion.",
+        "ko": "역방향의 펜타클 6은 나눔에 조건이 붙어 있거나, 주고받음의 저울이 한쪽으로 기울어 있지 않은지 돌아보게 합니다. 남의 몫과 비교하는 마음이나 보답을 바라는 호의는 관계를 지치게 합니다. 무엇을 왜 주고받고 있는지 솔직하게 들여다보면 균형을 되찾을 수 있습니다."
+      }
+    },
+    "narrative": {
+      "en": "The Six of Pentacles represents generosity, fairness, and the flow of giving and receiving. It speaks of sharing what you have and being open to support when it comes your way.\n\nWhen this card appears, it invites you to consider where balance is needed. Offer what you can. Accept help with grace. Abundance grows when it moves freely between people."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "seven-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 7,
+    "name": {
+      "en": "Seven of Pentacles",
+      "ko": "펜타클 7"
+    },
+    "image": "/tarotdeck/sevenofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/sevenofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["인내", "중간 점검", "장기적 안목", "무르익는 결실"]
+      },
+      "reversed": {
+        "ko": ["조급함", "금전 불안", "투자 재검토", "성과에 대한 회의"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "These are exceedingly contradictory; in the main, it is a card of money, business, barter; but one reading gives altercation, quarrels--and another innocence, ingenuity, purgation.",
+        "ko": "펜타클 7은 그동안 공들여 온 일과 재정의 흐름을 잠시 멈춰 서서 점검하는 시기를 의미합니다. 열매가 무르익으려면 시간이 필요하듯, 지금은 결과를 재촉하기보다 방향을 확인할 때입니다. 무엇이 잘 자라고 있고 무엇을 손봐야 하는지 차분히 살펴보세요."
+      },
+      "reversed": {
+        "en": "Cause for anxiety regarding money which it may be proposed to lend.",
+        "ko": "역방향의 펜타클 7은 돈을 빌려주거나 투자하려는 결정에 불안이 섞여 있지 않은지 돌아보게 합니다. 조급함에 밀려 내리는 판단은 애써 가꾼 것을 흔들 수 있습니다. 계약이나 금전 약속은 한 번 더 조건을 따져 보고, 확신이 설 때까지 결정을 미뤄도 괜찮습니다."
+      }
+    },
+    "narrative": {
+      "en": "The Seven of Pentacles represents patience, assessment, and the long view that comes with steady effort. It speaks of pausing to evaluate progress and trusting that growth takes time.\n\nThis card invites you to step back and consider what you have planted. Some things are ready to harvest. Others need more time. Either way, your work is not wasted."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "eight-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 8,
+    "name": {
+      "en": "Eight of Pentacles",
+      "ko": "펜타클 8"
+    },
+    "image": "/tarotdeck/eightofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/eightofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["꾸준한 연마", "성실함", "기술 향상", "일에 대한 정성"]
+      },
+      "reversed": {
+        "ko": ["헛된 야심", "매너리즘", "잔재주", "정성 부족"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Work, employment, commission, craftsmanship, skill in craft and business, perhaps in the preparatory stage.",
+        "ko": "펜타클 8은 한 가지 일에 정성을 들여 실력을 차곡차곡 쌓아 가는 성실한 연마의 시간을 의미합니다. 화려하지 않아도 반복되는 노력이 전문성이라는 확실한 자산이 되어 줍니다. 지금의 배움과 훈련이 준비 단계라 느껴져도, 하루하루의 몰입을 소중히 이어 가 보세요."
+      },
+      "reversed": {
+        "en": "Voided ambition, vanity, cupidity, exaction, usury. It may also signify the possession of skill, in the sense of the ingenious mind turned to cunning and intrigue.",
+        "ko": "역방향의 펜타클 8은 일의 의미를 잃은 채 기계적으로 반복하거나, 재주를 지름길과 요령에만 쓰고 있지 않은지 돌아보게 합니다. 겉으로 보이는 성과에 급급하면 애써 쌓은 신뢰가 흔들릴 수 있습니다. 처음 이 일을 시작했던 마음을 떠올리며 기본으로 돌아가 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Eight of Pentacles represents dedication, skill building, and the quiet pride of becoming good at something through practice. It speaks of focus, repetition, and care for the craft itself.\n\nWhen this card appears, it encourages you to keep going. Each small effort adds up. Mastery comes not from talent alone but from showing up day after day."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "nine-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 9,
+    "name": {
+      "en": "Nine of Pentacles",
+      "ko": "펜타클 9"
+    },
+    "image": "/tarotdeck/nineofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/nineofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["자립", "풍요로운 여유", "성취의 확신", "분별력"]
+      },
+      "reversed": {
+        "ko": ["기만 주의", "계획 무산", "신뢰 점검", "겉만 화려한 풍요"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Prudence, safety, success, accomplishment, certitude, discernment.",
+        "ko": "펜타클 9는 스스로의 노력으로 일군 안정과 풍요를 여유롭게 누리는 시기를 의미합니다. 신중한 선택이 쌓여 성취라는 확실한 결실이 되었음을 보여 주는 카드입니다. 이룬 것을 충분히 즐기되, 지금의 분별력과 자기 관리를 계속 지켜 가 보세요."
+      },
+      "reversed": {
+        "en": "Roguery, deception, voided project, bad faith.",
+        "ko": "역방향의 펜타클 9는 겉만 번드르르한 제안이나 신의 없는 거래에 흔들리고 있지 않은지 돌아보게 합니다. 서두른 계약이나 검증되지 않은 약속은 공들인 계획을 무너뜨릴 수 있습니다. 상대와 조건을 꼼꼼히 확인하고, 스스로의 기준을 다시 단단히 세워 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Nine of Pentacles represents independence, comfort, and the quiet enjoyment of the life you have built. It speaks of self sufficiency and the pleasure of moments truly your own.\n\nThis card invites you to appreciate your surroundings and recognise the freedom that comes from your own efforts. Take time to enjoy the fruits of what you have created."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "ten-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 10,
+    "name": {
+      "en": "Ten of Pentacles",
+      "ko": "펜타클 10"
+    },
+    "image": "/tarotdeck/tenofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/tenofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["가족의 번영", "유산", "안정된 기반", "대를 잇는 풍요"]
+      },
+      "reversed": {
+        "ko": ["재정 손실", "가족 갈등", "요행 심리", "기반 점검"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Gain, riches; family matters, archives, extraction, the abode of a family.",
+        "ko": "펜타클 10은 가족과 함께 누리는 풍요, 세대를 이어 전해지는 안정된 기반을 의미합니다. 재산이나 집, 가업처럼 오래 쌓아 온 것이 든든한 울타리가 되어 주는 시기입니다. 지금의 안정이 어디에서 왔는지 기억하며, 다음 세대와 공동체에도 그 온기를 나눠 보세요."
+      },
+      "reversed": {
+        "en": "Chance, fatality, loss, robbery, games of hazard; sometimes gift, dowry, pension.",
+        "ko": "역방향의 펜타클 10은 요행에 기대는 선택이나 가족 간의 재정 문제로 기반이 흔들리고 있지 않은지 돌아보게 합니다. 상속이나 공동 재산처럼 얽힌 문제일수록 감정보다 원칙이 필요합니다. 위험한 지름길을 피하고, 지켜야 할 것부터 차근차근 정리해 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Ten of Pentacles represents lasting stability, family, and the sense of being part of something that endures beyond the moment. It speaks of legacy, tradition, and the comfort of strong foundations.\n\nWhen this card appears, it honours what you and those before you have built. Take pride in the home, community, or shared history that supports you."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "page-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 11,
+    "name": {
+      "en": "Page of Pentacles",
+      "ko": "펜타클 시종"
+    },
+    "image": "/tarotdeck/pageofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/pageofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["배움의 열의", "성실한 탐구", "새로운 소식", "실속 있는 계획"]
+      },
+      "reversed": {
+        "ko": ["낭비", "산만함", "아쉬운 소식", "계획 흐지부지"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Application, study, scholarship, reflection another reading says news, messages and the bringer thereof; also rule, management.",
+        "ko": "펜타클 시종은 배움에 대한 열의와 성실한 탐구, 현실에 도움이 되는 반가운 소식을 의미합니다. 공부나 자격 준비, 새로운 기술처럼 미래의 자산이 될 씨앗을 심기 좋은 때입니다. 거창하지 않아도 좋으니, 관심 가는 분야를 오늘부터 조금씩 파고들어 보세요."
+      },
+      "reversed": {
+        "en": "Prodigality, dissipation, liberality, luxury; unfavourable news.",
+        "ko": "역방향의 펜타클 시종은 배움과 계획이 흐지부지되거나, 시간과 돈이 새어 나가고 있지 않은지 돌아보게 합니다. 기대와 다른 소식이 들려와도 낙심하기보다 계획을 다듬을 기회로 삼아 보세요. 목표를 작게 쪼개어 다시 시작하면 흩어졌던 집중력이 돌아옵니다."
+      }
+    },
+    "narrative": {
+      "en": "The Page of Pentacles represents fresh study, new skills, and the eagerness to learn something practical. This figure approaches the world with curiosity and a willingness to start from the beginning.\n\nWhen this card appears, it invites you to take an interest in something new. Sign up for the class, begin the project, or read the book. Small starts lead to meaningful growth."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "knight-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 12,
+    "name": {
+      "en": "Knight of Pentacles",
+      "ko": "펜타클 기사"
+    },
+    "image": "/tarotdeck/knightofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/knightofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["근면", "책임감", "꾸준한 전진", "믿음직함"]
+      },
+      "reversed": {
+        "ko": ["정체", "나태", "무기력", "의욕 저하"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Utility, serviceableness, interest, responsibility, rectitude-all on the normal and external plane.",
+        "ko": "펜타클 기사는 맡은 일을 끝까지 해내는 책임감과 느리지만 확실한 전진을 의미합니다. 화려한 속도전보다 묵묵한 성실함이 신뢰와 성과로 돌아오는 시기입니다. 세운 계획을 흔들림 없이 지켜 가되, 정한 일과를 꾸준히 반복하는 힘을 믿어 보세요."
+      },
+      "reversed": {
+        "en": "inertia, idleness, repose of that kind, stagnation; also placidity, discouragement, carelessness.",
+        "ko": "역방향의 펜타클 기사는 안정이 어느새 정체가 되어, 의욕과 긴장감이 느슨해지고 있지 않은지 돌아보게 합니다. 익숙한 일상에 안주하면 놓치는 부분이 생기기 쉽습니다. 게으름을 탓하기보다 작은 변화 하나를 더해, 멈춘 바퀴를 다시 굴려 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Knight of Pentacles represents steady effort, reliability, and the slow but sure progress that comes from sticking with the plan. This figure values consistency over flash.\n\nThis card encourages you to be patient and methodical. Keep your commitments, follow through on the details, and trust that careful work builds lasting results."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "queen-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 13,
+    "name": {
+      "en": "Queen of Pentacles",
+      "ko": "펜타클 여왕"
+    },
+    "image": "/tarotdeck/queenofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/queenofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["넉넉한 보살핌", "현실 감각", "안정된 살림", "너그러움"]
+      },
+      "reversed": {
+        "ko": ["불신", "막연한 불안", "지나친 걱정", "자기 돌봄 부족"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Opulence, generosity, magnificence, security, liberty.",
+        "ko": "펜타클 여왕은 풍요를 넉넉히 나누는 너그러움과 일상을 안정되게 가꾸는 현실 감각을 의미합니다. 살림과 일, 관계를 두루 살피며 주변을 편안하게 만드는 힘이 빛나는 시기입니다. 다른 이를 돌보는 만큼, 자신의 몸과 마음에도 같은 정성을 들여 주세요."
+      },
+      "reversed": {
+        "en": "Evil, suspicion, suspense, fear, mistrust.",
+        "ko": "역방향의 펜타클 여왕은 막연한 불안과 의심이 마음의 여유를 갉아먹고 있지 않은지 돌아보게 합니다. 걱정이 커질수록 정작 돌봐야 할 자신과 일상은 뒷전이 되기 쉽습니다. 사실과 짐작을 구분해 보고, 따뜻한 밥 한 끼와 충분한 휴식부터 챙겨 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Queen of Pentacles represents nurturing practicality, comfort, and the grounded warmth of someone who tends to home, family, and the everyday details with care.\n\nWhen this card appears, it invites you to look after the basics. Eat well, rest, tend to your space, and give thoughtful care to those around you. Quiet, consistent love is its own kind of magic."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "king-of-pentacles",
+    "arcana": "minor",
+    "suit": "pentacles",
+    "number": 14,
+    "name": {
+      "en": "King of Pentacles",
+      "ko": "펜타클 왕"
+    },
+    "image": "/tarotdeck/kingofpentacles.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/kingofpentacles.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["사업 수완", "확고한 성공", "든든한 통솔력", "현실적 지혜"]
+      },
+      "reversed": {
+        "ko": ["탐욕", "완고함", "신뢰 훼손", "가치관 점검"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Valour, realizing intelligence, business and normal intellectual aptitude, sometimes mathematical gifts and attainments of this kind; success in these paths.",
+        "ko": "펜타클 왕은 뛰어난 사업 수완과 현실적인 지혜로 뜻한 바를 이루어 내는 확고한 성공을 의미합니다. 계획을 숫자와 성과로 바꾸는 실행력이 무르익어, 큰 결정을 내리기에 좋은 시기입니다. 이룬 것을 지키는 데 그치지 말고, 그 안정으로 주변까지 든든하게 받쳐 주세요."
+      },
+      "reversed": {
+        "en": "Vice, weakness, ugliness, perversity, corruption, peril.",
+        "ko": "역방향의 펜타클 왕은 성공에 대한 집착이 탐욕이나 완고함으로 굳어지고 있지 않은지 돌아보게 합니다. 이익만 좇는 선택은 당장은 커 보여도 오래 쌓은 신뢰를 해칠 수 있습니다. 돈과 성과가 누구를 위한 것이었는지, 처음의 가치관을 다시 꺼내어 점검해 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The King of Pentacles represents established success, generosity, and the confidence of someone who has built something solid and enjoys sharing its rewards.\n\nThis card encourages you to lead with steadiness and to be generous with what you have. Stability is built over time, and you have the wisdom to manage what is in your care wisely."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  }
+]

@@ -1,0 +1,548 @@
+[
+  {
+    "id": "ace-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 1,
+    "name": {
+      "en": "Ace of Wands",
+      "ko": "완드 에이스"
+    },
+    "image": "/tarotdeck/aceofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/aceofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["새로운 시작", "창조적 영감", "열정의 불씨", "잠재력"]
+      },
+      "reversed": {
+        "ko": ["의욕 저하", "지연된 시작", "방향 상실", "흐려진 기쁨"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Creation, invention, enterprise, the powers which result in these; principle, beginning, source; birth, family, origin, and in a sense the virility which is behind them; the starting point of enterprises; according to another account, money, fortune, inheritance.",
+        "ko": "완드 에이스는 새로운 열정의 불씨와 창조적 에너지의 시작을 의미합니다. 마음속에서 꿈틀거리던 아이디어가 드디어 형태를 갖추기 시작하는 때입니다. 계산보다 영감을 믿고 과감하게 첫걸음을 내딛어 보세요."
+      },
+      "reversed": {
+        "en": "Fall, decadence, ruin, perdition, to perish also a certain clouded joy.",
+        "ko": "역방향의 완드 에이스는 의욕이 꺾이거나 시작이 자꾸 미뤄지고 있는 상태를 돌아보게 합니다. 불씨가 꺼진 것이 아니라 잠시 바람을 피하고 있을 뿐입니다. 무엇이 열정을 가로막고 있는지 살펴보고, 작은 실천부터 다시 불을 지펴 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Ace of Wands represents inspiration, new energy, and the spark that ignites a fresh creative path. It speaks of passion, possibility, and the urge to begin.\n\nWhen this card appears, it invites you to follow the spark. Whatever has been stirring in you is ready to take form. Trust the impulse and act on it."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "two-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 2,
+    "name": {
+      "en": "Two of Wands",
+      "ko": "완드 2"
+    },
+    "image": "/tarotdeck/twoofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/twoofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["미래 구상", "계획", "선택의 기로", "넓은 시야"]
+      },
+      "reversed": {
+        "ko": ["예상 밖의 변화", "두려움", "망설임", "좁아진 시야"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Between the alternative readings there is no marriage possible; on the one hand, riches, fortune, magnificence; on the other, physical suffering, disease, chagrin, sadness, mortification. The design gives one suggestion; here is a lord overlooking his dominion and alternately contemplating a globe; it looks like the malady, the mortification, the sadness of Alexander amidst the grandeur of this world's wealth.",
+        "ko": "완드 2는 이미 이룬 것 위에 서서 더 넓은 세상을 내다보는 계획과 전망의 카드입니다. 풍요로움 속에서도 어딘가 채워지지 않는 갈망이 다음 걸음을 재촉하는 때입니다. 현재에 안주하기보다 원하는 미래를 구체적으로 그리고 방향을 정해 보세요."
+      },
+      "reversed": {
+        "en": "Surprise, wonder, enchantment, emotion, trouble, fear.",
+        "ko": "역방향의 완드 2는 예상치 못한 변화나 미지에 대한 두려움이 발걸음을 붙잡고 있음을 보여 줍니다. 놀라움과 동요 속에도 새로운 가능성이 함께 숨어 있을 수 있습니다. 불안에 시야를 좁히기보다 지금 확실한 것부터 하나씩 정리해 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Two of Wands represents planning, vision, and the moment of standing at the edge of what could be. It speaks of looking outward and considering your next move.\n\nThis card invites you to dream broadly and choose your direction with care. The world is wider than it seems. Where you go next is yours to decide."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "three-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 3,
+    "name": {
+      "en": "Three of Wands",
+      "ko": "완드 3"
+    },
+    "image": "/tarotdeck/threeofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/threeofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["확장", "결실의 조짐", "협력", "넓어진 기회"]
+      },
+      "reversed": {
+        "ko": ["고난의 마무리", "회복", "재정비", "새로운 국면"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "He symbolizes established strength, enterprise, effort, trade, commerce, discovery; those are his ships, bearing his merchandise, which are sailing over the sea. The card also signifies able co-operation in business, as if the successful merchant prince were looking from his side towards yours with a view to help you.",
+        "ko": "완드 3은 노력의 결실이 배처럼 돌아오기 시작하는 확장과 전망의 카드입니다. 지금까지의 준비가 헛되지 않았음을 알려 주는 반가운 신호이기도 합니다. 든든한 협력의 손길에 마음을 열고, 더 넓은 무대를 향해 시야를 키워 보세요."
+      },
+      "reversed": {
+        "en": "The end of troubles, suspension or cessation of adversity, toil and disappointment.",
+        "ko": "역방향의 완드 3은 길었던 어려움과 수고가 서서히 마무리되는 국면을 알려 줍니다. 다만 회복의 흐름을 당연하게 여기기보다 지친 마음을 먼저 추스르는 것이 좋습니다. 다음 항해를 준비하며 계획을 차분히 재정비해 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Three of Wands represents expansion, foresight, and the satisfaction of watching plans begin to unfold. It speaks of progress and the horizon coming into view.\n\nWhen this card appears, it suggests that your efforts are bearing fruit. Stay patient as things develop and remain open to opportunities that arrive from unexpected places."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "four-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 4,
+    "name": {
+      "en": "Four of Wands",
+      "ko": "완드 4"
+    },
+    "image": "/tarotdeck/fourofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/fourofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["축하", "안정된 터전", "화합", "결실"]
+      },
+      "reversed": {
+        "ko": ["변함없는 축복", "소박한 기쁨", "내적 안정", "감사"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "They are for once almost on the surface--country life, haven of refuge, a species of domestic harvest-home, repose, concord, harmony, prosperity, peace, and the perfected work of these.",
+        "ko": "완드 4는 하나의 결실을 맺고 함께 기뻐하는 축하와 화합의 카드입니다. 그동안 쌓아 온 노력이 편안한 안식처와 안정된 터전이 되어 주고 있습니다. 잠시 멈추어 소중한 사람들과 이 평화로운 순간을 나누어 보세요."
+      },
+      "reversed": {
+        "en": "The meaning remains unaltered; it is prosperity, increase, felicity, beauty, embellishment.",
+        "ko": "역방향의 완드 4는 의미가 크게 달라지지 않는 카드로, 여전히 번영과 기쁨의 기운을 품고 있습니다. 다만 그 행복이 화려한 성취보다 소박한 일상 속에 깃들어 있을 수 있습니다. 가까이에 있는 작은 축복을 놓치지 말고 감사히 누려 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Four of Wands represents celebration, home, and the joy of arriving at a milestone worth marking. It speaks of harmony, belonging, and shared accomplishment.\n\nThis card invites you to pause and appreciate what you have built. Gather with those who matter to you. Joy shared is joy multiplied."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "five-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 5,
+    "name": {
+      "en": "Five of Wands",
+      "ko": "완드 5"
+    },
+    "image": "/tarotdeck/fiveofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/fiveofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["경쟁", "의견 충돌", "치열한 노력", "성장의 자극"]
+      },
+      "reversed": {
+        "ko": ["소모적 다툼", "분쟁 심화", "불신", "입장 차이"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Imitation, as, for example, sham fight, but also the strenuous competition and struggle of the search after riches and fortune. In this sense it connects with the battle of life. Hence some attributions say that it is a card of gold, gain, opulence.",
+        "ko": "완드 5는 서로 다른 열정이 부딪히는 경쟁과 의견 충돌의 카드입니다. 겉보기에는 소란스럽지만, 이 마찰은 더 나은 결과를 향한 성장의 자극이 되기도 합니다. 이기려고만 하기보다 서로의 이야기에 귀 기울이며 공통의 목표를 찾아보세요."
+      },
+      "reversed": {
+        "en": "Litigation, disputes, trickery, contradiction.",
+        "ko": "역방향의 완드 5는 건강한 경쟁이 소모적인 다툼이나 불필요한 신경전으로 번지고 있지 않은지 돌아보게 합니다. 갈등 자체보다 그것을 다루는 방식이 관건입니다. 감정적인 대응을 잠시 멈추고 정말 지켜야 할 것이 무엇인지 정리해 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Five of Wands represents friction, competition, and the energy of differing opinions colliding. It speaks of disagreements that can either fragment or sharpen, depending on how they are handled.\n\nThis card invites you to listen as much as you speak. Conflict can be productive when met with patience. Look for common ground beneath the noise."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "six-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 6,
+    "name": {
+      "en": "Six of Wands",
+      "ko": "완드 6"
+    },
+    "image": "/tarotdeck/sixofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/sixofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["승리", "인정", "좋은 소식", "이루어진 기대"]
+      },
+      "reversed": {
+        "ko": ["지연되는 결과", "불안", "흔들리는 신뢰", "자신감 저하"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "The card has been so designed that it can cover several significations; on the surface, it is a victor triumphing, but it is also great news, such as might be carried in state by the King's courier; it is expectation crowned with its own desire, the crown of hope, and so forth.",
+        "ko": "완드 6은 노력이 결실을 맺어 주변의 인정을 받는 승리의 카드입니다. 기다리던 반가운 소식이 도착하고, 품어 온 기대가 이루어지는 때이기도 합니다. 성취를 겸손하게 받아들이되, 함께해 준 이들과 그 공을 나누어 보세요."
+      },
+      "reversed": {
+        "en": "Apprehension, fear, as of a victorious enemy at the gate; treachery, disloyalty, as of gates being opened to the enemy; also indefinite delay.",
+        "ko": "역방향의 완드 6은 기대한 결과가 늦어지거나 성과를 둘러싼 불안이 커진 상태를 보여 줍니다. 주변과의 신뢰가 흔들리고 있지는 않은지도 함께 점검해 볼 때입니다. 조급함을 내려놓고 지금 할 수 있는 일에 다시 집중해 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Six of Wands represents victory, recognition, and the pride of having your efforts acknowledged. It speaks of public success and the rewards of perseverance.\n\nWhen this card appears, it honours your hard work. Accept the praise with grace, share credit where it is due, and let this moment encourage you to keep going."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "seven-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 7,
+    "name": {
+      "en": "Seven of Wands",
+      "ko": "완드 7"
+    },
+    "image": "/tarotdeck/sevenofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/sevenofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["소신", "용기 있는 방어", "유리한 위치", "경쟁의 우위"]
+      },
+      "reversed": {
+        "ko": ["우유부단", "망설임", "압박감", "흔들리는 확신"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "It is a card of valour, for, on the surface, six are attacking one, who has, however, the vantage position. On the intellectual plane, it signifies discussion, wordy strife; in business--negotiations, war of trade, barter, competition. It is further a card of success, for the combatant is on the top and his enemies may be unable to reach him.",
+        "ko": "완드 7은 여러 도전 앞에서도 자신의 자리를 지켜 내는 용기와 소신의 카드입니다. 치열한 경쟁이나 논쟁 속에서도 지금은 유리한 위치에 서 있으니 쉽게 물러설 필요가 없습니다. 옳다고 믿는 가치를 담담하게, 그러나 단단하게 지켜 보세요."
+      },
+      "reversed": {
+        "en": "Perplexity, embarrassments, anxiety. It is also a caution against indecision.",
+        "ko": "역방향의 완드 7은 결정을 미루는 사이 혼란과 불안이 쌓여 가고 있음을 알려 줍니다. 모든 요구에 다 응하려다 정작 중요한 것을 놓칠 수 있는 때입니다. 지켜야 할 것의 우선순위를 정하고, 선택을 더는 미루지 않는 것이 좋습니다."
+      }
+    },
+    "narrative": {
+      "en": "The Seven of Wands represents standing your ground, defending what you have built, and holding firm in the face of challenge. It speaks of conviction tested.\n\nThis card encourages you to stay strong. You have the high ground. Trust what you know, hold your position, and remember that boundaries are sometimes worth defending."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "eight-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 8,
+    "name": {
+      "en": "Eight of Wands",
+      "ko": "완드 8"
+    },
+    "image": "/tarotdeck/eightofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/eightofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["빠른 진행", "추진력", "소식의 도착", "순풍"]
+      },
+      "reversed": {
+        "ko": ["질투", "내부 갈등", "어긋난 소통", "성급함"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Activity in undertakings, the path of such activity, swiftness, as that of an express messenger; great haste, great hope, speed towards an end which promises assured felicity; generally, that which is on the move; also the arrows of love.",
+        "ko": "완드 8은 일이 빠르게 진행되고 기다리던 소식이 도착하는 가속의 카드입니다. 멈춰 있던 흐름에 순풍이 불고, 사랑의 기운이 움직이기 시작하는 때이기도 합니다. 기회가 지나가기 전에 민첩하게 응답하며 이 흐름에 몸을 실어 보세요."
+      },
+      "reversed": {
+        "en": "Arrows of jealousy, internal dispute, stingings of conscience, quarrels; and domestic disputes for persons who are married.",
+        "ko": "역방향의 완드 8은 질투나 오해, 어긋난 소통이 흐름을 흐트러뜨리고 있음을 보여 줍니다. 속도를 내기 전에 마음속 감정의 매듭부터 풀어야 할 때입니다. 가까운 사람과의 대화를 미루지 말고 솔직하게 마음을 나누어 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Eight of Wands represents swift movement, momentum, and the rapid unfolding of events. It speaks of messages arriving quickly and progress picking up speed.\n\nWhen this card appears, expect things to move. Stay agile, respond promptly, and ride the wave of energy that is now in motion."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "nine-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 9,
+    "name": {
+      "en": "Nine of Wands",
+      "ko": "완드 9"
+    },
+    "image": "/tarotdeck/nineofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/nineofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["끈기", "회복력", "마지막 고비", "굳건한 방어"]
+      },
+      "reversed": {
+        "ko": ["거듭된 장애물", "소진", "지친 마음", "과도한 경계"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "The card signifies strength in opposition. If attacked, the person will meet an onslaught boldly; and his build shews, that he may prove a formidable antagonist. With this main significance there are all its possible adjuncts--delay, suspension, adjournment.",
+        "ko": "완드 9는 여러 고비를 넘어온 사람의 끈기와 회복력을 의미합니다. 일이 다소 지연되더라도, 어떤 시련이 와도 맞설 수 있는 저력이 아직 남아 있습니다. 잠시 숨을 고르며 지금까지 지켜 온 것을 끝까지 지켜 내 보세요."
+      },
+      "reversed": {
+        "en": "Obstacles, adversity, calamity.",
+        "ko": "역방향의 완드 9는 거듭된 장애물로 몸과 마음이 소진된 상태를 돌아보게 합니다. 모든 것을 혼자 막아 내려는 태도가 오히려 무거운 짐이 되고 있을 수 있습니다. 경계를 조금 늦추고, 도움을 청하는 것도 용기임을 기억해 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Nine of Wands represents resilience, the last stretch, and the quiet strength of someone who has come a long way and is determined to see things through.\n\nThis card reminds you that you are stronger than you feel. Rest if you need to, but do not give up. You are closer to the finish than you think."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "ten-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 10,
+    "name": {
+      "en": "Ten of Wands",
+      "ko": "완드 10"
+    },
+    "image": "/tarotdeck/tenofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/tenofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["과중한 책임", "부담", "성공의 무게", "인내"]
+      },
+      "reversed": {
+        "ko": ["얽힌 문제", "한계 신호", "짐 내려놓기", "책임 나누기"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "A card of many significances, and some of the readings cannot be harmonized. I set aside that which connects it with honour and good faith. The chief meaning is oppression simply, but it is also fortune, gain, any kind of success, and then it is the oppression of these things. It is also a card of false-seeming, disguise, perfidy. The place which the figure is approaching may suffer from the rods that he carries. Success is stultified if the Nine of Swords follows, and if it is a question of a lawsuit, there will be certain loss.",
+        "ko": "완드 10은 성취와 함께 늘어난 책임의 무게를 홀로 짊어진 모습을 보여 줍니다. 목표가 가까워질수록 어깨의 짐은 더 무겁게 느껴질 수 있습니다. 모든 것을 혼자 감당하려 하지 말고, 덜어 낼 수 있는 짐부터 하나씩 정리해 보세요."
+      },
+      "reversed": {
+        "en": "Contrarieties, difficulties, intrigues, and their analogies.",
+        "ko": "역방향의 완드 10은 얽힌 문제와 과로가 한계에 다다르고 있음을 알려 줍니다. 지금 필요한 것은 더 버티는 힘이 아니라 짐을 나누는 지혜입니다. 우선순위를 다시 세우고, 내려놓을 것은 과감히 내려놓아 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Ten of Wands represents burden, responsibility, and the weight of carrying too much for too long. It speaks of the cost of doing it all alone.\n\nThis card invites you to set some of it down. You do not have to carry every load yourself. Ask for help, simplify where you can, and remember that rest is part of the work."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "page-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 11,
+    "name": {
+      "en": "Page of Wands",
+      "ko": "완드 시종"
+    },
+    "image": "/tarotdeck/pageofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/pageofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["반가운 소식", "호기심", "새로운 도전", "순수한 열의"]
+      },
+      "reversed": {
+        "ko": ["우유부단", "변덕", "달갑지 않은 소식", "산만함"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Dark young man, faithful, a lover, an envoy, a postman. Beside a man, he will bear favourable testimony concerning him. A dangerous rival, if followed by the Page of Cups. Has the chief qualities of his suit. He may signify family intelligence.",
+        "ko": "완드 시종은 반가운 소식과 새로운 도전을 향한 순수한 열의를 의미합니다. 성실한 전달자나 열정적인 사람이 곁에 다가오는 때이기도 합니다. 낯선 제안이나 신선한 아이디어가 찾아온다면 호기심을 갖고 가볍게 문을 열어 보세요."
+      },
+      "reversed": {
+        "en": "Anecdotes, announcements, evil news. Also indecision and the instability which accompanies it.",
+        "ko": "역방향의 완드 시종은 마음이 자주 바뀌거나 결정을 미루는 불안정한 상태를 돌아보게 합니다. 기대와 다른 소식에 잠시 흔들릴 수도 있는 시기입니다. 흩어진 관심사를 정리하고 하나의 목표에 마음을 모아 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Page of Wands represents enthusiasm, fresh ideas, and the spark of an adventure waiting to begin. This figure is bold, curious, and ready to explore.\n\nWhen this card appears, it invites you to follow your excitement. New interests, travel, or creative urges may be calling. Say yes and see where they lead."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "knight-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 12,
+    "name": {
+      "en": "Knight of Wands",
+      "ko": "완드 기사"
+    },
+    "image": "/tarotdeck/knightofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/knightofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["추진력", "이동과 여행", "모험", "대담한 행동"]
+      },
+      "reversed": {
+        "ko": ["갑작스러운 중단", "불화", "성급한 결정", "방향 상실"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Departure, absence, flight, emigration. A dark young man, friendly. Change of residence.",
+        "ko": "완드 기사는 열정을 안고 힘차게 나아가는 추진력과 변화의 카드입니다. 이사나 여행, 새로운 환경으로의 이동이 다가올 수 있는 때입니다. 설렘을 따르되, 출발하기 전에 방향을 한 번 더 확인해 보세요."
+      },
+      "reversed": {
+        "en": "Rupture, division, interruption, discord.",
+        "ko": "역방향의 완드 기사는 갑작스러운 중단이나 관계의 불화가 흐름을 끊고 있음을 보여 줍니다. 성급한 결정이 갈등의 불씨가 되지는 않았는지 살펴볼 때입니다. 속도를 조금 늦추고 어긋난 부분을 차분히 매만져 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The Knight of Wands represents passion, action, and the drive to chase what excites you. This figure moves quickly, fueled by inspiration and confidence.\n\nThis card encourages you to act on your ideas, but also to think before you leap. Channel your energy with purpose so that your enthusiasm carries you somewhere worth going."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "queen-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 13,
+    "name": {
+      "en": "Queen of Wands",
+      "ko": "완드 여왕"
+    },
+    "image": "/tarotdeck/queenofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/queenofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["따뜻한 카리스마", "자신감", "성실한 조력자", "사업의 성과"]
+      },
+      "reversed": {
+        "ko": ["질투", "경계심", "지나친 간섭", "흔들리는 신뢰"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "A dark woman, countrywoman, friendly, chaste, loving, honourable. If the card beside her signifies a man, she is well disposed towards him; if a woman, she is interested in the Querent. Also, love of money, or a certain success in business.",
+        "ko": "완드 여왕은 따뜻하면서도 당당한 매력으로 주변을 이끄는 존재를 의미합니다. 성실함과 애정을 겸비한 조력자가 곁에 있거나, 자신 안에서 그런 힘이 깨어나는 때입니다. 있는 그대로의 모습에 자신감을 갖고 사람과 일에 마음을 다해 보세요."
+      },
+      "reversed": {
+        "en": "Good, economical, obliging, serviceable. Signifies also--but in certain positions and in the neighbourhood of other cards tending in such directions--opposition, jealousy, even deceit and infidelity.",
+        "ko": "역방향의 완드 여왕은 여전히 성실하고 알뜰한 힘을 지니지만, 질투나 경계심이 관계를 흐리고 있지 않은지 돌아보게 합니다. 베푸는 마음이 통제나 간섭으로 비치지 않도록 균형이 필요한 때입니다. 상대를 믿어 주는 여유가 본래의 매력을 한층 빛나게 해 줄 것입니다."
+      }
+    },
+    "narrative": {
+      "en": "The Queen of Wands represents warmth, confidence, and the magnetic presence of someone fully at home in themselves. She inspires others simply by being who she is.\n\nWhen this card appears, it invites you to step into your own light. Trust your charisma, lead with heart, and let your authenticity draw the right people and opportunities toward you."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  },
+  {
+    "id": "king-of-wands",
+    "arcana": "minor",
+    "suit": "wands",
+    "number": 14,
+    "name": {
+      "en": "King of Wands",
+      "ko": "완드 왕"
+    },
+    "image": "/tarotdeck/kingofwands.jpeg",
+    "media": [
+      {
+        "type": "image",
+        "url": "/tarotdeck/kingofwands.jpeg"
+      }
+    ],
+    "keywords": {
+      "upright": {
+        "ko": ["정직한 리더십", "비전", "신뢰", "뜻밖의 좋은 소식"]
+      },
+      "reversed": {
+        "ko": ["엄격함", "완고함", "권위적 태도", "여유 부족"]
+      }
+    },
+    "meanings": {
+      "upright": {
+        "en": "Dark man, friendly, countryman, generally married, honest and conscientious. The card always signifies honesty, and may mean news concerning an unexpected heritage to fall in before very long.",
+        "ko": "완드 왕은 정직함과 경험을 바탕으로 사람들을 이끄는 리더십의 카드입니다. 믿을 수 있는 조력자를 만나거나 뜻밖의 반가운 소식이 찾아올 수 있는 때입니다. 큰 그림을 그리되, 진심과 성실함으로 신뢰를 쌓아 가 보세요."
+      },
+      "reversed": {
+        "en": "Good, but severe; austere, yet tolerant.",
+        "ko": "역방향의 완드 왕은 선의는 분명하지만 기준이 지나치게 엄격해진 상태를 돌아보게 합니다. 원칙을 지키는 힘과 품어 주는 너그러움은 얼마든지 함께 갈 수 있습니다. 조언과 지시 사이의 온도를 살피며 부드러움을 조금 더해 보세요."
+      }
+    },
+    "narrative": {
+      "en": "The King of Wands represents vision, leadership, and the confident drive of someone who turns ideas into movements. He leads with passion balanced by experience.\n\nThis card encourages you to think big, take charge of your direction, and inspire those around you. Bold action grounded in wisdom can take you far."
+    },
+    "source": "A. E. Waite, The Pictorial Key to the Tarot (1911), public domain"
+  }
+]
