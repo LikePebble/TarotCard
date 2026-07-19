@@ -90,6 +90,34 @@ export function useArcanaStore() {
   return { store, refresh };
 }
 
+/* Selected deck (device-local, like the collection). */
+
+const DECK_KEY = "arcana.deck";
+
+export function getSelectedDeckId(): string {
+  if (typeof window === "undefined") return "classic";
+  return window.localStorage.getItem(DECK_KEY) ?? "classic";
+}
+
+export function setSelectedDeckId(id: string) {
+  try {
+    window.localStorage.setItem(DECK_KEY, id);
+  } catch {}
+}
+
+/** Client hook: "classic" during SSR, then the persisted selection. */
+export function useSelectedDeck() {
+  const [deckId, setDeckId] = useState("classic");
+  useEffect(() => {
+    setDeckId(getSelectedDeckId());
+  }, []);
+  const select = useCallback((id: string) => {
+    setSelectedDeckId(id);
+    setDeckId(id);
+  }, []);
+  return { deckId, select };
+}
+
 /* Reading flow state (spread + focus) lives in sessionStorage. */
 
 export function setPendingSpread(spread: SpreadType) {

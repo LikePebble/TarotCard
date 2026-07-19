@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { CollectHistory } from "@/components/CollectHistory";
+import { DeckAwareArt } from "@/components/DeckAwareArt";
 import { DesktopNav } from "@/components/SiteNav";
 import { cardBySlug, cards, romanNumeral } from "@/data/cards";
 import { koCards } from "@/data/ko";
@@ -86,13 +86,11 @@ export default async function CardDetailPage({
         <div className="lg:mt-10 lg:grid lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-[72px]">
           <div className="flex justify-center lg:block">
             <div className="relative mt-1 aspect-[2/3.4] w-[216px] overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:mt-0 lg:w-full lg:rounded-[14px] lg:shadow-[0_30px_80px_rgba(8,5,0,0.65)]">
-              <Image
-                src={card.image}
-                alt={`${nameKo} ${card.nameEn}`}
-                fill
+              <DeckAwareArt
+                card={card}
                 sizes="(min-width: 1024px) 380px, 216px"
-                className="object-cover"
                 priority
+                showText
               />
             </div>
           </div>

@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { CardArt } from "@/components/CardArt";
 import { CardBack } from "@/components/CardBack";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { cards } from "@/data/cards";
-import { activeDeck } from "@/data/decks";
+import { decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
-import { collectedCount, useArcanaStore } from "@/lib/store";
+import { collectedCount, useArcanaStore, useSelectedDeck } from "@/lib/store";
 
 const FILTERS = [
   { id: "major", label: "메이저" },
@@ -23,6 +23,7 @@ type FilterId = (typeof FILTERS)[number]["id"];
 
 export default function CollectionPage() {
   const { store } = useArcanaStore();
+  const { deckId, select } = useSelectedDeck();
   const [filter, setFilter] = useState<FilterId>("major");
 
   const total = store ? collectedCount(store) : 0;
@@ -37,9 +38,25 @@ export default function CollectionPage() {
       <main className="mx-auto w-full max-w-[1280px] flex-1 px-5 pb-8 pt-2 lg:px-12 lg:pb-[88px] lg:pt-[72px]">
         <div className="lg:flex lg:items-end lg:justify-between">
           <div>
-            <p className="text-[12.5px] text-muted lg:mb-2.5 lg:text-[14px]">
-              {activeDeck.nameKo}
-            </p>
+            <div className="flex gap-3 lg:mb-2.5">
+              {decks
+                .filter((deck) => deck.active)
+                .map((deck) => (
+                  <button
+                    key={deck.id}
+                    type="button"
+                    onClick={() => select(deck.id)}
+                    aria-pressed={deckId === deck.id}
+                    className={`min-h-6 text-[12.5px] lg:text-[14px] ${
+                      deckId === deck.id
+                        ? "text-gold-soft"
+                        : "text-muted hover:text-cream"
+                    }`}
+                  >
+                    {deck.nameKo}
+                  </button>
+                ))}
+            </div>
             <div className="flex items-end justify-between lg:block">
               <h1 className="font-serif text-[27px] font-semibold lg:text-[40px]">
                 컬렉션
@@ -135,13 +152,11 @@ export default function CollectionPage() {
                 href={`/collection/${card.slug}`}
                 className="group block"
               >
-                <div className="relative aspect-[2/3.4] overflow-hidden rounded-xl bg-ink-2">
-                  <Image
-                    src={card.image}
-                    alt={`${nameKo} ${card.nameEn}`}
-                    fill
+                <div className="relative aspect-[2/3.4] overflow-hidden rounded-xl bg-ink-2 transition-transform duration-300 group-hover:scale-[1.03]">
+                  <CardArt
+                    card={card}
+                    deckId={deckId}
                     sizes="(min-width: 1024px) 190px, 33vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                   />
                 </div>
                 {label}

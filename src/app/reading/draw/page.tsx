@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
 import { CaretLeft } from "@phosphor-icons/react";
+import { CardArt } from "@/components/CardArt";
 import { CardBack } from "@/components/CardBack";
 import { DesktopNav } from "@/components/SiteNav";
 import { cards, type Card } from "@/data/cards";
@@ -17,6 +17,7 @@ import {
   getPendingFocus,
   getPendingSpread,
   recordReading,
+  useSelectedDeck,
   type SpreadType,
 } from "@/lib/store";
 
@@ -98,6 +99,7 @@ function GachaGlow() {
 export default function DrawPage() {
   const router = useRouter();
   const reducedMotion = useReducedMotion();
+  const { deckId } = useSelectedDeck();
   const [ready, setReady] = useState(false);
   const [spread, setSpread] = useState<SpreadType>("one");
   const [focus, setFocus] = useState("");
@@ -399,13 +401,7 @@ export default function DrawPage() {
                           >
                             <CardBack className="absolute inset-0 [backface-visibility:hidden]" />
                             <div className="absolute inset-0 overflow-hidden rounded-xl bg-ink-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                              <Image
-                                src={card.image}
-                                alt={`${nameKoOf(card)} ${card.nameEn}`}
-                                fill
-                                sizes="110px"
-                                className="object-cover"
-                              />
+                              <CardArt card={card} deckId={deckId} sizes="110px" />
                             </div>
                           </motion.div>
                         </motion.div>
@@ -519,12 +515,10 @@ export default function DrawPage() {
                           <CardBack className="absolute inset-0 [backface-visibility:hidden]" />
                           <div className="absolute inset-0 overflow-hidden rounded-xl bg-ink-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
                             {isFlipping && deck[0] ? (
-                              <Image
-                                src={deck[0].image}
-                                alt={`${nameKoOf(deck[0])} ${deck[0].nameEn}`}
-                                fill
+                              <CardArt
+                                card={deck[0]}
+                                deckId={deckId}
                                 sizes="170px"
-                                className="object-cover"
                               />
                             ) : null}
                           </div>
@@ -551,6 +545,7 @@ export default function DrawPage() {
         ) : spread === "one" ? (
           <OneCardResult
             card={deck[0]}
+            deckId={deckId}
             focus={focus}
             count={count}
             reducedMotion={!!reducedMotion}
@@ -559,6 +554,7 @@ export default function DrawPage() {
         ) : (
           <ThreeCardResult
             picked={deck.slice(0, 3)}
+            deckId={deckId}
             focus={focus}
             count={count}
             reducedMotion={!!reducedMotion}
@@ -571,12 +567,14 @@ export default function DrawPage() {
 
 function OneCardResult({
   card,
+  deckId,
   focus,
   count,
   reducedMotion,
   onRetry,
 }: {
   card: Card;
+  deckId: string;
   focus: string;
   count: number | null;
   reducedMotion: boolean;
@@ -593,13 +591,12 @@ function OneCardResult({
     >
       <div className="flex justify-center lg:justify-end">
         <div className="relative aspect-[2/3.4] w-[200px] overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:w-full lg:max-w-[360px] lg:rounded-[14px]">
-          <Image
-            src={card.image}
-            alt={`${nameKoOf(card)} ${card.nameEn}`}
-            fill
+          <CardArt
+            card={card}
+            deckId={deckId}
             sizes="(min-width: 1024px) 360px, 200px"
-            className="object-cover"
             priority
+            showText
           />
         </div>
       </div>
@@ -657,12 +654,14 @@ function OneCardResult({
 
 function ThreeCardResult({
   picked,
+  deckId,
   focus,
   count,
   reducedMotion,
   onRetry,
 }: {
   picked: Card[];
+  deckId: string;
   focus: string;
   count: number | null;
   reducedMotion: boolean;
@@ -685,13 +684,7 @@ function ThreeCardResult({
             key={card.slug}
             className="relative aspect-[2/3.4] w-[72px] overflow-hidden rounded-lg bg-ink-2 lg:w-[92px]"
           >
-            <Image
-              src={card.image}
-              alt={`${nameKoOf(card)} ${card.nameEn}`}
-              fill
-              sizes="92px"
-              className="object-cover"
-            />
+            <CardArt card={card} deckId={deckId} sizes="92px" />
           </div>
         ))}
       </div>
@@ -706,13 +699,7 @@ function ThreeCardResult({
               className="flex items-start gap-4 border-b border-line py-[22px] last:border-b-0 lg:gap-7 lg:py-8"
             >
               <div className="relative aspect-[2/3.4] w-[88px] flex-none overflow-hidden rounded-xl bg-ink-2 lg:w-[120px]">
-                <Image
-                  src={card.image}
-                  alt={`${nameKoOf(card)} ${card.nameEn}`}
-                  fill
-                  sizes="120px"
-                  className="object-cover"
-                />
+                <CardArt card={card} deckId={deckId} sizes="120px" />
               </div>
               <div>
                 <p className="text-[12.5px] text-gold lg:text-[13.5px]">
