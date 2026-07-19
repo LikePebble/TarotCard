@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "Wolha Biwon — Plum Bamboo Asymmetry",
-  "version": "1.0.3",
+  "version": "1.1.0",
+  "note": "1.1.0에서 고품질 카투슈 프레임의 실제 well/veil 위치에 맞춰 재보정. 텍스트는 안의 anchor 박스(safeZones.number, safeZones.titleContent)에 중앙 정렬한다. baselineY는 참고값.",
   "canvas": {
     "width": 1200,
     "height": 2040,
@@ -11,28 +12,28 @@
   },
   "safeZones": {
     "sideFrame": 72,
-    "number": { "x": 410, "y": 24, "width": 380, "height": 92 },
-    "titlePlaque": { "x": 215, "y": 1754, "width": 770, "height": 266 },
-    "titleContent": { "x": 325, "y": 1815, "width": 550, "height": 145 }
+    "number": { "x": 435, "y": 22, "width": 330, "height": 70 },
+    "titlePlaque": { "x": 250, "y": 1760, "width": 700, "height": 270 },
+    "titleContent": { "x": 300, "y": 1845, "width": 600, "height": 130 }
   },
   "number": {
     "visibleFor": "major-only",
     "anchorX": 600,
-    "baselineY": 80,
+    "baselineY": 71,
     "maxWidth": 280,
     "fontFamily": "Noto Serif KR, AppleMyungjo, Times New Roman, serif",
-    "fontSize": 40,
+    "fontSize": 38,
     "fontWeight": 700,
     "letterSpacing": 6,
-    "lineHeight": 48,
+    "lineHeight": 44,
     "color": "#E5C678",
     "outlineColor": "#26222A",
     "outlineWidth": 2.2
   },
   "titleKo": {
     "anchorX": 600,
-    "baselineY": 1900,
-    "maxWidth": 550,
+    "baselineY": 1905,
+    "maxWidth": 560,
     "fontFamily": "Noto Serif KR, AppleMyungjo, serif",
     "fontWeight": 600,
     "fontSize": 50,
@@ -45,17 +46,18 @@
   },
   "titleEn": {
     "anchorX": 600,
-    "baselineY": 1930,
-    "maxWidth": 650,
+    "baselineY": 1948,
+    "maxWidth": 620,
     "fontFamily": "Wanted Sans, Avenir Next, Arial, sans-serif",
     "fontWeight": 400,
-    "fontSize": 21,
-    "fontSizeMedium": 18,
-    "fontSizeLong": 16,
+    "fontSize": 16,
+    "fontSizeMedium": 14,
+    "fontSizeLong": 12,
     "mediumThreshold": 22,
     "longThreshold": 30,
-    "letterSpacing": 4.2,
-    "color": "#C9C1B8"
+    "letterSpacing": 3.4,
+    "color": "#C9C1B8",
+    "gap": 8
   },
   "shadow": {
     "blur": 2.4,

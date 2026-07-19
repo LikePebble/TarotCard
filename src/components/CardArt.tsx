@@ -3,6 +3,36 @@ import { romanNumeral, type Card } from "@/data/cards";
 import { canvasModeOf, deckArtSrc, deckById } from "@/data/decks";
 import { koCards } from "@/data/ko";
 
+// canvas.tokens.json(기준 1200x2040)의 safeZones/서체를 DOM 비율로 옮긴 값.
+// 텍스트는 safe zone 박스 안에 중앙 정렬한다(레이아웃 가이드와 동일).
+// cqw = 컨테이너 폭 대비 %. 토큰 px / 1200 * 100 으로 환산.
+const BASE_W = 1200;
+const BASE_H = 2040;
+const pct = (v: number, base: number) => `${(v / base) * 100}%`;
+const cqw = (px: number) => (px / BASE_W) * 100;
+
+// safeZones.number / safeZones.titleContent (canvas.tokens.json v1.1.0).
+const NUMBER_ZONE = { x: 435, y: 22, w: 330, h: 70 };
+const TITLE_ZONE = { x: 300, y: 1845, w: 600, h: 130 };
+const NUMBER_PX = 38;
+const TEXT_SHADOW = "0 2px 2.4px rgba(9,10,13,0.78)";
+
+// 장문 축소: 토큰의 medium/long 임계값.
+function koFontPx(len: number): number {
+  return len >= 13 ? 38 : len >= 9 ? 44 : 50;
+}
+function enFontPx(len: number): number {
+  return len >= 30 ? 12 : len >= 22 ? 14 : 16;
+}
+function zoneStyle(z: { x: number; y: number; w: number; h: number }) {
+  return {
+    left: pct(z.x, BASE_W),
+    top: pct(z.y, BASE_H),
+    width: pct(z.w, BASE_W),
+    height: pct(z.h, BASE_H),
+  } as const;
+}
+
 /**
  * 덱 인지 카드 아트. baked 카드는 아트 그대로, overlay 카드는 덱 공통
  * 프레임을 덧그린다. showText는 큰 화면(공개, 상세)에서만 켜서 카드명과
@@ -52,25 +82,60 @@ export function CardArt({
           className="pointer-events-none object-cover"
         />
       ) : null}
-      {withText ? (
-        // 위치/서체는 public/decks/wolha-biwon/canvas.tokens.json(기준 1200x2040)을
-        // DOM 비율로 옮긴 값. 번호 y=80, 한글 y=1900, 영문 y=1930.
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          {card.arcana === "major" ? (
-            <p className="absolute inset-x-0 top-[2%] text-center font-serif text-[clamp(11px,3.33cqw,40px)] font-bold tracking-[0.14em] text-[#e5c678] [text-shadow:0_2px_2.4px_rgba(9,10,13,0.78)]">
-              {romanNumeral(card.number)}
-            </p>
-          ) : null}
-          <div className="absolute inset-x-0 bottom-[5%] text-center [text-shadow:0_2px_2.4px_rgba(9,10,13,0.78)]">
-            <p className="font-serif text-[clamp(12px,4.17cqw,50px)] font-semibold leading-tight tracking-[0.12em] text-[#f5efe7]">
-              {nameKo}
-            </p>
-            <p className="mt-1 text-[clamp(8px,1.75cqw,21px)] tracking-[0.2em] text-[#c9c1b8]">
-              {card.nameEn}
-            </p>
-          </div>
-        </div>
-      ) : null}
+      {withText
+        ? (() => {
+            const nameEn = card.nameEn.toUpperCase();
+            const koPx = koFontPx([...nameKo].length);
+            const enPx = enFontPx(nameEn.length);
+            return (
+              <div aria-hidden className="pointer-events-none absolute inset-0">
+                {card.arcana === "major" ? (
+                  <div
+                    className="absolute flex items-center justify-center"
+                    style={zoneStyle(NUMBER_ZONE)}
+                  >
+                    <span
+                      className="font-serif font-bold text-[#e5c678]"
+                      style={{
+                        fontSize: `clamp(9px, ${cqw(NUMBER_PX)}cqw, ${NUMBER_PX}px)`,
+                        letterSpacing: `${cqw(6)}cqw`,
+                        textShadow: TEXT_SHADOW,
+                      }}
+                    >
+                      {romanNumeral(card.number)}
+                    </span>
+                  </div>
+                ) : null}
+                <div
+                  className="absolute flex flex-col items-center justify-center text-center"
+                  style={zoneStyle(TITLE_ZONE)}
+                >
+                  <span
+                    className="font-serif font-semibold leading-tight text-[#f5efe7]"
+                    style={{
+                      fontSize: `clamp(11px, ${cqw(koPx)}cqw, ${koPx}px)`,
+                      letterSpacing: `${cqw(6)}cqw`,
+                      textShadow: TEXT_SHADOW,
+                    }}
+                  >
+                    {nameKo}
+                  </span>
+                  <span
+                    className="text-[#c9c1b8]"
+                    style={{
+                      marginTop: "0.6cqw",
+                      fontSize: `clamp(6px, ${cqw(enPx)}cqw, ${enPx}px)`,
+                      letterSpacing: `${cqw(3.4)}cqw`,
+                      textShadow: TEXT_SHADOW,
+                    }}
+                  >
+                    {nameEn}
+                  </span>
+                </div>
+              </div>
+            );
+          })()
+        : null}
     </div>
   );
 }
