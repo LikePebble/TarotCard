@@ -1,30 +1,88 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { DEFAULT_DECK_ID } from "@/data/decks";
+import { localDateOf, isoWeekOf } from "@/lib/period";
+import {
+  readingTypeOf,
+  type ReadingTypeId,
+  type SpreadType,
+} from "@/data/reading-types";
 
-export type SpreadType = "one" | "three";
+export type { SpreadType };
+
+export type Orientation = "upright" | "reversed";
 
 export type CollectionEntry = { firstAt: string; count: number };
 
 export type ReadingRecord = {
-  at: string;
+  id: string;
+  at: string; // ISO
+  localDate: string; // YYYY-MM-DD (로컬)
+  isoWeek: string; // YYYY-Www
   spread: SpreadType;
-  focus: string;
+  typeId: ReadingTypeId;
+  category: string; // focus id
+  deckId: string;
   cards: string[];
+  orientations: Orientation[];
 };
 
+/** deckId -> slug -> entry (덱별 도감, D9). */
 export type ArcanaStore = {
-  version: 1;
-  collection: Record<string, CollectionEntry>;
+  version: 2;
+  collection: Record<string, Record<string, CollectionEntry>>;
   readings: ReadingRecord[];
 };
 
-const STORE_KEY = "arcana.v1";
+const STORE_KEY = "arcana.v1"; // 저장 키는 유지, 내부 version 필드로 마이그레이션 판별
 const SPREAD_KEY = "arcana.reading.spread";
 const FOCUS_KEY = "arcana.reading.focus";
 
-function emptyStore(): ArcanaStore {
-  return { version: 1, collection: {}, readings: [] };
+export function emptyStore(): ArcanaStore {
+  return { version: 2, collection: {}, readings: [] };
+}
+
+function migrateReading(rec: unknown, i: number): ReadingRecord {
+  const r = (rec ?? {}) as Record<string, unknown>;
+  const at = typeof r.at === "string" ? r.at : new Date(0).toISOString();
+  const d = new Date(at);
+  const spread: SpreadType = r.spread === "three" ? "three" : "one";
+  return {
+    id: `${at}-${i}`,
+    at,
+    localDate: localDateOf(d),
+    isoWeek: isoWeekOf(d),
+    spread,
+    typeId: readingTypeOf(spread).id,
+    category: typeof r.focus === "string" ? r.focus : "day",
+    deckId: DEFAULT_DECK_ID,
+    cards: Array.isArray(r.cards) ? (r.cards as string[]) : [],
+    orientations: [],
+  };
+}
+
+/** 저장된 임의 값을 현재(v2) 스토어로 정규화한다. */
+export function migrateStore(raw: unknown): ArcanaStore {
+  if (!raw || typeof raw !== "object") return emptyStore();
+  const r = raw as Record<string, unknown>;
+  const readings = Array.isArray(r.readings) ? r.readings : null;
+  const collection =
+    r.collection && typeof r.collection === "object" ? r.collection : null;
+
+  if (r.version === 2 && collection && readings) {
+    return raw as ArcanaStore;
+  }
+  if (r.version === 1 && collection && readings) {
+    return {
+      version: 2,
+      collection: {
+        [DEFAULT_DECK_ID]: collection as Record<string, CollectionEntry>,
+      },
+      readings: readings.map((rec, i) => migrateReading(rec, i)),
+    };
+  }
+  return emptyStore();
 }
 
 export function loadStore(): ArcanaStore {
@@ -32,17 +90,7 @@ export function loadStore(): ArcanaStore {
   try {
     const raw = window.localStorage.getItem(STORE_KEY);
     if (!raw) return emptyStore();
-    const parsed = JSON.parse(raw) as ArcanaStore;
-    if (
-      parsed &&
-      parsed.version === 1 &&
-      typeof parsed.collection === "object" &&
-      parsed.collection !== null &&
-      Array.isArray(parsed.readings)
-    ) {
-      return parsed;
-    }
-    return emptyStore();
+    return migrateStore(JSON.parse(raw));
   } catch {
     return emptyStore();
   }
@@ -57,27 +105,13 @@ function saveStore(store: ArcanaStore) {
   }
 }
 
-/** Records a finished reading: increments collection counts and appends history. */
-export function recordReading(
-  spread: SpreadType,
-  focus: string,
-  slugs: string[],
-): ArcanaStore {
-  const store = loadStore();
-  const at = new Date().toISOString();
-  for (const slug of slugs) {
-    const entry = store.collection[slug];
-    store.collection[slug] = entry
-      ? { firstAt: entry.firstAt, count: entry.count + 1 }
-      : { firstAt: at, count: 1 };
-  }
-  store.readings.push({ at, spread, focus, cards: slugs });
-  saveStore(store);
-  return store;
+export function recordReading(): ArcanaStore {
+  // 정식 구현은 Task 5. 이 스텁은 컴파일만 통과시킨다.
+  return loadStore();
 }
 
-export function collectedCount(store: ArcanaStore): number {
-  return Object.keys(store.collection).length;
+export function collectedCount(store: ArcanaStore, deckId: string): number {
+  return Object.keys(store.collection[deckId] ?? {}).length;
 }
 
 /** Client hook: null until mounted (SSR-safe), then the live store. */
