@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "artifactId": "wolha-biwon-frame-design",
+  "deckId": "wolha-biwon",
+  "deckNameKo": "월하비원",
+  "selectedVariant": {
+    "id": "08-plum-bamboo-asymmetry",
+    "nameKo": "매죽 비대칭",
+    "status": "selected"
+  },
+  "packageType": "documentation-and-qa",
+  "runtimeReady": false,
+  "runtimeBlocker": "selected-mockup-no-text.png contains the High Priestess artwork and has no alpha channel; a separate transparent RGBA frame.png is required",
+  "generator": {
+    "tool": "Codex built-in image generation",
+    "exactInternalModelVersion": "not exposed",
+    "workflow": "reference-guided precise-object-edit"
+  },
+  "inputs": [
+    {
+      "role": "style-reference",
+      "name": "user-provided premium tarot card sample",
+      "packaged": false
+    },
+    {
+      "role": "edit-target",
+      "name": "the-high-priestess.webp",
+      "projectPath": "public/decks/wolha-biwon/art/the-high-priestess.webp",
+      "packaged": false
+    }
+  ],
+  "canvas": {
+    "width": 1200,
+    "height": 2040,
+    "aspectRatio": "1:1.7",
+    "colorSpace": "sRGB"
+  },
+  "typography": {
+    "tokenVersion": "1.0.3",
+    "numberBaselineY": 80,
+    "titleKoBaselineY": 1900,
+    "titleEnBaselineY": 1930,
+    "majorNumberVisibility": "major-only",
+    "minorNumberVisibility": "hidden"
+  },
+  "qaCases": [
+    {
+      "slug": "the-high-priestess",
+      "kind": "major-short-title",
+      "roman": "II",
+      "titleKo": "여사제",
+      "titleEn": "THE HIGH PRIESTESS"
+    },
+    {
+      "slug": "wheel-of-fortune",
+      "kind": "major-long-title",
+      "roman": "X",
+      "titleKo": "운명의 수레바퀴",
+      "titleEn": "WHEEL OF FORTUNE"
+    },
+    {
+      "slug": "four-of-pentacles",
+      "kind": "minor-no-number",
+      "roman": "",
+      "titleKo": "펜타클 4",
+      "titleEn": "FOUR OF PENTACLES"
+    }
+  ],
+  "files": {
+    "readme": "README.md",
+    "selectedPrompt": "selected-prompt.md",
+    "allVariantPrompts": "prompt-set.md",
+    "designTokens": "design-tokens.json",
+    "typographySpecification": "typography-spec.md",
+    "renderManifest": "render-manifest.json",
+    "generationVerification": "generation-verification.json",
+    "typographyVerification": "typography-verification.json",
+    "selectedMockup": "selected-mockup-no-text.png",
+    "layoutGuide": "qa/layout-guide.png",
+    "typographyComparison": "qa/typography-comparison.jpg",
+    "qaRenders": [
+      "qa/renders/the-high-priestess.png",
+      "qa/renders/wheel-of-fortune.png",
+      "qa/renders/four-of-pentacles.png"
+    ],
+    "qaPreviews": [
+      "qa/previews/the-high-priestess.webp",
+      "qa/previews/wheel-of-fortune.webp",
+      "qa/previews/four-of-pentacles.webp"
+    ]
+  },
+  "verification": {
+    "generationVariants": 10,
+    "selectedQaRenders": 3,
+    "selectedQaPreviews": 3,
+    "expectedStatus": "pass"
+  }
+}

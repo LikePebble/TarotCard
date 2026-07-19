@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "Wolha Biwon — Plum Bamboo Asymmetry",
+  "version": "1.0.3",
+  "canvas": {
+    "width": 1200,
+    "height": 2040,
+    "aspectRatio": 0.5882352941,
+    "cornerRadius": 12,
+    "scaleBase": 1200
+  },
+  "safeZones": {
+    "sideFrame": 72,
+    "number": { "x": 410, "y": 24, "width": 380, "height": 92 },
+    "titlePlaque": { "x": 215, "y": 1754, "width": 770, "height": 266 },
+    "titleContent": { "x": 325, "y": 1815, "width": 550, "height": 145 }
+  },
+  "number": {
+    "visibleFor": "major-only",
+    "anchorX": 600,
+    "baselineY": 80,
+    "maxWidth": 280,
+    "fontFamily": "Noto Serif KR, AppleMyungjo, Times New Roman, serif",
+    "fontSize": 40,
+    "fontWeight": 700,
+    "letterSpacing": 6,
+    "lineHeight": 48,
+    "color": "#E5C678",
+    "outlineColor": "#26222A",
+    "outlineWidth": 2.2
+  },
+  "titleKo": {
+    "anchorX": 600,
+    "baselineY": 1900,
+    "maxWidth": 550,
+    "fontFamily": "Noto Serif KR, AppleMyungjo, serif",
+    "fontWeight": 600,
+    "fontSize": 50,
+    "fontSizeMedium": 44,
+    "fontSizeLong": 38,
+    "mediumThreshold": 9,
+    "longThreshold": 13,
+    "letterSpacing": 6,
+    "color": "#F5EFE7"
+  },
+  "titleEn": {
+    "anchorX": 600,
+    "baselineY": 1930,
+    "maxWidth": 650,
+    "fontFamily": "Wanted Sans, Avenir Next, Arial, sans-serif",
+    "fontWeight": 400,
+    "fontSize": 21,
+    "fontSizeMedium": 18,
+    "fontSizeLong": 16,
+    "mediumThreshold": 22,
+    "longThreshold": 30,
+    "letterSpacing": 4.2,
+    "color": "#C9C1B8"
+  },
+  "shadow": {
+    "blur": 2.4,
+    "offsetY": 2,
+    "opacity": 0.78,
+    "color": "#090A0D"
+  },
+  "responsive": {
+    "positionMode": "fixed-proportional",
+    "scaleFormula": "renderWidth / 1200",
+    "minimumRenderWidth": 300,
+    "minorArcanaKeepsEmptyTopPlaque": true
+  }
+}

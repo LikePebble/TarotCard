@@ -1,0 +1,32 @@
+{
+  "selectedVariant": "08-plum-bamboo-asymmetry",
+  "tokenVersion": "1.0.3",
+  "source": "/Users/pebble/Documents/Image-Gen/output/tarot/wolha-biwon/canvas/frame-variants-imagen/normalized/08-plum-bamboo-asymmetry.png",
+  "renders": [
+    {
+      "slug": "the-high-priestess",
+      "arcana": "major",
+      "roman": "II",
+      "ko": "여사제",
+      "en": "THE HIGH PRIESTESS"
+    },
+    {
+      "slug": "wheel-of-fortune",
+      "arcana": "major",
+      "roman": "X",
+      "ko": "운명의 수레바퀴",
+      "en": "WHEEL OF FORTUNE"
+    },
+    {
+      "slug": "four-of-pentacles",
+      "arcana": "minor",
+      "roman": "",
+      "ko": "펜타클 4",
+      "en": "FOUR OF PENTACLES"
+    }
+  ],
+  "outputSize": [
+    1200,
+    2040
+  ]
+}

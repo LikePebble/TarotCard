@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "selectedVariant": "08-plum-bamboo-asymmetry",
+  "tokenVersion": "1.0.3",
+  "renderCount": 3,
+  "previewCount": 3,
+  "canvas": [
+    1200,
+    2040
+  ],
+  "numberBaseline": 80,
+  "titleBaselines": [
+    1900,
+    1930
+  ],
+  "errors": []
+}

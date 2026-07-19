@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "mockupCount": 10,
+  "normalizedCount": 10,
+  "titledCount": 10,
+  "previewCount": 10,
+  "contactSheetCount": 2,
+  "normalizedSize": [
+    1200,
+    2040
+  ],
+  "previewSize": [
+    600,
+    1020
+  ],
+  "errors": []
+}

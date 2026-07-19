@@ -53,17 +53,19 @@ export function CardArt({
         />
       ) : null}
       {withText ? (
+        // 위치/서체는 public/decks/wolha-biwon/canvas.tokens.json(기준 1200x2040)을
+        // DOM 비율로 옮긴 값. 번호 y=80, 한글 y=1900, 영문 y=1930.
         <div aria-hidden className="pointer-events-none absolute inset-0">
           {card.arcana === "major" ? (
-            <p className="absolute inset-x-0 top-[2.5%] text-center font-serif text-[clamp(11px,7cqw,20px)] font-semibold text-gold-soft [text-shadow:0_1px_10px_rgba(8,5,0,0.85)]">
+            <p className="absolute inset-x-0 top-[2%] text-center font-serif text-[clamp(11px,3.33cqw,40px)] font-bold tracking-[0.14em] text-[#e5c678] [text-shadow:0_2px_2.4px_rgba(9,10,13,0.78)]">
               {romanNumeral(card.number)}
             </p>
           ) : null}
-          <div className="absolute inset-x-0 bottom-[4%] text-center [text-shadow:0_1px_10px_rgba(8,5,0,0.85)]">
-            <p className="font-serif text-[clamp(12px,9cqw,26px)] font-semibold leading-tight text-cream">
+          <div className="absolute inset-x-0 bottom-[5%] text-center [text-shadow:0_2px_2.4px_rgba(9,10,13,0.78)]">
+            <p className="font-serif text-[clamp(12px,4.17cqw,50px)] font-semibold leading-tight tracking-[0.12em] text-[#f5efe7]">
               {nameKo}
             </p>
-            <p className="mt-0.5 text-[clamp(8px,5cqw,13px)] text-[#cfc7b8]">
+            <p className="mt-1 text-[clamp(8px,1.75cqw,21px)] tracking-[0.2em] text-[#c9c1b8]">
               {card.nameEn}
             </p>
           </div>
