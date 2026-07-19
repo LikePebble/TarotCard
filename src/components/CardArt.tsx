@@ -12,8 +12,8 @@ const pct = (v: number, base: number) => `${(v / base) * 100}%`;
 const cqw = (px: number) => (px / BASE_W) * 100;
 
 // safeZones.number / safeZones.titleContent (canvas.tokens.json v1.1.0).
-const NUMBER_ZONE = { x: 435, y: 22, w: 330, h: 70 };
-const TITLE_ZONE = { x: 300, y: 1845, w: 600, h: 130 };
+const NUMBER_ZONE = { x: 435, y: 30, w: 330, h: 68 };
+const TITLE_ZONE = { x: 300, y: 1840, w: 600, h: 120 };
 const NUMBER_PX = 38;
 const TEXT_SHADOW = "0 2px 2.4px rgba(9,10,13,0.78)";
 
@@ -22,7 +22,7 @@ function koFontPx(len: number): number {
   return len >= 13 ? 38 : len >= 9 ? 44 : 50;
 }
 function enFontPx(len: number): number {
-  return len >= 30 ? 12 : len >= 22 ? 14 : 16;
+  return len >= 30 ? 11 : len >= 22 ? 12 : 13;
 }
 function zoneStyle(z: { x: number; y: number; w: number; h: number }) {
   return {
@@ -123,9 +123,9 @@ export function CardArt({
                   <span
                     className="text-[#c9c1b8]"
                     style={{
-                      marginTop: "0.6cqw",
-                      fontSize: `clamp(6px, ${cqw(enPx)}cqw, ${enPx}px)`,
-                      letterSpacing: `${cqw(3.4)}cqw`,
+                      marginTop: "0.3cqw",
+                      fontSize: `clamp(5px, ${cqw(enPx)}cqw, ${enPx}px)`,
+                      letterSpacing: `${cqw(3)}cqw`,
                       textShadow: TEXT_SHADOW,
                     }}
                   >
