@@ -266,6 +266,11 @@ export function blockingReading(
   return today.length >= maxDailySlots ? today[today.length - 1] : undefined;
 }
 
+/** 병합/동기화 결과를 로컬 스토어에 반영한다(부작용). */
+export function setLocalStore(store: ArcanaStore): void {
+  saveStore(store);
+}
+
 /** Client hook: null until mounted (SSR-safe), then the live store. */
 export function useArcanaStore() {
   const [store, setStore] = useState<ArcanaStore | null>(null);

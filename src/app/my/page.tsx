@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { CaretRight, Notebook, Sparkle, UserCircle } from "@phosphor-icons/react";
+import { CaretRight, Notebook, Sparkle } from "@phosphor-icons/react";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
+import { AccountCard } from "./AccountCard";
 import { useJournal } from "@/lib/journal";
 import { collectedCount, useArcanaStore, useSelectedDeck } from "@/lib/store";
 
@@ -72,19 +73,7 @@ export default function MyPage() {
             </span>
           </div>
 
-          <div className="rounded-2xl border border-line bg-ink-1 p-5 opacity-60 lg:rounded-[14px] lg:p-6">
-            <span className="flex items-center gap-3.5">
-              <UserCircle size={22} className="text-muted" aria-hidden />
-              <span>
-                <span className="block font-serif text-[17px] font-semibold lg:text-[19px]">
-                  로그인 · 계정
-                </span>
-                <span className="text-[13px] text-muted lg:text-[14px]">
-                  기기 간 보관 · 카카오/구글 로그인 · 준비 중
-                </span>
-              </span>
-            </span>
-          </div>
+          <AccountCard />
         </div>
       </main>
       <TabBar />
