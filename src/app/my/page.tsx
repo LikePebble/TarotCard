@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "motion/react";
 import { CaretRight, Notebook, Sparkle } from "@phosphor-icons/react";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
-import { AccountCard } from "./AccountCard";
 import { useJournal } from "@/lib/journal";
 import { collectedCount, useArcanaStore, useSelectedDeck } from "@/lib/store";
+import { AccountCard } from "./AccountCard";
 
 export default function MyPage() {
   const { store } = useArcanaStore();
@@ -17,33 +18,45 @@ export default function MyPage() {
   const collected = store ? collectedCount(store, deckId) : 0;
   const days = journal ? Object.keys(journal).length : 0;
 
+  const stats = [
+    { label: "수집", value: collected, unit: "/ 78" },
+    { label: "리딩", value: readings, unit: "회" },
+    { label: "기록", value: days, unit: "일" },
+  ];
+
   return (
     <div className="flex min-h-[100dvh] flex-col">
       <DesktopNav active="my" />
       <MobileTopBar />
-      <main className="mx-auto w-full max-w-[760px] flex-1 px-5 pb-8 pt-2 lg:px-12 lg:pb-[88px] lg:pt-[72px]">
+      <motion.main
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="mx-auto w-full max-w-[760px] flex-1 px-5 pb-8 pt-2 lg:px-12 lg:pb-[88px] lg:pt-[72px]"
+      >
         <h1 className="font-serif text-[27px] font-semibold lg:text-[40px]">MY</h1>
+        <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
+          당신이 만난 카드와 남긴 마음이 이곳에 쌓입니다.
+        </p>
 
-        <div className="mt-5 grid grid-cols-2 gap-3 lg:mt-8 lg:gap-5">
-          <div className="rounded-2xl border border-line bg-ink-1 p-5 lg:rounded-[14px] lg:p-7">
-            <p className="text-[12.5px] text-muted lg:text-[13px]">수집</p>
-            <p className="mt-1 font-serif text-2xl font-semibold text-gold-soft lg:text-[32px]">
-              {collected} <span className="text-sm font-normal text-muted">/ 78</span>
-            </p>
-          </div>
-          <div className="rounded-2xl border border-line bg-ink-1 p-5 lg:rounded-[14px] lg:p-7">
-            <p className="text-[12.5px] text-muted lg:text-[13px]">리딩</p>
-            <p className="mt-1 font-serif text-2xl font-semibold text-gold-soft lg:text-[32px]">
-              {readings}
-              <span className="ml-1 text-sm font-normal text-muted">회</span>
-            </p>
-          </div>
+        <div className="mt-5 grid grid-cols-3 divide-x divide-line rounded-2xl border border-line bg-ink-1 lg:mt-8 lg:rounded-[16px]">
+          {stats.map((s) => (
+            <div key={s.label} className="px-4 py-5 text-center lg:py-7">
+              <p className="text-[12px] text-muted lg:text-[13px]">{s.label}</p>
+              <p className="mt-1 font-serif text-[26px] font-semibold text-gold-soft lg:text-[34px]">
+                {s.value}
+                <span className="ml-1 text-[13px] font-normal text-muted">
+                  {s.unit}
+                </span>
+              </p>
+            </div>
+          ))}
         </div>
 
         <div className="mt-4 flex flex-col gap-2.5 lg:mt-6">
           <Link
             href="/my/journal"
-            className="flex items-center justify-between rounded-2xl border border-line bg-ink-1 p-5 hover:border-line-gold lg:rounded-[14px] lg:p-6"
+            className="flex items-center justify-between rounded-2xl border border-line bg-ink-1 p-5 transition-colors hover:border-line-gold active:scale-[0.99] lg:rounded-[14px] lg:p-6"
           >
             <span className="flex items-center gap-3.5">
               <Notebook size={22} className="text-gold-soft" aria-hidden />
@@ -52,7 +65,9 @@ export default function MyPage() {
                   일별 기록
                 </span>
                 <span className="text-[13px] text-muted lg:text-[14px]">
-                  {days > 0 ? `${days}일의 기록과 일기` : "리딩과 그날의 일기를 모아 봅니다"}
+                  {days > 0
+                    ? `달력에서 ${days}일의 기록과 일기를 봅니다`
+                    : "달력에서 리딩과 그날의 일기를 봅니다"}
                 </span>
               </span>
             </span>
@@ -75,7 +90,7 @@ export default function MyPage() {
 
           <AccountCard />
         </div>
-      </main>
+      </motion.main>
       <TabBar />
     </div>
   );
