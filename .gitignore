@@ -4,3 +4,8 @@ out
 next-env.d.ts
 *.tsbuildinfo
 .DS_Store
+
+# deck renderer fonts (large; fetched on demand)
+tools/decks/**/fonts/*.ttf
+tools/decks/**/fonts/*.otf
+/out/

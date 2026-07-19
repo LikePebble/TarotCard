@@ -81,6 +81,16 @@ cp -R frame /Volumes/DevProjects/projects/TarotCard/docs/artifacts/wolha-biwon/
 
 기존 대상 디렉터리가 있을 경우 덮어쓰기 전에 변경 내용을 확인한다.
 
+## 저장소 이관 시 정리 (2026-07-19)
+
+저장소 용량을 위해 무거운 원본을 정리했다. 전체 원본은 제작 프로젝트
+(`Image-Gen/output/tarot/wolha-biwon`)에 남아 있다.
+
+- `selected-mockup-no-text.png`(5.4MB) -> `.webp` 프리뷰로 대체
+- `qa/renders/*.png`(고해상도 3장), `qa/layout-guide.png` 제거. `qa/previews/*.webp` 유지
+- 런타임 `frame.png`는 최종 카투슈 프레임(변형 09, 투명 RGBA)으로 교체
+- 프레임 벡터 원본 `frame-source.svg`, `frame-source-spec.json` 추가
+
 ## 재현 정보
 
 - 전체 시안 프롬프트 요약: `prompt-set.md`

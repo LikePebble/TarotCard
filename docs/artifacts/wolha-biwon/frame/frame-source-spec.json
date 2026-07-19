@@ -1,0 +1,26 @@
+{
+  "id": "09-plum-bamboo-asymmetry",
+  "nameKo": "매죽 비대칭",
+  "nameEn": "Plum Bamboo Asymmetry",
+  "description": "왼쪽 대나무와 오른쪽 매화를 비대칭으로 배치해 비밀 정원의 생동감을 살린 식물형",
+  "canvas": {
+    "width": 1200,
+    "height": 2040,
+    "aspectRatio": "1:1.7"
+  },
+  "safeZone": {
+    "topPx": 170,
+    "sidePx": 72,
+    "bottomPx": 300
+  },
+  "text": {
+    "number": "#D6C089",
+    "ko": "#F4EFE6",
+    "en": "#BDB4A7"
+  },
+  "previewCards": [
+    "the-moon",
+    "king-of-cups",
+    "four-of-pentacles"
+  ]
+}
