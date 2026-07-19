@@ -110,6 +110,68 @@ export function recordReading(): ArcanaStore {
   return loadStore();
 }
 
+export type SlotState = {
+  state: "available" | "completed" | "exhausted";
+  readingId?: string;
+};
+
+/** 현재 주기에서 (유형, 카테고리)에 해당하는 이미 완료된 리딩을 찾는다. */
+export function findReadingFor(
+  store: ArcanaStore,
+  spread: SpreadType,
+  category: string,
+  d: Date,
+): ReadingRecord | undefined {
+  const type = readingTypeOf(spread);
+  if (type.cadenceUnit === "week") {
+    const wk = isoWeekOf(d);
+    return store.readings.find((r) => r.typeId === type.id && r.isoWeek === wk);
+  }
+  const day = localDateOf(d);
+  return store.readings.find(
+    (r) => r.typeId === type.id && r.localDate === day && r.category === category,
+  );
+}
+
+/** 오늘 이 유형으로 소비한 서로 다른 카테고리 수(=슬롯 소비). */
+export function dailySlotsUsed(
+  store: ArcanaStore,
+  spread: SpreadType,
+  d: Date,
+): number {
+  const type = readingTypeOf(spread);
+  const day = localDateOf(d);
+  const cats = new Set(
+    store.readings
+      .filter((r) => r.typeId === type.id && r.localDate === day)
+      .map((r) => r.category),
+  );
+  return cats.size;
+}
+
+/**
+ * (유형, 카테고리)의 현재 상태.
+ * - completed: 이번 주기에 이미 뽑음 → readingId로 결과 이동
+ * - exhausted: 오늘 슬롯 소진(일 케이던스 한정)
+ * - available: 뽑기 가능
+ * maxDailySlots 기본 1(무료). ad_free는 3(D15) — P0-a 이후 주입.
+ */
+export function slotState(
+  store: ArcanaStore,
+  spread: SpreadType,
+  category: string,
+  d: Date,
+  maxDailySlots = 1,
+): SlotState {
+  const existing = findReadingFor(store, spread, category, d);
+  if (existing) return { state: "completed", readingId: existing.id };
+  const type = readingTypeOf(spread);
+  if (type.cadenceUnit === "day" && dailySlotsUsed(store, spread, d) >= maxDailySlots) {
+    return { state: "exhausted" };
+  }
+  return { state: "available" };
+}
+
 export function collectedCount(store: ArcanaStore, deckId: string): number {
   return Object.keys(store.collection[deckId] ?? {}).length;
 }
