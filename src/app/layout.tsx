@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Serif_KR } from "next/font/google";
-import "pretendard/dist/web/static/pretendard.css";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const notoSerifKr = Noto_Serif_KR({
@@ -8,6 +8,13 @@ const notoSerifKr = Noto_Serif_KR({
   weight: ["400", "500", "600", "700"],
   variable: "--font-noto-serif-kr",
   display: "swap",
+});
+
+const wantedSans = localFont({
+  src: "../fonts/WantedSansVariable.woff2",
+  variable: "--font-wanted-sans",
+  display: "swap",
+  weight: "400 1000",
 });
 
 export const metadata: Metadata = {
@@ -24,7 +31,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko" className={notoSerifKr.variable}>
+    <html lang="ko" className={`${notoSerifKr.variable} ${wantedSans.variable}`}>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );

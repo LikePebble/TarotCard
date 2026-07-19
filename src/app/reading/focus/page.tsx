@@ -56,7 +56,10 @@ export default function FocusPage() {
           무엇이 궁금한가요
         </h1>
         <div className="mt-[22px] border-t border-line lg:mt-10">
-          {FOCUS_OPTIONS.map((option) => (
+          {(spread === "three"
+            ? FOCUS_OPTIONS.filter((option) => option.label !== "오늘 하루")
+            : FOCUS_OPTIONS
+          ).map((option) => (
             <button
               key={option.label}
               type="button"

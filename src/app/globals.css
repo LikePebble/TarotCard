@@ -12,8 +12,8 @@
   --color-line: rgba(236, 229, 216, 0.1);
   --color-line-gold: rgba(201, 162, 75, 0.35);
   --font-serif: var(--font-noto-serif-kr), "Noto Serif KR", serif;
-  --font-sans: "Pretendard", "Pretendard Variable", -apple-system, "Segoe UI",
-    sans-serif;
+  --font-sans: var(--font-wanted-sans), "Wanted Sans Variable", "Wanted Sans",
+    -apple-system, "Segoe UI", sans-serif;
 }
 
 body {
@@ -134,34 +134,60 @@ body {
   position: relative;
   --fan-step: 12deg;
 }
+/* Positioning uses the individual translate/rotate properties, NOT the
+   transform property: Motion's layout projection (layoutId slot flight)
+   writes inline transform on tracked fan cards, which must not be able to
+   knock the fan geometry out. */
 .draw-fan .fan-card {
   position: absolute;
   left: 50%;
   bottom: 48px;
-  transform-origin: 50% 115%;
-  transform: translateX(-50%) rotate(calc(var(--fan-i, 0) * var(--fan-step)));
-  translate: 0 var(--fan-lift, 0px);
+  /* !important: Motion's layout projection writes an inline 50% 50% origin
+     on layoutId-tracked cards, which would collapse the arc pivot. */
+  transform-origin: 50% 115% !important;
+  translate: -50% var(--fan-lift, 0px);
+  rotate: calc(var(--fan-i, 0) * var(--fan-step));
   transition:
-    transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) var(--deal-delay, 0ms),
-    translate 0.25s ease;
+    rotate 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) var(--deal-delay, 0ms),
+    translate 0.25s ease,
+    scale 0.3s ease;
   box-shadow: 0 10px 30px rgba(8, 5, 0, 0.55);
   border-radius: 12px;
 }
-.draw-fan .fan-card:hover,
-.draw-fan .fan-card:focus-visible {
-  translate: 0 calc(var(--fan-lift, 0px) - 10px);
+/* While choosing: the card under the pointer answers with a small lift and
+   a soft gold border. No card is pre-highlighted at rest. */
+.draw-fan .fan-card:not(:disabled):hover,
+.draw-fan .fan-card:not(:disabled):focus-visible,
+.draw-fan .fan-card:not(:disabled):active {
+  translate: -50% calc(var(--fan-lift, 0px) - 10px);
 }
-.draw-fan .fan-card.lifted {
-  --fan-lift: -28px;
+.draw-fan .fan-card .cardback {
+  transition: border-color 0.2s ease;
+}
+.draw-fan .fan-card:not(:disabled):hover .cardback,
+.draw-fan .fan-card:not(:disabled):focus-visible .cardback,
+.draw-fan .fan-card:not(:disabled):active .cardback {
+  border-color: rgba(201, 162, 75, 0.75);
 }
 /* Deal-in start state: stacked at center, spread staggers via --deal-delay */
 .draw-fan .fan-card.stacked {
-  transform: translateX(-50%) translateY(14px) rotate(0deg);
+  translate: -50% 14px;
+  rotate: 0deg;
 }
 /* Gacha charge: chosen card lifts above the fan while the glow builds */
 .draw-fan .fan-card.charging {
-  translate: 0 calc(var(--fan-lift, 0px) - 26px);
+  translate: -50% calc(var(--fan-lift, 0px) - 26px);
   z-index: 30;
+}
+/* Three-card mode: shallow, even arc tucked directly under the slot row.
+   Smaller step and deeper origin so 100px cards do not pile up or clip. */
+.draw-fan.fan-three {
+  --fan-step: 9deg;
+}
+.draw-fan.fan-three .fan-card {
+  bottom: auto;
+  top: 10px;
+  transform-origin: 50% 130% !important;
 }
 @media (min-width: 1024px) {
   .draw-fan {
@@ -169,10 +195,12 @@ body {
   }
   .draw-fan .fan-card {
     bottom: 8px;
-    transform-origin: 50% 120%;
+    transform-origin: 50% 120% !important;
   }
-  .draw-fan .fan-card.lifted {
-    --fan-lift: -34px;
+  .draw-fan.fan-three .fan-card {
+    bottom: auto;
+    top: 10px;
+    transform-origin: 50% 130% !important;
   }
 }
 
@@ -193,7 +221,7 @@ body {
 .shuffle-card {
   position: absolute;
   left: 50%;
-  bottom: 90px;
+  bottom: 30px;
   translate: -50% 0;
   box-shadow: 0 10px 30px rgba(8, 5, 0, 0.55);
 }
@@ -414,6 +442,186 @@ body {
   100% {
     opacity: 0;
     transform: scale(1.25);
+  }
+}
+
+/* ===== One-card path (ported from redesign/arcana-fable) ===== */
+
+/* Shuffle: cards gather into a center stack, slip out alternately left and
+   right, and reinsert. Pure CSS decoration; phase advance is timer-driven. */
+/* Keyframes use the individual translate/rotate properties to match the fan
+   positioning scheme (see .draw-fan .fan-card). Visual result is identical
+   to the source branch's transform keyframes. */
+.draw-fan.is-shuffling .fan-card {
+  translate: -50% calc(var(--shuf-i) * -2.5px);
+  rotate: 0deg;
+  animation: shuf-cycle 1.15s ease-in-out 2;
+  animation-delay: calc(var(--shuf-i) * 85ms);
+  transition: none;
+}
+@keyframes shuf-cycle {
+  0%,
+  100% {
+    translate: -50% calc(var(--shuf-i) * -2.5px);
+    rotate: 0deg;
+  }
+  22% {
+    translate: calc(-50% + var(--shuf-dir) * 96px) -26px;
+    rotate: calc(var(--shuf-dir) * 13deg);
+  }
+  46% {
+    translate: -50% calc(var(--shuf-i) * -2.5px);
+    rotate: 0deg;
+  }
+  68% {
+    translate: calc(-50% + var(--shuf-dir) * -70px) -14px;
+    rotate: calc(var(--shuf-dir) * -9deg);
+  }
+}
+
+/* Gacha pick: the chosen card rises while gold light gathers behind it.
+   Layers animate opacity/transform only; no per-frame shadows or filters. */
+.draw-fan .fan-card.charging-lift {
+  --fan-lift: -56px;
+  scale: 1.07;
+  z-index: 5;
+  transition: translate 0.5s cubic-bezier(0.16, 1, 0.3, 1), scale 0.5s ease;
+}
+.draw-fan .fan-card.dimmed {
+  opacity: 0.1;
+  transition: opacity 0.4s ease;
+}
+.gacha-aura {
+  position: absolute;
+  inset: -42%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(224, 192, 120, 0.5),
+    rgba(201, 162, 75, 0.22) 48%,
+    transparent 72%
+  );
+  opacity: 0;
+  animation: aura-in 0.85s ease-out forwards;
+  pointer-events: none;
+}
+.gacha-aura.fast {
+  animation: aura-pulse 0.38s ease-out forwards;
+}
+.gacha-rays {
+  position: absolute;
+  inset: -70%;
+  z-index: -2;
+  background: repeating-conic-gradient(
+    rgba(224, 192, 120, 0.16) 0deg 7deg,
+    transparent 7deg 26deg
+  );
+  -webkit-mask-image: radial-gradient(closest-side, #000 26%, transparent 68%);
+  mask-image: radial-gradient(closest-side, #000 26%, transparent 68%);
+  opacity: 0;
+  will-change: transform;
+  animation: rays-spin 5.5s linear infinite, aura-in 0.85s ease-out forwards;
+  pointer-events: none;
+}
+.gacha-flash {
+  position: absolute;
+  inset: -34%;
+  z-index: 2;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 245, 220, 0.9),
+    rgba(224, 192, 120, 0.4) 55%,
+    transparent 75%
+  );
+  opacity: 0;
+  animation: flash-pop 0.75s ease-in forwards;
+  pointer-events: none;
+}
+.gacha-bloom {
+  position: absolute;
+  inset: -28%;
+  z-index: 2;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(224, 192, 120, 0.55),
+    transparent 70%
+  );
+  opacity: 0;
+  animation: bloom-pop 0.55s ease-out forwards;
+  animation-delay: var(--bloom-delay, 0s);
+  pointer-events: none;
+}
+@keyframes aura-in {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes aura-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  60% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+@keyframes rays-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes flash-pop {
+  0%,
+  78% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  88% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+@keyframes bloom-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  45% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .draw-fan.is-shuffling .fan-card {
+    animation: none;
+  }
+  .gacha-aura,
+  .gacha-rays,
+  .gacha-flash,
+  .gacha-bloom {
+    animation: none;
+    opacity: 0;
   }
 }
 }

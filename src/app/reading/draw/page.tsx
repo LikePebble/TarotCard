@@ -22,22 +22,33 @@ const POSITIONS = ["과거", "현재", "미래"] as const;
 const FAN_SIZE = 7;
 
 /*
- * Choreography timeline (all phase transitions are setTimeout-driven; the
- * Motion animations are decoration layered on top of timer-driven state,
- * because rAF pauses in background tabs and completion callbacks may never
- * fire there).
+ * Choreography timelines. Every phase transition is setTimeout-driven; CSS
+ * and Motion animations are decoration on top of timer-driven state (rAF
+ * pauses in background tabs, so nothing may depend on a completion callback).
+ *
+ * One-card (오늘의 카드): stack cross-shuffle on the fan itself, then
+ * lift-and-glow charge with the flash baked into the flash-pop keyframes.
+ * Three-card (과거 · 현재 · 미래): shuffle-stage overlay with stagger deal,
+ * per-pick charge + flash + slot flight + landing burst, sequential flips.
  */
-const SHUFFLE_MS = 2400; // first shuffle on page entry
-const SHUFFLE_REPEAT_MS = 1300; // shorter shuffle after 다시 뽑기
-const CHARGE_MS = 700; // gold glow buildup after tapping a card
+const SHUFFLE_MS = 2400;
+const SHUFFLE_REPEAT_MS = 1300; // three-card only: shorter after 다시 뽑기
+
+/* One-card path (Fable timings) */
+const ONE_CHARGE_MS = 800; // gold light gathers on the chosen card
+const ONE_FLIP_MS = 700;
+const ONE_SETTLE_MS = 500; // pause on the revealed face before the panel
+const ONE_REVEAL_MS = ONE_CHARGE_MS + ONE_FLIP_MS + ONE_SETTLE_MS; // 2000
+const ONE_WATCHDOG_MS = ONE_CHARGE_MS + ONE_FLIP_MS + ONE_SETTLE_MS + 700;
+
+/* Three-card path */
+const CHARGE_MS = 700; // glow buildup after tapping a card
 const FLASH_MS = 130; // bright flash at the peak
-const FLIP_MS = 650; // card flip duration
-const ONE_REVEAL_PAUSE_MS = 350; // pause on the revealed face
-const ONE_TOTAL_MS = CHARGE_MS + FLASH_MS + FLIP_MS + ONE_REVEAL_PAUSE_MS; // 1830
 const THREE_FLIP_STAGGER_S = 0.55; // delay between sequential slot flips
+const THREE_FLIP_MS = 650;
 const THREE_REVEAL_MS = 2300; // flipping -> revealed (last flip ends ~1750ms)
 
-/** Which shuffle-stack cards run which loop animation (index = fan slot). */
+/** Which shuffle-stack cards run which loop animation (three-card stage). */
 const SHUFFLE_CARD_CLASSES = [
   "shuf-static-a",
   "shuf-loop-left",
@@ -69,9 +80,8 @@ function descriptionOf(card: Card): string[] {
 }
 
 /**
- * Pre-rendered gold light layers for the gacha buildup. Only transform and
- * opacity are animated; blurs and gradients are static. The ray disc is a
- * single element and unmounts as soon as the charge ends.
+ * Three-card path glow layers. Only transform and opacity are animated;
+ * gradients and mask are static. Unmounts as soon as the charge ends.
  */
 function GachaGlow() {
   return (
@@ -102,6 +112,11 @@ export default function DrawPage() {
   const watchdogRef = useRef<number | null>(null);
   const timersRef = useRef<number[]>([]);
   const hasShuffledRef = useRef(false);
+  const reducedRef = useRef(false);
+
+  useEffect(() => {
+    reducedRef.current = !!reducedMotion;
+  }, [reducedMotion]);
 
   const clearTimers = useCallback(() => {
     for (const id of timersRef.current) window.clearTimeout(id);
@@ -113,12 +128,22 @@ export default function DrawPage() {
     timersRef.current.push(window.setTimeout(fn, ms));
   }, []);
 
-  const beginPicking = useCallback(() => {
-    setPhase((p) => (p === "shuffling" ? "picking" : p));
-    later(40, () => setDealt(true));
-  }, [later]);
+  const beginPicking = useCallback(
+    (s: SpreadType) => {
+      setPhase((p) => (p === "shuffling" ? "picking" : p));
+      if (s === "three") {
+        later(40, () => setDealt(true));
+      } else {
+        setDealt(true);
+      }
+    },
+    [later],
+  );
 
   const setup = useCallback(() => {
+    // Spread comes from sessionStorage (source of truth) because setup can
+    // run in the same tick that seeds the spread state.
+    const s = getPendingSpread() ?? "one";
     clearTimers();
     if (watchdogRef.current !== null) {
       window.clearTimeout(watchdogRef.current);
@@ -132,17 +157,21 @@ export default function DrawPage() {
     setFlashing(false);
     setCount(null);
     recordedRef.current = false;
-    if (reducedMotion) {
+    if (reducedRef.current) {
       setPhase("picking");
       setDealt(true);
       return;
     }
     setPhase("shuffling");
-    setDealt(false);
-    const ms = hasShuffledRef.current ? SHUFFLE_REPEAT_MS : SHUFFLE_MS;
+    // One-card shuffles the fan itself (is-shuffling class); the cards stay
+    // mounted, so no deal-in state is needed. Three-card hides the fan behind
+    // the shuffle stage and deals it out afterwards.
+    setDealt(s === "one");
+    const ms =
+      s === "three" && hasShuffledRef.current ? SHUFFLE_REPEAT_MS : SHUFFLE_MS;
     hasShuffledRef.current = true;
-    later(ms, beginPicking);
-  }, [beginPicking, clearTimers, later, reducedMotion]);
+    later(ms, () => beginPicking(s));
+  }, [beginPicking, clearTimers, later]);
 
   useEffect(
     () => () => {
@@ -193,7 +222,7 @@ export default function DrawPage() {
   const skipShuffle = () => {
     if (phase !== "shuffling") return;
     clearTimers();
-    beginPicking();
+    beginPicking(spread);
   };
 
   const need = spread === "one" ? 1 : 3;
@@ -215,20 +244,18 @@ export default function DrawPage() {
         setPhase("revealed");
         return;
       }
-      // Timeline: charge glow -> flash -> flip -> reveal. Timer-driven.
-      setPhase("flipping");
+      // Fable timeline: charge (lift + glow, flash baked into the keyframes)
+      // -> flip -> settle -> reveal. Timer-driven; watchdog as backstop.
       setChargingFanId(fanId);
-      later(CHARGE_MS, () => setFlashing(true));
-      later(CHARGE_MS + FLASH_MS, () => {
-        setFlashing(false);
-        setChargingFanId(null);
+      armRevealWatchdog([slug], spread, focus, ONE_WATCHDOG_MS);
+      later(ONE_CHARGE_MS, () => {
         setFlippingFanId(fanId);
+        setPhase("flipping");
       });
-      later(ONE_TOTAL_MS, () => {
+      later(ONE_REVEAL_MS, () => {
         record([slug], spread, focus);
         setPhase((p) => (p === "flipping" ? "revealed" : p));
       });
-      armRevealWatchdog([slug], spread, focus, ONE_TOTAL_MS + 600);
       return;
     }
     const nextPicked = [...pickedFanIds, fanId];
@@ -273,7 +300,6 @@ export default function DrawPage() {
   }
 
   const spreadLabel = spread === "one" ? "오늘의 카드" : "과거 · 현재 · 미래";
-  const activeFanId = chargingFanId ?? flippingFanId;
 
   return (
     <div className="flex min-h-[100dvh] flex-col">
@@ -302,7 +328,10 @@ export default function DrawPage() {
       )}
 
       {phase !== "revealed" ? (
-          <main className="flex flex-1 flex-col pb-6 pt-3 text-center lg:pt-14">
+          <main
+            className="flex flex-1 flex-col pb-6 pt-3 text-center lg:pt-14"
+            onPointerDown={skipShuffle}
+          >
             <p className="px-6 text-[13px] text-muted lg:text-[14px]">
               {spreadLabel}{" "}
               <b className="font-medium text-gold">{focus}</b>
@@ -310,7 +339,8 @@ export default function DrawPage() {
             <h1 className="mt-1.5 px-6 font-serif text-[27px] font-semibold leading-[1.35] lg:text-[40px]">
               {phase === "shuffling"
                 ? "카드를 섞고 있습니다"
-                : phase === "flipping"
+                : phase === "flipping" ||
+                    (spread === "one" && chargingFanId !== null)
                   ? "카드를 공개합니다"
                   : spread === "three" && pickedFanIds.length > 0
                     ? "한 장 더 고르세요"
@@ -358,7 +388,9 @@ export default function DrawPage() {
                               rotateY: phase === "flipping" ? 180 : 0,
                             }}
                             transition={{
-                              duration: reducedMotion ? 0 : FLIP_MS / 1000,
+                              duration: reducedMotion
+                                ? 0
+                                : THREE_FLIP_MS / 1000,
                               delay: reducedMotion
                                 ? 0
                                 : i * THREE_FLIP_STAGGER_S,
@@ -393,11 +425,15 @@ export default function DrawPage() {
             ) : null}
 
             <div
-              className={`draw-fan mt-2.5 flex-1 overflow-hidden ${
-                spread === "three" ? "min-h-[300px]" : "min-h-[380px]"
-              } lg:h-[430px] lg:min-h-0 lg:flex-none lg:overflow-visible`}
+              className={`draw-fan ${
+                spread === "three"
+                  ? "fan-three mt-4 h-[250px] flex-none overflow-hidden lg:h-[430px] lg:overflow-visible"
+                  : "mt-2.5 min-h-[380px] flex-1 overflow-hidden lg:h-[430px] lg:min-h-0 lg:flex-none lg:overflow-visible"
+              } ${
+                spread === "one" && phase === "shuffling" ? "is-shuffling" : ""
+              }`}
             >
-              {phase === "shuffling" ? (
+              {spread === "three" && phase === "shuffling" ? (
                 <button
                   type="button"
                   onClick={skipShuffle}
@@ -414,13 +450,13 @@ export default function DrawPage() {
               ) : (
                 fan.map((fanId, i) => {
                   const offset = i - (fan.length - 1) / 2;
-                  const lifted = offset === 0;
                   const isFlipping = flippingFanId === fanId;
                   const isCharging = chargingFanId === fanId;
-                  const dimmed =
-                    spread === "one"
-                      ? phase === "flipping" && fanId !== activeFanId
-                      : chargingFanId !== null && fanId !== chargingFanId;
+                  const dimmedOne =
+                    spread === "one" &&
+                    (chargingFanId !== null || phase === "flipping") &&
+                    !isCharging &&
+                    !isFlipping;
                   return (
                     <motion.button
                       key={fanId}
@@ -433,33 +469,53 @@ export default function DrawPage() {
                       onClick={() => pick(fanId)}
                       disabled={phase !== "picking" || chargingFanId !== null}
                       aria-label={`덮인 카드 ${i + 1}`}
-                      animate={{
-                        opacity: dimmed ? (spread === "one" ? 0.12 : 0.35) : 1,
-                      }}
+                      animate={
+                        spread === "three"
+                          ? {
+                              opacity:
+                                chargingFanId !== null && !isCharging
+                                  ? 0.35
+                                  : 1,
+                            }
+                          : undefined
+                      }
                       className={`fan-card aspect-[2/3.4] ${
                         spread === "three" ? "w-[100px]" : "w-28"
-                      } lg:w-[170px] ${lifted ? "lifted" : ""} ${
-                        !dealt ? "stacked" : ""
-                      } ${isCharging || isFlipping ? "charging" : ""}`}
+                      } lg:w-[170px] ${
+                        spread === "one" && (isCharging || isFlipping)
+                          ? "charging-lift"
+                          : ""
+                      } ${
+                        spread === "three" && isCharging ? "charging" : ""
+                      } ${dimmedOne ? "dimmed" : ""} ${!dealt ? "stacked" : ""}`}
                       style={
                         {
                           "--fan-i": offset,
                           "--deal-delay": `${Math.abs(offset) * 55}ms`,
+                          "--shuf-i": i,
+                          "--shuf-dir": i % 2 === 0 ? 1 : -1,
                         } as React.CSSProperties
                       }
                     >
-                      {isCharging && !reducedMotion ? <GachaGlow /> : null}
+                      {spread === "one" &&
+                      !reducedMotion &&
+                      (isCharging || isFlipping) ? (
+                        <span aria-hidden>
+                          <span className="gacha-rays" />
+                          <span className="gacha-aura" />
+                          <span className="gacha-flash" />
+                        </span>
+                      ) : null}
+                      {spread === "three" && !reducedMotion && isCharging ? (
+                        <GachaGlow />
+                      ) : null}
                       <div className="relative z-[1] h-full w-full [perspective:700px]">
                         <motion.div
                           className="relative h-full w-full [transform-style:preserve-3d]"
                           animate={{ rotateY: isFlipping ? 180 : 0 }}
-                          transition={{ duration: FLIP_MS / 1000 }}
+                          transition={{ duration: ONE_FLIP_MS / 1000 }}
                         >
-                          <CardBack
-                            className={`absolute inset-0 [backface-visibility:hidden] ${
-                              lifted ? "border-gold" : ""
-                            }`}
-                          />
+                          <CardBack className="absolute inset-0 [backface-visibility:hidden]" />
                           <div className="absolute inset-0 overflow-hidden rounded-xl bg-ink-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
                             {isFlipping && deck[0] ? (
                               <Image
@@ -473,7 +529,7 @@ export default function DrawPage() {
                           </div>
                         </motion.div>
                       </div>
-                      {(isCharging && flashing) || isFlipping ? (
+                      {spread === "three" && isCharging && flashing ? (
                         <div aria-hidden className="glow-flash" />
                       ) : null}
                     </motion.button>
@@ -483,16 +539,13 @@ export default function DrawPage() {
             </div>
             <p className="px-6 text-[13px] text-muted lg:hidden">
               {phase === "shuffling"
-                ? null
+                ? spread === "one"
+                  ? "화면을 누르면 건너뜁니다"
+                  : "화면을 누르면 바로 펼칩니다"
                 : spread === "three"
                   ? "고른 카드는 슬롯으로 이동합니다"
                   : "카드를 눌러 뒤집습니다"}
             </p>
-            {phase === "shuffling" ? (
-              <p className="px-6 text-[13px] text-muted">
-                화면을 누르면 바로 펼칩니다
-              </p>
-            ) : null}
           </main>
         ) : spread === "one" ? (
           <OneCardResult
