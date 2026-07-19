@@ -1,7 +1,11 @@
 import Link from "next/link";
 
 /** Desktop-only top navigation (lg and up). */
-export function DesktopNav({ active }: { active: "reading" | "collection" }) {
+export function DesktopNav({
+  active,
+}: {
+  active: "reading" | "collection" | "my";
+}) {
   return (
     <nav
       aria-label="주요 메뉴"
@@ -31,6 +35,14 @@ export function DesktopNav({ active }: { active: "reading" | "collection" }) {
           }
         >
           컬렉션
+        </Link>
+        <Link
+          href="/my"
+          className={
+            active === "my" ? "text-cream" : "text-muted hover:text-cream"
+          }
+        >
+          MY
         </Link>
       </div>
     </nav>

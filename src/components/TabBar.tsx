@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Cards, MoonStars } from "@phosphor-icons/react";
+import { Cards, MoonStars, User } from "@phosphor-icons/react";
 
 export function TabBar() {
   const pathname = usePathname();
+  const myActive = pathname.startsWith("/my");
   const collectionActive = pathname.startsWith("/collection");
+  const readingActive = !myActive && !collectionActive;
   const item =
     "flex flex-1 flex-col items-center justify-center gap-[3px] text-[11px]";
   return (
@@ -16,7 +18,7 @@ export function TabBar() {
     >
       <Link
         href="/"
-        className={`${item} ${collectionActive ? "text-muted" : "text-gold-soft"}`}
+        className={`${item} ${readingActive ? "text-gold-soft" : "text-muted"}`}
       >
         <MoonStars size={22} aria-hidden />
         리딩
@@ -27,6 +29,13 @@ export function TabBar() {
       >
         <Cards size={22} aria-hidden />
         컬렉션
+      </Link>
+      <Link
+        href="/my"
+        className={`${item} ${myActive ? "text-gold-soft" : "text-muted"}`}
+      >
+        <User size={22} aria-hidden />
+        MY
       </Link>
     </nav>
   );
