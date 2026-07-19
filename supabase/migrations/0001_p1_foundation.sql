@@ -9,7 +9,7 @@ create table if not exists public.profiles (
 );
 
 create table if not exists public.readings (
-  id uuid primary key, -- 클라 생성 uuid(P0-a). upsert 멱등키.
+  id text primary key, -- 클라 생성 id(신규는 uuid, 레거시 마이그레이션은 문자열). upsert 멱등키.
   user_id uuid not null references auth.users(id) on delete cascade,
   created_at timestamptz not null default now(),
   local_date date not null,

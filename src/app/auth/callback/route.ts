@@ -5,7 +5,12 @@ import { getServerSupabase } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/my";
+  const nextParam = searchParams.get("next");
+  // 오픈 리다이렉트 방지: 같은 오리진의 절대 경로만 허용.
+  const next =
+    nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//")
+      ? nextParam
+      : "/my";
 
   if (code) {
     const supabase = await getServerSupabase();

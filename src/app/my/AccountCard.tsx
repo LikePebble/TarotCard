@@ -18,7 +18,11 @@ export function AccountCard() {
 
   // 로그인되면 한 번 게스트→계정 병합을 실행한다.
   useEffect(() => {
-    if (user && syncedFor.current !== user.id) {
+    if (!user) {
+      syncedFor.current = null;
+      return;
+    }
+    if (syncedFor.current !== user.id) {
       syncedFor.current = user.id;
       void syncOnLogin(user.id);
     }

@@ -59,7 +59,10 @@ export async function pullRemoteStore(
     .from("readings")
     .select("*")
     .eq("user_id", userId);
-  if (error || !data) return null;
+  if (error || !data) {
+    if (error) console.error("[sync] 리딩 pull 실패:", error.message);
+    return null;
+  }
   const readings = (data as ReadingRow[]).map(rowToReading);
   return { version: 2, collection: recomputeCollection(readings), readings };
 }
@@ -72,5 +75,8 @@ export async function pushLocalStore(
   const supabase = getBrowserSupabase();
   if (!supabase || store.readings.length === 0) return;
   const rows = store.readings.map((r) => readingToRow(userId, r));
-  await supabase.from("readings").upsert(rows, { onConflict: "id" });
+  const { error } = await supabase
+    .from("readings")
+    .upsert(rows, { onConflict: "id" });
+  if (error) console.error("[sync] 리딩 push 실패:", error.message);
 }

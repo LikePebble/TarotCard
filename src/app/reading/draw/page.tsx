@@ -11,9 +11,11 @@ import { DesktopNav } from "@/components/SiteNav";
 import { cards, type Card } from "@/data/cards";
 import { focusLabelOf } from "@/data/focus";
 import {
+  blockingReading,
   collectedCount,
   getPendingFocus,
   getPendingSpread,
+  loadStore,
   recordReading,
   useSelectedDeck,
   type SpreadType,
@@ -179,6 +181,12 @@ export default function DrawPage() {
     const pendingFocus = getPendingFocus();
     if (!pendingSpread || !pendingFocus) {
       router.replace("/reading");
+      return;
+    }
+    // 이미 이번 주기에 뽑았으면(뒤로가기·직접 진입 등) 재기록을 막고 결과로 보낸다.
+    const blocked = blockingReading(loadStore(), pendingSpread, new Date());
+    if (blocked) {
+      router.replace(`/reading/${blocked.id}`);
       return;
     }
     setSpread(pendingSpread);

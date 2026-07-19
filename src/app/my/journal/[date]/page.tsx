@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
@@ -35,21 +35,33 @@ export default function JournalDayPage({
   const { store } = useArcanaStore();
   const { store: journal, refresh } = useJournal();
 
-  const [todayIso] = useState(() => localDateOf(new Date()));
+  // todayIso는 클라이언트에서만 계산한다(SSR과 타임존이 달라 하이드레이션 불일치가 나지 않게).
+  const [todayIso, setTodayIso] = useState<string | null>(null);
   const [body, setBody] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [saved, setSaved] = useState(false);
+  const loadedDate = useRef<string | null>(null);
 
   useEffect(() => {
-    if (journal && !loaded) {
+    setTodayIso(localDateOf(new Date()));
+  }, []);
+
+  // 날짜(param)가 바뀌면 그 날짜의 일기를 다시 불러온다. App Router는 param만
+  // 바뀔 때 리마운트하지 않으므로, 날짜 기준으로만 본문을 리로드한다(저장 후
+  // journal 갱신에는 반응하지 않아 "저장되었습니다"가 유지된다).
+  useEffect(() => {
+    if (!journal) return;
+    if (loadedDate.current !== date) {
+      loadedDate.current = date;
       setBody(journal[date]?.body ?? "");
-      setLoaded(true);
+      setSaved(false);
     }
-  }, [journal, loaded, date]);
+    setLoaded(true);
+  }, [journal, date]);
 
   const readings = (store?.readings ?? []).filter((r) => r.localDate === date);
   const isToday = date === todayIso;
-  const canGoNext = date < todayIso;
+  const canGoNext = todayIso !== null && date < todayIso;
   const savedAt = journal?.[date]?.updatedAt;
 
   const save = () => {
