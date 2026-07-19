@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { migrateStore, readingById, type ArcanaStore } from "@/lib/store";
+import {
+  blockingReading,
+  migrateStore,
+  readingById,
+  type ArcanaStore,
+} from "@/lib/store";
 import {
   slotState,
   type ArcanaStore as Store,
@@ -167,5 +172,38 @@ describe("readingById", () => {
     const s: ArcanaStore = { version: 2, collection: {}, readings: [rec] };
     expect(readingById(s, "R-xyz")).toBe(rec);
     expect(readingById(s, "nope")).toBeUndefined();
+  });
+});
+
+describe("blockingReading", () => {
+  const day = new Date(2026, 6, 19); // 2026-07-19, 2026-W29
+
+  it("오늘의 타로: 오늘 이미 뽑았으면 그 리딩 반환(기본 1슬롯)", () => {
+    const r = reading({ id: "A", typeId: "ONE_CARD", spread: "one" });
+    const s: ArcanaStore = { version: 2, collection: {}, readings: [r] };
+    expect(blockingReading(s, "one", day)?.id).toBe("A");
+  });
+
+  it("오늘의 타로: 오늘 안 뽑았으면 undefined", () => {
+    const s: ArcanaStore = { version: 2, collection: {}, readings: [] };
+    expect(blockingReading(s, "one", day)).toBeUndefined();
+  });
+
+  it("오늘의 타로: maxDailySlots=3이면 1건은 아직 시작 가능", () => {
+    const r = reading({ id: "A", typeId: "ONE_CARD", spread: "one" });
+    const s: ArcanaStore = { version: 2, collection: {}, readings: [r] };
+    expect(blockingReading(s, "one", day, 3)).toBeUndefined();
+  });
+
+  it("PPF: 이번 주 뽑았으면 카테고리 무관하게 그 리딩 반환", () => {
+    const r = reading({
+      id: "W",
+      typeId: "THREE_CARD_PPF",
+      spread: "three",
+      category: "self",
+      isoWeek: "2026-W29",
+    });
+    const s: ArcanaStore = { version: 2, collection: {}, readings: [r] };
+    expect(blockingReading(s, "three", day)?.id).toBe("W");
   });
 });

@@ -242,6 +242,30 @@ export function readingById(
   return store.readings.find((r) => r.id === id);
 }
 
+/**
+ * 지금 이 유형으로 새 리딩을 시작할 수 없다면, 대신 보여줄 기존 리딩을 반환한다.
+ * 없으면(=시작 가능) undefined. 케이던스 게이팅/리롤 방지용.
+ * - 주 케이던스(PPF): 이번 주에 뽑았으면 그 리딩(카테고리 무관).
+ * - 일 케이던스(오늘의 타로): 오늘 소비한 슬롯이 maxDailySlots 이상이면 마지막 리딩.
+ */
+export function blockingReading(
+  store: ArcanaStore,
+  spread: SpreadType,
+  d: Date,
+  maxDailySlots = 1,
+): ReadingRecord | undefined {
+  const type = readingTypeOf(spread);
+  if (type.cadenceUnit === "week") {
+    const wk = isoWeekOf(d);
+    return store.readings.find((r) => r.typeId === type.id && r.isoWeek === wk);
+  }
+  const day = localDateOf(d);
+  const today = store.readings.filter(
+    (r) => r.typeId === type.id && r.localDate === day,
+  );
+  return today.length >= maxDailySlots ? today[today.length - 1] : undefined;
+}
+
 /** Client hook: null until mounted (SSR-safe), then the live store. */
 export function useArcanaStore() {
   const [store, setStore] = useState<ArcanaStore | null>(null);
