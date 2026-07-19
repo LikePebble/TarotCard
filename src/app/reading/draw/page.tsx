@@ -9,7 +9,9 @@ import { CaretLeft } from "@phosphor-icons/react";
 import { CardBack } from "@/components/CardBack";
 import { DesktopNav } from "@/components/SiteNav";
 import { cards, type Card } from "@/data/cards";
+import { focusLabelOf, focusParagraphOf } from "@/data/focus";
 import { koCards } from "@/data/ko";
+import { koPositions } from "@/data/ko-positions";
 import {
   collectedCount,
   getPendingFocus,
@@ -32,7 +34,7 @@ const FAN_SIZE = 7;
  * per-pick charge + flash + slot flight + landing burst, sequential flips.
  */
 const SHUFFLE_MS = 2400;
-const SHUFFLE_REPEAT_MS = 1300; // three-card only: shorter after 다시 뽑기
+const SHUFFLE_REPEAT_MS = 1300; // shorter shuffle after 다시 뽑기 (both spreads)
 
 /* One-card path (Fable timings) */
 const ONE_CHARGE_MS = 800; // gold light gathers on the chosen card
@@ -167,8 +169,7 @@ export default function DrawPage() {
     // mounted, so no deal-in state is needed. Three-card hides the fan behind
     // the shuffle stage and deals it out afterwards.
     setDealt(s === "one");
-    const ms =
-      s === "three" && hasShuffledRef.current ? SHUFFLE_REPEAT_MS : SHUFFLE_MS;
+    const ms = hasShuffledRef.current ? SHUFFLE_REPEAT_MS : SHUFFLE_MS;
     hasShuffledRef.current = true;
     later(ms, () => beginPicking(s));
   }, [beginPicking, clearTimers, later]);
@@ -334,7 +335,7 @@ export default function DrawPage() {
           >
             <p className="px-6 text-[13px] text-muted lg:text-[14px]">
               {spreadLabel}{" "}
-              <b className="font-medium text-gold">{focus}</b>
+              <b className="font-medium text-gold">{focusLabelOf(focus)}</b>
             </p>
             <h1 className="mt-1.5 px-6 font-serif text-[27px] font-semibold leading-[1.35] lg:text-[40px]">
               {phase === "shuffling"
@@ -582,6 +583,7 @@ function OneCardResult({
   onRetry: () => void;
 }) {
   const paragraphs = descriptionOf(card);
+  const themeParagraph = focusParagraphOf(focus, card.slug);
   return (
     <motion.main
       initial={reducedMotion ? false : { opacity: 0, y: 16 }}
@@ -603,7 +605,8 @@ function OneCardResult({
       </div>
       <div>
         <p className="mt-[22px] text-center text-[13px] text-muted lg:mt-0 lg:text-left lg:text-[14px]">
-          오늘의 카드 · <b className="font-medium text-gold">{focus}</b>
+          오늘의 카드 ·{" "}
+          <b className="font-medium text-gold">{focusLabelOf(focus)}</b>
         </p>
         <h1 className="mt-1 text-center font-serif text-[30px] font-semibold lg:text-left lg:text-[44px]">
           {nameKoOf(card)}{" "}
@@ -616,6 +619,16 @@ function OneCardResult({
             <p key={paragraph.slice(0, 24)}>{paragraph}</p>
           ))}
         </div>
+        {themeParagraph ? (
+          <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
+            <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+              {focusLabelOf(focus)}
+            </p>
+            <p className="mt-1.5 text-[15px] text-body lg:text-base">
+              {themeParagraph}
+            </p>
+          </div>
+        ) : null}
         <div className="mt-5 flex items-baseline justify-between rounded-[14px] border border-line-gold px-[18px] py-3.5 text-[13.5px] lg:mt-8 lg:inline-flex lg:gap-3.5 lg:text-[14.5px]">
           <span>컬렉션에 추가되었습니다</span>
           <b className="font-serif text-[15px] font-semibold text-gold-soft">
@@ -663,7 +676,8 @@ function ThreeCardResult({
       className="mx-auto w-full max-w-[760px] flex-1 px-6 pb-8 pt-1 lg:pb-24 lg:pt-14"
     >
       <p className="text-center text-[13px] text-muted lg:text-[14px]">
-        과거 · 현재 · 미래 <b className="font-medium text-gold">{focus}</b>
+        과거 · 현재 · 미래{" "}
+        <b className="font-medium text-gold">{focusLabelOf(focus)}</b>
       </p>
       <div className="mt-4 flex justify-center gap-2.5">
         {picked.map((card) => (
@@ -682,38 +696,58 @@ function ThreeCardResult({
         ))}
       </div>
       <div className="mt-2">
-        {picked.map((card, i) => (
-          <section
-            key={card.slug}
-            className="flex items-start gap-4 border-b border-line py-[22px] last:border-b-0 lg:gap-7 lg:py-8"
-          >
-            <div className="relative aspect-[2/3.4] w-[88px] flex-none overflow-hidden rounded-xl bg-ink-2 lg:w-[120px]">
-              <Image
-                src={card.image}
-                alt={`${nameKoOf(card)} ${card.nameEn}`}
-                fill
-                sizes="120px"
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-                {POSITIONS[i]}
-              </p>
-              <h2 className="mt-0.5 mb-1.5 font-serif text-xl font-semibold lg:text-2xl">
-                {nameKoOf(card)}{" "}
-                <span className="ml-1 text-[13px] font-normal text-muted lg:text-[15px]">
-                  {card.nameEn}
-                </span>
-              </h2>
-              <div className="space-y-2.5 text-[13.5px] leading-[1.65] text-body lg:text-[15px]">
-                {descriptionOf(card).map((paragraph) => (
-                  <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-                ))}
+        {picked.map((card, i) => {
+          const positionKey = (["past", "present", "future"] as const)[i];
+          const positionSentence = koPositions[card.slug]?.[positionKey];
+          const themeParagraph = focusParagraphOf(focus, card.slug);
+          return (
+            <section
+              key={card.slug}
+              className="flex items-start gap-4 border-b border-line py-[22px] last:border-b-0 lg:gap-7 lg:py-8"
+            >
+              <div className="relative aspect-[2/3.4] w-[88px] flex-none overflow-hidden rounded-xl bg-ink-2 lg:w-[120px]">
+                <Image
+                  src={card.image}
+                  alt={`${nameKoOf(card)} ${card.nameEn}`}
+                  fill
+                  sizes="120px"
+                  className="object-cover"
+                />
               </div>
-            </div>
-          </section>
-        ))}
+              <div>
+                <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+                  {POSITIONS[i]}
+                </p>
+                <h2 className="mt-0.5 mb-1.5 font-serif text-xl font-semibold lg:text-2xl">
+                  {nameKoOf(card)}{" "}
+                  <span className="ml-1 text-[13px] font-normal text-muted lg:text-[15px]">
+                    {card.nameEn}
+                  </span>
+                </h2>
+                {positionSentence ? (
+                  <p className="mb-2 text-[14.5px] leading-[1.6] text-cream lg:text-base">
+                    {positionSentence}
+                  </p>
+                ) : null}
+                <div className="space-y-2.5 text-[13.5px] leading-[1.65] text-body lg:text-[15px]">
+                  {descriptionOf(card).map((paragraph) => (
+                    <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+                  ))}
+                </div>
+                {themeParagraph ? (
+                  <div className="mt-3 border-t border-line pt-2.5">
+                    <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+                      {focusLabelOf(focus)}
+                    </p>
+                    <p className="mt-1 text-[13.5px] leading-[1.65] text-body lg:text-[15px]">
+                      {themeParagraph}
+                    </p>
+                  </div>
+                ) : null}
+              </div>
+            </section>
+          );
+        })}
       </div>
       <div className="mt-2 flex items-baseline justify-between rounded-[14px] border border-line-gold px-[18px] py-3.5 text-[13.5px] lg:text-[14.5px]">
         <span>3장이 컬렉션에 추가되었습니다</span>

@@ -4,18 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FlowHeader } from "@/components/FlowHeader";
 import { DesktopNav } from "@/components/SiteNav";
+import { focusOptionsFor } from "@/data/focus";
 import {
   getPendingSpread,
   setPendingFocus,
   type SpreadType,
 } from "@/lib/store";
-
-const FOCUS_OPTIONS = [
-  { label: "사랑", desc: "마음과 관계의 흐름" },
-  { label: "일", desc: "일과 성취의 방향" },
-  { label: "나 자신", desc: "내면의 상태와 균형" },
-  { label: "오늘 하루", desc: "오늘의 전반적인 기운" },
-];
 
 export default function FocusPage() {
   const router = useRouter();
@@ -56,14 +50,11 @@ export default function FocusPage() {
           무엇이 궁금한가요
         </h1>
         <div className="mt-[22px] border-t border-line lg:mt-10">
-          {(spread === "three"
-            ? FOCUS_OPTIONS.filter((option) => option.label !== "오늘 하루")
-            : FOCUS_OPTIONS
-          ).map((option) => (
+          {(spread ? focusOptionsFor(spread) : []).map((option) => (
             <button
-              key={option.label}
+              key={option.id}
               type="button"
-              onClick={() => choose(option.label)}
+              onClick={() => choose(option.id)}
               aria-label={option.label}
               className="group flex w-full items-baseline justify-between border-b border-line px-1 py-[22px] text-left lg:px-2 lg:py-[30px]"
             >
