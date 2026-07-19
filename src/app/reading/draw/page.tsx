@@ -201,10 +201,16 @@ export default function DrawPage() {
     (slugs: string[], s: SpreadType, f: string) => {
       if (recordedRef.current) return;
       recordedRef.current = true;
-      const store = recordReading(s, f, slugs);
-      setCount(collectedCount(store));
+      const store = recordReading({
+        spread: s,
+        category: f,
+        deckId,
+        cards: slugs,
+        orientations: slugs.map(() => "upright" as const),
+      });
+      setCount(collectedCount(store, deckId));
     },
-    [],
+    [deckId],
   );
 
   // Flow state must never depend solely on animation completion: rAF pauses

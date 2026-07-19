@@ -1,6 +1,6 @@
 "use client";
 
-import { useArcanaStore } from "@/lib/store";
+import { useArcanaStore, useSelectedDeck } from "@/lib/store";
 
 function formatKoDate(iso: string): string {
   const d = new Date(iso);
@@ -9,7 +9,8 @@ function formatKoDate(iso: string): string {
 
 export function CollectHistory({ slug }: { slug: string }) {
   const { store } = useArcanaStore();
-  const entry = store?.collection[slug];
+  const { deckId } = useSelectedDeck();
+  const entry = store?.collection[deckId]?.[slug];
 
   return (
     <div className="mt-7 border-t border-line pt-5 lg:mt-10 lg:pt-7">

@@ -26,7 +26,7 @@ export default function CollectionPage() {
   const { deckId, select } = useSelectedDeck();
   const [filter, setFilter] = useState<FilterId>("major");
 
-  const total = store ? collectedCount(store) : 0;
+  const total = store ? collectedCount(store, deckId) : 0;
   const visible = cards.filter((card) =>
     filter === "major" ? card.arcana === "major" : card.suit === filter,
   );
@@ -131,7 +131,7 @@ export default function CollectionPage() {
 
         <div className="mt-4 grid grid-cols-3 gap-y-3.5 gap-x-3 lg:mt-8 lg:grid-cols-6 lg:gap-[22px]">
           {visible.map((card) => {
-            const collected = !!store?.collection[card.slug];
+            const collected = !!store?.collection[deckId]?.[card.slug];
             const nameKo = koCards[card.slug]?.nameKo ?? card.nameEn;
             const label = (
               <p
