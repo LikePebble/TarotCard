@@ -101,3 +101,62 @@ describe("slotState — 과거·현재·미래 (주 1회, 카테고리 무관)",
     expect(slotState(s, "three", "love", day)).toEqual({ state: "available" });
   });
 });
+
+import { newReadingRecord, withReadingRecorded, collectedCount } from "@/lib/store";
+
+describe("newReadingRecord", () => {
+  it("at·spread로 파생 필드를 채운다", () => {
+    const rec = newReadingRecord({
+      id: "R1",
+      at: new Date(2026, 6, 19, 14, 0, 0),
+      spread: "three",
+      category: "love",
+      deckId: "wolha-biwon",
+      cards: ["thefool", "themoon", "thestar"],
+      orientations: ["upright", "reversed", "upright"],
+    });
+    expect(rec.localDate).toBe("2026-07-19");
+    expect(rec.isoWeek).toBe("2026-W29");
+    expect(rec.typeId).toBe("THREE_CARD_PPF");
+    expect(rec.deckId).toBe("wolha-biwon");
+    expect(rec.cards).toHaveLength(3);
+  });
+});
+
+describe("withReadingRecorded", () => {
+  it("해당 덱의 도감만 채우고 리딩을 append한다", () => {
+    const store = { version: 2 as const, collection: {}, readings: [] };
+    const rec = newReadingRecord({
+      id: "R1",
+      at: new Date(2026, 6, 19),
+      spread: "one",
+      category: "day",
+      deckId: "wolha-biwon",
+      cards: ["thefool"],
+      orientations: ["upright"],
+    });
+    const next = withReadingRecorded(store, rec);
+    expect(collectedCount(next, "wolha-biwon")).toBe(1);
+    expect(collectedCount(next, "classic")).toBe(0);
+    expect(next.readings).toHaveLength(1);
+    expect(next.collection["wolha-biwon"].thefool.count).toBe(1);
+  });
+
+  it("같은 카드를 다시 만나면 count만 증가하고 firstAt은 유지한다", () => {
+    let store: ArcanaStore = { version: 2, collection: {}, readings: [] };
+    const base = {
+      id: "R1",
+      at: new Date(2026, 6, 19),
+      spread: "one" as const,
+      category: "day",
+      deckId: "classic",
+      cards: ["thefool"],
+      orientations: ["upright" as const],
+    };
+    store = withReadingRecorded(store, newReadingRecord(base));
+    const firstAt = store.collection.classic.thefool.firstAt;
+    store = withReadingRecorded(store, newReadingRecord({ ...base, id: "R2" }));
+    expect(store.collection.classic.thefool.count).toBe(2);
+    expect(store.collection.classic.thefool.firstAt).toBe(firstAt);
+  });
+});

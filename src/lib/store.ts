@@ -105,9 +105,67 @@ function saveStore(store: ArcanaStore) {
   }
 }
 
-export function recordReading(): ArcanaStore {
-  // 정식 구현은 Task 5. 이 스텁은 컴파일만 통과시킨다.
-  return loadStore();
+export type NewReadingInput = {
+  id: string;
+  at: Date;
+  spread: SpreadType;
+  category: string;
+  deckId: string;
+  cards: string[];
+  orientations: Orientation[];
+};
+
+/** 파생 필드를 채운 리딩 레코드를 만든다(순수). */
+export function newReadingRecord(input: NewReadingInput): ReadingRecord {
+  return {
+    id: input.id,
+    at: input.at.toISOString(),
+    localDate: localDateOf(input.at),
+    isoWeek: isoWeekOf(input.at),
+    spread: input.spread,
+    typeId: readingTypeOf(input.spread).id,
+    category: input.category,
+    deckId: input.deckId,
+    cards: input.cards,
+    orientations: input.orientations,
+  };
+}
+
+/** 덱별 도감 카운트를 올리고 리딩을 추가한 새 스토어를 반환(순수). */
+export function withReadingRecorded(
+  store: ArcanaStore,
+  record: ReadingRecord,
+): ArcanaStore {
+  const deck = { ...(store.collection[record.deckId] ?? {}) };
+  for (const slug of record.cards) {
+    const entry = deck[slug];
+    deck[slug] = entry
+      ? { firstAt: entry.firstAt, count: entry.count + 1 }
+      : { firstAt: record.at, count: 1 };
+  }
+  return {
+    version: 2,
+    collection: { ...store.collection, [record.deckId]: deck },
+    readings: [...store.readings, record],
+  };
+}
+
+/** 완료된 리딩을 저장한다(부작용 래퍼). */
+export function recordReading(input: {
+  spread: SpreadType;
+  category: string;
+  deckId: string;
+  cards: string[];
+  orientations: Orientation[];
+}): ArcanaStore {
+  const record = newReadingRecord({
+    id: crypto.randomUUID(),
+    at: new Date(),
+    ...input,
+  });
+  const next = withReadingRecorded(loadStore(), record);
+  saveStore(next);
+  return next;
 }
 
 export type SlotState = {
