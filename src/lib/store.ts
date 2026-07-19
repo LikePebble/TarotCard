@@ -234,6 +234,14 @@ export function collectedCount(store: ArcanaStore, deckId: string): number {
   return Object.keys(store.collection[deckId] ?? {}).length;
 }
 
+/** 저장된 리딩을 id로 찾는다 (결과 재열람용, /reading/[id]). */
+export function readingById(
+  store: ArcanaStore,
+  id: string,
+): ReadingRecord | undefined {
+  return store.readings.find((r) => r.id === id);
+}
+
 /** Client hook: null until mounted (SSR-safe), then the live store. */
 export function useArcanaStore() {
   const [store, setStore] = useState<ArcanaStore | null>(null);

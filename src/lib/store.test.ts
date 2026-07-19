@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { migrateStore, type ArcanaStore } from "@/lib/store";
+import { migrateStore, readingById, type ArcanaStore } from "@/lib/store";
 import {
   slotState,
   type ArcanaStore as Store,
@@ -158,5 +158,14 @@ describe("withReadingRecorded", () => {
     store = withReadingRecorded(store, newReadingRecord({ ...base, id: "R2" }));
     expect(store.collection.classic.thefool.count).toBe(2);
     expect(store.collection.classic.thefool.firstAt).toBe(firstAt);
+  });
+});
+
+describe("readingById", () => {
+  it("id로 리딩을 찾고, 없으면 undefined", () => {
+    const rec = reading({ id: "R-xyz" });
+    const s: ArcanaStore = { version: 2, collection: {}, readings: [rec] };
+    expect(readingById(s, "R-xyz")).toBe(rec);
+    expect(readingById(s, "nope")).toBeUndefined();
   });
 });
