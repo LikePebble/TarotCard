@@ -30,10 +30,11 @@ const FAN_SIZE = 7;
  * and Motion animations are decoration on top of timer-driven state (rAF
  * pauses in background tabs, so nothing may depend on a completion callback).
  *
- * One-card (오늘의 카드): stack cross-shuffle on the fan itself, then
- * lift-and-glow charge with the flash baked into the flash-pop keyframes.
- * Three-card (과거 · 현재 · 미래): shuffle-stage overlay with stagger deal,
- * per-pick charge + flash + slot flight + landing burst, sequential flips.
+ * Both spreads share one shuffle: the fan stays spread while the cards
+ * cross-shuffle in place (is-shuffling), then settle for picking.
+ * One-card (오늘의 카드): lift-and-glow charge with the flash baked into the
+ * flash-pop keyframes. Three-card (과거 · 현재 · 미래): per-pick charge + flash
+ * + slot flight + landing burst, then sequential flips.
  */
 const SHUFFLE_MS = 2400;
 const SHUFFLE_REPEAT_MS = 1300; // shorter shuffle after 다시 뽑기 (both spreads)
@@ -51,17 +52,6 @@ const FLASH_MS = 130; // bright flash at the peak
 const THREE_FLIP_STAGGER_S = 0.55; // delay between sequential slot flips
 const THREE_FLIP_MS = 650;
 const THREE_REVEAL_MS = 2300; // flipping -> revealed (last flip ends ~1750ms)
-
-/** Which shuffle-stack cards run which loop animation (three-card stage). */
-const SHUFFLE_CARD_CLASSES = [
-  "shuf-static-a",
-  "shuf-loop-left",
-  "shuf-static-b",
-  "shuf-loop-right",
-  "shuf-static-a",
-  "shuf-loop-left-late",
-  "shuf-static-c",
-];
 
 type Phase = "shuffling" | "picking" | "flipping" | "revealed";
 
@@ -102,7 +92,6 @@ export default function DrawPage() {
   const [flippingFanId, setFlippingFanId] = useState<number | null>(null);
   const [chargingFanId, setChargingFanId] = useState<number | null>(null);
   const [flashing, setFlashing] = useState(false);
-  const [dealt, setDealt] = useState(true);
   const [count, setCount] = useState<number | null>(null);
   const recordedRef = useRef(false);
   const watchdogRef = useRef<number | null>(null);
@@ -124,22 +113,13 @@ export default function DrawPage() {
     timersRef.current.push(window.setTimeout(fn, ms));
   }, []);
 
-  const beginPicking = useCallback(
-    (s: SpreadType) => {
-      setPhase((p) => (p === "shuffling" ? "picking" : p));
-      if (s === "three") {
-        later(40, () => setDealt(true));
-      } else {
-        setDealt(true);
-      }
-    },
-    [later],
-  );
+  const beginPicking = useCallback(() => {
+    // 두 스프레드 모두 셔플 내내 부채꼴이 펼쳐진 채이므로 별도 deal-in 없이
+    // 셔플 애니메이션만 걷어내고 바로 고르기 단계로 넘어간다.
+    setPhase((p) => (p === "shuffling" ? "picking" : p));
+  }, []);
 
   const setup = useCallback(() => {
-    // Spread comes from sessionStorage (source of truth) because setup can
-    // run in the same tick that seeds the spread state.
-    const s = getPendingSpread() ?? "one";
     clearTimers();
     if (watchdogRef.current !== null) {
       window.clearTimeout(watchdogRef.current);
@@ -155,17 +135,14 @@ export default function DrawPage() {
     recordedRef.current = false;
     if (reducedRef.current) {
       setPhase("picking");
-      setDealt(true);
       return;
     }
     setPhase("shuffling");
-    // One-card shuffles the fan itself (is-shuffling class); the cards stay
-    // mounted, so no deal-in state is needed. Three-card hides the fan behind
-    // the shuffle stage and deals it out afterwards.
-    setDealt(s === "one");
+    // 통일된 셔플: 오늘의 카드·3카드 모두 부채꼴을 펼친 채 카드 자체가 섞인다
+    // (is-shuffling). 별도 셔플 스테이지 오버레이 없이 같은 연출로 이어진다.
     const ms = hasShuffledRef.current ? SHUFFLE_REPEAT_MS : SHUFFLE_MS;
     hasShuffledRef.current = true;
-    later(ms, () => beginPicking(s));
+    later(ms, () => beginPicking());
   }, [beginPicking, clearTimers, later]);
 
   useEffect(
@@ -229,7 +206,7 @@ export default function DrawPage() {
   const skipShuffle = () => {
     if (phase !== "shuffling") return;
     clearTimers();
-    beginPicking(spread);
+    beginPicking();
   };
 
   const need = spread === "one" ? 1 : 3;
@@ -343,7 +320,7 @@ export default function DrawPage() {
               {spreadLabel}{" "}
               <b className="font-medium text-gold">{focusLabelOf(focus)}</b>
             </p>
-            <h1 className="mt-1.5 px-6 font-serif text-[27px] font-semibold leading-[1.35] lg:text-[40px]">
+            <h1 className="mt-1.5 px-6 font-display text-[27px] font-semibold leading-[1.35] lg:text-[40px]">
               {phase === "shuffling"
                 ? "카드를 섞고 있습니다"
                 : phase === "flipping" ||
@@ -405,7 +382,12 @@ export default function DrawPage() {
                           >
                             <CardBack className="absolute inset-0 [backface-visibility:hidden]" />
                             <div className="absolute inset-0 overflow-hidden rounded-xl bg-ink-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                              <CardArt card={card} deckId={deckId} sizes="110px" />
+                              <CardArt
+                                card={card}
+                                deckId={deckId}
+                                sizes="110px"
+                                showText
+                              />
                             </div>
                           </motion.div>
                         </motion.div>
@@ -430,26 +412,9 @@ export default function DrawPage() {
                 spread === "three"
                   ? "fan-three mt-4 h-[250px] flex-none overflow-hidden lg:h-[430px] lg:overflow-visible"
                   : "mt-2.5 min-h-[380px] flex-1 overflow-hidden lg:h-[430px] lg:min-h-0 lg:flex-none lg:overflow-visible"
-              } ${
-                spread === "one" && phase === "shuffling" ? "is-shuffling" : ""
-              }`}
+              } ${phase === "shuffling" ? "is-shuffling" : ""}`}
             >
-              {spread === "three" && phase === "shuffling" ? (
-                <button
-                  type="button"
-                  onClick={skipShuffle}
-                  aria-label="카드 섞기 건너뛰기"
-                  className="shuffle-stage"
-                >
-                  {SHUFFLE_CARD_CLASSES.map((cls, i) => (
-                    <CardBack
-                      key={i}
-                      className={`shuffle-card ${cls} aspect-[2/3.4] w-28 lg:w-[170px]`}
-                    />
-                  ))}
-                </button>
-              ) : (
-                fan.map((fanId, i) => {
+              {fan.map((fanId, i) => {
                   const offset = i - (fan.length - 1) / 2;
                   const isFlipping = flippingFanId === fanId;
                   const isCharging = chargingFanId === fanId;
@@ -488,7 +453,7 @@ export default function DrawPage() {
                           : ""
                       } ${
                         spread === "three" && isCharging ? "charging" : ""
-                      } ${dimmedOne ? "dimmed" : ""} ${!dealt ? "stacked" : ""}`}
+                      } ${dimmedOne ? "dimmed" : ""}`}
                       style={
                         {
                           "--fan-i": offset,
@@ -523,6 +488,7 @@ export default function DrawPage() {
                                 card={deck[0]}
                                 deckId={deckId}
                                 sizes="170px"
+                                showText
                               />
                             ) : null}
                           </div>
@@ -533,14 +499,11 @@ export default function DrawPage() {
                       ) : null}
                     </motion.button>
                   );
-                })
-              )}
+                })}
             </div>
             <p className="px-6 text-[13px] text-muted lg:hidden">
               {phase === "shuffling"
-                ? spread === "one"
-                  ? "화면을 누르면 건너뜁니다"
-                  : "화면을 누르면 바로 펼칩니다"
+                ? "화면을 누르면 바로 펼칩니다"
                 : spread === "three"
                   ? "고른 카드는 슬롯으로 이동합니다"
                   : "카드를 눌러 뒤집습니다"}
@@ -556,7 +519,7 @@ export default function DrawPage() {
             actions={
               <>
                 <Link
-                  href={`/collection/${deck[0].slug}`}
+                  href={`/collection/${deck[0].slug}?deck=${deckId}`}
                   className="btn btn-gold w-full lg:w-auto"
                 >
                   카드 자세히 보기

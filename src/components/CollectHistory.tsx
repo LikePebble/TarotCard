@@ -22,13 +22,13 @@ export function CollectHistory({ slug }: { slug: string }) {
         <div className="flex gap-10 lg:gap-14">
           <div>
             <p className="text-[12.5px] text-muted lg:text-[13px]">첫 수집</p>
-            <p className="font-serif text-[17px] lg:text-[19px]">
+            <p className="font-display text-[17px] lg:text-[19px]">
               {formatKoDate(entry.firstAt)}
             </p>
           </div>
           <div>
             <p className="text-[12.5px] text-muted lg:text-[13px]">뽑은 횟수</p>
-            <p className="font-serif text-[17px] lg:text-[19px]">
+            <p className="font-display text-[17px] lg:text-[19px]">
               {entry.count}회
             </p>
           </div>

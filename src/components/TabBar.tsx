@@ -14,7 +14,7 @@ export function TabBar() {
   return (
     <nav
       aria-label="하단 탭"
-      className="mt-auto flex h-[76px] flex-none border-t border-line bg-ink-0 pb-3 lg:hidden"
+      className="flex h-[76px] flex-none border-t border-line bg-ink-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden"
     >
       <Link
         href="/"

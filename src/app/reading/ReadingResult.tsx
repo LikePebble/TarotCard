@@ -49,11 +49,11 @@ export function OneCardResult({
       className="mx-auto w-full max-w-[1280px] flex-1 px-6 pb-8 pt-1 lg:grid lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-[72px] lg:px-[72px] lg:py-20"
     >
       <div className="flex justify-center lg:justify-end">
-        <div className="relative aspect-[2/3.4] w-[200px] overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:w-full lg:max-w-[360px] lg:rounded-[14px]">
+        <div className="relative aspect-[2/3.4] w-[248px] overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:w-full lg:max-w-[400px] lg:rounded-[14px]">
           <CardArt
             card={card}
             deckId={deckId}
-            sizes="(min-width: 1024px) 360px, 200px"
+            sizes="(min-width: 1024px) 400px, 248px"
             priority
             showText
           />
@@ -64,13 +64,13 @@ export function OneCardResult({
           오늘의 카드 ·{" "}
           <b className="font-medium text-gold">{focusLabelOf(focus)}</b>
         </p>
-        <h1 className="mt-1 text-center font-serif text-[30px] font-semibold lg:text-left lg:text-[44px]">
+        <h1 className="mt-1 text-center font-display text-[30px] font-semibold lg:text-left lg:text-[44px]">
           {nameKoOf(card)}{" "}
           <span className="ml-1 text-base font-normal text-muted lg:text-[22px]">
             {card.nameEn}
           </span>
         </h1>
-        <div className="mt-4 space-y-3 text-[15px] text-body lg:mt-6 lg:max-w-[520px] lg:text-base">
+        <div className="mt-4 space-y-3 font-serif text-[15px] text-body lg:mt-6 lg:max-w-[520px] lg:text-base">
           {paragraphs.map((paragraph) => (
             <p key={paragraph.slice(0, 24)}>{paragraph}</p>
           ))}
@@ -80,7 +80,7 @@ export function OneCardResult({
             <p className="text-[12.5px] text-gold lg:text-[13.5px]">
               {focusLabelOf(focus)}
             </p>
-            <p className="mt-1.5 text-[15px] text-body lg:text-base">
+            <p className="mt-1.5 font-serif text-[15px] text-body lg:text-base">
               {themeParagraph}
             </p>
           </div>
@@ -88,7 +88,7 @@ export function OneCardResult({
         {collectionCount !== undefined ? (
           <div className="mt-5 flex items-baseline justify-between rounded-[14px] border border-line-gold px-[18px] py-3.5 text-[13.5px] lg:mt-8 lg:inline-flex lg:gap-3.5 lg:text-[14.5px]">
             <span>컬렉션에 추가되었습니다</span>
-            <b className="font-serif text-[15px] font-semibold text-gold-soft">
+            <b className="font-display text-[15px] font-semibold text-gold-soft">
               {collectionCount ?? "-"} / 78
             </b>
           </div>
@@ -130,17 +130,30 @@ export function ThreeCardResult({
         과거 · 현재 · 미래{" "}
         <b className="font-medium text-gold">{focusLabelOf(focus)}</b>
       </p>
-      <div className="mt-4 flex justify-center gap-2.5">
-        {picked.map((card) => (
-          <div
+
+      {/* 스프레드 히어로: 세 장을 함께 크게. 카드면에는 프레임만(이름은 아래
+          해석 제목이 담당) — 작은 카드에 baked 텍스트를 얹지 않아 비율이 정돈된다. */}
+      <div className="mx-auto mt-5 grid max-w-[440px] grid-cols-3 gap-3 lg:mt-7 lg:gap-4">
+        {picked.map((card, i) => (
+          <motion.figure
             key={card.slug}
-            className="relative aspect-[2/3.4] w-[72px] overflow-hidden rounded-lg bg-ink-2 lg:w-[92px]"
+            initial={reducedMotion ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: reducedMotion ? 0 : 0.12 + i * 0.1 }}
+            className="flex flex-col items-center"
           >
-            <CardArt card={card} deckId={deckId} sizes="92px" />
-          </div>
+            <div className="relative aspect-[2/3.4] w-full overflow-hidden rounded-xl bg-ink-2 shadow-[0_16px_40px_rgba(8,5,0,0.6)]">
+              <CardArt card={card} deckId={deckId} sizes="(min-width: 1024px) 150px, 33vw" />
+            </div>
+            <figcaption className="mt-2 text-[12px] tracking-[0.02em] text-gold lg:text-[13px]">
+              {POSITIONS[i]}
+            </figcaption>
+          </motion.figure>
         ))}
       </div>
-      <div className="mt-2">
+
+      {/* 해석: 텍스트 중심. 카드 이미지는 히어로에서 이미 보였으므로 반복하지 않는다. */}
+      <div className="mt-8 lg:mt-12">
         {picked.map((card, i) => {
           const positionKey = (["past", "present", "future"] as const)[i];
           const positionSentence = koPositions[card.slug]?.[positionKey];
@@ -148,42 +161,37 @@ export function ThreeCardResult({
           return (
             <section
               key={card.slug}
-              className="flex items-start gap-4 border-b border-line py-[22px] last:border-b-0 lg:gap-7 lg:py-8"
+              className="border-t border-line py-6 first:border-t-0 first:pt-0 lg:py-8"
             >
-              <div className="relative aspect-[2/3.4] w-[88px] flex-none overflow-hidden rounded-xl bg-ink-2 lg:w-[120px]">
-                <CardArt card={card} deckId={deckId} sizes="120px" />
-              </div>
-              <div>
-                <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-                  {POSITIONS[i]}
+              <p className="text-[12.5px] tracking-[0.04em] text-gold lg:text-[13.5px]">
+                {POSITIONS[i]}
+              </p>
+              <h2 className="mt-1 font-display text-[22px] font-semibold leading-tight lg:text-[26px]">
+                {nameKoOf(card)}
+                <span className="mt-0.5 block text-[13px] font-normal text-muted lg:text-[15px]">
+                  {card.nameEn}
+                </span>
+              </h2>
+              {positionSentence ? (
+                <p className="mt-3 text-[15px] leading-[1.6] text-cream lg:text-[17px]">
+                  {positionSentence}
                 </p>
-                <h2 className="mt-0.5 mb-1.5 font-serif text-xl font-semibold lg:text-2xl">
-                  {nameKoOf(card)}{" "}
-                  <span className="ml-1 text-[13px] font-normal text-muted lg:text-[15px]">
-                    {card.nameEn}
-                  </span>
-                </h2>
-                {positionSentence ? (
-                  <p className="mb-2 text-[14.5px] leading-[1.6] text-cream lg:text-base">
-                    {positionSentence}
-                  </p>
-                ) : null}
-                <div className="space-y-2.5 text-[13.5px] leading-[1.65] text-body lg:text-[15px]">
-                  {descriptionOf(card).map((paragraph) => (
-                    <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-                  ))}
-                </div>
-                {themeParagraph ? (
-                  <div className="mt-3 border-t border-line pt-2.5">
-                    <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-                      {focusLabelOf(focus)}
-                    </p>
-                    <p className="mt-1 text-[13.5px] leading-[1.65] text-body lg:text-[15px]">
-                      {themeParagraph}
-                    </p>
-                  </div>
-                ) : null}
+              ) : null}
+              <div className="mt-3 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
+                {descriptionOf(card).map((paragraph) => (
+                  <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+                ))}
               </div>
+              {themeParagraph ? (
+                <div className="mt-3.5 border-t border-line pt-3">
+                  <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+                    {focusLabelOf(focus)}
+                  </p>
+                  <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
+                    {themeParagraph}
+                  </p>
+                </div>
+              ) : null}
             </section>
           );
         })}
@@ -191,7 +199,7 @@ export function ThreeCardResult({
       {collectionCount !== undefined ? (
         <div className="mt-2 flex items-baseline justify-between rounded-[14px] border border-line-gold px-[18px] py-3.5 text-[13.5px] lg:text-[14.5px]">
           <span>3장이 컬렉션에 추가되었습니다</span>
-          <b className="font-serif text-[15px] font-semibold text-gold-soft">
+          <b className="font-display text-[15px] font-semibold text-gold-soft">
             {collectionCount ?? "-"} / 78
           </b>
         </div>

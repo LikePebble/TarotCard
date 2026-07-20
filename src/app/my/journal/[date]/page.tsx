@@ -96,7 +96,7 @@ export default function JournalDayPage({
       >
         <div className="flex items-center justify-between">
           <div className="flex items-baseline gap-2.5">
-            <h1 className="font-serif text-[24px] font-semibold lg:text-[32px]">
+            <h1 className="font-display text-[24px] font-semibold lg:text-[32px]">
               {Number(date.split("-")[1])}월 {Number(date.split("-")[2])}일
             </h1>
             <span className="text-[15px] text-muted lg:text-[17px]">
@@ -189,7 +189,7 @@ export default function JournalDayPage({
             }}
             placeholder="오늘 마음에 남은 것을 적어 보세요."
             rows={8}
-            className="mt-2 w-full resize-y rounded-2xl border border-line bg-ink-1 p-4 text-[15px] leading-[1.75] text-body outline-none transition-colors focus:border-line-gold lg:rounded-[14px]"
+            className="mt-2 w-full resize-y rounded-2xl border border-line bg-ink-1 p-4 font-serif text-[15px] leading-[1.75] text-body outline-none transition-colors focus:border-line-gold lg:rounded-[14px]"
           />
           <div className="mt-3 flex items-center gap-3">
             <button

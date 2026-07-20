@@ -58,7 +58,7 @@ export default function ReadingResultPage({
         <DesktopNav active="reading" />
         {backNav}
         <main className="mx-auto flex w-full max-w-[520px] flex-1 flex-col items-center justify-center px-6 text-center">
-          <p className="font-serif text-[21px] font-semibold">
+          <p className="font-display text-[21px] font-semibold">
             리딩을 찾을 수 없습니다
           </p>
           <p className="mt-1.5 text-[14px] text-muted">
@@ -85,7 +85,7 @@ export default function ReadingResultPage({
           actions={
             <>
               <Link
-                href={`/collection/${cards[0].slug}`}
+                href={`/collection/${cards[0].slug}?deck=${reading.deckId}`}
                 className="btn btn-gold w-full lg:w-auto"
               >
                 카드 자세히 보기

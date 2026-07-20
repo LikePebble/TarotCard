@@ -150,6 +150,25 @@ export function withReadingRecorded(
   };
 }
 
+/**
+ * 리딩 id 생성. crypto.randomUUID는 보안 컨텍스트(HTTPS·localhost)에서만
+ * 존재하므로, LAN http로 연 폰 등 비보안 컨텍스트에서도 동작하도록 폴백한다.
+ */
+function uid(): string {
+  const c = globalThis.crypto;
+  if (c?.randomUUID) return c.randomUUID();
+  if (c?.getRandomValues) {
+    const b = c.getRandomValues(new Uint8Array(16));
+    b[6] = (b[6] & 0x0f) | 0x40;
+    b[8] = (b[8] & 0x3f) | 0x80;
+    const h = [...b].map((x) => x.toString(16).padStart(2, "0"));
+    return `${h.slice(0, 4).join("")}-${h.slice(4, 6).join("")}-${h
+      .slice(6, 8)
+      .join("")}-${h.slice(8, 10).join("")}-${h.slice(10, 16).join("")}`;
+  }
+  return `r-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 /** 완료된 리딩을 저장한다(부작용 래퍼). */
 export function recordReading(input: {
   spread: SpreadType;
@@ -159,7 +178,7 @@ export function recordReading(input: {
   orientations: Orientation[];
 }): ArcanaStore {
   const record = newReadingRecord({
-    id: crypto.randomUUID(),
+    id: uid(),
     at: new Date(),
     ...input,
   });
@@ -299,14 +318,16 @@ export function setSelectedDeckId(id: string) {
 /** Client hook: "classic" during SSR, then the persisted selection. */
 export function useSelectedDeck() {
   const [deckId, setDeckId] = useState("classic");
+  const [ready, setReady] = useState(false);
   useEffect(() => {
     setDeckId(getSelectedDeckId());
+    setReady(true);
   }, []);
   const select = useCallback((id: string) => {
     setSelectedDeckId(id);
     setDeckId(id);
   }, []);
-  return { deckId, select };
+  return { deckId, select, ready };
 }
 
 /* Reading flow state (spread + focus) lives in sessionStorage. */

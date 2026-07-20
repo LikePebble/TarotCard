@@ -13,7 +13,7 @@ export function DesktopNav({
     >
       <Link
         href="/"
-        className="font-serif text-[19px] font-semibold tracking-[0.06em]"
+        className="font-display text-[19px] font-semibold tracking-[0.06em]"
       >
         아르카나
       </Link>
@@ -53,7 +53,7 @@ export function DesktopNav({
 export function MobileTopBar() {
   return (
     <header className="flex h-14 flex-none items-center px-5 lg:hidden">
-      <span className="font-serif text-[17px] font-semibold tracking-[0.06em]">
+      <span className="font-display text-[17px] font-semibold tracking-[0.06em]">
         아르카나
       </span>
     </header>

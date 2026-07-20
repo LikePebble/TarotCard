@@ -42,7 +42,7 @@ function TypeCard({
     <>
       <div>
         <h2
-          className={`font-serif text-[21px] font-semibold lg:text-[27px] ${titleClass}`}
+          className={`font-display text-[21px] font-semibold lg:text-[27px] ${titleClass}`}
         >
           {title}
         </h2>

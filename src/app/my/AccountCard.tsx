@@ -35,7 +35,7 @@ export function AccountCard() {
         <span className="flex items-center gap-3.5">
           <UserCircle size={22} className="text-muted" aria-hidden />
           <span>
-            <span className="block font-serif text-[17px] font-semibold lg:text-[19px]">
+            <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
               로그인 · 계정
             </span>
             <span className="text-[13px] text-muted lg:text-[14px]">
@@ -58,7 +58,7 @@ export function AccountCard() {
           <span className="flex items-center gap-3.5">
             <UserCircle size={22} className="text-gold-soft" aria-hidden />
             <span>
-              <span className="block font-serif text-[16px] font-semibold lg:text-[18px]">
+              <span className="block font-display text-[16px] font-semibold lg:text-[18px]">
                 로그인됨
               </span>
               <span className="text-[13px] text-muted lg:text-[14px]">
@@ -83,7 +83,7 @@ export function AccountCard() {
       <span className="flex items-center gap-3.5">
         <UserCircle size={22} className="text-gold-soft" aria-hidden />
         <span>
-          <span className="block font-serif text-[17px] font-semibold lg:text-[19px]">
+          <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
             로그인
           </span>
           <span className="text-[13px] text-muted lg:text-[14px]">

@@ -46,7 +46,7 @@ export default function JournalPage() {
     .slice(0, 6);
 
   return (
-    <div className="flex min-h-[100dvh] flex-col">
+    <div className="flex h-[100dvh] flex-col overflow-hidden lg:h-auto lg:min-h-[100dvh] lg:overflow-visible">
       <DesktopNav active="my" />
       <MobileTopBar />
       <nav className="flex h-12 flex-none items-center px-5 lg:hidden">
@@ -63,9 +63,9 @@ export default function JournalPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        className="mx-auto w-full max-w-[760px] flex-1 px-5 pb-8 pt-1 lg:px-12 lg:pb-[88px] lg:pt-6"
+        className="mx-auto w-full min-h-0 flex-1 overflow-y-auto px-5 pb-8 pt-1 lg:max-w-[760px] lg:overflow-visible lg:px-12 lg:pb-[88px] lg:pt-6"
       >
-        <h1 className="font-serif text-[27px] font-semibold lg:text-[36px]">
+        <h1 className="font-display text-[27px] font-semibold lg:text-[36px]">
           일별 기록
         </h1>
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
@@ -88,7 +88,7 @@ export default function JournalPage() {
             {recent.length === 0 ? (
               <div className="mt-6 flex flex-col items-center rounded-2xl border border-line bg-ink-1 px-6 py-10 text-center lg:rounded-[18px]">
                 <Notebook size={28} className="text-gold-soft" aria-hidden />
-                <p className="mt-3 font-serif text-lg font-semibold lg:text-[21px]">
+                <p className="mt-3 font-display text-lg font-semibold lg:text-[21px]">
                   아직 기록이 없습니다
                 </p>
                 <p className="mt-1 max-w-[320px] text-[13.5px] text-muted lg:text-[15px]">
@@ -114,7 +114,7 @@ export default function JournalPage() {
                         className="flex items-center justify-between gap-3 px-5 py-4 transition-colors hover:bg-ink-2"
                       >
                         <span className="min-w-0">
-                          <span className="font-serif text-[15px] font-semibold lg:text-[16px]">
+                          <span className="font-display text-[15px] font-semibold lg:text-[16px]">
                             {formatKoDate(date)}
                           </span>
                           <span className="mt-0.5 block truncate text-[12.5px] text-muted lg:text-[13.5px]">

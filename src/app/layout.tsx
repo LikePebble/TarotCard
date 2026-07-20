@@ -1,20 +1,33 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Serif_KR } from "next/font/google";
+import { Nanum_Myeongjo } from "next/font/google";
 import localFont from "next/font/local";
+import { NoPinchZoom } from "@/components/NoPinchZoom";
 import "./globals.css";
 
-const notoSerifKr = Noto_Serif_KR({
+// 본문 해석문(나눔명조). Google Fonts에서 로드.
+const nanumMyeongjo = Nanum_Myeongjo({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-noto-serif-kr",
+  weight: ["400", "700"],
+  variable: "--font-nanum-myeongjo",
   display: "swap",
 });
 
-const wantedSans = localFont({
-  src: "../fonts/WantedSansVariable.woff2",
-  variable: "--font-wanted-sans",
+// 타이틀(빛의 계승자체). KS X 1001 서브셋 self-host. 라이선스는 src/fonts/README.md.
+const heirOfLight = localFont({
+  src: [
+    { path: "../fonts/HeirofLight-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/HeirofLight-Bold.woff2", weight: "700", style: "normal" },
+  ],
+  variable: "--font-heir-of-light",
   display: "swap",
-  weight: "400 1000",
+});
+
+// UI·안내 문구(조선일보명조체). 서브셋 self-host. 라이선스는 src/fonts/README.md.
+const chosun = localFont({
+  src: "../fonts/Chosun-Regular.woff2",
+  variable: "--font-chosun",
+  display: "swap",
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -25,14 +38,25 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#14110d",
+  // 앱형 UX: 손가락으로 화면 확대(핀치줌) 되지 않도록 고정.
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko" className={`${notoSerifKr.variable} ${wantedSans.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+    <html
+      lang="ko"
+      className={`${heirOfLight.variable} ${nanumMyeongjo.variable} ${chosun.variable}`}
+    >
+      <body className="font-sans antialiased">
+        <NoPinchZoom />
+        {children}
+      </body>
     </html>
   );
 }

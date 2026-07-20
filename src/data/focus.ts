@@ -10,12 +10,12 @@ export type FocusId = "love" | "work" | "self" | "health" | "money" | "day";
 export type FocusOption = { id: FocusId; label: string; desc: string };
 
 export const FOCUS_OPTIONS: FocusOption[] = [
+  { id: "day", label: "오늘 하루", desc: "오늘의 전반적인 기운" },
   { id: "love", label: "사랑", desc: "마음과 관계의 흐름" },
   { id: "work", label: "일", desc: "일과 성취의 방향" },
   { id: "self", label: "나 자신", desc: "내면의 상태와 균형" },
   { id: "health", label: "건강", desc: "몸과 마음의 컨디션" },
   { id: "money", label: "금전", desc: "돈을 대하는 마음가짐" },
-  { id: "day", label: "오늘 하루", desc: "오늘의 전반적인 기운" },
 ];
 
 /** 오늘 하루는 오늘의 카드 전용. */

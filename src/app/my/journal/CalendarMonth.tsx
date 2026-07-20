@@ -49,7 +49,7 @@ export function CalendarMonth({
   return (
     <section className="rounded-2xl border border-line bg-ink-1 p-5 lg:rounded-[18px] lg:p-7">
       <header className="flex items-center justify-between">
-        <h2 className="font-serif text-[20px] font-semibold lg:text-[24px]">
+        <h2 className="font-display text-[20px] font-semibold lg:text-[24px]">
           {view.y}년 {view.m + 1}월
         </h2>
         <div className="flex gap-2">

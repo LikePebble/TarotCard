@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react/dist/ssr";
+import { CardArtViewer } from "@/components/CardArtViewer";
 import { CollectHistory } from "@/components/CollectHistory";
-import { DeckAwareArt } from "@/components/DeckAwareArt";
 import { DesktopNav } from "@/components/SiteNav";
 import { cardBySlug, cards, romanNumeral } from "@/data/cards";
 import { koCards } from "@/data/ko";
@@ -36,10 +36,13 @@ export async function generateMetadata({
 
 export default async function CardDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ deck?: string }>;
 }) {
   const { slug } = await params;
+  const { deck: deckOverride } = await searchParams;
   const card = cardBySlug.get(slug);
   if (!card) notFound();
 
@@ -85,26 +88,19 @@ export default async function CardDetailPage({
         </Link>
         <div className="lg:mt-10 lg:grid lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-[72px]">
           <div className="flex justify-center lg:block">
-            <div className="relative mt-1 aspect-[2/3.4] w-[216px] overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:mt-0 lg:w-full lg:rounded-[14px] lg:shadow-[0_30px_80px_rgba(8,5,0,0.65)]">
-              <DeckAwareArt
-                card={card}
-                sizes="(min-width: 1024px) 380px, 216px"
-                priority
-                showText
-              />
-            </div>
+            <CardArtViewer card={card} deckOverride={deckOverride} />
           </div>
           <div>
             <p className="mt-6 text-center text-[13px] text-muted lg:mt-0 lg:text-left lg:text-[14px]">
               {arcanaLabel}
             </p>
-            <h1 className="mt-0.5 mb-[18px] text-center font-serif text-[30px] font-semibold lg:mb-6 lg:text-left lg:text-[46px]">
-              {nameKo}{" "}
-              <span className="ml-1 text-base font-normal text-muted lg:text-[22px]">
+            <h1 className="mt-0.5 mb-[18px] text-center font-display text-[30px] font-semibold lg:mb-6 lg:text-left lg:text-[46px]">
+              {nameKo}
+              <span className="mt-1 block text-base font-normal text-muted lg:text-[22px]">
                 {card.nameEn}
               </span>
             </h1>
-            <div className="space-y-3 text-[15px] text-body lg:max-w-[560px] lg:text-base">
+            <div className="space-y-3 font-serif text-[15px] text-body lg:max-w-[560px] lg:text-base">
               {paragraphs.map((paragraph) => (
                 <p key={paragraph.slice(0, 24)}>{paragraph}</p>
               ))}
@@ -113,7 +109,7 @@ export default async function CardDetailPage({
               <summary className="inline-block min-h-11 cursor-pointer pt-2.5 text-[13.5px] text-muted underline underline-offset-4 hover:text-cream">
                 영어 원문 보기
               </summary>
-              <div className="mt-2 space-y-3 text-[14px] text-body lg:max-w-[560px]">
+              <div className="mt-2 space-y-3 font-serif text-[14px] text-body lg:max-w-[560px]">
                 {enParagraphs.map((paragraph) => (
                   <p key={paragraph.slice(0, 24)}>{paragraph}</p>
                 ))}

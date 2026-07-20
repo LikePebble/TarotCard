@@ -25,16 +25,16 @@ export default function MyPage() {
   ];
 
   return (
-    <div className="flex min-h-[100dvh] flex-col">
+    <div className="flex h-[100dvh] flex-col overflow-hidden lg:h-auto lg:min-h-[100dvh] lg:overflow-visible">
       <DesktopNav active="my" />
       <MobileTopBar />
       <motion.main
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        className="mx-auto w-full max-w-[760px] flex-1 px-5 pb-8 pt-2 lg:px-12 lg:pb-[88px] lg:pt-[72px]"
+        className="mx-auto w-full min-h-0 flex-1 overflow-y-auto px-5 pb-8 pt-2 lg:max-w-[760px] lg:overflow-visible lg:px-12 lg:pb-[88px] lg:pt-[72px]"
       >
-        <h1 className="font-serif text-[27px] font-semibold lg:text-[40px]">MY</h1>
+        <h1 className="font-display text-[27px] font-semibold lg:text-[40px]">MY</h1>
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
           당신이 만난 카드와 남긴 마음이 이곳에 쌓입니다.
         </p>
@@ -43,7 +43,7 @@ export default function MyPage() {
           {stats.map((s) => (
             <div key={s.label} className="px-4 py-5 text-center lg:py-7">
               <p className="text-[12px] text-muted lg:text-[13px]">{s.label}</p>
-              <p className="mt-1 font-serif text-[26px] font-semibold text-gold-soft lg:text-[34px]">
+              <p className="mt-1 font-display text-[26px] font-semibold text-gold-soft lg:text-[34px]">
                 {s.value}
                 <span className="ml-1 text-[13px] font-normal text-muted">
                   {s.unit}
@@ -61,7 +61,7 @@ export default function MyPage() {
             <span className="flex items-center gap-3.5">
               <Notebook size={22} className="text-gold-soft" aria-hidden />
               <span>
-                <span className="block font-serif text-[17px] font-semibold lg:text-[19px]">
+                <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
                   일별 기록
                 </span>
                 <span className="text-[13px] text-muted lg:text-[14px]">
@@ -78,7 +78,7 @@ export default function MyPage() {
             <span className="flex items-center gap-3.5">
               <Sparkle size={22} className="text-muted" aria-hidden />
               <span>
-                <span className="block font-serif text-[17px] font-semibold lg:text-[19px]">
+                <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
                   사주 프로필
                 </span>
                 <span className="text-[13px] text-muted lg:text-[14px]">

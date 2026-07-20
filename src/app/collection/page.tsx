@@ -32,10 +32,10 @@ export default function CollectionPage() {
   );
 
   return (
-    <div className="flex min-h-[100dvh] flex-col">
+    <div className="flex h-[100dvh] flex-col overflow-hidden lg:h-auto lg:min-h-[100dvh] lg:overflow-visible">
       <DesktopNav active="collection" />
       <MobileTopBar />
-      <main className="mx-auto w-full max-w-[1280px] flex-1 px-5 pb-8 pt-2 lg:px-12 lg:pb-[88px] lg:pt-[72px]">
+      <main className="mx-auto w-full min-h-0 flex-1 overflow-y-auto px-5 pb-8 pt-2 lg:max-w-[1280px] lg:overflow-visible lg:px-12 lg:pb-[88px] lg:pt-[72px]">
         <div className="lg:flex lg:items-end lg:justify-between">
           <div>
             <div className="flex gap-3 lg:mb-2.5">
@@ -58,17 +58,17 @@ export default function CollectionPage() {
                 ))}
             </div>
             <div className="flex items-end justify-between lg:block">
-              <h1 className="font-serif text-[27px] font-semibold lg:text-[40px]">
+              <h1 className="font-display text-[27px] font-semibold lg:text-[40px]">
                 컬렉션
               </h1>
-              <p className="font-serif text-2xl font-semibold text-gold-soft lg:hidden">
+              <p className="font-display text-2xl font-semibold text-gold-soft lg:hidden">
                 {total}{" "}
                 <span className="text-sm font-normal text-muted">/ 78</span>
               </p>
             </div>
           </div>
           <div className="hidden lg:block lg:text-right">
-            <p className="font-serif text-[40px] font-semibold text-gold-soft">
+            <p className="font-display text-[40px] font-semibold text-gold-soft">
               {total}{" "}
               <span className="text-xl font-normal text-muted">/ 78</span>
             </p>
@@ -90,7 +90,7 @@ export default function CollectionPage() {
         {store && total === 0 ? (
           <div className="mt-5 rounded-2xl border border-line bg-ink-1 p-6 lg:mt-10 lg:flex lg:items-center lg:justify-between lg:p-8">
             <div>
-              <p className="font-serif text-lg font-semibold lg:text-[21px]">
+              <p className="font-display text-lg font-semibold lg:text-[21px]">
                 아직 수집한 카드가 없습니다
               </p>
               <p className="mt-1 text-[13.5px] text-muted lg:text-[15px]">
@@ -157,6 +157,7 @@ export default function CollectionPage() {
                     card={card}
                     deckId={deckId}
                     sizes="(min-width: 1024px) 190px, 33vw"
+                    bare
                   />
                 </div>
                 {label}

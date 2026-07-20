@@ -45,6 +45,7 @@ export function CardArt({
   sizes,
   priority = false,
   showText = false,
+  bare = false,
   className = "",
 }: {
   card: Card;
@@ -52,13 +53,14 @@ export function CardArt({
   sizes: string;
   priority?: boolean;
   showText?: boolean;
+  bare?: boolean;
   className?: string;
 }) {
   const deck = deckById(deckId);
   const mode = canvasModeOf(deck.id, card.slug);
   const nameKo = koCards[card.slug]?.nameKo ?? card.nameEn;
-  const withFrame = mode === "overlay" && !!deck.frame;
-  const withText = showText && mode !== "baked";
+  const withFrame = !bare && mode === "overlay" && !!deck.frame;
+  const withText = !bare && showText && mode !== "baked";
 
   return (
     <div
@@ -95,7 +97,7 @@ export function CardArt({
                     style={zoneStyle(NUMBER_ZONE)}
                   >
                     <span
-                      className="font-serif font-bold text-[#e5c678]"
+                      className="font-display font-bold text-[#e5c678]"
                       style={{
                         fontSize: `clamp(9px, ${cqw(NUMBER_PX)}cqw, ${NUMBER_PX}px)`,
                         letterSpacing: `${cqw(6)}cqw`,
@@ -111,7 +113,7 @@ export function CardArt({
                   style={zoneStyle(TITLE_ZONE)}
                 >
                   <span
-                    className="font-serif font-semibold leading-tight text-[#f5efe7]"
+                    className="font-display font-semibold leading-tight text-[#f5efe7]"
                     style={{
                       fontSize: `clamp(11px, ${cqw(koPx)}cqw, ${koPx}px)`,
                       letterSpacing: `${cqw(6)}cqw`,
