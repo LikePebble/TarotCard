@@ -386,7 +386,6 @@ export default function DrawPage() {
                                 card={card}
                                 deckId={deckId}
                                 sizes="110px"
-                                showText
                               />
                             </div>
                           </motion.div>
@@ -488,7 +487,6 @@ export default function DrawPage() {
                                 card={deck[0]}
                                 deckId={deckId}
                                 sizes="170px"
-                                showText
                               />
                             ) : null}
                           </div>

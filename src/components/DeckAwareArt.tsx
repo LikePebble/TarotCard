@@ -13,15 +13,11 @@ export function DeckAwareArt({
   card,
   sizes,
   priority = false,
-  showText = false,
-  bare = false,
   deckOverride,
 }: {
   card: Card;
   sizes: string;
   priority?: boolean;
-  showText?: boolean;
-  bare?: boolean;
   deckOverride?: string;
 }) {
   const { deckId, ready } = useSelectedDeck();
@@ -36,8 +32,6 @@ export function DeckAwareArt({
       deckId={resolvedDeck}
       sizes={sizes}
       priority={priority}
-      showText={showText}
-      bare={bare}
     />
   );
 }

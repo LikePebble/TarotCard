@@ -157,7 +157,6 @@ export default function CollectionPage() {
                     card={card}
                     deckId={deckId}
                     sizes="(min-width: 1024px) 190px, 33vw"
-                    bare
                   />
                 </div>
                 {label}

@@ -62,7 +62,6 @@ export function CardArtViewer({
           card={card}
           sizes="(min-width: 1024px) 380px, 216px"
           priority
-          showText
           deckOverride={deckOverride}
         />
       </button>
@@ -282,7 +281,6 @@ function ViewerOverlay({
             card={card}
             sizes="90vw"
             priority
-            bare
             deckOverride={deckOverride}
           />
         </div>

@@ -55,7 +55,6 @@ export function OneCardResult({
             deckId={deckId}
             sizes="(min-width: 1024px) 400px, 248px"
             priority
-            showText
           />
         </div>
       </div>
