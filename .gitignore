@@ -7,8 +7,4 @@ next-env.d.ts
 
 # local env files (secrets — never commit; use .env.example as the template)
 .env*.local
-
-# deck renderer fonts (large; fetched on demand)
-tools/decks/**/fonts/*.ttf
-tools/decks/**/fonts/*.otf
 /out/
