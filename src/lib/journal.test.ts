@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
-import { withEntry, type JournalStore } from "@/lib/journal";
+import { describe, expect, it, vi } from "vitest";
+import { setEntry, withEntry, type JournalStore } from "@/lib/journal";
+import { subscribeLocal } from "@/lib/local-events";
 
 describe("withEntry", () => {
   it("본문을 그날 항목으로 저장한다", () => {
@@ -22,5 +23,23 @@ describe("withEntry", () => {
     const store: JournalStore = {};
     withEntry(store, "2026-07-19", "메모", "2026-07-19T00:00:00.000Z");
     expect(store["2026-07-19"]).toBeUndefined();
+  });
+});
+
+describe("setEntry", () => {
+  it("journal 채널로 변경을 알린다", () => {
+    const fn = vi.fn();
+    const off = subscribeLocal("journal", fn);
+    setEntry("2026-07-22", "메모");
+    off();
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it("store 채널은 건드리지 않는다", () => {
+    const fn = vi.fn();
+    const off = subscribeLocal("store", fn);
+    setEntry("2026-07-22", "메모");
+    off();
+    expect(fn).not.toHaveBeenCalled();
   });
 });

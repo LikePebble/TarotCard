@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { DEFAULT_DECK_ID } from "@/data/decks";
+import { notifyLocal, subscribeLocal } from "@/lib/local-events";
 import { localDateOf, isoWeekOf } from "@/lib/period";
 import {
   readingTypeOf,
@@ -97,12 +98,15 @@ export function loadStore(): ArcanaStore {
 }
 
 function saveStore(store: ArcanaStore) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(STORE_KEY, JSON.stringify(store));
-  } catch {
-    // storage full or unavailable; reading still works for the session
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.setItem(STORE_KEY, JSON.stringify(store));
+    } catch {
+      // storage full or unavailable; reading still works for the session
+    }
   }
+  // 저장 실패와 무관하게 알린다: 인메모리 의도는 이미 바뀌었다.
+  notifyLocal("store");
 }
 
 export type NewReadingInput = {
@@ -290,13 +294,15 @@ export function setLocalStore(store: ArcanaStore): void {
   saveStore(store);
 }
 
-/** Client hook: null until mounted (SSR-safe), then the live store. */
+/** Client hook: null until mounted (SSR-safe), then the live store.
+ *  저장이 일어나면(뽑기·로그인 병합·로그아웃 비움) 자동으로 다시 읽는다. */
 export function useArcanaStore() {
   const [store, setStore] = useState<ArcanaStore | null>(null);
-  useEffect(() => {
-    setStore(loadStore());
-  }, []);
   const refresh = useCallback(() => setStore(loadStore()), []);
+  useEffect(() => {
+    refresh();
+    return subscribeLocal("store", refresh);
+  }, [refresh]);
   return { store, refresh };
 }
 

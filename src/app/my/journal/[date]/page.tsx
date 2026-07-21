@@ -33,7 +33,7 @@ export default function JournalDayPage({
 }) {
   const { date } = use(params);
   const { store } = useArcanaStore();
-  const { store: journal, refresh } = useJournal();
+  const { store: journal } = useJournal();
 
   // todayIso는 클라이언트에서만 계산한다(SSR과 타임존이 달라 하이드레이션 불일치가 나지 않게).
   const [todayIso, setTodayIso] = useState<string | null>(null);
@@ -66,7 +66,6 @@ export default function JournalDayPage({
 
   const save = () => {
     setEntry(date, body);
-    refresh();
     setSaved(true);
   };
 

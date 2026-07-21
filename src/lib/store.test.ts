@@ -1,14 +1,15 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   blockingReading,
+  emptyStore,
   migrateStore,
   readingById,
-  type ArcanaStore,
-} from "@/lib/store";
-import {
+  setLocalStore,
   slotState,
+  type ArcanaStore,
   type ArcanaStore as Store,
 } from "@/lib/store";
+import { subscribeLocal } from "@/lib/local-events";
 
 function reading(over: Partial<import("@/lib/store").ReadingRecord>): import("@/lib/store").ReadingRecord {
   return {
@@ -205,5 +206,15 @@ describe("blockingReading", () => {
     });
     const s: ArcanaStore = { version: 2, collection: {}, readings: [r] };
     expect(blockingReading(s, "three", day)?.id).toBe("W");
+  });
+});
+
+describe("setLocalStore", () => {
+  it("store 채널로 변경을 알린다", () => {
+    const fn = vi.fn();
+    const off = subscribeLocal("store", fn);
+    setLocalStore(emptyStore());
+    off();
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 });
