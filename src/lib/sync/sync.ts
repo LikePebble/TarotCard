@@ -1,6 +1,11 @@
 import { loadStore, setLocalStore } from "@/lib/store";
-import { mergeStores } from "@/lib/sync/merge";
+import { loadJournal, setLocalJournal } from "@/lib/journal";
+import { mergeJournals, mergeStores } from "@/lib/sync/merge";
 import { pullRemoteStore, pushLocalStore } from "@/lib/sync/remote";
+import {
+  pullRemoteJournal,
+  pushLocalJournal,
+} from "@/lib/sync/journal-remote";
 
 /**
  * 로그인 시 게스트→계정 병합.
@@ -13,4 +18,16 @@ export async function syncOnLogin(userId: string): Promise<void> {
   const merged = remote ? mergeStores(local, remote) : local;
   setLocalStore(merged);
   await pushLocalStore(userId, merged);
+}
+
+/**
+ * 로그인 시 일기 병합. 날짜별 last-write-wins.
+ * 병합본은 서버의 상위집합이므로, 이때의 push는 서버 행을 지우지 않는다.
+ */
+export async function syncJournalOnLogin(userId: string): Promise<void> {
+  const remote = await pullRemoteJournal(userId);
+  const local = loadJournal();
+  const merged = remote ? mergeJournals(local, remote) : local;
+  setLocalJournal(merged);
+  await pushLocalJournal(userId, merged);
 }

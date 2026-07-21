@@ -58,6 +58,11 @@ export function setEntry(date: string, body: string): JournalStore {
   return next;
 }
 
+/** 병합/동기화 결과를 로컬 일기에 반영한다(부작용). */
+export function setLocalJournal(store: JournalStore): void {
+  saveJournal(store);
+}
+
 /** Client hook: null until mounted (SSR-safe), then the live journal.
  *  일기가 저장되거나 로그인 병합이 끝나면 자동으로 다시 읽는다. */
 export function useJournal() {
