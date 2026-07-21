@@ -1,4 +1,5 @@
 import type { ArcanaStore, CollectionEntry, ReadingRecord } from "@/lib/store";
+import type { JournalStore } from "@/lib/journal";
 
 /** 리딩에서 덱별 도감을 재계산한다(firstAt=최초 at, count=등장 수). */
 export function recomputeCollection(
@@ -26,4 +27,21 @@ export function mergeStores(a: ArcanaStore, b: ArcanaStore): ArcanaStore {
   }
   const readings = [...byId.values()];
   return { version: 2, collection: recomputeCollection(readings), readings };
+}
+
+/**
+ * 일기 병합: 날짜별 last-write-wins(updatedAt 기준).
+ * 동률이면 로컬을 택한다(로그인 이후 로컬이 권위).
+ * updatedAt은 항상 ISO 문자열이라 사전식 비교 = 시간순 비교.
+ */
+export function mergeJournals(
+  local: JournalStore,
+  remote: JournalStore,
+): JournalStore {
+  const merged: JournalStore = { ...remote };
+  for (const [date, entry] of Object.entries(local)) {
+    const other = merged[date];
+    if (!other || entry.updatedAt >= other.updatedAt) merged[date] = entry;
+  }
+  return merged;
 }
