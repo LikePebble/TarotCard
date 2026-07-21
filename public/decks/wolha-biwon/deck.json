@@ -1,6 +1,6 @@
 {
   "id": "wolha-biwon",
   "nameKo": "월하비원",
-  "canvasDefault": "overlay",
+  "canvasDefault": "baked",
   "canvasOverrides": {}
 }

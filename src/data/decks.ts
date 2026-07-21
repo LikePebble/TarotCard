@@ -30,7 +30,6 @@ export const decks: Deck[] = [
     active: true,
     canvasDefault: wolhaBiwon.canvasDefault as CanvasMode,
     canvasOverrides: wolhaBiwon.canvasOverrides as Record<string, CanvasMode>,
-    frame: `/decks/${wolhaBiwon.id}/frame.png`,
   },
 ];
 
