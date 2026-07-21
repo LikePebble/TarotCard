@@ -63,6 +63,18 @@ export function setLocalJournal(store: JournalStore): void {
   saveJournal(store);
 }
 
+/** 이 기기의 일기를 지운다(로그아웃). 서버 사본은 건드리지 않는다. */
+export function clearLocalJournal(): void {
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.removeItem(KEY);
+    } catch {
+      // 위와 같다.
+    }
+  }
+  notifyLocal("journal");
+}
+
 /** Client hook: null until mounted (SSR-safe), then the live journal.
  *  일기가 저장되거나 로그인 병합이 끝나면 자동으로 다시 읽는다. */
 export function useJournal() {

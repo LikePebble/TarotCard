@@ -294,6 +294,18 @@ export function setLocalStore(store: ArcanaStore): void {
   saveStore(store);
 }
 
+/** 이 기기의 리딩·도감을 지운다(로그아웃). 서버 사본은 건드리지 않는다. */
+export function clearLocalStore(): void {
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.removeItem(STORE_KEY);
+    } catch {
+      // 지우지 못해도 알림은 보낸다 — 화면은 다시 읽어 최선의 상태를 보여준다.
+    }
+  }
+  notifyLocal("store");
+}
+
 /** Client hook: null until mounted (SSR-safe), then the live store.
  *  저장이 일어나면(뽑기·로그인 병합·로그아웃 비움) 자동으로 다시 읽는다. */
 export function useArcanaStore() {

@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
-import { setEntry, withEntry, type JournalStore } from "@/lib/journal";
+import {
+  clearLocalJournal,
+  setEntry,
+  withEntry,
+  type JournalStore,
+} from "@/lib/journal";
 import { subscribeLocal } from "@/lib/local-events";
 
 describe("withEntry", () => {
@@ -41,5 +46,15 @@ describe("setEntry", () => {
     setEntry("2026-07-22", "메모");
     off();
     expect(fn).not.toHaveBeenCalled();
+  });
+});
+
+describe("clearLocalJournal", () => {
+  it("journal 채널로 변경을 알린다", () => {
+    const fn = vi.fn();
+    const off = subscribeLocal("journal", fn);
+    clearLocalJournal();
+    off();
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 });

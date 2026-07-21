@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   blockingReading,
+  clearLocalStore,
   emptyStore,
   migrateStore,
   readingById,
@@ -214,6 +215,16 @@ describe("setLocalStore", () => {
     const fn = vi.fn();
     const off = subscribeLocal("store", fn);
     setLocalStore(emptyStore());
+    off();
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("clearLocalStore", () => {
+  it("store 채널로 변경을 알린다", () => {
+    const fn = vi.fn();
+    const off = subscribeLocal("store", fn);
+    clearLocalStore();
     off();
     expect(fn).toHaveBeenCalledTimes(1);
   });

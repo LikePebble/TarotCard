@@ -3,15 +3,30 @@
 import { UserCircle } from "@phosphor-icons/react";
 import {
   signInWithProvider,
-  signOut,
+  signOutAndClear,
   useSession,
 } from "@/lib/auth/session";
+import { useSyncStatus, type SyncState } from "@/lib/sync/status";
 
 const card =
   "rounded-2xl border border-line bg-ink-1 p-5 lg:rounded-[14px] lg:p-6";
 
+/** 계정 카드 아래에 한 줄로 붙이는 동기화 상태 문구. */
+function syncLine(state: SyncState, lastSyncedAt: string | null): string {
+  if (state === "syncing") return "동기화 중…";
+  if (state === "error") return "동기화 대기 중 · 연결되면 자동으로 올라갑니다";
+  if (lastSyncedAt) {
+    const d = new Date(lastSyncedAt);
+    const hh = String(d.getHours()).padStart(2, "0");
+    const mm = String(d.getMinutes()).padStart(2, "0");
+    return `마지막 동기화 ${hh}:${mm}`;
+  }
+  return "기록이 계정에 보관됩니다";
+}
+
 export function AccountCard() {
   const { user, loading, configured } = useSession();
+  const { state, lastSyncedAt } = useSyncStatus();
 
   // Supabase 미설정 → 준비 중(현행 게스트 모드).
   if (!configured) {
@@ -46,14 +61,17 @@ export function AccountCard() {
               <span className="block font-display text-[16px] font-semibold lg:text-[18px]">
                 로그인됨
               </span>
-              <span className="text-[13px] text-muted lg:text-[14px]">
+              <span className="block text-[13px] text-muted lg:text-[14px]">
                 {user.email ?? user.id}
+              </span>
+              <span className="block text-[12px] text-muted lg:text-[13px]">
+                {syncLine(state, lastSyncedAt)}
               </span>
             </span>
           </span>
           <button
             type="button"
-            onClick={() => void signOut()}
+            onClick={() => void signOutAndClear()}
             className="text-[13px] text-muted underline underline-offset-4 hover:text-cream"
           >
             로그아웃
