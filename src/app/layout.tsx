@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Nanum_Myeongjo } from "next/font/google";
 import localFont from "next/font/local";
 import { NoPinchZoom } from "@/components/NoPinchZoom";
+import { SyncBridge } from "@/components/SyncBridge";
 import "./globals.css";
 
 // 본문 해석문(나눔명조). Google Fonts에서 로드.
@@ -55,6 +56,7 @@ export default function RootLayout({
     >
       <body className="font-sans antialiased">
         <NoPinchZoom />
+        <SyncBridge />
         {children}
       </body>
     </html>

@@ -1,32 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { UserCircle } from "@phosphor-icons/react";
 import {
   signInWithProvider,
   signOut,
   useSession,
 } from "@/lib/auth/session";
-import { syncOnLogin } from "@/lib/sync/sync";
 
 const card =
   "rounded-2xl border border-line bg-ink-1 p-5 lg:rounded-[14px] lg:p-6";
 
 export function AccountCard() {
   const { user, loading, configured } = useSession();
-  const syncedFor = useRef<string | null>(null);
-
-  // 로그인되면 한 번 게스트→계정 병합을 실행한다.
-  useEffect(() => {
-    if (!user) {
-      syncedFor.current = null;
-      return;
-    }
-    if (syncedFor.current !== user.id) {
-      syncedFor.current = user.id;
-      void syncOnLogin(user.id);
-    }
-  }, [user]);
 
   // Supabase 미설정 → 준비 중(현행 게스트 모드).
   if (!configured) {
