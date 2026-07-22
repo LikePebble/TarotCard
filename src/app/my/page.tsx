@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { CaretRight, Cards, Notebook, Sparkle } from "@phosphor-icons/react";
+import { CaretRight, Notebook, Sparkle } from "@phosphor-icons/react";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { useJournal } from "@/lib/journal";
@@ -68,24 +68,6 @@ export default function MyPage() {
                   {days > 0
                     ? `달력에서 ${days}일의 기록과 일기를 봅니다`
                     : "달력에서 리딩과 그날의 일기를 봅니다"}
-                </span>
-              </span>
-            </span>
-            <CaretRight size={18} className="text-muted" aria-hidden />
-          </Link>
-
-          <Link
-            href="/my/decks"
-            className="flex items-center justify-between rounded-2xl border border-line bg-ink-1 p-5 transition-colors hover:border-line-gold active:scale-[0.99] lg:rounded-[14px] lg:p-6"
-          >
-            <span className="flex items-center gap-3.5">
-              <Cards size={22} className="text-gold-soft" aria-hidden />
-              <span>
-                <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
-                  덱 관리
-                </span>
-                <span className="text-[13px] text-muted lg:text-[14px]">
-                  리딩에서 뽑을 덱을 고릅니다
                 </span>
               </span>
             </span>
