@@ -6,6 +6,7 @@ import { useReducedMotion } from "motion/react";
 import { CaretLeft } from "@phosphor-icons/react";
 import { DesktopNav } from "@/components/SiteNav";
 import { cardBySlug, type Card } from "@/data/cards";
+import { useJournal } from "@/lib/journal";
 import { readingById, useArcanaStore } from "@/lib/store";
 import { OneCardResult, ThreeCardResult } from "../ReadingResult";
 
@@ -22,6 +23,7 @@ export default function ReadingResultPage({
   const { id } = use(params);
   const reducedMotion = useReducedMotion();
   const { store } = useArcanaStore();
+  const { store: journal } = useJournal();
 
   const backNav = (
     <nav className="flex h-14 flex-none items-center px-5 lg:hidden">
@@ -35,8 +37,9 @@ export default function ReadingResultPage({
     </nav>
   );
 
-  // SSR / mount 전에는 store가 null. 빈 화면으로 깜빡임을 막는다.
-  if (store === null) {
+  // SSR / mount 전에는 store·journal이 null. 빈 화면으로 깜빡임을 막는다
+  // (journal도 같이 기다리지 않으면 라벨이 "쓰기"→"보기"로 깜빡인다).
+  if (store === null || journal === null) {
     return (
       <div className="flex min-h-[100dvh] flex-col">
         <DesktopNav active="reading" />
@@ -93,6 +96,12 @@ export default function ReadingResultPage({
               <Link href="/collection" className="btn btn-ghost w-full lg:w-auto">
                 컬렉션 보기
               </Link>
+              <Link
+                href={`/my/journal/${reading.localDate}`}
+                className="btn btn-ghost w-full lg:w-auto"
+              >
+                {journal[reading.localDate] ? "이날의 일기 보기" : "이날의 일기 쓰기"}
+              </Link>
             </>
           }
         />
@@ -103,9 +112,17 @@ export default function ReadingResultPage({
           focus={reading.category}
           reducedMotion={!!reducedMotion}
           actions={
-            <Link href="/collection" className="btn btn-gold w-full lg:w-auto">
-              컬렉션 보기
-            </Link>
+            <>
+              <Link href="/collection" className="btn btn-gold w-full lg:w-auto">
+                컬렉션 보기
+              </Link>
+              <Link
+                href={`/my/journal/${reading.localDate}`}
+                className="btn btn-ghost w-full lg:w-auto"
+              >
+                {journal[reading.localDate] ? "이날의 일기 보기" : "이날의 일기 쓰기"}
+              </Link>
+            </>
           }
         />
       )}
