@@ -1,6 +1,7 @@
 import { getBrowserSupabase } from "@/lib/supabase/client";
 import type { ArcanaStore, ReadingRecord } from "@/lib/store";
 import { recomputeCollection } from "@/lib/sync/merge";
+import type { PullResult, SyncOutcome } from "@/lib/sync/outcome";
 
 type ReadingRow = {
   id: string;
@@ -49,34 +50,45 @@ function readingToRow(
   };
 }
 
-/** 서버에서 유저의 리딩을 읽어 스토어로. 미설정이면 null. */
+/** 서버에서 유저의 리딩을 읽어 스토어로. 미설정이면 skipped, 실패면 failed. */
 export async function pullRemoteStore(
   userId: string,
-): Promise<ArcanaStore | null> {
+): Promise<PullResult<ArcanaStore>> {
   const supabase = getBrowserSupabase();
-  if (!supabase) return null;
+  if (!supabase) return { outcome: "skipped" };
   const { data, error } = await supabase
     .from("readings")
     .select("*")
     .eq("user_id", userId);
   if (error || !data) {
     if (error) console.error("[sync] 리딩 pull 실패:", error.message);
-    return null;
+    return { outcome: "failed" };
   }
   const readings = (data as ReadingRow[]).map(rowToReading);
-  return { version: 2, collection: recomputeCollection(readings), readings };
+  return {
+    outcome: "ok",
+    data: { version: 2, collection: recomputeCollection(readings), readings },
+  };
 }
 
-/** 로컬 리딩을 서버에 멱등 upsert. 미설정이면 no-op. */
+/**
+ * 로컬 리딩을 서버에 멱등 upsert. 미설정·빈 스토어면 skipped.
+ * 호출자가 성공 여부로 상태를 표시하므로 결과를 반드시 돌려준다(삼켜서는 안 된다).
+ */
 export async function pushLocalStore(
   userId: string,
   store: ArcanaStore,
-): Promise<void> {
+): Promise<SyncOutcome> {
   const supabase = getBrowserSupabase();
-  if (!supabase || store.readings.length === 0) return;
+  if (!supabase) return "skipped";
+  if (store.readings.length === 0) return "skipped";
   const rows = store.readings.map((r) => readingToRow(userId, r));
   const { error } = await supabase
     .from("readings")
     .upsert(rows, { onConflict: "id" });
-  if (error) console.error("[sync] 리딩 push 실패:", error.message);
+  if (error) {
+    console.error("[sync] 리딩 push 실패:", error.message);
+    return "failed";
+  }
+  return "ok";
 }

@@ -6,6 +6,7 @@ import { getBrowserSupabase, isSupabaseConfigured } from "@/lib/supabase/client"
 import { clearLocalJournal } from "@/lib/journal";
 import { clearLocalStore } from "@/lib/store";
 import { flushPendingSync } from "@/lib/sync/pusher";
+import { resetSyncStatus } from "@/lib/sync/status";
 
 export type AuthState = {
   user: User | null;
@@ -75,5 +76,6 @@ export async function signOutAndClear(): Promise<void> {
   }
   clearLocalStore();
   clearLocalJournal();
+  resetSyncStatus(); // 다음 계정에 이전 사용자의 마지막 동기화 시각이 보이면 안 된다.
   await signOut();
 }

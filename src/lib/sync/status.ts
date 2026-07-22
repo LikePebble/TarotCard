@@ -52,6 +52,10 @@ export function setSyncState(state: SyncState): void {
   } else {
     status = { state, lastSyncedAt: status.lastSyncedAt };
   }
+  notify();
+}
+
+function notify() {
   for (const fn of [...subscribers]) {
     try {
       fn();
@@ -59,6 +63,22 @@ export function setSyncState(state: SyncState): void {
       console.error("[sync-status] 구독자 오류:", e);
     }
   }
+}
+
+/**
+ * 상태와 저장된 마지막 동기화 시각을 모두 지운다(로그아웃).
+ * 남겨두면 이 기기의 다음 계정이 이전 사용자의 "마지막 동기화"를 보게 된다.
+ */
+export function resetSyncStatus(): void {
+  status = { state: "idle", lastSyncedAt: null };
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.removeItem(LAST_AT_KEY);
+    } catch {
+      // 표시용 값일 뿐이라 실패해도 무시한다.
+    }
+  }
+  notify();
 }
 
 /** Client hook: 현재 동기화 상태. */

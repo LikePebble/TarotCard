@@ -1,0 +1,232 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+// pusher는 모듈 수준 상태를 들고 있다. 테스트마다 resetModules + 동적 import로
+// 새 인스턴스를 받아 순서 의존을 없앤다.
+vi.mock("@/lib/store", () => ({
+  loadStore: vi.fn(() => ({ version: 2, collection: {}, readings: [] })),
+}));
+vi.mock("@/lib/journal", () => ({
+  loadJournal: vi.fn(() => ({})),
+}));
+vi.mock("@/lib/sync/remote", () => ({
+  pullRemoteStore: vi.fn(async () => ({ outcome: "skipped" })),
+  pushLocalStore: vi.fn(async () => "ok"),
+}));
+vi.mock("@/lib/sync/journal-remote", () => ({
+  pullRemoteJournal: vi.fn(async () => ({ outcome: "skipped" })),
+  pushLocalJournal: vi.fn(async () => "ok"),
+}));
+vi.mock("@/lib/sync/sync", () => ({
+  syncOnLogin: vi.fn(async () => "ok"),
+  syncJournalOnLogin: vi.fn(async () => ({ outcome: "ok", pullOk: true })),
+}));
+
+async function load() {
+  vi.resetModules();
+  const store = await import("@/lib/store");
+  const journal = await import("@/lib/journal");
+  const remote = await import("@/lib/sync/remote");
+  const journalRemote = await import("@/lib/sync/journal-remote");
+  const sync = await import("@/lib/sync/sync");
+  const status = await import("@/lib/sync/status");
+  const pusher = await import("@/lib/sync/pusher");
+
+  // resetAllMocks가 구현까지 지우므로 기본 동작을 매번 다시 심는다.
+  vi.mocked(store.loadStore).mockReturnValue({
+    version: 2,
+    collection: {},
+    readings: [],
+  });
+  vi.mocked(journal.loadJournal).mockReturnValue({});
+  vi.mocked(remote.pullRemoteStore).mockResolvedValue({ outcome: "skipped" });
+  vi.mocked(remote.pushLocalStore).mockResolvedValue("ok");
+  vi.mocked(journalRemote.pullRemoteJournal).mockResolvedValue({
+    outcome: "skipped",
+  });
+  vi.mocked(journalRemote.pushLocalJournal).mockResolvedValue("ok");
+  vi.mocked(sync.syncOnLogin).mockResolvedValue("ok");
+  vi.mocked(sync.syncJournalOnLogin).mockResolvedValue({
+    outcome: "ok",
+    pullOk: true,
+  });
+
+  return { store, journal, remote, journalRemote, sync, status, pusher };
+}
+
+/** 대기 중인 마이크로태스크를 모두 흘린다(디바운스 타이머는 건드리지 않는다). */
+async function settle() {
+  await vi.advanceTimersByTimeAsync(0);
+  await vi.advanceTimersByTimeAsync(0);
+}
+
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((r) => {
+    resolve = r;
+  });
+  return { promise, resolve };
+}
+
+type Loaded = Awaited<ReturnType<typeof load>>;
+
+/** 로그인 병합까지 끝낸 상태로 만든다. */
+async function loggedIn(userId = "u1"): Promise<Loaded> {
+  const mods = await load();
+  mods.pusher.setSyncUser(userId);
+  await settle();
+  return mods;
+}
+
+describe("pusher", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    // 모킹된 모듈 인스턴스는 resetModules를 넘어 살아남는다. 호출 기록과
+    // 테스트별 구현을 여기서 되돌려 순서 의존을 없앤다.
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("게스트면 예약도 push도 하지 않는다", async () => {
+    const { pusher, remote, journalRemote } = await load();
+    pusher.schedulePush();
+    expect(vi.getTimerCount()).toBe(0);
+    await vi.advanceTimersByTimeAsync(10_000);
+    expect(remote.pushLocalStore).not.toHaveBeenCalled();
+    expect(journalRemote.pushLocalJournal).not.toHaveBeenCalled();
+  });
+
+  it("연속 예약을 한 번의 push로 합친다", async () => {
+    const { pusher, remote } = await loggedIn();
+    pusher.schedulePush();
+    pusher.schedulePush();
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    await settle();
+    expect(remote.pushLocalStore).toHaveBeenCalledTimes(1);
+  });
+
+  it("push 중에 들어온 변경을 삼키지 않는다", async () => {
+    const { pusher, remote } = await loggedIn();
+    const gate = deferred<"ok">();
+    vi.mocked(remote.pushLocalStore).mockReturnValueOnce(gate.promise);
+
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(remote.pushLocalStore).toHaveBeenCalledTimes(1);
+
+    // 진행 중인 push가 끝나기 전에 도착한 변경.
+    pusher.schedulePush();
+    await settle();
+    expect(remote.pushLocalStore).toHaveBeenCalledTimes(1);
+
+    gate.resolve("ok");
+    await settle();
+    await vi.advanceTimersByTimeAsync(2000);
+    await settle();
+    expect(remote.pushLocalStore).toHaveBeenCalledTimes(2);
+  });
+
+  it("push가 끝나지 않아도 flush는 타임아웃 안에 반환한다", async () => {
+    const { pusher, remote } = await loggedIn();
+    vi.mocked(remote.pushLocalStore).mockReturnValueOnce(
+      new Promise(() => {}), // 영원히 안 끝나는 push
+    );
+    const flushed = pusher.flushPendingSync(50);
+    await vi.advanceTimersByTimeAsync(50);
+    await expect(flushed).resolves.toBeUndefined();
+  });
+
+  it("push 도중 로컬이 비워져도 처음 뜬 스냅샷을 올린다", async () => {
+    const { pusher, remote, journalRemote, journal } = await loggedIn();
+    const entries = { "2026-07-22": { body: "메모", updatedAt: "2026-07-22" } };
+    vi.mocked(journal.loadJournal).mockReturnValue(entries);
+    const gate = deferred<"ok">();
+    vi.mocked(remote.pushLocalStore).mockReturnValueOnce(gate.promise);
+
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    // 로그아웃이 push 사이에 localStorage를 비운 상황.
+    vi.mocked(journal.loadJournal).mockReturnValue({});
+    gate.resolve("ok");
+    await settle();
+
+    expect(journalRemote.pushLocalJournal).toHaveBeenCalledWith(
+      "u1",
+      entries,
+      { prune: true },
+    );
+  });
+
+  it("push가 실패하면 상태가 error가 된다", async () => {
+    const { pusher, remote, status } = await loggedIn();
+    vi.mocked(remote.pushLocalStore).mockResolvedValueOnce("failed");
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    await settle();
+    expect(status.getSyncStatus().state).toBe("error");
+  });
+
+  it("일기 push가 실패해도 상태가 error가 된다", async () => {
+    const { pusher, journalRemote, status } = await loggedIn();
+    vi.mocked(journalRemote.pushLocalJournal).mockResolvedValueOnce("failed");
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    await settle();
+    expect(status.getSyncStatus().state).toBe("error");
+  });
+
+  it("둘 다 성공하면 상태가 ok가 된다", async () => {
+    const { pusher, status } = await loggedIn();
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    await settle();
+    expect(status.getSyncStatus().state).toBe("ok");
+  });
+
+  it("로그인 pull이 실패했으면 이후 push가 서버 행을 지우지 않는다", async () => {
+    const mods = await load();
+    vi.mocked(mods.sync.syncJournalOnLogin).mockResolvedValue({
+      outcome: "failed",
+      pullOk: false,
+    });
+    mods.pusher.setSyncUser("u1");
+    await settle();
+
+    mods.pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    await settle();
+    expect(mods.journalRemote.pushLocalJournal).toHaveBeenCalledWith(
+      "u1",
+      {},
+      { prune: false },
+    );
+  });
+
+  it("로그인 pull이 성공했으면 push가 서버 행을 정리한다", async () => {
+    const { pusher, journalRemote } = await loggedIn();
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    await settle();
+    expect(journalRemote.pushLocalJournal).toHaveBeenCalledWith(
+      "u1",
+      {},
+      { prune: true },
+    );
+  });
+
+  it("같은 id로는 한 번만 병합하고, 로그아웃 후 재로그인이면 다시 병합한다", async () => {
+    const { pusher, sync } = await load();
+    pusher.setSyncUser("u1");
+    pusher.setSyncUser("u1");
+    await settle();
+    expect(sync.syncOnLogin).toHaveBeenCalledTimes(1);
+
+    pusher.setSyncUser(null);
+    pusher.setSyncUser("u1");
+    await settle();
+    expect(sync.syncOnLogin).toHaveBeenCalledTimes(2);
+  });
+});
