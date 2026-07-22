@@ -1,22 +1,29 @@
 "use client";
 
-import { useArcanaStore, useSelectedDeck } from "@/lib/store";
+import { useArcanaStore } from "@/lib/store";
 
 function formatKoDate(iso: string): string {
   const d = new Date(iso);
   return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
 }
 
-export function CollectHistory({ slug }: { slug: string }) {
+/** 이 카드를 이 덱에서 언제 처음 만났고 몇 번 뽑았는지.
+ *  덱은 반드시 보고 있는 덱을 받아야 한다 — 기본 덱을 읽으면 남의 이력이 뜬다. */
+export function CollectHistory({
+  slug,
+  deckId,
+}: {
+  slug: string;
+  deckId: string;
+}) {
   const { store } = useArcanaStore();
-  const { deckId } = useSelectedDeck();
   const entry = store?.collection[deckId]?.[slug];
 
   return (
     <div className="mt-7 border-t border-line pt-5 lg:mt-10 lg:pt-7">
       {store === null ? (
         <p className="text-[12.5px] text-muted" aria-hidden>
-          {" "}
+          {" "}
         </p>
       ) : entry ? (
         <div className="flex gap-10 lg:gap-14">

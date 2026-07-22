@@ -525,7 +525,7 @@ export default function DrawPage() {
             actions={
               <>
                 <Link
-                  href={`/collection/${deck[0].slug}?deck=${deckId}`}
+                  href={`/collection/${deckId}/${deck[0].slug}`}
                   className="btn btn-gold w-full lg:w-auto"
                 >
                   카드 자세히 보기

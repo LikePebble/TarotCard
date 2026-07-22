@@ -85,7 +85,7 @@ export default function ReadingResultPage({
           actions={
             <>
               <Link
-                href={`/collection/${cards[0].slug}?deck=${reading.deckId}`}
+                href={`/collection/${reading.deckId}/${cards[0].slug}`}
                 className="btn btn-gold w-full lg:w-auto"
               >
                 카드 자세히 보기
