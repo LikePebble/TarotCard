@@ -33,10 +33,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const card = cardBySlug.get(slug);
-  if (!card) return { title: "아르카나" };
+  if (!card) return { title: "에그타로트" };
   const nameKo = koCards[card.slug]?.nameKo ?? card.nameEn;
   return {
-    title: `${nameKo} ${card.nameEn} | 아르카나`,
+    title: `${nameKo} ${card.nameEn} | 에그타로트`,
     description: `${nameKo} 카드의 해석과 수집 이력을 확인하세요.`,
   };
 }
