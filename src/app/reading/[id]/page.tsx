@@ -8,7 +8,6 @@ import { DesktopNav } from "@/components/SiteNav";
 import { cardBySlug, type Card } from "@/data/cards";
 import { useJournal } from "@/lib/journal";
 import { readingById, useArcanaStore } from "@/lib/store";
-import { JournalLink } from "../JournalLink";
 import { OneCardResult, ThreeCardResult } from "../ReadingResult";
 
 /**
@@ -86,20 +85,7 @@ export default function ReadingResultPage({
           deckId={reading.deckId}
           focus={reading.category}
           reducedMotion={!!reducedMotion}
-          actions={
-            <>
-              <Link
-                href={`/collection/${reading.deckId}/${cards[0].slug}`}
-                className="btn btn-gold w-full lg:w-auto"
-              >
-                카드 자세히 보기
-              </Link>
-              <Link href="/collection" className="btn btn-ghost w-full lg:w-auto">
-                컬렉션 보기
-              </Link>
-              <JournalLink localDate={reading.localDate} />
-            </>
-          }
+          localDate={reading.localDate}
         />
       ) : (
         <ThreeCardResult
@@ -107,14 +93,7 @@ export default function ReadingResultPage({
           deckId={reading.deckId}
           focus={reading.category}
           reducedMotion={!!reducedMotion}
-          actions={
-            <>
-              <Link href="/collection" className="btn btn-gold w-full lg:w-auto">
-                컬렉션 보기
-              </Link>
-              <JournalLink localDate={reading.localDate} />
-            </>
-          }
+          localDate={reading.localDate}
         />
       )}
     </div>

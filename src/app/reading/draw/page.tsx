@@ -21,7 +21,6 @@ import {
   type ReadingRecord,
   type SpreadType,
 } from "@/lib/store";
-import { JournalLink } from "../JournalLink";
 import { OneCardResult, ThreeCardResult } from "../ReadingResult";
 
 const POSITIONS = ["과거", "현재", "미래"] as const;
@@ -527,25 +526,7 @@ export default function DrawPage() {
             focus={focus}
             collectionCount={count}
             reducedMotion={!!reducedMotion}
-            actions={
-              <>
-                <Link
-                  href={`/collection/${deckId}/${deck[0].slug}`}
-                  className="btn btn-gold w-full lg:w-auto"
-                >
-                  카드 자세히 보기
-                </Link>
-                <Link
-                  href="/collection"
-                  className="btn btn-ghost w-full lg:w-auto"
-                >
-                  컬렉션 보기
-                </Link>
-                {readingRecord ? (
-                  <JournalLink localDate={readingRecord.localDate} />
-                ) : null}
-              </>
-            }
+            localDate={readingRecord?.localDate ?? null}
           />
         ) : (
           <ThreeCardResult
@@ -554,16 +535,7 @@ export default function DrawPage() {
             focus={focus}
             collectionCount={count}
             reducedMotion={!!reducedMotion}
-            actions={
-              <>
-                <Link href="/collection" className="btn btn-gold w-full lg:w-auto">
-                  컬렉션 보기
-                </Link>
-                {readingRecord ? (
-                  <JournalLink localDate={readingRecord.localDate} />
-                ) : null}
-              </>
-            }
+            localDate={readingRecord?.localDate ?? null}
           />
         )}
     </div>
