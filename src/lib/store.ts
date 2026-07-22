@@ -173,14 +173,18 @@ function uid(): string {
   return `r-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-/** 완료된 리딩을 저장한다(부작용 래퍼). */
+/**
+ * 완료된 리딩을 저장한다(부작용 래퍼).
+ * 스토어뿐 아니라 방금 만든 record도 함께 돌려준다 — 호출부가 그 리딩의
+ * localDate 등을 다시 계산하지 않고 그대로 쓸 수 있어야 자정 경계 오류가 없다.
+ */
 export function recordReading(input: {
   spread: SpreadType;
   category: string;
   deckId: string;
   cards: string[];
   orientations: Orientation[];
-}): ArcanaStore {
+}): { store: ArcanaStore; record: ReadingRecord } {
   const record = newReadingRecord({
     id: uid(),
     at: new Date(),
@@ -188,7 +192,7 @@ export function recordReading(input: {
   });
   const next = withReadingRecorded(loadStore(), record);
   saveStore(next);
-  return next;
+  return { store: next, record };
 }
 
 export type SlotState = {

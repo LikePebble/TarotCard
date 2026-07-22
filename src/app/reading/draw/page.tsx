@@ -18,8 +18,10 @@ import {
   loadStore,
   recordReading,
   useSelectedDeck,
+  type ReadingRecord,
   type SpreadType,
 } from "@/lib/store";
+import { JournalLink } from "../JournalLink";
 import { OneCardResult, ThreeCardResult } from "../ReadingResult";
 
 const POSITIONS = ["과거", "현재", "미래"] as const;
@@ -93,6 +95,7 @@ export default function DrawPage() {
   const [chargingFanId, setChargingFanId] = useState<number | null>(null);
   const [flashing, setFlashing] = useState(false);
   const [count, setCount] = useState<number | null>(null);
+  const [readingRecord, setReadingRecord] = useState<ReadingRecord | null>(null);
   const recordedRef = useRef(false);
   const watchdogRef = useRef<number | null>(null);
   const timersRef = useRef<number[]>([]);
@@ -132,6 +135,7 @@ export default function DrawPage() {
     setChargingFanId(null);
     setFlashing(false);
     setCount(null);
+    setReadingRecord(null);
     recordedRef.current = false;
     if (reducedRef.current) {
       setPhase("picking");
@@ -176,14 +180,15 @@ export default function DrawPage() {
     (slugs: string[], s: SpreadType, f: string) => {
       if (recordedRef.current) return;
       recordedRef.current = true;
-      const store = recordReading({
+      const result = recordReading({
         spread: s,
         category: f,
         deckId,
         cards: slugs,
         orientations: slugs.map(() => "upright" as const),
       });
-      setCount(collectedCount(store, deckId));
+      setCount(collectedCount(result.store, deckId));
+      setReadingRecord(result.record);
     },
     [deckId],
   );
@@ -536,6 +541,9 @@ export default function DrawPage() {
                 >
                   컬렉션 보기
                 </Link>
+                {readingRecord ? (
+                  <JournalLink localDate={readingRecord.localDate} />
+                ) : null}
               </>
             }
           />
@@ -547,9 +555,14 @@ export default function DrawPage() {
             collectionCount={count}
             reducedMotion={!!reducedMotion}
             actions={
-              <Link href="/collection" className="btn btn-gold w-full lg:w-auto">
-                컬렉션 보기
-              </Link>
+              <>
+                <Link href="/collection" className="btn btn-gold w-full lg:w-auto">
+                  컬렉션 보기
+                </Link>
+                {readingRecord ? (
+                  <JournalLink localDate={readingRecord.localDate} />
+                ) : null}
+              </>
             }
           />
         )}

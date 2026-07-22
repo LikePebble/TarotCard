@@ -8,6 +8,7 @@ import { DesktopNav } from "@/components/SiteNav";
 import { cardBySlug, type Card } from "@/data/cards";
 import { useJournal } from "@/lib/journal";
 import { readingById, useArcanaStore } from "@/lib/store";
+import { JournalLink } from "../JournalLink";
 import { OneCardResult, ThreeCardResult } from "../ReadingResult";
 
 /**
@@ -96,12 +97,7 @@ export default function ReadingResultPage({
               <Link href="/collection" className="btn btn-ghost w-full lg:w-auto">
                 컬렉션 보기
               </Link>
-              <Link
-                href={`/my/journal/${reading.localDate}`}
-                className="btn btn-ghost w-full lg:w-auto"
-              >
-                {journal[reading.localDate] ? "이날의 일기 보기" : "이날의 일기 쓰기"}
-              </Link>
+              <JournalLink localDate={reading.localDate} />
             </>
           }
         />
@@ -116,12 +112,7 @@ export default function ReadingResultPage({
               <Link href="/collection" className="btn btn-gold w-full lg:w-auto">
                 컬렉션 보기
               </Link>
-              <Link
-                href={`/my/journal/${reading.localDate}`}
-                className="btn btn-ghost w-full lg:w-auto"
-              >
-                {journal[reading.localDate] ? "이날의 일기 보기" : "이날의 일기 쓰기"}
-              </Link>
+              <JournalLink localDate={reading.localDate} />
             </>
           }
         />
