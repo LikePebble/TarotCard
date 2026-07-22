@@ -1,9 +1,11 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { CardArt } from "@/components/CardArt";
 import { CardBack } from "@/components/CardBack";
+import { cardBySlug } from "@/data/cards";
 import {
   blockingReading,
   setPendingSpread,
@@ -20,6 +22,9 @@ const panel =
 /**
  * 리딩 유형 카드. 이번 주기에 이미 뽑았으면(blocked) 새로 시작하지 못하게
  * 하고 그 결과로 링크한다(리롤 방지). 아니면 유형을 골라 포커스 단계로 간다.
+ *
+ * blocked면 뒷면 대신 실제로 뽑은 카드(blocked.cards)를 보여준다 — 덱은 그때
+ * 뽑을 때 쓴 blocked.deckId를 쓴다. 기본 덱을 바꿔도 실제로 받은 그림 그대로.
  */
 function TypeCard({
   title,
@@ -29,7 +34,10 @@ function TypeCard({
   blocked,
   ariaBase,
   onStart,
-  children,
+  deckId,
+  cardClassName,
+  cardSizes,
+  cardCount,
 }: {
   title: string;
   titleClass?: string;
@@ -38,8 +46,35 @@ function TypeCard({
   blocked: ReadingRecord | undefined;
   ariaBase: string;
   onStart: () => void;
-  children: ReactNode;
+  deckId: string;
+  cardClassName: string;
+  cardSizes: string;
+  cardCount: number;
 }) {
+  const cardEls = blocked
+    ? blocked.cards.map((slug) => {
+        const card = cardBySlug.get(slug);
+        if (!card) return null;
+        // CardArt는 래퍼가 h-full w-full이라 크기 클래스를 직접 넘기면
+        // w-full과 충돌한다. CardBack과 달리 바깥에서 크기를 잡아 준다.
+        return (
+          <div
+            key={slug}
+            className={`relative overflow-hidden rounded-[12px] border border-line-gold ${cardClassName}`}
+          >
+            <CardArt card={card} deckId={blocked.deckId} sizes={cardSizes} />
+          </div>
+        );
+      })
+    : Array.from({ length: cardCount }, (_, i) => (
+        <CardBack
+          key={i}
+          deckId={deckId}
+          sizes={cardSizes}
+          className={cardClassName}
+        />
+      ));
+
   const inner = (
     <>
       <div>
@@ -56,7 +91,7 @@ function TypeCard({
           {blocked ? blockedNote : desc}
         </p>
       </div>
-      <div className="flex gap-1.5 lg:mt-7 lg:gap-2.5">{children}</div>
+      <div className="flex gap-1.5 lg:mt-7 lg:gap-2.5">{cardEls}</div>
     </>
   );
 
@@ -104,13 +139,11 @@ export function ReadingChoice() {
         blocked={blockedOne}
         ariaBase="오늘의 카드"
         onStart={() => choose("one")}
-      >
-        <CardBack
-          deckId={deckId}
-          sizes="96px"
-          className="aspect-[2/3.4] w-[52px] lg:w-24"
-        />
-      </TypeCard>
+        deckId={deckId}
+        cardClassName="aspect-[2/3.4] w-[52px] lg:w-24"
+        cardSizes="96px"
+        cardCount={1}
+      />
 
       <TypeCard
         title="과거 · 현재 · 미래"
@@ -120,23 +153,11 @@ export function ReadingChoice() {
         blocked={blockedThree}
         ariaBase="과거 현재 미래"
         onStart={() => choose("three")}
-      >
-        <CardBack
-          deckId={deckId}
-          sizes="74px"
-          className="aspect-[2/3.4] w-11 lg:w-[74px]"
-        />
-        <CardBack
-          deckId={deckId}
-          sizes="74px"
-          className="aspect-[2/3.4] w-11 lg:w-[74px]"
-        />
-        <CardBack
-          deckId={deckId}
-          sizes="74px"
-          className="aspect-[2/3.4] w-11 lg:w-[74px]"
-        />
-      </TypeCard>
+        deckId={deckId}
+        cardClassName="aspect-[2/3.4] w-11 lg:w-[74px]"
+        cardSizes="74px"
+        cardCount={3}
+      />
 
       {isDevTools && todayCount > 0 ? (
         <button
