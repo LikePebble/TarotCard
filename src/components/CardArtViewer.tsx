@@ -26,12 +26,25 @@ function distance(a: Point, b: Point) {
  * 앱이 브라우저 핀치 줌(userScalable:false)을 막고 있으므로,
  * 뷰어 안에서 포인터 이벤트로 더블탭/핀치 줌·드래그 팬을 직접 구현한다.
  */
+const DEFAULT_TRIGGER_CLASSNAME =
+  "relative mt-1 block aspect-[2/3.4] w-[216px] cursor-zoom-in overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:mt-0 lg:w-full lg:rounded-[14px] lg:shadow-[0_30px_80px_rgba(8,5,0,0.65)]";
+
+// 기본값은 카드 상세 페이지의 트리거 크기에 맞춘 것. 트리거를 다른 크기로
+// 쓰는 호출부는 sizes도 같이 넘겨야 한다 — 안 그러면 필요보다 큰 이미지를 받는다.
+const DEFAULT_SIZES = "(min-width: 1024px) 380px, 216px";
+
 export function CardArtViewer({
   card,
   deckOverride,
+  triggerClassName = DEFAULT_TRIGGER_CLASSNAME,
+  sizes = DEFAULT_SIZES,
+  priority = true,
 }: {
   card: Card;
   deckOverride?: string;
+  triggerClassName?: string;
+  sizes?: string;
+  priority?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -56,12 +69,12 @@ export function CardArtViewer({
         type="button"
         onClick={() => setOpen(true)}
         aria-label="카드 크게 보기"
-        className="relative mt-1 block aspect-[2/3.4] w-[216px] cursor-zoom-in overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:mt-0 lg:w-full lg:rounded-[14px] lg:shadow-[0_30px_80px_rgba(8,5,0,0.65)]"
+        className={triggerClassName}
       >
         <DeckAwareArt
           card={card}
-          sizes="(min-width: 1024px) 380px, 216px"
-          priority
+          sizes={sizes}
+          priority={priority}
           deckOverride={deckOverride}
         />
       </button>

@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
-import { CardArt } from "@/components/CardArt";
+import { CardArtViewer } from "@/components/CardArtViewer";
 import { type Card } from "@/data/cards";
 import { focusLabelOf, focusParagraphOf } from "@/data/focus";
 import { koCards } from "@/data/ko";
@@ -49,14 +49,12 @@ export function OneCardResult({
       className="mx-auto w-full max-w-[1280px] flex-1 px-6 pb-8 pt-1 lg:grid lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-[72px] lg:px-[72px] lg:py-20"
     >
       <div className="flex justify-center lg:justify-end">
-        <div className="relative aspect-[2/3.4] w-[248px] overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:w-full lg:max-w-[400px] lg:rounded-[14px]">
-          <CardArt
-            card={card}
-            deckId={deckId}
-            sizes="(min-width: 1024px) 400px, 248px"
-            priority
-          />
-        </div>
+        <CardArtViewer
+          card={card}
+          deckOverride={deckId}
+          triggerClassName="relative block aspect-[2/3.4] w-[248px] cursor-zoom-in overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:w-full lg:max-w-[400px] lg:rounded-[14px]"
+          sizes="(min-width: 1024px) 400px, 248px"
+        />
       </div>
       <div>
         <p className="mt-[22px] text-center text-[13px] text-muted lg:mt-0 lg:text-left lg:text-[14px]">
@@ -141,9 +139,13 @@ export function ThreeCardResult({
             transition={{ duration: 0.45, delay: reducedMotion ? 0 : 0.12 + i * 0.1 }}
             className="flex flex-col items-center"
           >
-            <div className="relative aspect-[2/3.4] w-full overflow-hidden rounded-xl bg-ink-2 shadow-[0_16px_40px_rgba(8,5,0,0.6)]">
-              <CardArt card={card} deckId={deckId} sizes="(min-width: 1024px) 150px, 33vw" />
-            </div>
+            <CardArtViewer
+              card={card}
+              deckOverride={deckId}
+              triggerClassName="relative block aspect-[2/3.4] w-full cursor-zoom-in overflow-hidden rounded-xl bg-ink-2 shadow-[0_16px_40px_rgba(8,5,0,0.6)]"
+              sizes="(min-width: 1024px) 150px, 33vw"
+              priority={false}
+            />
             <figcaption className="mt-2 text-[12px] tracking-[0.02em] text-gold lg:text-[13px]">
               {POSITIONS[i]}
             </figcaption>
