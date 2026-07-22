@@ -2,7 +2,7 @@
 
 import { CardArt } from "@/components/CardArt";
 import type { Card } from "@/data/cards";
-import { useSelectedDeck } from "@/lib/store";
+import { useSelectedDeck, type Orientation } from "@/lib/store";
 
 /**
  * 서버 컴포넌트 페이지에서 쓰는, 선택된 덱을 따라가는 카드 아트.
@@ -14,11 +14,13 @@ export function DeckAwareArt({
   sizes,
   priority = false,
   deckOverride,
+  orientation,
 }: {
   card: Card;
   sizes: string;
   priority?: boolean;
   deckOverride?: string;
+  orientation?: Orientation;
 }) {
   const { deckId, ready } = useSelectedDeck();
   const resolvedDeck = deckOverride ?? deckId;
@@ -32,6 +34,7 @@ export function DeckAwareArt({
       deckId={resolvedDeck}
       sizes={sizes}
       priority={priority}
+      orientation={orientation}
     />
   );
 }

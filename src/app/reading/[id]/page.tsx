@@ -84,6 +84,7 @@ export default function ReadingResultPage({
           card={cards[0]}
           deckId={reading.deckId}
           focus={reading.category}
+          orientations={reading.orientations}
           reducedMotion={!!reducedMotion}
           localDate={reading.localDate}
         />
@@ -92,6 +93,7 @@ export default function ReadingResultPage({
           picked={cards}
           deckId={reading.deckId}
           focus={reading.category}
+          orientations={reading.orientations}
           reducedMotion={!!reducedMotion}
           localDate={reading.localDate}
         />

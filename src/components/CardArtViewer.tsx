@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { X } from "@phosphor-icons/react";
 import { DeckAwareArt } from "@/components/DeckAwareArt";
 import type { Card } from "@/data/cards";
+import type { Orientation } from "@/lib/store";
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 4;
@@ -39,12 +40,14 @@ export function CardArtViewer({
   triggerClassName = DEFAULT_TRIGGER_CLASSNAME,
   sizes = DEFAULT_SIZES,
   priority = true,
+  orientation,
 }: {
   card: Card;
   deckOverride?: string;
   triggerClassName?: string;
   sizes?: string;
   priority?: boolean;
+  orientation?: Orientation;
 }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -76,6 +79,7 @@ export function CardArtViewer({
           sizes={sizes}
           priority={priority}
           deckOverride={deckOverride}
+          orientation={orientation}
         />
       </button>
       {mounted && open
@@ -83,6 +87,7 @@ export function CardArtViewer({
             <ViewerOverlay
               card={card}
               deckOverride={deckOverride}
+              orientation={orientation}
               onClose={() => setOpen(false)}
             />,
             document.body,
@@ -95,10 +100,12 @@ export function CardArtViewer({
 function ViewerOverlay({
   card,
   deckOverride,
+  orientation,
   onClose,
 }: {
   card: Card;
   deckOverride?: string;
+  orientation?: Orientation;
   onClose: () => void;
 }) {
   const [scale, setScale] = useState(1);
@@ -295,6 +302,7 @@ function ViewerOverlay({
             sizes="90vw"
             priority
             deckOverride={deckOverride}
+            orientation={orientation}
           />
         </div>
       </div>

@@ -2,21 +2,28 @@
 
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
-import { CardArt } from "@/components/CardArt";
 import { CardArtViewer } from "@/components/CardArtViewer";
 import { type Card } from "@/data/cards";
 import { focusLabelOf, focusParagraphOf } from "@/data/focus";
 import { koCards } from "@/data/ko";
 import { koPositions } from "@/data/ko-positions";
+import { reversedCards } from "@/data/reversed";
+import type { Orientation } from "@/lib/store";
 import { ResultActions } from "./ResultActions";
 
 const POSITIONS = ["과거", "현재", "미래"] as const;
 const POSITION_KEYS = ["past", "present", "future"] as const;
 
-// 스와이프를 "탭"과 구분하는 임계값(px). 10을 넘으면 뷰어가 열리지 않도록
-// 다음 click을 억제하고, 50을 넘으면 실제로 포지션을 전환한다.
-const CLICK_SUPPRESS_PX = 10;
-const SWIPE_PX = 50;
+// 카드별 역방향 해석문이 없을 때의 최후 폴백. 78장 모두 reversed.ts에 있으므로
+// 평소에는 쓰이지 않는다 — 새 카드가 추가됐는데 해석문이 아직 없을 때를 위한 그물.
+const REVERSED_FALLBACK =
+  "역방향으로 나온 카드는 본래 의미의 기운이 약해지거나 안으로 향해 있음을 뜻합니다. 위 해석을 바탕으로, 그 흐름이 지연되거나 억눌린 상태라는 관점에서 읽어 보세요.";
+
+/** 역방향 해석문 문단들. 정방향 해석과 같이 빈 줄로 나뉜다. */
+function reversedParagraphs(card: Card): string[] {
+  const ko = reversedCards[card.slug]?.ko;
+  return (ko && ko.length > 0 ? ko : REVERSED_FALLBACK).split("\n\n");
+}
 
 function nameKoOf(card: Card): string {
   return koCards[card.slug]?.nameKo ?? card.nameEn;
@@ -25,6 +32,15 @@ function nameKoOf(card: Card): string {
 function descriptionOf(card: Card): string[] {
   const ko = koCards[card.slug]?.description;
   return (ko && ko.length > 0 ? ko : card.en.description).split("\n\n");
+}
+
+/** 아트가 왜 뒤집혔는지 알리는 소형 배지. 카드명 옆에 붙는다. */
+function ReversedBadge() {
+  return (
+    <span className="ml-2 inline-block rounded-full border border-gold px-2 py-[3px] align-middle text-[11px] font-medium leading-none text-gold lg:text-[12px]">
+      역방향
+    </span>
+  );
 }
 
 /**
@@ -36,6 +52,7 @@ export function OneCardResult({
   card,
   deckId,
   focus,
+  orientations,
   collectionCount,
   reducedMotion,
   localDate,
@@ -43,12 +60,16 @@ export function OneCardResult({
   card: Card;
   deckId: string;
   focus: string;
+  orientations?: Orientation[];
   collectionCount?: number | null;
   reducedMotion: boolean;
   localDate: string | null;
 }) {
   const paragraphs = descriptionOf(card);
   const themeParagraph = focusParagraphOf(focus, card.slug);
+  // 레거시·마이그레이션 기록에는 orientations가 없거나 짧을 수 있다 — 정방향으로 본다.
+  const orientation: Orientation = orientations?.[0] ?? "upright";
+  const reversed = orientation === "reversed";
   return (
     <motion.main
       initial={reducedMotion ? false : { opacity: 0, y: 16 }}
@@ -60,34 +81,47 @@ export function OneCardResult({
         <CardArtViewer
           card={card}
           deckOverride={deckId}
+          orientation={orientation}
           triggerClassName="relative block aspect-[2/3.4] w-[248px] cursor-zoom-in overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:w-full lg:max-w-[400px] lg:rounded-[14px]"
           sizes="(min-width: 1024px) 400px, 248px"
         />
       </div>
       <div>
         <p className="mt-[22px] text-center text-[13px] text-muted lg:mt-0 lg:text-left lg:text-[14px]">
-          오늘의 카드 ·{" "}
-          <b className="font-medium text-gold">{focusLabelOf(focus)}</b>
+          오늘의 카드
         </p>
         <h1 className="mt-1 text-center font-display text-[30px] font-semibold lg:text-left lg:text-[44px]">
           {nameKoOf(card)}{" "}
           <span className="ml-1 text-base font-normal text-muted lg:text-[22px]">
             {card.nameEn}
           </span>
+          {reversed ? <ReversedBadge /> : null}
         </h1>
         <div className="mt-4 space-y-3 font-serif text-[15px] text-body lg:mt-6 lg:max-w-[520px] lg:text-base">
           {paragraphs.map((paragraph) => (
             <p key={paragraph.slice(0, 24)}>{paragraph}</p>
           ))}
         </div>
-        {themeParagraph ? (
-          <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
-            <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-              {focusLabelOf(focus)}
-            </p>
+        {/* 테마는 머리말이 아니라 여기 한 곳에서만 보여준다. 해석 문단이
+            없어도(오늘 하루 등) 무슨 테마로 뽑았는지 라벨은 남긴다. */}
+        <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
+          <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+            {focusLabelOf(focus)}
+          </p>
+          {themeParagraph ? (
             <p className="mt-1.5 font-serif text-[15px] text-body lg:text-base">
               {themeParagraph}
             </p>
+          ) : null}
+        </div>
+        {reversed ? (
+          <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
+            <p className="text-[12.5px] text-gold lg:text-[13.5px]">역방향</p>
+            <div className="mt-1.5 space-y-3 font-serif text-[15px] text-body lg:text-base">
+              {reversedParagraphs(card).map((p) => (
+                <p key={p.slice(0, 24)}>{p}</p>
+              ))}
+            </div>
           </div>
         ) : null}
         {collectionCount !== undefined ? (
@@ -128,13 +162,13 @@ function panelInitial(direction: number) {
 
 /**
  * 과거·현재·미래 결과. 갓 뽑은 리빌(draw)과 재열람(/reading/[id])이 공유한다.
- * 한 번에 한 포지션만 보여준다 — 탭 · 작은 카드 줄 · 큰 카드 스와이프
- * 세 경로가 모두 같은 선택 인덱스를 움직인다.
+ * 한 번에 한 포지션만 보여준다 — 전환 경로는 탭(←/→ 키 포함) 하나다.
  */
 export function ThreeCardResult({
   picked,
   deckId,
   focus,
+  orientations,
   collectionCount,
   reducedMotion,
   localDate,
@@ -142,6 +176,7 @@ export function ThreeCardResult({
   picked: Card[];
   deckId: string;
   focus: string;
+  orientations?: Orientation[];
   collectionCount?: number | null;
   reducedMotion: boolean;
   localDate: string | null;
@@ -157,51 +192,29 @@ export function ThreeCardResult({
     setIndex(next);
   };
 
+  // roving tabindex: 선택이 바뀌면 이전 탭은 tabIndex -1이 되므로 포커스도
+  // 같이 옮겨야 한다. 안 그러면 스크린리더가 읽는 위치와 열린 패널이 어긋난다.
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const moveTab = (next: number) => {
+    if (next < 0 || next > 2) return;
+    goTo(next);
+    tabRefs.current[next]?.focus();
+  };
+
   const onTabsKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight") {
       e.preventDefault();
-      goTo(index + 1);
+      moveTab(index + 1);
     } else if (e.key === "ArrowLeft") {
       e.preventDefault();
-      goTo(index - 1);
-    }
-  };
-
-  // 스와이프 vs 전체화면 뷰어 탭 판정. framer의 drag는 click을 막아 주지
-  // 않으므로 포인터 이벤트로 직접 판정한다.
-  const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
-  const suppressClickRef = useRef(false);
-
-  const onCardPointerDown = (e: React.PointerEvent) => {
-    pointerStartRef.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const onCardPointerUp = (e: React.PointerEvent) => {
-    const start = pointerStartRef.current;
-    pointerStartRef.current = null;
-    if (!start) return;
-    const dx = e.clientX - start.x;
-    const dy = e.clientY - start.y;
-    // 가로 이동이 세로보다 클 때만 스와이프로 본다 — 세로 스크롤을 막지 않는다.
-    if (Math.abs(dx) <= Math.abs(dy)) return;
-    if (Math.abs(dx) > CLICK_SUPPRESS_PX) {
-      suppressClickRef.current = true;
-    }
-    if (Math.abs(dx) >= SWIPE_PX) {
-      goTo(dx < 0 ? index + 1 : index - 1);
-    }
-  };
-
-  // 억제 플래그가 서 있으면 뷰어를 여는 click을 캡처 단계에서 끊는다.
-  const onCardClickCapture = (e: React.MouseEvent) => {
-    if (suppressClickRef.current) {
-      e.stopPropagation();
-      e.preventDefault();
-      suppressClickRef.current = false;
+      moveTab(index - 1);
     }
   };
 
   const selected = picked[index];
+  // 레거시·마이그레이션 기록에는 orientations가 없거나 짧을 수 있다 — 정방향으로 본다.
+  const orientation: Orientation = orientations?.[index] ?? "upright";
+  const reversed = orientation === "reversed";
   const positionSentence = koPositions[selected.slug]?.[POSITION_KEYS[index]];
   const themeParagraph = focusParagraphOf(focus, selected.slug);
 
@@ -213,8 +226,7 @@ export function ThreeCardResult({
       className="mx-auto w-full max-w-[760px] flex-1 px-6 pb-8 pt-1 lg:pb-24 lg:pt-14"
     >
       <p className="text-center text-[13px] text-muted lg:text-[14px]">
-        과거 · 현재 · 미래{" "}
-        <b className="font-medium text-gold">{focusLabelOf(focus)}</b>
+        과거 · 현재 · 미래
       </p>
 
       {/* 탭 */}
@@ -229,6 +241,9 @@ export function ThreeCardResult({
             key={label}
             type="button"
             role="tab"
+            ref={(el) => {
+              tabRefs.current[i] = el;
+            }}
             id={`three-card-tab-${i}`}
             aria-selected={i === index}
             aria-controls="three-card-panel"
@@ -245,55 +260,16 @@ export function ThreeCardResult({
         ))}
       </div>
 
-      {/* 큰 카드: 눌러서 전체화면, 옆으로 끌어서 포지션 전환 */}
+      {/* 큰 카드: 눌러서 전체화면 */}
       <div className="mt-5 flex justify-center lg:mt-7">
-        <div
-          className="relative"
-          onPointerDown={onCardPointerDown}
-          onPointerUp={onCardPointerUp}
-          onClickCapture={onCardClickCapture}
-        >
-          <CardArtViewer
-            card={selected}
-            deckOverride={deckId}
-            triggerClassName="relative block aspect-[2/3.4] w-[248px] cursor-zoom-in overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:w-[340px] lg:rounded-[14px]"
-            sizes="(min-width: 1024px) 340px, 248px"
-            priority={index === 0}
-          />
-        </div>
-      </div>
-
-      {/* 작은 카드 줄: 세 장을 순서 그대로 전부 둔다(선택된 것도 빼지 않음) —
-          두 장만 남기면 선택할 때마다 줄이 재배치돼 과거→미래 축이 깨진다. */}
-      <div className="mx-auto mt-4 flex max-w-[340px] justify-center gap-3 lg:mt-6 lg:gap-4">
-        {picked.map((card, i) => (
-          <button
-            key={card.slug}
-            type="button"
-            onClick={() => goTo(i)}
-            aria-label={`${POSITIONS[i]} 카드로 이동`}
-            className="flex flex-col items-center gap-1.5"
-          >
-            <span
-              className={`block aspect-[2/3.4] w-16 overflow-hidden rounded-lg border-2 lg:w-[88px] ${
-                i === index ? "border-gold" : "border-transparent"
-              }`}
-            >
-              <CardArt
-                card={card}
-                deckId={deckId}
-                sizes="(min-width: 1024px) 88px, 64px"
-              />
-            </span>
-            <span
-              className={`text-[11px] lg:text-[12px] ${
-                i === index ? "text-gold" : "text-muted"
-              }`}
-            >
-              {POSITIONS[i]}
-            </span>
-          </button>
-        ))}
+        <CardArtViewer
+          card={selected}
+          deckOverride={deckId}
+          orientation={orientation}
+          triggerClassName="relative block aspect-[2/3.4] w-[248px] cursor-zoom-in overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:w-[340px] lg:rounded-[14px]"
+          sizes="(min-width: 1024px) 340px, 248px"
+          priority={index === 0}
+        />
       </div>
 
       {/* 해석: 선택된 포지션의 문장·설명·포커스 해석만 보여준다 */}
@@ -314,6 +290,7 @@ export function ThreeCardResult({
           </p>
           <h2 className="mt-1 font-display text-[22px] font-semibold leading-tight lg:text-[26px]">
             {nameKoOf(selected)}
+            {reversed ? <ReversedBadge /> : null}
             <span className="mt-0.5 block text-[13px] font-normal text-muted lg:text-[15px]">
               {selected.nameEn}
             </span>
@@ -328,14 +305,26 @@ export function ThreeCardResult({
               <p key={paragraph.slice(0, 24)}>{paragraph}</p>
             ))}
           </div>
-          {themeParagraph ? (
-            <div className="mt-3.5 border-t border-line pt-3">
-              <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-                {focusLabelOf(focus)}
-              </p>
+          {/* 테마는 머리말이 아니라 여기 한 곳에서만 보여준다. 해석 문단이
+              없어도 무슨 테마로 뽑았는지 라벨은 남긴다. */}
+          <div className="mt-3.5 border-t border-line pt-3">
+            <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+              {focusLabelOf(focus)}
+            </p>
+            {themeParagraph ? (
               <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
                 {themeParagraph}
               </p>
+            ) : null}
+          </div>
+          {reversed ? (
+            <div className="mt-3.5 border-t border-line pt-3">
+              <p className="text-[12.5px] text-gold lg:text-[13.5px]">역방향</p>
+              <div className="mt-1 space-y-2.5 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
+                {reversedParagraphs(selected).map((p) => (
+                  <p key={p.slice(0, 24)}>{p}</p>
+                ))}
+              </div>
             </div>
           ) : null}
         </motion.div>

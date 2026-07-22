@@ -10,6 +10,7 @@ import { CardBack } from "@/components/CardBack";
 import { DesktopNav } from "@/components/SiteNav";
 import { cards, type Card } from "@/data/cards";
 import { focusLabelOf } from "@/data/focus";
+import { pickOrientations, secureRand } from "@/lib/orientation";
 import {
   blockingReading,
   collectedCount,
@@ -37,8 +38,15 @@ const FAN_SIZE = 7;
  * flash-pop keyframes. Three-card (과거 · 현재 · 미래): per-pick charge + flash
  * + slot flight + landing burst, then sequential flips.
  */
-const SHUFFLE_MS = 2400;
-const SHUFFLE_REPEAT_MS = 1300; // shorter shuffle after 다시 뽑기 (both spreads)
+/*
+ * 셔플 타이머는 CSS 애니메이션(shuf-cycle 1.15s × var(--shuf-cycles), 카드별
+ * 지연 85ms × 최대 6)이 전부 끝난 뒤에 걸려야 한다. 실행 중인 애니메이션이 있는
+ * 속성은 is-shuffling을 떼도 CSS 전이가 발화하지 않아 부채꼴로 한 프레임에
+ * 튄다(관찰로 확인). 끝난 뒤에 떼면 기본 rotate/translate 전이가 스택 →
+ * 부채꼴을 부드럽게 잇는다. 아래 값 = 지연 510ms + 사이클 합 + 여유 ~90ms.
+ */
+const SHUFFLE_MS = 2900; // 2사이클: 510 + 2300 + 여유
+const SHUFFLE_REPEAT_MS = 1750; // 다시 뽑기: 1사이클(510 + 1150) + 여유 (both spreads)
 
 /* One-card path (Fable timings) */
 const ONE_CHARGE_MS = 800; // gold light gathers on the chosen card
@@ -94,6 +102,8 @@ export default function DrawPage() {
   const [chargingFanId, setChargingFanId] = useState<number | null>(null);
   const [flashing, setFlashing] = useState(false);
   const [count, setCount] = useState<number | null>(null);
+  // 셔플 사이클 수. CSS(--shuf-cycles)와 타이머가 같은 값을 봐야 끊김이 없다.
+  const [shuffleCycles, setShuffleCycles] = useState(2);
   const [readingRecord, setReadingRecord] = useState<ReadingRecord | null>(null);
   const recordedRef = useRef(false);
   const watchdogRef = useRef<number | null>(null);
@@ -143,9 +153,10 @@ export default function DrawPage() {
     setPhase("shuffling");
     // 통일된 셔플: 오늘의 카드·3카드 모두 부채꼴을 펼친 채 카드 자체가 섞인다
     // (is-shuffling). 별도 셔플 스테이지 오버레이 없이 같은 연출로 이어진다.
-    const ms = hasShuffledRef.current ? SHUFFLE_REPEAT_MS : SHUFFLE_MS;
+    const repeat = hasShuffledRef.current;
+    setShuffleCycles(repeat ? 1 : 2);
     hasShuffledRef.current = true;
-    later(ms, () => beginPicking());
+    later(repeat ? SHUFFLE_REPEAT_MS : SHUFFLE_MS, () => beginPicking());
   }, [beginPicking, clearTimers, later]);
 
   useEffect(
@@ -184,7 +195,8 @@ export default function DrawPage() {
         category: f,
         deckId,
         cards: slugs,
-        orientations: slugs.map(() => "upright" as const),
+        // 방향은 기록 시점에 뽑는다. uid()와 같은 이유로 보안 난수를 쓴다.
+        orientations: pickOrientations(slugs.length, secureRand),
       });
       setCount(collectedCount(result.store, deckId));
       setReadingRecord(result.record);
@@ -237,11 +249,13 @@ export default function DrawPage() {
       setChargingFanId(fanId);
       armRevealWatchdog([slug], spread, focus, ONE_WATCHDOG_MS);
       later(ONE_CHARGE_MS, () => {
+        // 뒤집기 전에 기록한다 — 방향이 여기서 정해지므로, 늦게 부르면 역방향
+        // 카드가 정방향으로 뒤집힌 뒤 결과 화면에서 튄다. 3장 경로도 같은 순서다.
+        record([slug], spread, focus);
         setFlippingFanId(fanId);
         setPhase("flipping");
       });
       later(ONE_REVEAL_MS, () => {
-        record([slug], spread, focus);
         setPhase((p) => (p === "flipping" ? "revealed" : p));
       });
       return;
@@ -394,6 +408,9 @@ export default function DrawPage() {
                                 card={card}
                                 deckId={deckId}
                                 sizes="110px"
+                                orientation={
+                                  readingRecord?.orientations[i] ?? "upright"
+                                }
                               />
                             </div>
                           </motion.div>
@@ -414,12 +431,18 @@ export default function DrawPage() {
               </div>
             ) : null}
 
+            {/* 두 스프레드 모두 같은 하단 고정 레이아웃 — 셔플 중(슬롯 줄 없음)에도
+                더미가 1장과 같은 자리에 있고, 고정 높이 + overflow-hidden 박스가
+                차지 리프트를 위로 잘라내던 문제가 없어진다. 3장은 슬롯 줄이
+                공간을 쓰므로 모바일 최소 높이와 데스크톱 높이만 낮춘다
+                (430이면 슬롯 줄에 밀려 카드가 폴드 아래로 내려간다). */}
             <div
               className={`draw-fan ${
                 spread === "three"
-                  ? "fan-three mt-4 h-[250px] flex-none overflow-hidden lg:h-[430px] lg:overflow-visible"
+                  ? "fan-three mt-2.5 min-h-[300px] flex-1 overflow-hidden lg:h-[350px] lg:min-h-0 lg:flex-none lg:overflow-visible"
                   : "mt-2.5 min-h-[380px] flex-1 overflow-hidden lg:h-[430px] lg:min-h-0 lg:flex-none lg:overflow-visible"
               } ${phase === "shuffling" ? "is-shuffling" : ""}`}
+              style={{ "--shuf-cycles": shuffleCycles } as React.CSSProperties}
             >
               {fan.map((fanId, i) => {
                   const offset = i - (fan.length - 1) / 2;
@@ -499,6 +522,9 @@ export default function DrawPage() {
                                 card={deck[0]}
                                 deckId={deckId}
                                 sizes="170px"
+                                orientation={
+                                  readingRecord?.orientations[0] ?? "upright"
+                                }
                               />
                             ) : null}
                           </div>
@@ -524,6 +550,7 @@ export default function DrawPage() {
             card={deck[0]}
             deckId={deckId}
             focus={focus}
+            orientations={readingRecord?.orientations}
             collectionCount={count}
             reducedMotion={!!reducedMotion}
             localDate={readingRecord?.localDate ?? null}
@@ -533,6 +560,7 @@ export default function DrawPage() {
             picked={deck.slice(0, 3)}
             deckId={deckId}
             focus={focus}
+            orientations={readingRecord?.orientations}
             collectionCount={count}
             reducedMotion={!!reducedMotion}
             localDate={readingRecord?.localDate ?? null}

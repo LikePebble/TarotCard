@@ -193,15 +193,11 @@ body {
   translate: -50% calc(var(--fan-lift, 0px) - 26px);
   z-index: 30;
 }
-/* Three-card mode: shallow, even arc tucked directly under the slot row.
-   Smaller step and deeper origin so 100px cards do not pile up or clip. */
+/* Three-card mode: shallower step for 100px cards. Positioning is the same
+   bottom-anchored scheme as one-card — the pile must sit in the same spot in
+   both spreads (top-anchoring inside the clipped box cut cards off on lift). */
 .draw-fan.fan-three {
   --fan-step: 9deg;
-}
-.draw-fan.fan-three .fan-card {
-  bottom: auto;
-  top: 10px;
-  transform-origin: 50% 130% !important;
 }
 @media (min-width: 1024px) {
   .draw-fan {
@@ -210,11 +206,6 @@ body {
   .draw-fan .fan-card {
     bottom: 8px;
     transform-origin: 50% 120% !important;
-  }
-  .draw-fan.fan-three .fan-card {
-    bottom: auto;
-    top: 10px;
-    transform-origin: 50% 130% !important;
   }
 }
 
@@ -373,10 +364,14 @@ body {
 /* Keyframes use the individual translate/rotate properties to match the fan
    positioning scheme (see .draw-fan .fan-card). Visual result is identical
    to the source branch's transform keyframes. */
+/* 반복 횟수는 --shuf-cycles로 JS와 공유한다. 셔플 종료 타이머는 이 애니메이션이
+   전부 끝난 뒤에 걸려야 한다 — 실행 중인 애니메이션이 있는 속성은 클래스를 떼도
+   전이가 발화하지 않아(스펙), 부채꼴로 한 프레임에 튄다. 끝난 뒤에 떼면 아래
+   .fan-card의 rotate/translate 전이가 스택 → 부채꼴을 부드럽게 잇는다. */
 .draw-fan.is-shuffling .fan-card {
   translate: -50% calc(var(--shuf-i) * -2.5px);
   rotate: 0deg;
-  animation: shuf-cycle 1.15s ease-in-out 2;
+  animation: shuf-cycle 1.15s ease-in-out var(--shuf-cycles, 2);
   animation-delay: calc(var(--shuf-i) * 85ms);
   transition: none;
 }
