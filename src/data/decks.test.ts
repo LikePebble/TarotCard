@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decks, deckById } from "@/data/decks";
+import { decks, deckById, decksByDefaultFirst } from "@/data/decks";
 
 describe("decks", () => {
   it("id는 서로 겹치지 않고, deckById는 각 id의 덱을 돌려준다", () => {
@@ -16,5 +16,29 @@ describe("decks", () => {
     for (const deck of decks.filter((d) => d.id !== "classic")) {
       expect(deck.cardBack).toBe(`/decks/${deck.id}/card-back.webp`);
     }
+  });
+});
+
+describe("decksByDefaultFirst", () => {
+  it("기본 덱을 맨 앞에 놓는다", () => {
+    const sorted = decksByDefaultFirst("k-pop-museverse");
+    expect(sorted[0].id).toBe("k-pop-museverse");
+  });
+
+  it("나머지는 원래 순서를 유지한다", () => {
+    const original = decks.filter((d) => d.active).map((d) => d.id);
+    const sorted = decksByDefaultFirst("k-pop-museverse").map((d) => d.id);
+    expect(sorted.slice(1)).toEqual(
+      original.filter((id) => id !== "k-pop-museverse"),
+    );
+  });
+
+  it("모르는 id면 원래 순서를 그대로 돌려준다", () => {
+    const original = decks.filter((d) => d.active).map((d) => d.id);
+    expect(decksByDefaultFirst("없는-덱").map((d) => d.id)).toEqual(original);
+  });
+
+  it("활성 덱만 담는다", () => {
+    expect(decksByDefaultFirst("classic").every((d) => d.active)).toBe(true);
   });
 });
