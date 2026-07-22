@@ -12,6 +12,7 @@ import {
   type ReadingRecord,
   type SpreadType,
 } from "@/lib/store";
+import { isDevTools, resetTodayReadings, todayReadingCount } from "@/lib/dev-reset";
 
 const panel =
   "flex w-full flex-col items-start gap-[18px] rounded-2xl border border-line bg-ink-1 p-6 text-left hover:border-line-gold lg:min-h-[330px] lg:justify-between lg:rounded-[14px] lg:p-10";
@@ -92,6 +93,7 @@ export function ReadingChoice() {
 
   const blockedOne = store ? blockingReading(store, "one", now) : undefined;
   const blockedThree = store ? blockingReading(store, "three", now) : undefined;
+  const todayCount = todayReadingCount(store);
 
   return (
     <div className="mt-[18px] flex flex-col gap-[18px] lg:mt-12 lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-5">
@@ -135,6 +137,16 @@ export function ReadingChoice() {
           className="aspect-[2/3.4] w-11 lg:w-[74px]"
         />
       </TypeCard>
+
+      {isDevTools && todayCount > 0 ? (
+        <button
+          type="button"
+          onClick={() => resetTodayReadings()}
+          className="justify-self-start text-[12px] text-muted underline underline-offset-4 hover:text-cream lg:col-span-2"
+        >
+          [개발] 오늘 리딩 {todayCount}건 리셋
+        </button>
+      ) : null}
     </div>
   );
 }
