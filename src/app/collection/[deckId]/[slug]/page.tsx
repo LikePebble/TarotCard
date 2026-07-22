@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CaretLeft, CaretRight } from "@phosphor-icons/react/dist/ssr";
+import { CaretLeft } from "@phosphor-icons/react/dist/ssr";
 import { CardArtViewer } from "@/components/CardArtViewer";
 import { CollectHistory } from "@/components/CollectHistory";
+import { CollectedCardNav } from "@/components/CollectedCardNav";
 import { DesktopNav } from "@/components/SiteNav";
 import { cardBySlug, cards, romanNumeral } from "@/data/cards";
 import { decks } from "@/data/decks";
@@ -58,12 +59,6 @@ export default async function CardDetailPage({
       : card.en.description;
   const paragraphs = description.split("\n\n");
   const enParagraphs = card.en.description.split("\n\n");
-
-  const index = cards.indexOf(card);
-  const prev = cards[(index + cards.length - 1) % cards.length];
-  const next = cards[(index + 1) % cards.length];
-  const prevNameKo = koCards[prev.slug]?.nameKo ?? prev.nameEn;
-  const nextNameKo = koCards[next.slug]?.nameKo ?? next.nameEn;
 
   const arcanaLabel =
     card.arcana === "major"
@@ -122,22 +117,7 @@ export default async function CardDetailPage({
               </div>
             </details>
             <CollectHistory slug={card.slug} deckId={deck.id} />
-            <div className="mt-7 flex justify-between border-t border-line pt-5 lg:mt-14 lg:pt-7">
-              <Link
-                href={`/collection/${deck.id}/${prev.slug}`}
-                className="inline-flex min-h-11 items-center gap-1.5 text-[13.5px] text-muted hover:text-gold-soft lg:text-[15px]"
-              >
-                <CaretLeft size={14} aria-hidden />
-                {prevNameKo} {prev.nameEn}
-              </Link>
-              <Link
-                href={`/collection/${deck.id}/${next.slug}`}
-                className="inline-flex min-h-11 items-center gap-1.5 text-[13.5px] text-muted hover:text-gold-soft lg:text-[15px]"
-              >
-                {nextNameKo} {next.nameEn}
-                <CaretRight size={14} aria-hidden />
-              </Link>
-            </div>
+            <CollectedCardNav deckId={deck.id} slug={card.slug} />
           </div>
         </div>
       </main>
