@@ -8,6 +8,7 @@ import {
   blockingReading,
   setPendingSpread,
   useArcanaStore,
+  useSelectedDeck,
   type ReadingRecord,
   type SpreadType,
 } from "@/lib/store";
@@ -81,6 +82,7 @@ function TypeCard({
 export function ReadingChoice() {
   const router = useRouter();
   const { store } = useArcanaStore();
+  const { deckId } = useSelectedDeck();
   const [now] = useState(() => new Date());
 
   const choose = (spread: SpreadType) => {
@@ -101,7 +103,11 @@ export function ReadingChoice() {
         ariaBase="오늘의 카드"
         onStart={() => choose("one")}
       >
-        <CardBack className="aspect-[2/3.4] w-[52px] lg:w-24" />
+        <CardBack
+          deckId={deckId}
+          sizes="96px"
+          className="aspect-[2/3.4] w-[52px] lg:w-24"
+        />
       </TypeCard>
 
       <TypeCard
@@ -113,9 +119,21 @@ export function ReadingChoice() {
         ariaBase="과거 현재 미래"
         onStart={() => choose("three")}
       >
-        <CardBack className="aspect-[2/3.4] w-11 lg:w-[74px]" />
-        <CardBack className="aspect-[2/3.4] w-11 lg:w-[74px]" />
-        <CardBack className="aspect-[2/3.4] w-11 lg:w-[74px]" />
+        <CardBack
+          deckId={deckId}
+          sizes="74px"
+          className="aspect-[2/3.4] w-11 lg:w-[74px]"
+        />
+        <CardBack
+          deckId={deckId}
+          sizes="74px"
+          className="aspect-[2/3.4] w-11 lg:w-[74px]"
+        />
+        <CardBack
+          deckId={deckId}
+          sizes="74px"
+          className="aspect-[2/3.4] w-11 lg:w-[74px]"
+        />
       </TypeCard>
     </div>
   );

@@ -1,3 +1,4 @@
+import kpopMuseverse from "../../public/decks/k-pop-museverse/deck.json";
 import wolhaBiwon from "../../public/decks/wolha-biwon/deck.json";
 import type { Card } from "./cards";
 
@@ -7,6 +8,8 @@ export type Deck = {
   nameKo: string;
   active: boolean;
   price?: number;
+  /** 덱 고유 카드 뒷면 이미지. 없는 덱은 내장 CSS 뒷면으로 떨어진다. */
+  cardBack?: string;
 };
 
 export const decks: Deck[] = [
@@ -19,6 +22,13 @@ export const decks: Deck[] = [
     id: wolhaBiwon.id,
     nameKo: wolhaBiwon.nameKo,
     active: true,
+    cardBack: `/decks/${wolhaBiwon.id}/card-back.webp`,
+  },
+  {
+    id: kpopMuseverse.id,
+    nameKo: kpopMuseverse.nameKo,
+    active: true,
+    cardBack: `/decks/${kpopMuseverse.id}/card-back.webp`,
   },
 ];
 

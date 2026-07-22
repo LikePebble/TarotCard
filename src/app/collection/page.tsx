@@ -163,7 +163,11 @@ export default function CollectionPage() {
               </Link>
             ) : (
               <div key={card.slug}>
-                <CardBack className="aspect-[2/3.4] w-full" />
+                <CardBack
+                  deckId={deckId}
+                  sizes="(min-width: 1024px) 190px, 33vw"
+                  className="aspect-[2/3.4] w-full"
+                />
                 {label}
               </div>
             );

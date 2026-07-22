@@ -380,7 +380,11 @@ export default function DrawPage() {
                                 : i * THREE_FLIP_STAGGER_S,
                             }}
                           >
-                            <CardBack className="absolute inset-0 [backface-visibility:hidden]" />
+                            <CardBack
+                              deckId={deckId}
+                              sizes="110px"
+                              className="absolute inset-0 [backface-visibility:hidden]"
+                            />
                             <div className="absolute inset-0 overflow-hidden rounded-xl bg-ink-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
                               <CardArt
                                 card={card}
@@ -480,7 +484,11 @@ export default function DrawPage() {
                           animate={{ rotateY: isFlipping ? 180 : 0 }}
                           transition={{ duration: ONE_FLIP_MS / 1000 }}
                         >
-                          <CardBack className="absolute inset-0 [backface-visibility:hidden]" />
+                          <CardBack
+                            deckId={deckId}
+                            sizes="170px"
+                            className="absolute inset-0 [backface-visibility:hidden]"
+                          />
                           <div className="absolute inset-0 overflow-hidden rounded-xl bg-ink-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
                             {isFlipping && deck[0] ? (
                               <CardArt

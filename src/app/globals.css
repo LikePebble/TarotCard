@@ -65,6 +65,15 @@ body {
   transform: translate(-50%, -50%) rotate(45deg);
   border: 1px solid rgba(201, 162, 75, 0.55);
 }
+/* 덱 고유 뒷면 아트: 장식은 지우고 아트만 둥근 모서리에 맞춰 자른다.
+   그라데이션·금테는 남긴다 — draw-fan hover가 이 테두리를 애니메이션한다. */
+.cardback--art::before,
+.cardback--art::after {
+  content: none;
+}
+.cardback--art {
+  overflow: hidden;
+}
 }
 
 /* Pill buttons */
