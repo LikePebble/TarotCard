@@ -53,8 +53,8 @@ export const reversedCards: Record<string, ReversedText> = {
     en: "Reversed, the Hermit suggests that retreat has drifted into hiding. What began as careful reflection may have become caution without a reason, and fear rather than wisdom may be shading the lantern.\n\nAsk yourself again what the solitude was for. If it has given you what you needed, it may be time to open the door a little. The lantern was never meant to be hidden away — it exists to light the next step.",
   },
   "wheel-of-fortune": {
-    ko: "역방향의 운명의 수레바퀴는 흐름이 멈춘 것이 아니라 오히려 넘치게 도는 상태를 비춥니다. 들어오는 것이 많아 풍요롭지만, 그만큼 필요 이상의 것들까지 함께 쌓이는 때일 수 있습니다.\n\n지금은 더 얻으려 하기보다 가려내는 눈이 필요합니다. 무엇이 정말 남길 것이고 무엇이 스쳐 가는 것인지 살펴보세요. 넘치는 시기를 잘 추린 사람이 다음 순환도 가볍게 맞이합니다.",
-    en: "Reversed, the Wheel of Fortune does not stop turning — if anything, it gives more than was asked for. Abundance arrives, and with it a surplus: more options, more input, more of everything than one season can hold.\n\nThe skill needed now is not gathering but sorting. Ask what is truly worth keeping and what is simply passing through. Those who sift a plentiful season well step into the next turn of the wheel travelling light.",
+    ko: "역방향의 운명의 수레바퀴는 흐름이 내 쪽으로 돌지 않는 시기를 비춥니다. 일이 밀리거나 뜻대로 풀리지 않고, 내가 어찌할 수 없는 곳에서 중요한 것이 정해지는 듯한 때입니다. 벗어난 줄 알았던 자리로 다시 돌아온 기분이 들기도 합니다.\n\n다만 수레바퀴는 멈추는 물건이 아닙니다. 지금의 국면도 지나갑니다. 힘으로 돌려세우려 애쓰기보다 쥐고 있던 것을 조금 늦추고, 달라진 조건에 맞게 방향을 다시 잡아 보세요. 이 시기를 자기 탓으로 돌릴 일은 아닙니다.",
+    en: "Reversed, the Wheel of Fortune marks a stretch where the turn is not going your way. Things stall, plans slip, and what matters seems to be decided somewhere out of reach — sometimes you land back at a place you thought you had already left.\n\nStill, a wheel is not a thing that stops. This stretch passes too. Rather than forcing it round, loosen your grip a little and set your direction by the conditions as they actually are. None of this is a verdict on you.",
   },
   "justice": {
     ko: "역방향의 정의는 저울이 한쪽으로 기울어 있는 상태를 비춥니다. 판단에 선입견이 섞여 있거나, 자신이나 누군가를 필요 이상으로 가혹하게 재고 있는 때일 수 있습니다. 일이 절차에 얽혀 더디게 풀리기도 합니다.\n\n결론을 내리기 전에 저울 위에 무엇을 올렸는지 다시 살펴보세요. 공정함은 엄격함이 아니라 치우침 없음에서 옵니다. 특히 자신에게 내리는 판결이 너무 무겁지 않은지 확인해 보시기 바랍니다.",
@@ -161,8 +161,8 @@ export const reversedCards: Record<string, ReversedText> = {
     en: "Reversed, the Ace of Pentacles shows abundance weighing on you instead of grounding you. An opportunity may arrive with the joy calculated out of it, or keeping what you have may have grown larger than the life it was meant to serve.\n\nMoney and security are not the problem. Just ask again what they were for. When the purpose finds its place, the same prosperity begins to feel different.",
   },
   "two-of-pentacles": {
-    ko: "역방향의 펜타클 2는 균형 잡는 솜씨가 한계에 다다른 상태를 비춥니다. 괜찮은 척 웃고 있지만 실은 버거운 때이고, 여러 일을 굴리는 것이 재주가 아니라 의무가 되어 버린 때이기도 합니다.\n\n버티는 것만이 능력은 아닙니다. 모든 공을 계속 띄워 둘 필요는 없습니다. 하나쯤 내려놓아도 무너지지 않습니다. 어느 것이 정말 내 손에 있어야 하는지부터 다시 골라 보세요.",
-    en: "Reversed, the Two of Pentacles shows the juggling act reaching its limit. The smile may be held in place while the load underneath has become too much, and keeping everything moving has turned from a skill into an obligation.\n\nNot every ball needs to stay in the air. Setting one down will not bring the rest crashing. Start by choosing again which things truly belong in your hands.",
+    ko: "역방향의 펜타클 2는 균형 잡는 솜씨가 한계에 다다른 상태를 비춥니다. 괜찮은 척 웃고 있지만 실은 버거운 때이고, 여러 일을 굴리는 것이 재주가 아니라 의무가 되어 버린 때이기도 합니다. 시간이든 돈이든 나가는 쪽이 많아 셈이 빠듯해지기도 합니다.\n\n버티는 것만이 능력은 아닙니다. 모든 공을 계속 띄워 둘 필요는 없습니다. 하나쯤 내려놓아도 무너지지 않습니다. 어느 것이 정말 내 손에 있어야 하는지부터 다시 골라 보세요.",
+    en: "Reversed, the Two of Pentacles shows the juggling act reaching its limit. The smile may be held in place while the load underneath has become too much, and keeping everything moving has turned from a skill into an obligation. Time or money, more is going out than coming in.\n\nEnduring is not the only competence. Not every ball needs to stay in the air, and letting one down will not bring the rest of it crashing. Start by choosing which of them truly belongs in your hands.",
   },
   "three-of-pentacles": {
     ko: "역방향의 펜타클 3은 함께 짓는 일이 제 높이에 이르지 못한 상태를 비춥니다. 노력이 그럭저럭에 머물고 있거나, 협업이 겉돌아 각자 다른 방향을 보고 있는 때이기도 합니다. 사소한 일에 힘을 쓰느라 정작 중요한 완성도가 뒤로 밀렸을 수도 있습니다.\n\n기준을 다시 세우는 데서 시작해 보세요. 무엇이 좋은 결과인지 함께 합의하고 나면, 같은 손들이 훨씬 나은 것을 지어 올립니다.",
