@@ -85,7 +85,7 @@ export async function pushLocalStore(
   const rows = store.readings.map((r) => readingToRow(userId, r));
   const { error } = await supabase
     .from("readings")
-    .upsert(rows, { onConflict: "id" });
+    .upsert(rows, { onConflict: "user_id,id" });
   if (error) {
     console.error("[sync] 리딩 push 실패:", error.message);
     return "failed";

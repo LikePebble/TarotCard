@@ -9,7 +9,7 @@ create table if not exists public.profiles (
 );
 
 create table if not exists public.readings (
-  id text primary key, -- 클라 생성 id(신규는 uuid, 레거시 마이그레이션은 문자열). upsert 멱등키.
+  id text not null, -- 클라 생성 id(신규는 uuid, 레거시 마이그레이션은 문자열). 사용자 범위 안에서의 upsert 멱등키(전역 유일 아님).
   user_id uuid not null references auth.users(id) on delete cascade,
   created_at timestamptz not null default now(),
   local_date date not null,
@@ -19,7 +19,8 @@ create table if not exists public.readings (
   category text not null,
   deck_id text not null,
   cards jsonb not null,
-  orientations jsonb not null
+  orientations jsonb not null,
+  primary key (user_id, id)
 );
 create index if not exists readings_user_idx on public.readings (user_id, local_date);
 
