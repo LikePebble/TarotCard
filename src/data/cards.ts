@@ -234,7 +234,7 @@ export const cards: Card[] = [
     image: "/tarotdeck/themoon.jpeg",
     en: {
       description:
-        "The Moon represents the unseen, the intuitive, and the parts of life that are not yet clear. It speaks of dreams, imagination, and the uncertainty that asks us to feel our way forward rather than reason alone.\n\nThis card invites you to honour your emotions and to be patient with what is still taking shape. Not everything needs to be explained right now. Trust what you sense, even when the path is dim.",
+        "The Moon represents what has not yet come into focus, the realm where intuition and dreams move ahead of reason. This is not always a time to trust things exactly as they appear — shadows loom larger than they are in the fog, and there can be real distance between how a situation looks and what is actually happening.\n\nHonour your feelings, but hold off on quick conclusions. Question what you see one more time, and take small, reversible steps until the picture clears. Even in the mist, this way you do not lose the path.",
     },
   },
   {

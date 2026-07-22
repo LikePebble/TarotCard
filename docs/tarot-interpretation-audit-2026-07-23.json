@@ -1,0 +1,940 @@
+{
+ "the-fool": {
+  "upright": {
+   "verdict": "drift",
+   "note": "Waite/Mathers/Papus 모두 '어리석음·경솔함·광기'를 핵심으로 두지만, 우리는 현대 표준 해석(새로운 시작·순수함)을 채택함. 20세기 이후 통용 관습이라 방어 가능.",
+   "sourcesAgreeing": 0
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "역방향(주저·불안정·부주의)과 '아직 발을 떼지 못함' 표현이 잘 맞음.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-magician": {
+  "upright": {
+   "verdict": "ok",
+   "note": "Waite 본문은 이례적으로 '질병·손실'도 섞지만 Mathers/Papus는 의지·기량으로 일치, 우리 텍스트와 부합.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "의지 약화·불안(Waite 'disquiet', Mathers 'weakness of will')과 잘 맞음.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-high-priestess": {
+  "upright": {
+   "verdict": "ok",
+   "note": "신비·지혜·직관 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "감정 과열(passion/ardour)과 피상적 앎(surface knowledge)이 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-empress": {
+  "upright": {
+   "verdict": "drift",
+   "note": "세 출처 모두 '행동·주도권(action/initiative)'을 핵심으로 두는데(옛 프랑스 전통), 우리는 현대 표준인 '풍요·양육·자연'으로 재해석. 현대 타로 교습에서 거의 보편적인 관습이라 방어 가능.",
+   "sourcesAgreeing": 0
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "오히려 Waite 역방향(빛·진실·얽힌 일이 풀림·동요)과 정확히 일치 — 정방향보다 더 좋은 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-emperor": {
+  "upright": {
+   "verdict": "ok",
+   "note": "구조·권위·안정 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "관대함(Waite benevolence)과 미숙함/정체(immature/stoppage) 둘 다 반영, 정합도 높음.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-hierophant": {
+  "upright": {
+   "verdict": "drift",
+   "note": "출처들은 '결혼·자비·친절'을 핵심으로 두지만, 우리는 현대 표준(전통·제도·스승)으로 재해석. 위상학적 이미지(교황과 두 신도) 기반의 보편적 현대 해석이라 방어 가능.",
+   "sourcesAgreeing": 0
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "'over-kindness, weakness'가 '지나친 다정함, 자기 목소리를 잃음'으로 정확히 반영됨 — 정방향보다 더 좋은 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-lovers": {
+  "upright": {
+   "verdict": "ok",
+   "note": "매력·사랑·시련 극복 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "실패한 계획·불화·잘못된 선택 테마 부드럽게 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-chariot": {
+  "upright": {
+   "verdict": "ok",
+   "note": "결단력·승리·장애물 극복 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "다툼·분쟁·정체(바퀴가 헛돎) 테마 일치.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "strength": {
+  "upright": {
+   "verdict": "ok",
+   "note": "출처는 '힘·용기·행동'을 강조하지만 이미지 기반의 '부드러운 내적 힘' 해석은 방향이 어긋나지 않음(용기·기개는 그대로 유지).",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "권력 남용(force where patience needed)과 기개 상실(want of fortitude) 둘 다 반영, 정합도 높음.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-hermit": {
+  "upright": {
+   "verdict": "ok",
+   "note": "신중함·성찰·고독 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "은폐·근거 없는 조심성·두려움(concealment/unreasoned caution/fear)이 정확히 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "wheel-of-fortune": {
+  "upright": {
+   "verdict": "ok",
+   "note": "'운명·행운·성공'이 '순환·변화의 리듬'으로 확장되었으나 반대 방향은 아님.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "Waite 역방향(증가·풍요·과잉)을 그대로 살려 '넘치게 도는 상태'로 정확히 재현. Mathers 역방향(불운)과는 갈리지만 출처끼리도 불일치하는 지점.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "justice": {
+  "upright": {
+   "verdict": "ok",
+   "note": "공정·진실·행동의 결과 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "편견·과도한 엄격함·절차 지연이 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-hanged-man": {
+  "upright": {
+   "verdict": "ok",
+   "note": "멈춤·희생·새로운 시야 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "이기심·군중(the crowd)에 이끌림이 '남의 시선에 매달림'으로 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "death": {
+  "upright": {
+   "verdict": "drift",
+   "note": "Waite/Mathers는 파괴·부고·'더 나쁜 쪽으로의 변화'를 명시하는데, 우리는 완전히 긍정적인 통과의례로 재구성. 현대 타로에서 가장 흔한 재해석(문자 그대로의 죽음이 아니다)이라 방어 가능.",
+   "sourcesAgreeing": 0
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "Waite 역방향(무기력·잠·희망 소실)과 '멈춰서 무거워짐, 흐릿해지는 희망'이 거의 직역 수준으로 일치.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "temperance": {
+  "upright": {
+   "verdict": "ok",
+   "note": "절제·중용·조화 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "어울리지 않는 조합·경쟁하는 관심사 테마가 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-devil": {
+  "upright": {
+   "verdict": "drift",
+   "note": "출처들은 '힘·숙명(force/fatality)'을 핵심으로 두는데, 우리는 현대 표준인 '집착·환상·속박'으로 재해석. 웨이트-스미스 카드 이미지(사슬에 묶인 인물)에 기반한 보편적 현대 해석이라 방어 가능.",
+   "sourcesAgreeing": 0
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "사소한 습관·자잘한 매임이라는 방향은 상충하지 않음, 부드럽게 확장.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "the-tower": {
+  "upright": {
+   "verdict": "ok",
+   "note": "재앙·파국이라는 핵심은 유지한 채 '더 정직한 것이 드러난다'는 위안을 덧붙임 — 방향 반대는 아님.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "억눌린 붕괴·압력이 쌓이는 상태로 자연스럽게 확장.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "the-star": {
+  "upright": {
+   "verdict": "ok",
+   "note": "Mathers/Papus 및 Waite의 대안 해석(희망) 모두와 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "자만 또는 무력감으로 빛과의 연결이 흐려짐, 방향 일치.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "the-moon": {
+  "upright": {
+   "verdict": "drift",
+   "note": "세 출처 모두 '숨은 적·위험·기만'을 핵심에 둔다. 우리는 그 위협적 뉘앙스를 완전히 걷어내고 '보이지 않는 것·직관·꿈'이라는 온화한 신비로만 남겨, 셋 다 강조하는 '보이는 대로 믿을 수 없다'는 경고가 사라졌다. 톤을 겁주지 않게 유지하는 원칙은 지키되, 이 카드는 드리프트 폭이 다른 카드보다 커서 대체 문안을 제안함.",
+   "sourcesAgreeing": 0,
+   "suggestedKo": "달은 아직 또렷해지지 않은 것들, 직관과 꿈이 이성보다 앞서 움직이는 영역을 상징합니다. 보이는 대로 다 믿기는 어려운 때이기도 합니다. 안개 속에서는 그림자가 실제보다 크게 보이고, 겉모습과 실제 사정 사이에 틈이 생기기 쉽습니다.\n\n지금은 감정을 존중하되 성급한 결론은 미루어 두세요. 눈에 보이는 것을 한 번 더 의심해 보고, 확실해질 때까지 작은 걸음으로 나아가면 안개 속에서도 길을 잃지 않을 수 있습니다.",
+   "suggestedEn": "The Moon represents what has not yet come into focus, the realm where intuition and dreams move ahead of reason. This is not always a time to trust things exactly as they appear — shadows loom larger than they are in the fog, and there can be real distance between how a situation looks and what is actually happening.\n\nHonour your feelings, but hold off on quick conclusions. Question what you see one more time, and take small, reversible steps until the picture clears. Even in the mist, this way you do not lose the path."
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "불안정성·잦은 변덕·침묵(silence 직접 언급)이 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-sun": {
+  "upright": {
+   "verdict": "ok",
+   "note": "기쁨·명료함·행복 테마 강하게 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "약화된 형태의 같은 행복(구름에 가려진 해)로 자연스럽게 확장.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "judgement": {
+  "upright": {
+   "verdict": "ok",
+   "note": "각성·성찰·부름에 응답 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "나약함(pusillanimity→'마음이 작아짐')과 결과 지연(postponement)이 정확히 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "the-world": {
+  "upright": {
+   "verdict": "ok",
+   "note": "완성·성취·의미있는 순환의 마무리 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "마무리되지 못한 순환, 미뤄진 마지막 한 걸음으로 자연스럽게 반영.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "ace-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "영감·새 기운·창조의 불꽃 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "Waite 역방향의 'clouded joy'가 '흐린 기운 섞인 기쁨'으로 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "two-of-wands": {
+  "upright": {
+   "verdict": "drift",
+   "note": "출처는 '부·풍요·장엄함'을 핵심으로 두는데(또는 Waite 대안으로 신체적 고통), 우리는 이미지(영지를 내다보는 영주) 기반의 '계획·비전'으로 재해석. 방향이 반대는 아니고 카드 그림 자체와는 부합.",
+   "sourcesAgreeing": 1
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "놀라움·경이·불안(surprise/wonder/trouble/fear)이 정확히 반영됨.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "three-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "확장·무역·발견 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "역경의 종식(end of troubles)이 '어려움이 걷혀감'으로 잘 반영.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "four-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "축하·화합·번영 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "Waite가 명시한 '뜻이 바뀌지 않는다'는 점을 텍스트에서 직접 언급하며 정확히 반영 — 모범적인 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "five-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "마찰·경쟁·모의 전투 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "소송·다툼·트집으로 확대된 갈등이 잘 반영됨.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "six-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "승리·낭보·인정 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "적에 대한 두려움·불신·지연이 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "seven-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "자리 지킴·용기·유리한 고지 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "당혹·망설임·불안(perplexity/indecision)이 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "eight-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "빠른 움직임·소식·진행 속도 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "질투의 화살(arrows of jealousy)이 '가까운 곳에 떨어지는 화살'로 이미지까지 살려 정확히 반영 — 뛰어난 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "nine-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "회복력·최후의 저항·경계 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "장애물·역경이 잇달아 닥침이 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "ten-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "Mathers만 상반된 '자신감·명예'를 제시하나 Waite/Book T와는 부담·억압으로 일치.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "반목·난관·음모가 '얽힌 사정'으로 잘 반영됨.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "page-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "출처는 '메신저·전령'을 강조하지만 열정·모험심도 상충하지 않는 확장.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "나쁜 소식·우유부단(evil news/indecision)이 '어수선한 말·결정 미룸'으로 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "knight-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "출처의 '출발·이주'라는 문자적 여행 테마 대신 Book T의 기질 묘사(fierce/impetuous)를 반영한 현대적 해석.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "단절·불화(rupture/discord)가 '중간에 끊긴 길, 균열'로 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "queen-of-wands": {
+  "upright": {
+   "verdict": "drift",
+   "note": "Waite/Mathers는 '시골 여인·돈에 대한 애착·인색'을 강조하는데, 우리는 Book T의 기질 묘사(매력·설득력·다정함)를 따라 '따뜻함과 카리스마'로 재해석. Book T가 뒷받침하므로 방어 가능.",
+   "sourcesAgreeing": 1
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "검소·실용(economical)과 질투·반목(jealousy/opposition) 둘 다 반영, 정합도 높음.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "king-of-wands": {
+  "upright": {
+   "verdict": "ok",
+   "note": "출처의 '정직한 시골 사람' 대신 Book T 기질(fierce/impetuous)에 가까운 '비전 있는 리더'로 재해석, 방향은 상충하지 않음.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "'선하나 엄격함(good but severe)'이 '선한 뜻이 엄격한 모습으로'로 정확히 반영 — 뛰어난 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "ace-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "감정의 개화·기쁨·풍요 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "거짓된 마음·불안정이 '막힘, 겉과 속의 어긋남'으로 반영.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "two-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "동반자 관계·사랑·우정·친밀감 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "Waite는 역방향 항목이 없으나(정방향 막힘으로 대체한다고 파일 헤더에 명시) Mathers 역방향(crossed desires/obstacles)과 잘 맞음.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "three-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "축하·우정·기쁨 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "감각적 과잉(excess in physical enjoyment)이 '과해진 기쁨'으로 반영.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "four-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "권태·성찰·놓치고 있는 축복 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "새로운 인연·소식(novelty/new acquaintance)이 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "five-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "Waite의 이미지 설명('two are left')을 '두 개의 컵은 여전히 서 있다'로 그대로 살림 — 뛰어난 정합. Mathers만 결혼/결합으로 다른 계열.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "소식·재회(news/return)가 정확히 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "six-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "추억·과거·어린 시절 테마 정확히 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "미래·다가올 것(the future, shortly)이 직접적으로 반영 — 뛰어난 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "seven-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "선택지·공상·비영속성 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "의지·결심·계획(will/plan/decision)이 정확히 반영 — 뛰어난 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "eight-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "Waite는 모순적이나 Book T(thrown aside, journeying)가 '떠남·내려놓음'을 뒷받침.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "Waite/Mathers 역방향의 '큰 기쁨·잔치'가 '되살아난 기쁨, 축하할 일'로 정확히 반영 — Waite 역방향이 더 밝은 대표 사례.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "nine-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "만족·소원 성취 테마('소원 카드') 정확히 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "결함·불완전함(faults/imperfections)이 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "ten-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "감정적 조화·가족·지속되는 행복 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "거짓된 화목·불화(false heart/strife)가 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "page-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "창조적 영감·소식·순한 마음 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "유혹·기만·술책(deception/artifice)이 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "knight-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "낭만·초대·이상 추구 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "속임수·사기(trickery/fraud)가 '말은 아름다운데 행동이 따르지 않음'으로 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "queen-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "감정적 깊이·연민·직관 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "신뢰할 수 없는 여인(not to be trusted)이 '모든 다정함이 진심은 아닐 수 있다'로 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "king-of-cups": {
+  "upright": {
+   "verdict": "ok",
+   "note": "감정적 성숙·평정·지혜 테마 일치.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "이중적 태도·부정직(double-dealing)이 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "ace-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "명료함·통찰·큰 힘(triumph/force) 테마가 '돌파하는 통찰'로 반영.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "Waite 역방향 'the same, but disastrous'가 '같은 통찰이 과하게 휘둘림'으로 정확히 반영.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "two-of-swords": {
+  "upright": {
+   "verdict": "drift",
+   "note": "출처는 '우정·용맹·화합 속의 대치'를 핵심으로 두는데, 우리는 이미지(눈가리개를 한 균형) 기반의 현대 표준인 '어려운 선택·교착'으로 재해석. Waite 본문도 '검은 대체로 온화한 힘을 상징하지 않는다'고 단서를 달아 방향 전환의 여지를 인정함.",
+   "sourcesAgreeing": 1
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "위선·기만·불충(imposture/duplicity)이 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "three-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "상심·이별·단절 테마 정확히 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "정신적 착란·혼란(mental alienation/confusion)이 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "four-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "휴식·물러남·경계 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "현명한 관리·신중함(wise administration/precaution)이 '조심스러운 복귀'로 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "five-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "갈등·불명예·상실 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "Waite 역방향의 '장례(burial and obsequies)'가 '정식으로 배웅해 주세요'로 그대로 반영 — 뛰어난 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "six-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "이동·여정·고비를 넘김 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "고백·사랑의 고백(declaration/love proposed)이 '고백이나 선언, 애정'으로 정확히 반영 — 뛰어난 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "seven-of-swords": {
+  "upright": {
+   "verdict": "drift",
+   "note": "출처는 비교적 중립적인 '희망·시도·바람'을 핵심으로 두는데, 우리는 이미지(검을 몰래 가져가는 인물) 기반의 현대 표준인 '술책·기만'으로 재해석.",
+   "sourcesAgreeing": 1
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "좋은 조언(good advice)과 험담(slander/babbling) 두 갈래 모두를 '진짜 조언과 소문이 섞여 든다'로 정확히 함께 반영 — 뛰어난 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "eight-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "갇힘·속박·탈출구 없음 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "불안·사고·예기치 못함(disquiet/unforeseen)이 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "nine-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "Waite/Papus는 절망·상실로 일치, Mathers만 '성직자·양심'으로 다른 계열.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "'근거 있는 두려움(reasonable fear)'이라는 뉘앙스가 '근거 없는 것이 아닐 수 있다'로 정교하게 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "ten-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "고통스러운 끝맺음·바닥·새 시작 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "일시적 이득·성공(passing success)이 '아직 온전히 자리 잡지 않은 회복'으로 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "page-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "호기심·예리한 사고·감시 테마 일치.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "미비된 상태·질병 암시(unprepared state/sickness)가 '준비 없이 맞닥뜨림, 몸의 신호를 놓침'으로 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "knight-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "속도·확신·거침없는 실행 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "경솔함(imprudence)이 정확히 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "queen-of-swords": {
+  "upright": {
+   "verdict": "drift",
+   "note": "Waite/Mathers는 '과부·슬픔·상실(widowhood)'을 핵심으로 두는데, 우리는 Book T의 기질 묘사(perceptive/graceful/confident)를 따라 '맑은 시선·정직함'으로 재해석. Book T가 뒷받침하므로 방어 가능.",
+   "sourcesAgreeing": 1
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "악의·위선(malice/bigotry)이 '날카로움이 밀어내는 말이 됨'으로 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "king-of-swords": {
+  "upright": {
+   "verdict": "ok",
+   "note": "지성·권위·판단력 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "잔혹함·악의(cruelty/evil intention)가 부드럽게 '온기를 잃은 판단'으로 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "ace-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "새로운 기회·토대·물질적 시작 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "'부의 악한 측면(evil side of wealth)'이 '풍요가 무겁게 짓누름'으로 반영.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "two-of-pentacles": {
+  "upright": {
+   "verdict": "drift",
+   "note": "Waite/Mathers는 '곤란·근심(embarrassment/worry/difficulties)'을 핵심으로 두는데, 우리는 이미지(저글링하는 인물) 기반의 현대 표준인 '균형·유연함'으로 재해석하며 어려움 쪽은 역방향으로 넘김.",
+   "sourcesAgreeing": 1
+  },
+  "reversed": {
+   "verdict": "drift",
+   "note": "Waite/Mathers 역방향은 실제로 '편지·서신·소식(handwriting/letter)'을 뜻하는데, 우리는 상관없이 '저글링의 한계·소진'을 역방향에 배치함. 반대 방향은 아니지만 출처의 실제 역방향 의미와는 무관한 확장.",
+   "sourcesAgreeing": 0
+  }
+ },
+ "three-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "협업·장인정신·인정받는 실력 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "평범함·미숙함(mediocrity/pettiness)이 잘 반영됨.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "four-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "Mathers만 '기쁨·향유'로 다르고 Waite/Book T는 소유·집착으로 일치.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "지연·장애(suspense/obstacles)가 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "five-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "Waite/Book T는 물질적 어려움으로 일치, Mathers만 '연인·사랑'으로 다른 계열(매핑 상 이례적).",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "무질서·불화(disorder/discord)가 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "six-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "너그러움·선물·주고받음 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "Waite 역방향의 '탐욕·질투(cupidity/envy/jealousy)'가 '견주게 됨, 부러움'으로 정확히 반영.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "seven-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "인내·평가·장기적 안목 테마 일치.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "'빌려준 돈에 대한 근심(anxiety regarding money)'이 '걱정 쪽으로 기운 마음'으로 정확히 반영 — 뛰어난 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "eight-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "Waite/Book T는 숙련·전념으로 일치, Mathers만 '아름다운 소녀'로 다른 계열.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "헛된 야망·잔꾀(voided ambition/cunning)가 잘 반영됨.",
+   "sourcesAgreeing": 2
+  }
+ },
+ "nine-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "자립·안락·신중함 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "부정직·기만(bad faith/deception)이 '믿었던 약속이 지켜지지 않음'으로 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "ten-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "지속되는 안정·가족·유산 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "요행·도박(chance/games of hazard)이 '운에 기댐'으로 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "page-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "배움·실용적 기술·학구열 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "낭비·방탕(prodigality/dissipation)이 '흩어 씀'으로 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "knight-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "꾸준함·신뢰성·성실함 테마 일치.",
+   "sourcesAgreeing": 3
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "무기력·정체(inertia/stagnation)가 '제자리걸음으로 굳어버림'으로 정확히 반영 — 뛰어난 정합.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "queen-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "풍요·너그러움·안정감 테마 일치.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "의심·불신(suspicion/mistrust)이 정확히 반영.",
+   "sourcesAgreeing": 3
+  }
+ },
+ "king-of-pentacles": {
+  "upright": {
+   "verdict": "ok",
+   "note": "확립된 성공·사업 수완·너그러움 테마 일치.",
+   "sourcesAgreeing": 2
+  },
+  "reversed": {
+   "verdict": "ok",
+   "note": "악덕·타락(vice/corruption/peril)이 '위태로움을 부름'으로 부드럽게 반영.",
+   "sourcesAgreeing": 2
+  }
+ }
+}
