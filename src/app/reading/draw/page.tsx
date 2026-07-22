@@ -334,9 +334,13 @@ export default function DrawPage() {
             className="flex flex-1 flex-col pb-6 pt-3 text-center lg:pt-14"
             onPointerDown={skipShuffle}
           >
+            {/* 테마는 리딩 유형 아래 자기 줄에 둔다 — 한 줄에 이어 붙이면
+                유형과 테마가 한 덩어리로 읽힌다. */}
             <p className="px-6 text-[13px] text-muted lg:text-[14px]">
-              {spreadLabel}{" "}
-              <b className="font-medium text-gold">{focusLabelOf(focus)}</b>
+              {spreadLabel}
+              <b className="mt-0.5 block font-medium text-gold">
+                {focusLabelOf(focus)}
+              </b>
             </p>
             <h1 className="mt-1.5 px-6 font-display text-[27px] font-semibold leading-[1.35] lg:text-[40px]">
               {phase === "shuffling"

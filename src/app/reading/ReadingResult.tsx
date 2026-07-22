@@ -87,8 +87,12 @@ export function OneCardResult({
         />
       </div>
       <div>
+        {/* 테마는 리딩 유형 바로 아래 자기 줄에 둔다. */}
         <p className="mt-[22px] text-center text-[13px] text-muted lg:mt-0 lg:text-left lg:text-[14px]">
           오늘의 카드
+          <b className="mt-0.5 block font-medium text-gold">
+            {focusLabelOf(focus)}
+          </b>
         </p>
         <h1 className="mt-1 text-center font-display text-[30px] font-semibold lg:text-left lg:text-[44px]">
           {nameKoOf(card)}{" "}
@@ -102,18 +106,18 @@ export function OneCardResult({
             <p key={paragraph.slice(0, 24)}>{paragraph}</p>
           ))}
         </div>
-        {/* 테마는 머리말이 아니라 여기 한 곳에서만 보여준다. 해석 문단이
-            없어도(오늘 하루 등) 무슨 테마로 뽑았는지 라벨은 남긴다. */}
-        <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
-          <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-            {focusLabelOf(focus)}
-          </p>
-          {themeParagraph ? (
+        {/* 테마 라벨은 머리말이 담당한다. 여기는 테마별 해석문이 있을 때만
+            나온다 — 라벨만 남은 빈 블록을 만들지 않는다. */}
+        {themeParagraph ? (
+          <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
+            <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+              {focusLabelOf(focus)}
+            </p>
             <p className="mt-1.5 font-serif text-[15px] text-body lg:text-base">
               {themeParagraph}
             </p>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
         {reversed ? (
           <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
             <p className="text-[12.5px] text-gold lg:text-[13.5px]">역방향</p>
@@ -225,8 +229,12 @@ export function ThreeCardResult({
       transition={{ duration: 0.4 }}
       className="mx-auto w-full max-w-[760px] flex-1 px-6 pb-8 pt-1 lg:pb-24 lg:pt-14"
     >
+      {/* 테마는 리딩 유형 바로 아래 자기 줄에 둔다. */}
       <p className="text-center text-[13px] text-muted lg:text-[14px]">
         과거 · 현재 · 미래
+        <b className="mt-0.5 block font-medium text-gold">
+          {focusLabelOf(focus)}
+        </b>
       </p>
 
       {/* 탭 */}
@@ -305,18 +313,17 @@ export function ThreeCardResult({
               <p key={paragraph.slice(0, 24)}>{paragraph}</p>
             ))}
           </div>
-          {/* 테마는 머리말이 아니라 여기 한 곳에서만 보여준다. 해석 문단이
-              없어도 무슨 테마로 뽑았는지 라벨은 남긴다. */}
-          <div className="mt-3.5 border-t border-line pt-3">
-            <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-              {focusLabelOf(focus)}
-            </p>
-            {themeParagraph ? (
+          {/* 테마 라벨은 머리말이 담당한다. 여기는 테마별 해석문이 있을 때만. */}
+          {themeParagraph ? (
+            <div className="mt-3.5 border-t border-line pt-3">
+              <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+                {focusLabelOf(focus)}
+              </p>
               <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
                 {themeParagraph}
               </p>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
           {reversed ? (
             <div className="mt-3.5 border-t border-line pt-3">
               <p className="text-[12.5px] text-gold lg:text-[13.5px]">역방향</p>
