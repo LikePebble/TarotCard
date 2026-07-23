@@ -9,6 +9,8 @@ import { focusLabelOf, focusParagraphOf } from "@/data/focus";
 import { koCards } from "@/data/ko";
 import { koPositions } from "@/data/ko-positions";
 import { reversedCards } from "@/data/reversed";
+import { reversedFocusParagraphOf } from "@/data/reversed-focus";
+import { reversedPositions } from "@/data/reversed-positions";
 import type { Orientation } from "@/lib/store";
 import { ResultActions } from "./ResultActions";
 
@@ -95,6 +97,9 @@ export function OneCardResult({
   // 레거시·마이그레이션 기록에는 orientations가 없거나 짧을 수 있다 — 정방향으로 본다.
   const orientation: Orientation = orientations?.[0] ?? "upright";
   const reversed = orientation === "reversed";
+  const reversedTheme = reversed
+    ? reversedFocusParagraphOf(focus, card.slug)
+    : null;
 
   // 정방향 본문 + 테마. 정방향 카드면 그대로 보이고, 역방향이면 토글에 접힌다.
   const uprightContent = (
@@ -159,6 +164,17 @@ export function OneCardResult({
                   <p key={p.slice(0, 24)}>{p}</p>
                 ))}
               </div>
+              {/* 역방향 전용 테마 해석 — 정방향의 테마 블록과 같은 자리. */}
+              {reversedTheme ? (
+                <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
+                  <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+                    {focusLabelOf(focus)}
+                  </p>
+                  <p className="mt-1.5 font-serif text-[15px] text-body lg:text-base">
+                    {reversedTheme}
+                  </p>
+                </div>
+              ) : null}
               <UprightDetails>{uprightContent}</UprightDetails>
             </>
           ) : (
@@ -258,6 +274,12 @@ export function ThreeCardResult({
   const reversed = orientation === "reversed";
   const positionSentence = koPositions[selected.slug]?.[POSITION_KEYS[index]];
   const themeParagraph = focusParagraphOf(focus, selected.slug);
+  const reversedPositionSentence = reversed
+    ? reversedPositions[selected.slug]?.[POSITION_KEYS[index]]
+    : null;
+  const reversedTheme = reversed
+    ? reversedFocusParagraphOf(focus, selected.slug)
+    : null;
 
   // 정방향: 포지션 문장 + 본문 + 테마. 포지션 문장도 정방향 어조라(예: "결실이
   // 무르익어 다가온다") 역방향이면 함께 접는다.
@@ -371,11 +393,28 @@ export function ThreeCardResult({
           <div className="mt-3">
             {reversed ? (
               <>
-                <div className="space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
+                {/* 역방향 전용 포지션 문장 — 정방향의 포지션 문장과 같은 자리. */}
+                {reversedPositionSentence ? (
+                  <p className="text-[15px] leading-[1.6] text-cream lg:text-[17px]">
+                    {reversedPositionSentence}
+                  </p>
+                ) : null}
+                <div className="mt-3 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
                   {reversedParagraphs(selected).map((p) => (
                     <p key={p.slice(0, 24)}>{p}</p>
                   ))}
                 </div>
+                {/* 역방향 전용 테마 해석. */}
+                {reversedTheme ? (
+                  <div className="mt-3.5 border-t border-line pt-3">
+                    <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+                      {focusLabelOf(focus)}
+                    </p>
+                    <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
+                      {reversedTheme}
+                    </p>
+                  </div>
+                ) : null}
                 <UprightDetails>{uprightContent}</UprightDetails>
               </>
             ) : (

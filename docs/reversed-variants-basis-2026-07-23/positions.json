@@ -1,0 +1,1094 @@
+{
+ "the-fool": {
+  "past": {
+   "text": "시작의 머뭇거림이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Negligence, absence, distribution, carelessness; our_reversed 정본의 시작의 머뭇거림을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "시작의 머뭇거림이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Negligence, absence, distribution, carelessness; our_reversed 정본의 시작의 머뭇거림을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "시작의 머뭇거림이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Negligence, absence, distribution, carelessness; our_reversed 정본의 시작의 머뭇거림을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-magician": {
+  "past": {
+   "text": "지난 자리에서는 흩어진 의지가 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Physician, Magus, mental disease, disgrace; our_reversed 정본의 흩어진 의지를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 흩어진 의지를 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Physician, Magus, mental disease, disgrace; our_reversed 정본의 흩어진 의지를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 흩어진 의지가 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: Physician, Magus, mental disease, disgrace; our_reversed 정본의 흩어진 의지를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-high-priestess": {
+  "past": {
+   "text": "얕아진 판단이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Passion, moral or physical ardour, conceit, surface knowledge; Mathers reversed: Conceit, Ignorance, Unskilfulness, Superficial Knowledge; our_reversed 정본의 얕아진 판단을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "얕아진 판단이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Passion, moral or physical ardour, conceit, surface knowledge; Mathers reversed: Conceit, Ignorance, Unskilfulness, Superficial Knowledge; our_reversed 정본의 얕아진 판단을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "얕아진 판단이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Passion, moral or physical ardour, conceit, surface knowledge; Mathers reversed: Conceit, Ignorance, Unskilfulness, Superficial Knowledge; our_reversed 정본의 얕아진 판단을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-empress": {
+  "past": {
+   "text": "풀리는 매듭과 흔들림이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Light, truth, the unravelling of involved matters, public rejoicings; Mathers reversed: Inaction, Frittering away of power, Want of Concentration Vacillation; our_reversed 정본의 풀리는 매듭과 흔들림을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "풀리는 매듭과 흔들림이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Light, truth, the unravelling of involved matters, public rejoicings; Mathers reversed: Inaction, Frittering away of power, Want of Concentration Vacillation; our_reversed 정본의 풀리는 매듭과 흔들림을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "풀리는 매듭과 흔들림이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Light, truth, the unravelling of involved matters, public rejoicings; Mathers reversed: Inaction, Frittering away of power, Want of Concentration Vacillation; our_reversed 정본의 풀리는 매듭과 흔들림을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-emperor": {
+  "past": {
+   "text": "지난 자리에서는 덜 익은 질서가 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Benevolence, compassion, credit, also confusion to enemies; Mathers reversed: Stoppage, Check, Immature, Unripe; our_reversed 정본의 덜 익은 질서를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 덜 익은 질서를 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Benevolence, compassion, credit, also confusion to enemies; Mathers reversed: Stoppage, Check, Immature, Unripe; our_reversed 정본의 덜 익은 질서를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 덜 익은 질서가 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Benevolence, compassion, credit, also confusion to enemies; Mathers reversed: Stoppage, Check, Immature, Unripe; our_reversed 정본의 덜 익은 질서를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-hierophant": {
+  "past": {
+   "text": "지나친 맞춤이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Society, good understanding, concord, overkindness; our_reversed 정본의 지나친 맞춤을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지나친 맞춤이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Society, good understanding, concord, overkindness; our_reversed 정본의 지나친 맞춤을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "지나친 맞춤이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Society, good understanding, concord, overkindness; our_reversed 정본의 지나친 맞춤을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-lovers": {
+  "past": {
+   "text": "어긋난 마음과 선택이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Failure, foolish designs, Another account speaks of marriage frustrated and contrarieties of all kinds; Mathers reversed: Unwise Plans, Failure when put to the test; our_reversed 정본의 어긋난 마음과 선택을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "어긋난 마음과 선택이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Failure, foolish designs, Another account speaks of marriage frustrated and contrarieties of all kinds; Mathers reversed: Unwise Plans, Failure when put to the test; our_reversed 정본의 어긋난 마음과 선택을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "어긋난 마음과 선택이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Failure, foolish designs, Another account speaks of marriage frustrated and contrarieties of all kinds; Mathers reversed: Unwise Plans, Failure when put to the test; our_reversed 정본의 어긋난 마음과 선택을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-chariot": {
+  "past": {
+   "text": "지난 자리에서는 마찰로 새는 추진력이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Riot, quarrel, dispute, litigation; Mathers reversed: Overthrown, Conquered by Obstacles at the last moment; our_reversed 정본의 마찰로 새는 추진력을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 마찰로 새는 추진력을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Riot, quarrel, dispute, litigation; Mathers reversed: Overthrown, Conquered by Obstacles at the last moment; our_reversed 정본의 마찰로 새는 추진력을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 마찰로 새는 추진력이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Riot, quarrel, dispute, litigation; Mathers reversed: Overthrown, Conquered by Obstacles at the last moment; our_reversed 정본의 마찰로 새는 추진력을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "strength": {
+  "past": {
+   "text": "기울어진 힘의 균형이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Despotism, abuse if power, weakness, discord; our_reversed 정본의 기울어진 힘의 균형을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "기울어진 힘의 균형이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Despotism, abuse if power, weakness, discord; our_reversed 정본의 기울어진 힘의 균형을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "기울어진 힘의 균형이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Despotism, abuse if power, weakness, discord; our_reversed 정본의 기울어진 힘의 균형을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-hermit": {
+  "past": {
+   "text": "두려움에 숨은 성찰이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Concealment, disguise, policy, fear; Mathers reversed: Over-prudence, Timorousness, Fear; our_reversed 정본의 두려움에 숨은 성찰을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "두려움에 숨은 성찰이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Concealment, disguise, policy, fear; Mathers reversed: Over-prudence, Timorousness, Fear; our_reversed 정본의 두려움에 숨은 성찰을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "두려움에 숨은 성찰이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Concealment, disguise, policy, fear; Mathers reversed: Over-prudence, Timorousness, Fear; our_reversed 정본의 두려움에 숨은 성찰을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "wheel-of-fortune": {
+  "past": {
+   "text": "지난 자리에서는 늦어진 흐름이 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Increase, abundance, superfluity; our_reversed 정본의 늦어진 흐름을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 늦어진 흐름을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Increase, abundance, superfluity; our_reversed 정본의 늦어진 흐름을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 일이 더디게 풀리는 때가 올 수 있으니 여유를 챙겨 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: Increase, abundance, superfluity; our_reversed 정본의 늦어진 흐름(일이 밀리고 뜻대로 풀리지 않음, 힘으로 돌려세우기보다 늦추라)을 다가올 가능성·경향으로 투영; 기존 문장의 '흐름이 흐름을' 중복 어법을 교정"
+  }
+ },
+ "justice": {
+  "past": {
+   "text": "기울어진 저울이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Law in all its departments, legal complications, bigotry, bias; Mathers reversed: Bigotry, Want of Balance, Abuse of Justice, Over-severity; our_reversed 정본의 기울어진 저울을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "기울어진 저울이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Law in all its departments, legal complications, bigotry, bias; Mathers reversed: Bigotry, Want of Balance, Abuse of Justice, Over-severity; our_reversed 정본의 기울어진 저울을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "기울어진 저울이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Law in all its departments, legal complications, bigotry, bias; Mathers reversed: Bigotry, Want of Balance, Abuse of Justice, Over-severity; our_reversed 정본의 기울어진 저울을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-hanged-man": {
+  "past": {
+   "text": "의미를 잃은 멈춤이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Selfishness, the crowd, body politic; Mathers reversed: Selfishness, Unbound, Partial sacrifice; our_reversed 정본의 의미를 잃은 멈춤을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "의미를 잃은 멈춤이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Selfishness, the crowd, body politic; Mathers reversed: Selfishness, Unbound, Partial sacrifice; our_reversed 정본의 의미를 잃은 멈춤을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "의미를 잃은 멈춤이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Selfishness, the crowd, body politic; Mathers reversed: Selfishness, Unbound, Partial sacrifice; our_reversed 정본의 의미를 잃은 멈춤을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "death": {
+  "past": {
+   "text": "지난 자리에서는 미뤄진 끝맺음이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Inertia, sleep, lethargy, petrifaction; Mathers reversed: Death just escaped, Partial change, Alteration for the better; our_reversed 정본의 미뤄진 끝맺음을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 미뤄진 끝맺음을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Inertia, sleep, lethargy, petrifaction; Mathers reversed: Death just escaped, Partial change, Alteration for the better; our_reversed 정본의 미뤄진 끝맺음을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 미뤄진 끝맺음이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Inertia, sleep, lethargy, petrifaction; Mathers reversed: Death just escaped, Partial change, Alteration for the better; our_reversed 정본의 미뤄진 끝맺음을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "temperance": {
+  "past": {
+   "text": "겉도는 조합이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Things connected with churches, religions, sects, the priesthood; Mathers reversed: IIl- advised combinations, Disunion, Clashing interests, &c; our_reversed 정본의 겉도는 조합을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "겉도는 조합이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Things connected with churches, religions, sects, the priesthood; Mathers reversed: IIl- advised combinations, Disunion, Clashing interests, &c; our_reversed 정본의 겉도는 조합을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "겉도는 조합이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Things connected with churches, religions, sects, the priesthood; Mathers reversed: IIl- advised combinations, Disunion, Clashing interests, &c; our_reversed 정본의 겉도는 조합을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-devil": {
+  "past": {
+   "text": "작은 얽매임이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Evil fatality, weakness, pettiness, blindness; Mathers reversed: Fatality for Evil; our_reversed 정본의 작은 얽매임을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "작은 얽매임이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Evil fatality, weakness, pettiness, blindness; Mathers reversed: Fatality for Evil; our_reversed 정본의 작은 얽매임을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "작은 얽매임이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Evil fatality, weakness, pettiness, blindness; Mathers reversed: Fatality for Evil; our_reversed 정본의 작은 얽매임을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-tower": {
+  "past": {
+   "text": "지난 자리에서는 쌓여 가는 압력이 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: According to one account, the same in a lesser degree also oppression, imprisonment, tyranny; our_reversed 정본의 쌓여 가는 압력을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 쌓여 가는 압력을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: According to one account, the same in a lesser degree also oppression, imprisonment, tyranny; our_reversed 정본의 쌓여 가는 압력을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 쌓여 가는 압력이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: According to one account, the same in a lesser degree also oppression, imprisonment, tyranny; our_reversed 정본의 쌓여 가는 압력을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-star": {
+  "past": {
+   "text": "흐려진 희망이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Arrogance, haughtiness, impotence; Mathers reversed: Hopes not fulfilled, Expectations disappointed or fulfilled in a minor degree; our_reversed 정본의 흐려진 희망을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "흐려진 희망이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Arrogance, haughtiness, impotence; Mathers reversed: Hopes not fulfilled, Expectations disappointed or fulfilled in a minor degree; our_reversed 정본의 흐려진 희망을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "흐려진 희망이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Arrogance, haughtiness, impotence; Mathers reversed: Hopes not fulfilled, Expectations disappointed or fulfilled in a minor degree; our_reversed 정본의 흐려진 희망을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-moon": {
+  "past": {
+   "text": "걷히는 안개 속 흔들림이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Instability, inconstancy, silence, lesser degrees of deception and error; Mathers reversed: Fluctuation, slight Deceptions, Trifling Mistakes; our_reversed 정본의 걷히는 안개 속 흔들림을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "걷히는 안개 속 흔들림이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Instability, inconstancy, silence, lesser degrees of deception and error; Mathers reversed: Fluctuation, slight Deceptions, Trifling Mistakes; our_reversed 정본의 걷히는 안개 속 흔들림을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "걷히는 안개 속 흔들림이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Instability, inconstancy, silence, lesser degrees of deception and error; Mathers reversed: Fluctuation, slight Deceptions, Trifling Mistakes; our_reversed 정본의 걷히는 안개 속 흔들림을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-sun": {
+  "past": {
+   "text": "지난 자리에서는 구름에 가린 기쁨이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: The same in a lesser sense; Mathers reversed: These in a minor degree; our_reversed 정본의 구름에 가린 기쁨을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 구름에 가린 기쁨을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: The same in a lesser sense; Mathers reversed: These in a minor degree; our_reversed 정본의 구름에 가린 기쁨을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 구름에 가린 기쁨이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: The same in a lesser sense; Mathers reversed: These in a minor degree; our_reversed 정본의 구름에 가린 기쁨을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "judgement": {
+  "past": {
+   "text": "미뤄진 응답이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Weakness, pusillanimity, simplicity, also deliberation; our_reversed 정본의 미뤄진 응답을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "미뤄진 응답이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Weakness, pusillanimity, simplicity, also deliberation; our_reversed 정본의 미뤄진 응답을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "미뤄진 응답이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Weakness, pusillanimity, simplicity, also deliberation; our_reversed 정본의 미뤄진 응답을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "the-world": {
+  "past": {
+   "text": "닫히지 않은 순환이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Inertia, fixity, stagnation, permanence; our_reversed 정본의 닫히지 않은 순환을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "닫히지 않은 순환이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Inertia, fixity, stagnation, permanence; our_reversed 정본의 닫히지 않은 순환을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "닫히지 않은 순환이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Inertia, fixity, stagnation, permanence; our_reversed 정본의 닫히지 않은 순환을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "ace-of-cups": {
+  "past": {
+   "text": "지난 자리에서는 막힌 감정의 물길이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: House of the false heart, mutation, instability, revolution; Mathers reversed: Change, Novelty, Metamorphosis, Inconstancy; our_reversed 정본의 막힌 감정의 물길을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 막힌 감정의 물길을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: House of the false heart, mutation, instability, revolution; Mathers reversed: Change, Novelty, Metamorphosis, Inconstancy; our_reversed 정본의 막힌 감정의 물길을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 막힌 감정의 물길이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: House of the false heart, mutation, instability, revolution; Mathers reversed: Change, Novelty, Metamorphosis, Inconstancy; our_reversed 정본의 막힌 감정의 물길을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "two-of-cups": {
+  "past": {
+   "text": "어긋난 두 마음이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite/Mathers 역방향 항목 없음, our_reversed 정본만 사용; our_reversed 정본의 어긋난 두 마음을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "어긋난 두 마음이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite/Mathers 역방향 항목 없음, our_reversed 정본만 사용; our_reversed 정본의 어긋난 두 마음을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "어긋난 두 마음이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite/Mathers 역방향 항목 없음, our_reversed 정본만 사용; our_reversed 정본의 어긋난 두 마음을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "three-of-cups": {
+  "past": {
+   "text": "과해진 어울림이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Expedition, dispatch, achievement, end; Mathers reversed: Expedition of business, Quickness, Celerity, Vigilance; our_reversed 정본의 과해진 어울림을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "과해진 어울림이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Expedition, dispatch, achievement, end; Mathers reversed: Expedition of business, Quickness, Celerity, Vigilance; our_reversed 정본의 과해진 어울림을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "과해진 어울림이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Expedition, dispatch, achievement, end; Mathers reversed: Expedition of business, Quickness, Celerity, Vigilance; our_reversed 정본의 과해진 어울림을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "four-of-cups": {
+  "past": {
+   "text": "지난 자리에서는 되살아나는 관심이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Novelty, presage, new instruction, new relations; Mathers reversed: New Acquaintance, Conjecture, Sign, Presentiment; our_reversed 정본의 되살아나는 관심을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 되살아나는 관심을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Novelty, presage, new instruction, new relations; Mathers reversed: New Acquaintance, Conjecture, Sign, Presentiment; our_reversed 정본의 되살아나는 관심을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 되살아나는 관심이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Novelty, presage, new instruction, new relations; Mathers reversed: New Acquaintance, Conjecture, Sign, Presentiment; our_reversed 정본의 되살아나는 관심을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "five-of-cups": {
+  "past": {
+   "text": "돌아오는 인연과 회복이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: News, alliances, affinity, consanguinity; Mathers reversed: Arrival, Return, News, Surprise; our_reversed 정본의 돌아오는 인연과 회복을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "돌아오는 인연과 회복이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: News, alliances, affinity, consanguinity; Mathers reversed: Arrival, Return, News, Surprise; our_reversed 정본의 돌아오는 인연과 회복을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "돌아오는 인연과 회복이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: News, alliances, affinity, consanguinity; Mathers reversed: Arrival, Return, News, Surprise; our_reversed 정본의 돌아오는 인연과 회복을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "six-of-cups": {
+  "past": {
+   "text": "미래로 향하는 시선이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: The future, renewal, that which will come to pass presently; Mathers reversed: The Future, that which is to come, Shortly, Soon; our_reversed 정본의 미래로 향하는 시선을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "미래로 향하는 시선이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: The future, renewal, that which will come to pass presently; Mathers reversed: The Future, that which is to come, Shortly, Soon; our_reversed 정본의 미래로 향하는 시선을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "미래로 향하는 시선이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: The future, renewal, that which will come to pass presently; Mathers reversed: The Future, that which is to come, Shortly, Soon; our_reversed 정본의 미래로 향하는 시선을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "seven-of-cups": {
+  "past": {
+   "text": "지난 자리에서는 모여드는 결심이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Desire, will, determination, project; Mathers reversed: Plan, Design, Resolution, Decision; our_reversed 정본의 모여드는 결심을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 모여드는 결심을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Desire, will, determination, project; Mathers reversed: Plan, Design, Resolution, Decision; our_reversed 정본의 모여드는 결심을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 모여드는 결심이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Desire, will, determination, project; Mathers reversed: Plan, Design, Resolution, Decision; our_reversed 정본의 모여드는 결심을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "eight-of-cups": {
+  "past": {
+   "text": "다시 보이는 머물 이유가 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Great joy, happiness, feasting; Mathers reversed: Gaiety, Feasting, Joy, Pleasure; our_reversed 정본의 다시 보이는 머물 이유를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "다시 보이는 머물 이유가 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Great joy, happiness, feasting; Mathers reversed: Gaiety, Feasting, Joy, Pleasure; our_reversed 정본의 다시 보이는 머물 이유를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "다시 보이는 머물 이유가 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Great joy, happiness, feasting; Mathers reversed: Gaiety, Feasting, Joy, Pleasure; our_reversed 정본의 다시 보이는 머물 이유를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "nine-of-cups": {
+  "past": {
+   "text": "흠이 보이는 만족이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Truth, loyalty, liberty, but the readings vary and include mistakes; Mathers reversed: Faults, Errors, Mistakes, Imperfections; our_reversed 정본의 흠이 보이는 만족을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "흠이 보이는 만족이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Truth, loyalty, liberty, but the readings vary and include mistakes; Mathers reversed: Faults, Errors, Mistakes, Imperfections; our_reversed 정본의 흠이 보이는 만족을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "흠이 보이는 만족이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Truth, loyalty, liberty, but the readings vary and include mistakes; Mathers reversed: Faults, Errors, Mistakes, Imperfections; our_reversed 정본의 흠이 보이는 만족을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "ten-of-cups": {
+  "past": {
+   "text": "지난 자리에서는 평온 아래 쌓인 서운함이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Repose of the false heart, indignation, violence, 0; Mathers reversed: Combat, Strife, Opposition, Differences; our_reversed 정본의 평온 아래 쌓인 서운함을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 평온 아래 쌓인 서운함을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Repose of the false heart, indignation, violence, 0; Mathers reversed: Combat, Strife, Opposition, Differences; our_reversed 정본의 평온 아래 쌓인 서운함을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 평온 아래 쌓인 서운함이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Repose of the false heart, indignation, violence, 0; Mathers reversed: Combat, Strife, Opposition, Differences; our_reversed 정본의 평온 아래 쌓인 서운함을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "page-of-cups": {
+  "past": {
+   "text": "꾸며진 감정의 반짝임이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Taste, inclination, attachment, seduction; our_reversed 정본의 꾸며진 감정의 반짝임을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "꾸며진 감정의 반짝임이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Taste, inclination, attachment, seduction; our_reversed 정본의 꾸며진 감정의 반짝임을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "꾸며진 감정의 반짝임이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Taste, inclination, attachment, seduction; our_reversed 정본의 꾸며진 감정의 반짝임을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "knight-of-cups": {
+  "past": {
+   "text": "실체보다 앞선 낭만이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Trickery, artifice, subtlety, swindling; Mathers reversed: Duplicity, Abuse of Confidence, Fraud, Cunning; our_reversed 정본의 실체보다 앞선 낭만을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "실체보다 앞선 낭만이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Trickery, artifice, subtlety, swindling; Mathers reversed: Duplicity, Abuse of Confidence, Fraud, Cunning; our_reversed 정본의 실체보다 앞선 낭만을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "실체보다 앞선 낭만이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Trickery, artifice, subtlety, swindling; Mathers reversed: Duplicity, Abuse of Confidence, Fraud, Cunning; our_reversed 정본의 실체보다 앞선 낭만을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "queen-of-cups": {
+  "past": {
+   "text": "지난 자리에서는 경계 잃은 감수성이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: The accounts vary, good woman, otherwise, distinguished woman but one not to be trusted; Mathers reversed: A Woman in good position, but intermeddling, and to be distrusted, Success; our_reversed 정본의 경계 잃은 감수성을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 경계 잃은 감수성을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: The accounts vary, good woman, otherwise, distinguished woman but one not to be trusted; Mathers reversed: A Woman in good position, but intermeddling, and to be distrusted, Success; our_reversed 정본의 경계 잃은 감수성을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 경계 잃은 감수성이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: The accounts vary, good woman, otherwise, distinguished woman but one not to be trusted; Mathers reversed: A Woman in good position, but intermeddling, and to be distrusted, Success; our_reversed 정본의 경계 잃은 감수성을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "king-of-cups": {
+  "past": {
+   "text": "계산이 섞인 평온이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Dishonest, double-dealing man, roguery, exaction; Mathers reversed: A Man of good position, but shifty in his Dealings, Distrust, Doubt; our_reversed 정본의 계산이 섞인 평온을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "계산이 섞인 평온이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Dishonest, double-dealing man, roguery, exaction; Mathers reversed: A Man of good position, but shifty in his Dealings, Distrust, Doubt; our_reversed 정본의 계산이 섞인 평온을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "계산이 섞인 평온이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Dishonest, double-dealing man, roguery, exaction; Mathers reversed: A Man of good position, but shifty in his Dealings, Distrust, Doubt; our_reversed 정본의 계산이 섞인 평온을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "ace-of-pentacles": {
+  "past": {
+   "text": "무거워진 풍요가 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: The evil side of wealth, bad intelligence, also great riches, In any case it shews prosperity; Mathers reversed: Purse of Gold, Money, Gain, Help; our_reversed 정본의 무거워진 풍요를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "무거워진 풍요가 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: The evil side of wealth, bad intelligence, also great riches, In any case it shews prosperity; Mathers reversed: Purse of Gold, Money, Gain, Help; our_reversed 정본의 무거워진 풍요를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "무거워진 풍요가 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: The evil side of wealth, bad intelligence, also great riches, In any case it shews prosperity; Mathers reversed: Purse of Gold, Money, Gain, Help; our_reversed 정본의 무거워진 풍요를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "two-of-pentacles": {
+  "past": {
+   "text": "지난 자리에서는 버거워진 균형이 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Enforced gaiety, simulated enjoyment, literal sense, handwriting; our_reversed 정본의 버거워진 균형을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 버거워진 균형을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Enforced gaiety, simulated enjoyment, literal sense, handwriting; our_reversed 정본의 버거워진 균형을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 버거워진 균형이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: Enforced gaiety, simulated enjoyment, literal sense, handwriting; our_reversed 정본의 버거워진 균형을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "three-of-pentacles": {
+  "past": {
+   "text": "겉도는 협업이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Mediocrity, in work and otherwise, puerility, pettiness; Mathers reversed: Children, Sons, Daughters, Youths; our_reversed 정본의 겉도는 협업을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "겉도는 협업이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Mediocrity, in work and otherwise, puerility, pettiness; Mathers reversed: Children, Sons, Daughters, Youths; our_reversed 정본의 겉도는 협업을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "겉도는 협업이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Mediocrity, in work and otherwise, puerility, pettiness; Mathers reversed: Children, Sons, Daughters, Youths; our_reversed 정본의 겉도는 협업을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "four-of-pentacles": {
+  "past": {
+   "text": "지연과 반대가 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Suspense, delay, opposition; Mathers reversed: Obstacles, Hindrances; our_reversed 정본의 지연과 반대를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지연과 반대가 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Suspense, delay, opposition; Mathers reversed: Obstacles, Hindrances; our_reversed 정본의 지연과 반대를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "지연과 반대가 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Suspense, delay, opposition; Mathers reversed: Obstacles, Hindrances; our_reversed 정본의 지연과 반대를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "five-of-pentacles": {
+  "past": {
+   "text": "지난 자리에서는 어수선한 부족이 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Disorder, chaos, ruin, discord; our_reversed 정본의 어수선한 부족을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 어수선한 부족을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Disorder, chaos, ruin, discord; our_reversed 정본의 어수선한 부족을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 어수선한 부족이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: Disorder, chaos, ruin, discord; our_reversed 정본의 어수선한 부족을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "six-of-pentacles": {
+  "past": {
+   "text": "기울어진 주고받음이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Desire, cupidity, envy, jealousy; Mathers reversed: Disgraceful Love, Imprudence, License, Profligacy; our_reversed 정본의 기울어진 주고받음을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "기울어진 주고받음이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Desire, cupidity, envy, jealousy; Mathers reversed: Disgraceful Love, Imprudence, License, Profligacy; our_reversed 정본의 기울어진 주고받음을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "기울어진 주고받음이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Desire, cupidity, envy, jealousy; Mathers reversed: Disgraceful Love, Imprudence, License, Profligacy; our_reversed 정본의 기울어진 주고받음을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "seven-of-pentacles": {
+  "past": {
+   "text": "투자에 대한 걱정이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Cause for anxiety regarding money which it may be proposed to lend; Mathers reversed: Disturbance, Worry, Anxiety, Melancholy; our_reversed 정본의 투자에 대한 걱정을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "투자에 대한 걱정이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Cause for anxiety regarding money which it may be proposed to lend; Mathers reversed: Disturbance, Worry, Anxiety, Melancholy; our_reversed 정본의 투자에 대한 걱정을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "투자에 대한 걱정이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Cause for anxiety regarding money which it may be proposed to lend; Mathers reversed: Disturbance, Worry, Anxiety, Melancholy; our_reversed 정본의 투자에 대한 걱정을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "eight-of-pentacles": {
+  "past": {
+   "text": "지난 자리에서는 흐려진 일의 이유가 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Voided ambition, vanity, cupidity, exaction; Mathers reversed: Flattery, Usury, Hypocrisy, Shifty; our_reversed 정본의 흐려진 일의 이유를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 흐려진 일의 이유를 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Voided ambition, vanity, cupidity, exaction; Mathers reversed: Flattery, Usury, Hypocrisy, Shifty; our_reversed 정본의 흐려진 일의 이유를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 흐려진 일의 이유가 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Voided ambition, vanity, cupidity, exaction; Mathers reversed: Flattery, Usury, Hypocrisy, Shifty; our_reversed 정본의 흐려진 일의 이유를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "nine-of-pentacles": {
+  "past": {
+   "text": "미덥지 않은 안정이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Roguery, deception, voided project, bad faith; Mathers reversed: Deceit, Bad faith, Artifices, Deception; our_reversed 정본의 미덥지 않은 안정을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "미덥지 않은 안정이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Roguery, deception, voided project, bad faith; Mathers reversed: Deceit, Bad faith, Artifices, Deception; our_reversed 정본의 미덥지 않은 안정을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "미덥지 않은 안정이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Roguery, deception, voided project, bad faith; Mathers reversed: Deceit, Bad faith, Artifices, Deception; our_reversed 정본의 미덥지 않은 안정을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "ten-of-pentacles": {
+  "past": {
+   "text": "운에 기대 흔들린 기반이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Chance, fatality, loss, robbery; Mathers reversed: Gambling, Dissipation, Robbery, Loss; our_reversed 정본의 운에 기대 흔들린 기반을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "운에 기대 흔들린 기반이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Chance, fatality, loss, robbery; Mathers reversed: Gambling, Dissipation, Robbery, Loss; our_reversed 정본의 운에 기대 흔들린 기반을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "운에 기대 흔들린 기반이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Chance, fatality, loss, robbery; Mathers reversed: Gambling, Dissipation, Robbery, Loss; our_reversed 정본의 운에 기대 흔들린 기반을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "page-of-pentacles": {
+  "past": {
+   "text": "지난 자리에서는 흩어진 배움이 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Prodigality, dissipation, liberality, luxury; our_reversed 정본의 흩어진 배움을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 흩어진 배움을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Prodigality, dissipation, liberality, luxury; our_reversed 정본의 흩어진 배움을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 흩어진 배움이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: Prodigality, dissipation, liberality, luxury; our_reversed 정본의 흩어진 배움을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "knight-of-pentacles": {
+  "past": {
+   "text": "굳어진 제자리걸음이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: inertia, idleness, repose of that kind, stagnation; Mathers reversed: A brave Man, but out of Employment, Idle, Unemployed; our_reversed 정본의 굳어진 제자리걸음을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "굳어진 제자리걸음이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: inertia, idleness, repose of that kind, stagnation; Mathers reversed: A brave Man, but out of Employment, Idle, Unemployed; our_reversed 정본의 굳어진 제자리걸음을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "굳어진 제자리걸음이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: inertia, idleness, repose of that kind, stagnation; Mathers reversed: A brave Man, but out of Employment, Idle, Unemployed; our_reversed 정본의 굳어진 제자리걸음을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "queen-of-pentacles": {
+  "past": {
+   "text": "돌봄에 섞인 의심이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Evil, suspicion, suspense, fear; Mathers reversed: Certain Evil, a suspicious Woman, a Woman justly regarded with Suspicion, Doubt; our_reversed 정본의 돌봄에 섞인 의심을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "돌봄에 섞인 의심이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Evil, suspicion, suspense, fear; Mathers reversed: Certain Evil, a suspicious Woman, a Woman justly regarded with Suspicion, Doubt; our_reversed 정본의 돌봄에 섞인 의심을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "돌봄에 섞인 의심이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Evil, suspicion, suspense, fear; Mathers reversed: Certain Evil, a suspicious Woman, a Woman justly regarded with Suspicion, Doubt; our_reversed 정본의 돌봄에 섞인 의심을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "king-of-pentacles": {
+  "past": {
+   "text": "지난 자리에서는 쓰임을 벗어난 힘이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Vice, weakness, ugliness, perversity; Mathers reversed: An old and vicious Man, a Dangerous Man, Doubt, Fear; our_reversed 정본의 쓰임을 벗어난 힘을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 쓰임을 벗어난 힘을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Vice, weakness, ugliness, perversity; Mathers reversed: An old and vicious Man, a Dangerous Man, Doubt, Fear; our_reversed 정본의 쓰임을 벗어난 힘을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 쓰임을 벗어난 힘이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Vice, weakness, ugliness, perversity; Mathers reversed: An old and vicious Man, a Dangerous Man, Doubt, Fear; our_reversed 정본의 쓰임을 벗어난 힘을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "ace-of-swords": {
+  "past": {
+   "text": "지나치게 센 명료함이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: The same, but the results are disastrous, another account says— conception, childbirth; Mathers reversed: Embarrassment, Foolish and Hopeless Love, Obstacle, Hindrance; our_reversed 정본의 지나치게 센 명료함을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지나치게 센 명료함이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: The same, but the results are disastrous, another account says— conception, childbirth; Mathers reversed: Embarrassment, Foolish and Hopeless Love, Obstacle, Hindrance; our_reversed 정본의 지나치게 센 명료함을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "지나치게 센 명료함이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: The same, but the results are disastrous, another account says— conception, childbirth; Mathers reversed: Embarrassment, Foolish and Hopeless Love, Obstacle, Hindrance; our_reversed 정본의 지나치게 센 명료함을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "two-of-swords": {
+  "past": {
+   "text": "감춤이 된 망설임이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Imposture, falsehood, duplicity, disloyalty; our_reversed 정본의 감춤이 된 망설임을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "감춤이 된 망설임이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Imposture, falsehood, duplicity, disloyalty; our_reversed 정본의 감춤이 된 망설임을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "감춤이 된 망설임이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Imposture, falsehood, duplicity, disloyalty; our_reversed 정본의 감춤이 된 망설임을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "three-of-swords": {
+  "past": {
+   "text": "지난 자리에서는 정리되지 않은 아픔이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Mental alienation, error, loss, distraction; Mathers reversed: Error, Confusion, Misrule, Disorder; our_reversed 정본의 정리되지 않은 아픔을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 정리되지 않은 아픔을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Mental alienation, error, loss, distraction; Mathers reversed: Error, Confusion, Misrule, Disorder; our_reversed 정본의 정리되지 않은 아픔을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 정리되지 않은 아픔이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Mental alienation, error, loss, distraction; Mathers reversed: Error, Confusion, Misrule, Disorder; our_reversed 정본의 정리되지 않은 아픔을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "four-of-swords": {
+  "past": {
+   "text": "신중한 복귀 준비가 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Wise administration, circumspection, economy, avarice; Mathers reversed: Economy, Precaution, Regulation of Expenditure; our_reversed 정본의 신중한 복귀 준비를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "신중한 복귀 준비가 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Wise administration, circumspection, economy, avarice; Mathers reversed: Economy, Precaution, Regulation of Expenditure; our_reversed 정본의 신중한 복귀 준비를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "신중한 복귀 준비가 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Wise administration, circumspection, economy, avarice; Mathers reversed: Economy, Precaution, Regulation of Expenditure; our_reversed 정본의 신중한 복귀 준비를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "five-of-swords": {
+  "past": {
+   "text": "끝나지 않은 다툼이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: The same, burial and obsequies; Mathers reversed: Losses Trouble (same signification, whether reversed or not; our_reversed 정본의 끝나지 않은 다툼을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "끝나지 않은 다툼이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: The same, burial and obsequies; Mathers reversed: Losses Trouble (same signification, whether reversed or not; our_reversed 정본의 끝나지 않은 다툼을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "끝나지 않은 다툼이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: The same, burial and obsequies; Mathers reversed: Losses Trouble (same signification, whether reversed or not; our_reversed 정본의 끝나지 않은 다툼을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "six-of-swords": {
+  "past": {
+   "text": "지난 자리에서는 말이 되려는 고백이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Declaration, confession, publicity, one account says that it is a proposal of love; Mathers reversed: Declaration, Love proposed, Revelation, Surprise; our_reversed 정본의 말이 되려는 고백을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 말이 되려는 고백을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Declaration, confession, publicity, one account says that it is a proposal of love; Mathers reversed: Declaration, Love proposed, Revelation, Surprise; our_reversed 정본의 말이 되려는 고백을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 말이 되려는 고백이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Declaration, confession, publicity, one account says that it is a proposal of love; Mathers reversed: Declaration, Love proposed, Revelation, Surprise; our_reversed 정본의 말이 되려는 고백을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "seven-of-swords": {
+  "past": {
+   "text": "조언과 소문의 혼재가 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Good advice, counsel, instruction, slander; Mathers reversed: Wise Advice, Good Counsel, Wisdom, Prudence; our_reversed 정본의 조언과 소문의 혼재를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "조언과 소문의 혼재가 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Good advice, counsel, instruction, slander; Mathers reversed: Wise Advice, Good Counsel, Wisdom, Prudence; our_reversed 정본의 조언과 소문의 혼재를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "조언과 소문의 혼재가 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Good advice, counsel, instruction, slander; Mathers reversed: Wise Advice, Good Counsel, Wisdom, Prudence; our_reversed 정본의 조언과 소문의 혼재를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "eight-of-swords": {
+  "past": {
+   "text": "예상 밖의 흔들림이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Disquiet, difficulty, opposition, accident; Mathers reversed: Treachery in the Past, Event, Accident, Remarkable Incident; our_reversed 정본의 예상 밖의 흔들림을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "예상 밖의 흔들림이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Disquiet, difficulty, opposition, accident; Mathers reversed: Treachery in the Past, Event, Accident, Remarkable Incident; our_reversed 정본의 예상 밖의 흔들림을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "예상 밖의 흔들림이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Disquiet, difficulty, opposition, accident; Mathers reversed: Treachery in the Past, Event, Accident, Remarkable Incident; our_reversed 정본의 예상 밖의 흔들림을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "nine-of-swords": {
+  "past": {
+   "text": "지난 자리에서는 안으로 잠긴 걱정이 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Imprisonment, suspicion, doubt, reasonable fear; Mathers reversed: Wise distrust, Suspicion, Fear, Doubt; our_reversed 정본의 안으로 잠긴 걱정을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 안으로 잠긴 걱정을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Imprisonment, suspicion, doubt, reasonable fear; Mathers reversed: Wise distrust, Suspicion, Fear, Doubt; our_reversed 정본의 안으로 잠긴 걱정을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 안으로 잠긴 걱정이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Imprisonment, suspicion, doubt, reasonable fear; Mathers reversed: Wise distrust, Suspicion, Fear, Doubt; our_reversed 정본의 안으로 잠긴 걱정을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "ten-of-swords": {
+  "past": {
+   "text": "잠시 찾아온 회복이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Advantage, profit, success, favour; Mathers reversed: Passing Success, Momentary Advantage; our_reversed 정본의 잠시 찾아온 회복을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "잠시 찾아온 회복이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Advantage, profit, success, favour; Mathers reversed: Passing Success, Momentary Advantage; our_reversed 정본의 잠시 찾아온 회복을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "잠시 찾아온 회복이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Advantage, profit, success, favour; Mathers reversed: Passing Success, Momentary Advantage; our_reversed 정본의 잠시 찾아온 회복을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "page-of-swords": {
+  "past": {
+   "text": "방향 잃은 호기심이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: More evil side of these qualities, what is unforeseen, unprepared state, sickness is also intimated; our_reversed 정본의 방향 잃은 호기심을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "방향 잃은 호기심이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: More evil side of these qualities, what is unforeseen, unprepared state, sickness is also intimated; our_reversed 정본의 방향 잃은 호기심을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "방향 잃은 호기심이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Mathers 없음, Waite만 사용: More evil side of these qualities, what is unforeseen, unprepared state, sickness is also intimated; our_reversed 정본의 방향 잃은 호기심을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "knight-of-swords": {
+  "past": {
+   "text": "지난 자리에서는 방향을 앞선 속도가 선택의 방향을 바꾸었습니다.",
+   "basis": "Waite reversed: Imprudence, incapacity, extravagance; Mathers reversed: A conceited fool, Ingenuousness, Simplicity; our_reversed 정본의 방향을 앞선 속도를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 방향을 앞선 속도를 차분히 알아차려야 하는 때입니다.",
+   "basis": "Waite reversed: Imprudence, incapacity, extravagance; Mathers reversed: A conceited fool, Ingenuousness, Simplicity; our_reversed 정본의 방향을 앞선 속도를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 방향을 앞선 속도가 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Waite reversed: Imprudence, incapacity, extravagance; Mathers reversed: A conceited fool, Ingenuousness, Simplicity; our_reversed 정본의 방향을 앞선 속도를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "queen-of-swords": {
+  "past": {
+   "text": "차갑게 굳은 시선이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Waite reversed: Malice, bigotry, artifice, prudery; Mathers reversed: A Bad Woman, ill-tempered and bigoted, Riches and Discord, Abundance together with Worry; our_reversed 정본의 차갑게 굳은 시선을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "차갑게 굳은 시선이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Waite reversed: Malice, bigotry, artifice, prudery; Mathers reversed: A Bad Woman, ill-tempered and bigoted, Riches and Discord, Abundance together with Worry; our_reversed 정본의 차갑게 굳은 시선을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "차갑게 굳은 시선이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Waite reversed: Malice, bigotry, artifice, prudery; Mathers reversed: A Bad Woman, ill-tempered and bigoted, Riches and Discord, Abundance together with Worry; our_reversed 정본의 차갑게 굳은 시선을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "king-of-swords": {
+  "past": {
+   "text": "온기를 잃은 판단이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Waite reversed: Cruelty, perversity, barbarity, perfidy; Mathers reversed: A Wicked Man, Chagrin, Worry, Grief; our_reversed 정본의 온기를 잃은 판단을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "온기를 잃은 판단이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Waite reversed: Cruelty, perversity, barbarity, perfidy; Mathers reversed: A Wicked Man, Chagrin, Worry, Grief; our_reversed 정본의 온기를 잃은 판단을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "온기를 잃은 판단이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Waite reversed: Cruelty, perversity, barbarity, perfidy; Mathers reversed: A Wicked Man, Chagrin, Worry, Grief; our_reversed 정본의 온기를 잃은 판단을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "ace-of-wands": {
+  "past": {
+   "text": "지난 자리에서는 눌려 있는 불씨가 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Fall, decadence, ruin, perdition; our_reversed 정본의 눌려 있는 불씨를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 눌려 있는 불씨를 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Fall, decadence, ruin, perdition; our_reversed 정본의 눌려 있는 불씨를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 눌려 있는 불씨가 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: Fall, decadence, ruin, perdition; our_reversed 정본의 눌려 있는 불씨를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "two-of-wands": {
+  "past": {
+   "text": "뜻밖의 놀라움과 불안이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Surprise, wonder, enchantment, emotion; our_reversed 정본의 뜻밖의 놀라움과 불안을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "뜻밖의 놀라움과 불안이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Surprise, wonder, enchantment, emotion; our_reversed 정본의 뜻밖의 놀라움과 불안을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "뜻밖의 놀라움과 불안이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Surprise, wonder, enchantment, emotion; our_reversed 정본의 뜻밖의 놀라움과 불안을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "three-of-wands": {
+  "past": {
+   "text": "걷혀 가는 어려움이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: The end of troubles, suspension or cessation of adversity, toil and disappointment; our_reversed 정본의 걷혀 가는 어려움을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "걷혀 가는 어려움이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: The end of troubles, suspension or cessation of adversity, toil and disappointment; our_reversed 정본의 걷혀 가는 어려움을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "걷혀 가는 어려움이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Mathers 없음, Waite만 사용: The end of troubles, suspension or cessation of adversity, toil and disappointment; our_reversed 정본의 걷혀 가는 어려움을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "four-of-wands": {
+  "past": {
+   "text": "지난 자리에서는 소박하게 이어진 안정이 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: The meaning remains unaltered, it is prosperity, increase, felicity; our_reversed 정본의 소박하게 이어진 안정을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 소박하게 이어진 안정을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: The meaning remains unaltered, it is prosperity, increase, felicity; our_reversed 정본의 소박하게 이어진 안정을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 소박하게 이어진 안정이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: The meaning remains unaltered, it is prosperity, increase, felicity; our_reversed 정본의 소박하게 이어진 안정을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "five-of-wands": {
+  "past": {
+   "text": "엉켜 버린 다툼이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Litigation, disputes, trickery, contradiction; our_reversed 정본의 엉켜 버린 다툼을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "엉켜 버린 다툼이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Litigation, disputes, trickery, contradiction; our_reversed 정본의 엉켜 버린 다툼을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "엉켜 버린 다툼이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Litigation, disputes, trickery, contradiction; our_reversed 정본의 엉켜 버린 다툼을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "six-of-wands": {
+  "past": {
+   "text": "미뤄지는 좋은 소식이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Apprehension, fear, as of a victorious enemy at the gate, treachery; our_reversed 정본의 미뤄지는 좋은 소식을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "미뤄지는 좋은 소식이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Apprehension, fear, as of a victorious enemy at the gate, treachery; our_reversed 정본의 미뤄지는 좋은 소식을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "미뤄지는 좋은 소식이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Apprehension, fear, as of a victorious enemy at the gate, treachery; our_reversed 정본의 미뤄지는 좋은 소식을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "seven-of-wands": {
+  "past": {
+   "text": "지난 자리에서는 갈피 잃은 방어가 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Perplexity, embarrassments, anxiety, It is also a caution against indecision; our_reversed 정본의 갈피 잃은 방어를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 갈피 잃은 방어를 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Perplexity, embarrassments, anxiety, It is also a caution against indecision; our_reversed 정본의 갈피 잃은 방어를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 갈피 잃은 방어가 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: Perplexity, embarrassments, anxiety, It is also a caution against indecision; our_reversed 정본의 갈피 잃은 방어를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "eight-of-wands": {
+  "past": {
+   "text": "가까운 관계의 마찰이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Arrows of jealousy, internal dispute, stingings of conscience, quarrels; our_reversed 정본의 가까운 관계의 마찰을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "가까운 관계의 마찰이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Arrows of jealousy, internal dispute, stingings of conscience, quarrels; our_reversed 정본의 가까운 관계의 마찰을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "가까운 관계의 마찰이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Arrows of jealousy, internal dispute, stingings of conscience, quarrels; our_reversed 정본의 가까운 관계의 마찰을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "nine-of-wands": {
+  "past": {
+   "text": "바닥난 버팀이 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Obstacles, adversity, calamity; our_reversed 정본의 바닥난 버팀을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "바닥난 버팀이 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Obstacles, adversity, calamity; our_reversed 정본의 바닥난 버팀을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "바닥난 버팀이 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Obstacles, adversity, calamity; our_reversed 정본의 바닥난 버팀을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "ten-of-wands": {
+  "past": {
+   "text": "지난 자리에서는 속사정이 얽힌 짐이 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Contrarieties, difficulties, intrigues, and their analogies; our_reversed 정본의 속사정이 얽힌 짐을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 속사정이 얽힌 짐을 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Contrarieties, difficulties, intrigues, and their analogies; our_reversed 정본의 속사정이 얽힌 짐을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 속사정이 얽힌 짐이 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: Contrarieties, difficulties, intrigues, and their analogies; our_reversed 정본의 속사정이 얽힌 짐을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "page-of-wands": {
+  "past": {
+   "text": "소식에 흔들린 결정이 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Anecdotes, announcements, evil news, Also indecision and the instability which accompanies it; our_reversed 정본의 소식에 흔들린 결정을 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "소식에 흔들린 결정이 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Anecdotes, announcements, evil news, Also indecision and the instability which accompanies it; our_reversed 정본의 소식에 흔들린 결정을 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "소식에 흔들린 결정이 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Anecdotes, announcements, evil news, Also indecision and the instability which accompanies it; our_reversed 정본의 소식에 흔들린 결정을 다가올 가능성·경향으로 투영"
+  }
+ },
+ "knight-of-wands": {
+  "past": {
+   "text": "중간에 끊긴 질주가 지나온 흐름에 깊은 흔적을 남긴 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Rupture, division, interruption, discord; our_reversed 정본의 중간에 끊긴 질주를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "중간에 끊긴 질주가 지금 흐름의 속도와 방향을 바꾸고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Rupture, division, interruption, discord; our_reversed 정본의 중간에 끊긴 질주를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "중간에 끊긴 질주가 다가올 수 있으니 작은 신호부터 살펴보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Rupture, division, interruption, discord; our_reversed 정본의 중간에 끊긴 질주를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "queen-of-wands": {
+  "past": {
+   "text": "지난 자리에서는 온기에 섞인 경계가 선택의 방향을 바꾸었습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Good, economical, obliging, serviceable; our_reversed 정본의 온기에 섞인 경계를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "지금은 온기에 섞인 경계를 차분히 알아차려야 하는 때입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Good, economical, obliging, serviceable; our_reversed 정본의 온기에 섞인 경계를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "앞으로 온기에 섞인 경계가 흐름을 바꿀 가능성을 열어 두세요.",
+   "basis": "Mathers 없음, Waite만 사용: Good, economical, obliging, serviceable; our_reversed 정본의 온기에 섞인 경계를 다가올 가능성·경향으로 투영"
+  }
+ },
+ "king-of-wands": {
+  "past": {
+   "text": "엄격하게 드러난 선의가 과거의 흐름을 안쪽에서 움직인 자리입니다.",
+   "basis": "Mathers 없음, Waite만 사용: Good, but severe, austere, yet tolerant; our_reversed 정본의 엄격하게 드러난 선의를 지나온 원인·여운으로 투영"
+  },
+  "present": {
+   "text": "엄격하게 드러난 선의가 현재의 선택 안에서 조용히 드러나고 있습니다.",
+   "basis": "Mathers 없음, Waite만 사용: Good, but severe, austere, yet tolerant; our_reversed 정본의 엄격하게 드러난 선의를 현재의 상태·주의점으로 투영"
+  },
+  "future": {
+   "text": "엄격하게 드러난 선의가 다가오는 흐름에 어떤 뜻인지 지켜보세요.",
+   "basis": "Mathers 없음, Waite만 사용: Good, but severe, austere, yet tolerant; our_reversed 정본의 엄격하게 드러난 선의를 다가올 가능성·경향으로 투영"
+  }
+ }
+}

@@ -1,0 +1,314 @@
+{
+ "the-fool": {
+  "text": "바보 역방향은 나 자신에게 시작하려는 마음이 아직 발을 떼지 못한 양상으로 드러날 수 있습니다. 흩어진 주의를 탓하기보다, 지금 나에게 정말 궁금한 것 하나를 골라 보세요. 호기심이 한곳에 모이면 멈춘 발끝이 저절로 방향을 찾습니다.",
+  "basis": "Mathers 없음, Waite만 사용: Negligence, absence, distribution, carelessness; our_reversed 정본의 시작하려는 마음이 아직 발을 떼지 못한 의미를 나의 내면·자기인식으로 투영; 꼬리: Waite 'distribution/carelessness'의 흩어진 주의를 자기인식의 초점 회복 조언으로 전개"
+ },
+ "the-magician": {
+  "text": "마법사 역방향은 나 자신에게 재능과 도구는 그대로인데 마음이 흔들리는 양상으로 드러날 수 있습니다. 능력이 사라진 것이 아니라 자신을 보는 눈이 흐려진 때이니, 오늘 해낸 작은 일 하나를 있는 그대로 적어 보세요. 기록된 사실은 흔들리는 자기 의심보다 힘이 셉니다.",
+  "basis": "Mathers 없음, Waite만 사용: Physician, Magus, mental disease, disgrace; our_reversed 정본의 재능과 도구는 그대로인데 마음이 흔들리는 의미를 나의 내면·자기인식으로 투영; 꼬리: Waite 'disquiet'와 정본의 자기 의심을 기록으로 확인하는 내면 조언으로 전개"
+ },
+ "the-high-priestess": {
+  "text": "여사제 역방향은 나 자신에게 안쪽의 조용한 목소리가 바깥의 소음에 묻힌 양상으로 드러날 수 있습니다. 이미 다 안다고 여기는 부분일수록 한 겹 아래를 다시 들여다보세요. 하루 몇 분이라도 소리를 줄이면, 묻혀 있던 나의 목소리가 다시 또렷해집니다.",
+  "basis": "Waite reversed: Passion, moral or physical ardour, conceit, surface knowledge; Mathers reversed: Conceit, Ignorance, Unskilfulness, Superficial Knowledge; our_reversed 정본의 안쪽의 조용한 목소리가 바깥의 소음에 묻힌 의미를 나의 내면·선택으로 투영; 꼬리: 'surface knowledge/conceit'의 겉핥이 앎을 내면의 목소리 회복 조언으로 전개"
+ },
+ "the-empress": {
+  "text": "여황제 역방향은 나 자신에게 얽혀 있던 일이 풀리기 시작하는 양상으로 드러날 수 있습니다. 드러나는 내 모습이 낯설어도 서둘러 좋다 나쁘다를 매기지 마세요. 마음이 오락가락한다면 지금은 결정하는 때가 아니라 나를 알아 가는 때입니다.",
+  "basis": "Waite reversed: Light, truth, the unravelling of involved matters, public rejoicings; Mathers reversed: Inaction, Frittering away of power, Want of Concentration Vacillation; our_reversed 정본의 얽혀 있던 일이 풀리기 시작하는 의미를 나의 내면·선택으로 투영; 꼬리: Waite 'unravelling/vacillation'의 밝혀짐과 동요를 자기 이해의 시간으로 전개"
+ },
+ "the-emperor": {
+  "text": "황제 역방향은 나 자신에게 단단하던 질서가 조금 무르게 풀린 양상으로 드러날 수 있습니다. 느슨해진 자신을 실패로 여길 필요는 없습니다. 규칙을 다시 조이기 전에, 그 틀이 나를 지키기 위한 것이었는지 조이기 위한 것이었는지 가려 보세요.",
+  "basis": "Waite reversed: Benevolence, compassion, credit, also confusion to enemies; Mathers reversed: Stoppage, Check, Immature, Unripe; our_reversed 정본의 단단하던 질서가 조금 무르게 풀린 의미를 나의 내면·선택으로 투영; 꼬리: Mathers 'Immature/Unripe'의 덜 여문 틀을 자기 규율 점검 조언으로 전개"
+ },
+ "the-hierophant": {
+  "text": "교황 역방향은 나 자신에게 어울림과 화합이 앞서는 양상으로 드러날 수 있습니다. 모두에게 맞추는 동안 정작 내 뜻이 어디에 있었는지 흐려졌을 수 있습니다. 남의 기준을 잠시 내려놓고, 나는 무엇을 원하는지 한 문장으로 말해 보세요. 친절함과 나를 지우는 일은 다른 것입니다.",
+  "basis": "Mathers 없음, Waite만 사용: Society, good understanding, concord, overkindness; our_reversed 정본의 어울림과 화합이 앞서는 의미를 나의 내면·자기인식으로 투영; 꼬리: Waite 'overkindness/weakness'의 과한 맞춤을 자기 목소리 되찾기 조언으로 전개"
+ },
+ "the-lovers": {
+  "text": "연인 역방향은 나 자신에게 마음과 선택이 어긋나 있는 양상으로 드러날 수 있습니다. 지금의 선택이 진심에서 나온 것인지, 남의 기대에서 나온 것인지 조용히 갈라 보세요. 어긋남을 알아차린 것 자체가 이미 나를 이해하는 한 걸음입니다.",
+  "basis": "Waite reversed: Failure, foolish designs, Another account speaks of marriage frustrated and contrarieties of all kinds; Mathers reversed: Unwise Plans, Failure when put to the test; our_reversed 정본의 마음과 선택이 어긋나 있는 의미를 나의 내면·선택으로 투영; 꼬리: 'Unwise Plans/foolish designs'의 어긋난 선택을 진심 확인의 자기인식 조언으로 전개"
+ },
+ "the-chariot": {
+  "text": "전차 역방향은 나 자신에게 앞으로 나아가던 힘이 마찰로 새어 나가는 양상으로 드러날 수 있습니다. 내 안의 서로 다른 바람이 힘겨루기를 하고 있는지 살펴보세요. 어느 쪽도 틀리지 않았습니다. 둘 다 들어 준 뒤에 고삐를 쥐면 힘은 다시 한 방향으로 모입니다.",
+  "basis": "Waite reversed: Riot, quarrel, dispute, litigation; Mathers reversed: Overthrown, Conquered by Obstacles at the last moment; our_reversed 정본의 앞으로 나아가던 힘이 마찰로 새어 나가는 의미를 나의 내면·선택으로 투영; 꼬리: 'quarrel/dispute'의 충돌을 내면의 상반된 욕구 조율 조언으로 전개"
+ },
+ "strength": {
+  "text": "힘 역방향은 나 자신에게 부드러움과 단단함의 균형이 한쪽으로 기운 양상으로 드러날 수 있습니다. 지금 필요한 것은 더 강한 의지가 아니라 나를 달래는 다정함일 수 있습니다. 겁먹은 자신을 나무라지 말고, 잘 버텨 왔다는 말부터 건네 보세요.",
+  "basis": "Mathers 없음, Waite만 사용: Despotism, abuse if power, weakness, discord; our_reversed 정본의 부드러움과 단단함의 균형이 한쪽으로 기운 의미를 나의 내면·자기인식으로 투영; 꼬리: Waite 'weakness/discord'의 약해진 확신을 자기 다정함 회복 조언으로 전개"
+ },
+ "the-hermit": {
+  "text": "은둔자 역방향은 나 자신에게 성찰을 위한 물러남이 숨어 있는 쪽으로 기운 양상으로 드러날 수 있습니다. 혼자만의 시간이 성찰인지 회피인지 스스로에게 물어보세요. 얻은 답이 있다면 이제 문을 조금만 열어도 됩니다. 등불은 감추기 위한 것이 아니니까요.",
+  "basis": "Waite reversed: Concealment, disguise, policy, fear; Mathers reversed: Over-prudence, Timorousness, Fear; our_reversed 정본의 성찰을 위한 물러남이 숨어 있는 쪽으로 기운 의미를 나의 내면·선택으로 투영; 꼬리: 'Concealment/fear, Over-prudence'의 숨는 물러남을 성찰-회피 구분 조언으로 전개"
+ },
+ "wheel-of-fortune": {
+  "text": "운명의 수레바퀴 역방향은 나 자신에게 흐름이 내 쪽으로 돌지 않는 양상으로 드러날 수 있습니다. 뜻대로 되지 않는 시기를 자신의 모자람으로 읽지 않는 것이 먼저입니다. 바꿀 수 없는 것과 바꿀 수 있는 것을 나누어 보면, 기다림도 하나의 선택이 됩니다.",
+  "basis": "Mathers 없음, Waite만 사용: Increase, abundance, superfluity; our_reversed 정본의 흐름이 내 쪽으로 돌지 않는 시기인 의미를 나의 내면·자기인식으로 투영; 첫 문장 문법 수정('시기인 양상으로'→'양상으로'); 꼬리: 정본의 '자기 탓으로 돌릴 일이 아님'을 통제 가능/불가능 구분의 자기인식 조언으로 전개"
+ },
+ "justice": {
+  "text": "정의 역방향은 나 자신에게 저울이 한쪽으로 기울어 있는 양상으로 드러날 수 있습니다. 특히 자신에게 내리는 판결이 남에게보다 무겁지 않은지 살펴보세요. 잘못만 세지 말고 애쓴 것도 같은 저울에 올려 보면, 판단은 한결 공정해집니다.",
+  "basis": "Waite reversed: Law in all its departments, legal complications, bigotry, bias; Mathers reversed: Bigotry, Want of Balance, Abuse of Justice, Over-severity; our_reversed 정본의 저울이 한쪽으로 기울어 있는 의미를 나의 내면·선택으로 투영; 꼬리: 'Over-severity/Bias'의 가혹한 잣대를 자기 심판 완화 조언으로 전개"
+ },
+ "the-hanged-man": {
+  "text": "매달린 사람 역방향은 나 자신에게 멈춤이 제 역할을 하지 못하는 양상으로 드러날 수 있습니다. 이 기다림이 내 선택인지, 남들의 시선에 매달린 것인지 구분해 보세요. 거꾸로 매달려야만 보이는 나만의 풍경을 되찾으면 멈춤은 다시 의미를 얻습니다.",
+  "basis": "Waite reversed: Selfishness, the crowd, body politic; Mathers reversed: Selfishness, Unbound, Partial sacrifice; our_reversed 정본의 멈춤이 제 역할을 하지 못하는 의미를 나의 내면·선택으로 투영; 꼬리: 'the crowd/Selfishness'의 군중에 매인 상태를 자기 시점 회복 조언으로 전개"
+ },
+ "death": {
+  "text": "죽음 역방향은 나 자신에게 끝나야 할 것이 끝나지 못하고 멈춰 있는 양상으로 드러날 수 있습니다. 붙들고 있는 옛 모습이 지금의 나를 좁게 만들 수 있습니다. 이미 지나간 역할 하나에 작별을 고해 보세요. 비워진 자리로 새로운 내가 들어옵니다.",
+  "basis": "Waite reversed: Inertia, sleep, lethargy, petrifaction; Mathers reversed: Death just escaped, Partial change, Alteration for the better; our_reversed 정본의 끝나야 할 것이 끝나지 못하고 멈춰 있는 의미를 나의 내면·선택으로 투영; 꼬리: 'Inertia/petrifaction'의 멈춘 변화를 낡은 자기상과의 작별 조언으로 전개"
+ },
+ "temperance": {
+  "text": "절제 역방향은 나 자신에게 섞이던 것들이 서로 겉도는 양상으로 드러날 수 있습니다. 서로 어울리지 않는 역할과 바람을 한 몸에 담으려 애쓰고 있는지도 모릅니다. 전부 지키려 하기보다 무엇이 지금의 나와 맞는지 가려내 보세요. 덜어낸 자리에서 균형이 돌아옵니다.",
+  "basis": "Waite reversed: Things connected with churches, religions, sects, the priesthood; Mathers reversed: IIl- advised combinations, Disunion, Clashing interests, &c; our_reversed 정본의 섞이던 것들이 서로 겉도는 의미를 나의 내면·선택으로 투영; 꼬리: 'Disunion/Clashing interests'의 겉도는 조합을 내면의 역할 정리 조언으로 전개"
+ },
+ "the-devil": {
+  "text": "악마 역방향은 나 자신에게 작고 눈에 띄지 않는 고리들이 자신을 붙드는 양상으로 드러날 수 있습니다. 거창한 결심보다 작은 알아차림이 먼저입니다. 오늘 나를 깎아내린 혼잣말 하나를 붙잡아 이름을 붙여 보세요. 작은 고리는 작게 풀립니다.",
+  "basis": "Waite reversed: Evil fatality, weakness, pettiness, blindness; Mathers reversed: Fatality for Evil; our_reversed 정본의 작고 눈에 띄지 않는 고리들이 자신을 붙드는 의미를 나의 내면·선택으로 투영; 꼬리: 'pettiness/blindness'의 잔고리를 자기 비하 혼잣말 알아차림 조언으로 전개"
+ },
+ "the-tower": {
+  "text": "탑 역방향은 나 자신에게 무너질 것이 무너지지 못한 채 압력만 쌓여 가는 양상으로 드러날 수 있습니다. 버티는 것만이 답은 아닐 수 있습니다. 나를 조이는 생각의 벽돌 하나를 스스로 내려 보세요. 자발적인 허묾은 무너짐보다 훨씬 덜 아픕니다.",
+  "basis": "Mathers 없음, Waite만 사용: According to one account, the same in a lesser degree also oppression, imprisonment, tyranny; our_reversed 정본의 무너질 것이 무너지지 못한 채 압력만 쌓여 가는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'oppression/imprisonment'의 갇힌 압력을 스스로 허무는 내면 조언으로 전개"
+ },
+ "the-star": {
+  "text": "별 역방향은 나 자신에게 희망과 나 사이의 연결이 흐려진 양상으로 드러날 수 있습니다. 무력감도 자만도 결국 나와 희망 사이를 가리는 커튼일 뿐입니다. 오늘 마음이 조금이라도 밝아진 순간을 하나 기록해 보세요. 그 기록이 다시 별을 찾는 지도가 됩니다.",
+  "basis": "Waite reversed: Arrogance, haughtiness, impotence; Mathers reversed: Hopes not fulfilled, Expectations disappointed or fulfilled in a minor degree; our_reversed 정본의 희망과 나 사이의 연결이 흐려진 의미를 나의 내면·선택으로 투영; 꼬리: 'impotence/Hopes not fulfilled'의 흐려진 희망을 작은 밝음 기록의 자기인식 조언으로 전개"
+ },
+ "the-moon": {
+  "text": "달 역방향은 나 자신에게 짙던 안개가 옅어지고는 있지만 발밑이 아직 흔들리는 양상으로 드러날 수 있습니다. 지금의 내 감정이 사실인지 상상인지 애써 가리려 하지 않아도 됩니다. 보이는 만큼만 인정하고 작게 움직여 보세요. 안개 속 걸음도 걸음입니다.",
+  "basis": "Waite reversed: Instability, inconstancy, silence, lesser degrees of deception and error; Mathers reversed: Fluctuation, slight Deceptions, Trifling Mistakes; our_reversed 정본의 짙던 안개가 옅어지고는 있지만 발밑이 아직 흔들리는 의미를 나의 내면·선택으로 투영; 꼬리: 'Fluctuation/slight Deceptions'의 흔들림을 부분 인정과 소보폭 전진 조언으로 전개"
+ },
+ "the-sun": {
+  "text": "태양 역방향은 나 자신에게 빛이 사라진 것이 아니라 구름에 한 겹 가려진 양상으로 드러날 수 있습니다. 행복을 누릴 자격을 스스로 심사하고 있지는 않은지 돌아보세요. 오늘의 작은 온기를 미루지 않고 받아들이는 것이 나를 아끼는 연습이 됩니다.",
+  "basis": "Waite reversed: The same in a lesser sense; Mathers reversed: These in a minor degree; our_reversed 정본의 빛이 사라진 것이 아니라 구름에 한 겹 가려진 의미를 나의 내면·선택으로 투영; 꼬리: 'The same in a lesser sense'의 옅어진 기쁨을 자기 허용 연습 조언으로 전개"
+ },
+ "judgement": {
+  "text": "심판 역방향은 나 자신에게 부름은 이미 들려왔는데 대답이 머뭇거리는 양상으로 드러날 수 있습니다. 스스로를 심판하는 데 쓰는 힘을 조금 떼어, 미뤄 둔 대답 중 가장 작은 것에 응답해 보세요. 지난 나를 용서하는 것도 하나의 대답입니다.",
+  "basis": "Mathers 없음, Waite만 사용: Weakness, pusillanimity, simplicity, also deliberation; our_reversed 정본의 부름은 이미 들려왔는데 대답이 머뭇거리는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Weakness/deliberation'의 머뭇거림을 자기 용서와 작은 응답 조언으로 전개"
+ },
+ "the-world": {
+  "text": "세계 역방향은 나 자신에게 마무리되어야 할 순환이 아직 닫히지 못한 양상으로 드러날 수 있습니다. 거의 다 온 자신을 아직 멀었다고 깎아내리지 마세요. 남은 매듭 하나를 정직하게 짓고 나면, 지나온 여정 전체가 비로소 내 것으로 자리 잡습니다.",
+  "basis": "Mathers 없음, Waite만 사용: Inertia, fixity, stagnation, permanence; our_reversed 정본의 마무리되어야 할 순환이 아직 닫히지 못한 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Inertia/stagnation'의 닫히지 않은 순환을 자기 인정과 완결 조언으로 전개"
+ },
+ "ace-of-cups": {
+  "text": "컵 에이스 역방향은 나 자신에게 새로 흐르기 시작해야 할 감정이 어딘가에서 막혀 있는 양상으로 드러날 수 있습니다. 겉으로 보이는 표정과 속마음의 거리를 재어 보세요. 막힌 감정은 억지로 틔우기보다, 어디서 오는지 알아주는 것만으로 다시 흐르기 시작합니다.",
+  "basis": "Waite reversed: House of the false heart, mutation, instability, revolution; Mathers reversed: Change, Novelty, Metamorphosis, Inconstancy; our_reversed 정본의 새로 흐르기 시작해야 할 감정이 어딘가에서 막혀 있는 의미를 나의 내면·선택으로 투영; 꼬리: 'false heart/Inconstancy'의 겉속 어긋남을 감정의 출처 확인 조언으로 전개"
+ },
+ "two-of-cups": {
+  "text": "컵 2 역방향은 나 자신에게 두 마음이 만나야 할 자리에서 미묘하게 어긋나 있는 양상으로 드러날 수 있습니다. 나와 나 사이의 약속이 어긋나 있는지도 모릅니다. 스스로에게 하고 싶었던 말 하나를 오늘 꺼내어 보세요. 자신과의 화해가 모든 연결의 출발점입니다.",
+  "basis": "Waite/Mathers 역방향 항목 없음; our_reversed 정본의 두 마음이 만나야 할 자리에서 미묘하게 어긋나 있는 의미만 사용해 나의 내면·선택으로 투영; 꼬리: 정본의 '만남의 어긋남'을 자기 자신과의 관계로 옮겨 화해 조언으로 전개"
+ },
+ "three-of-cups": {
+  "text": "컵 3 역방향은 나 자신에게 함께하는 기쁨이 조금 과해진 양상으로 드러날 수 있습니다. 어울림 속에서 나를 잃고 있지는 않은지 살펴보세요. 모임이 나를 채우는지 비우는지 가려 보고, 혼자 고요히 회복하는 시간을 하나 남겨 두시기 바랍니다.",
+  "basis": "Waite reversed: Expedition, dispatch, achievement, end; Mathers reversed: Expedition of business, Quickness, Celerity, Vigilance; our_reversed 정본의 함께하는 기쁨이 조금 과해진 의미를 나의 내면·선택으로 투영; 꼬리: 'excess in enjoyment'의 과해진 어울림을 자기 소모 점검 조언으로 전개"
+ },
+ "four-of-cups": {
+  "text": "컵 4 역방향은 나 자신에게 오래 머물던 권태가 걷히기 시작하는 양상으로 드러날 수 있습니다. 다시 궁금해지기 시작한 마음을 놓치지 마세요. 시들하다고 여겼던 나에게도 아직 움직이는 관심이 있다는 것, 그 발견이 회복의 첫 신호입니다.",
+  "basis": "Waite reversed: Novelty, presage, new instruction, new relations; Mathers reversed: New Acquaintance, Conjecture, Sign, Presentiment; our_reversed 정본의 오래 머물던 권태가 걷히기 시작하는 의미를 나의 내면·선택으로 투영; 꼬리: 'Novelty/new instruction'의 깨어나는 관심을 자기 재발견 조언으로 전개"
+ },
+ "five-of-cups": {
+  "text": "컵 5 역방향은 나 자신에게 상실의 자리에서 시선이 다시 밖으로 향하기 시작하는 양상으로 드러날 수 있습니다. 돌아오는 위로와 서둘러 만든 희망을 천천히 가려 보세요. 잃은 것을 슬퍼한 시간도 나를 만든 일부입니다. 그 시간을 인정할 때 회복이 단단해집니다.",
+  "basis": "Waite reversed: News, alliances, affinity, consanguinity; Mathers reversed: Arrival, Return, News, Surprise; our_reversed 정본의 상실의 자리에서 시선이 다시 밖으로 향하기 시작하는 의미를 나의 내면·선택으로 투영; 꼬리: 'Return/False projects'의 회복과 헛기대를 애도 인정의 자기인식 조언으로 전개"
+ },
+ "six-of-cups": {
+  "text": "컵 6 역방향은 나 자신에게 시선이 과거에서 앞으로 옮겨 가는 양상으로 드러날 수 있습니다. 지난 나를 그리워하는 마음은 짐이 아니라 방향이 될 수 있습니다. 추억에서 가져갈 것과 두고 갈 것을 고르고, 다가올 나에게 자리를 조금 비워 두세요.",
+  "basis": "Waite reversed: The future, renewal, that which will come to pass presently; Mathers reversed: The Future, that which is to come, Shortly, Soon; our_reversed 정본의 시선이 과거에서 앞으로 옮겨 가는 길목을 의미를 나의 내면·선택으로 투영; 첫 문장 문법 수정('길목을 양상으로'→'옮겨 가는 양상으로'); 꼬리: 'The future/renewal'의 전환을 과거의 나와 다가올 나 사이 선별 조언으로 전개"
+ },
+ "seven-of-cups": {
+  "text": "컵 7 역방향은 나 자신에게 여러 갈래로 떠 있던 상상이 하나의 바람으로 모이기 시작하는 양상으로 드러날 수 있습니다. 또렷해진 바람 하나를 종이에 적어 보세요. 원하는 것을 스스로 인정하는 순간, 흩어져 있던 마음의 힘이 한 방향으로 모이기 시작합니다.",
+  "basis": "Waite reversed: Desire, will, determination, project; Mathers reversed: Plan, Design, Resolution, Decision; our_reversed 정본의 여러 갈래로 떠 있던 상상이 하나의 바람으로 모이기 시작하는 의미를 나의 내면·선택으로 투영; 꼬리: 'Desire/will/determination'의 결심을 바람의 언어화 조언으로 전개"
+ },
+ "eight-of-cups": {
+  "text": "컵 8 역방향은 나 자신에게 떠나려던 발걸음이 멈추고, 남아 있을 이유가 다시 보이기 시작하는 양상으로 드러날 수 있습니다. 머무는 것이 선택인지 미룸인지 스스로에게만은 정직하게 물어보세요. 답이 어느 쪽이든, 그 물음을 던질 수 있다는 것이 나를 아는 힘입니다.",
+  "basis": "Waite reversed: Great joy, happiness, feasting; Mathers reversed: Gaiety, Feasting, Joy, Pleasure; our_reversed 정본의 떠나려던 발걸음이 멈추고, 남아 있을 이유가 다시 보이기 시작하는 의미를 나의 내면·선택으로 투영; 꼬리: 'Great joy/feasting'의 되찾은 이유를 머묾의 동기 확인 조언으로 전개"
+ },
+ "nine-of-cups": {
+  "text": "컵 9 역방향은 나 자신에게 겉의 만족 아래 진짜 기준을 다시 묻게 되는 양상으로 드러날 수 있습니다. 이룬 것의 값어치를 스스로 깎아내리지 않는지 살펴보세요. 부족한 한 조각보다, 그 틈으로 보이기 시작한 진짜 바람에 눈을 두시기 바랍니다.",
+  "basis": "Waite reversed: Truth, loyalty, liberty, but the readings vary and include mistakes; Mathers reversed: Faults, Errors, Mistakes, Imperfections; our_reversed 정본의 겉의 만족 아래 진짜 기준을 다시 묻게 되는 의미를 나의 내면·선택으로 투영; 꼬리: 'Faults/Imperfections'의 흠을 자기 평가 절하 경계와 진짜 욕구 발견 조언으로 전개"
+ },
+ "ten-of-cups": {
+  "text": "컵 10 역방향은 나 자신에게 겉으로는 평온해 보이는 마음 안쪽이 어긋나 있는 양상으로 드러날 수 있습니다. 괜찮은 척이 길어지면 진짜 감정이 갈 곳을 잃습니다. 눌러 둔 서운함 하나를 자신 앞에서만이라도 소리 내어 말해 보세요. 정직은 안에서부터 시작됩니다.",
+  "basis": "Waite reversed: Repose of the false heart, indignation, violence, 0; Mathers reversed: Combat, Strife, Opposition, Differences; our_reversed 정본의 겉으로는 평온해 보이는 자리 안쪽의 어긋남을 의미를 나의 내면·선택으로 투영; 첫 문장 문법 수정('어긋남을 양상으로'→'어긋나 있는 양상으로'); 꼬리: 'Repose of the false heart'의 거짓 평온을 내면의 정직 조언으로 전개"
+ },
+ "page-of-cups": {
+  "text": "컵 페이지 역방향은 나 자신에게 마음을 끄는 것의 겉과 속이 다를 수 있는 양상으로 드러날 수 있습니다. 감정을 실제보다 예쁘게 포장하고 있지는 않은지 들여다보세요. 반짝임을 걷어 낸 뒤에도 남는 마음이 지금의 나를 알려 주는 진짜 신호입니다.",
+  "basis": "Mathers 없음, Waite만 사용: Taste, inclination, attachment, seduction; our_reversed 정본의 마음을 끄는 것의 겉과 속이 다를 수 있는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'seduction/artifice'의 꾸며진 겉을 감정 포장 점검 조언으로 전개"
+ },
+ "knight-of-cups": {
+  "text": "컵 나이트 역방향은 나 자신에게 낭만이 실체보다 앞서 있는 양상으로 드러날 수 있습니다. 이상 속의 나와 오늘의 나 사이 거리를 담담히 재어 보세요. 꿈을 버리라는 뜻이 아닙니다. 말뿐인 다짐 하나를 행동 하나로 바꾸면 낭만은 실체를 얻습니다.",
+  "basis": "Waite reversed: Trickery, artifice, subtlety, swindling; Mathers reversed: Duplicity, Abuse of Confidence, Fraud, Cunning; our_reversed 정본의 낭만이 실체보다 앞서 있는 의미를 나의 내면·선택으로 투영; 꼬리: 'Trickery/Duplicity'의 겉과 속 불일치를 자기 다짐의 실행 전환 조언으로 전개"
+ },
+ "queen-of-cups": {
+  "text": "컵 퀸 역방향은 나 자신에게 깊은 감수성이 물길을 잃은 양상으로 드러날 수 있습니다. 남의 마음을 살피느라 내 마음이 비어 가는지 확인해 보세요. 연민에도 가장자리가 필요합니다. 나의 컵을 먼저 채워야 감정이 판단을 흐리지 않습니다.",
+  "basis": "Waite reversed: The accounts vary, good woman, otherwise, distinguished woman but one not to be trusted; Mathers reversed: A Woman in good position, but intermeddling, and to be distrusted, Success; our_reversed 정본의 깊은 감수성이 물길을 잃은 의미를 나의 내면·선택으로 투영; 꼬리: 'not to be trusted/intermeddling'의 흐려진 경계를 자기 돌봄 우선 조언으로 전개"
+ },
+ "king-of-cups": {
+  "text": "컵 킹 역방향은 나 자신에게 감정의 성숙이 뒤집힌 양상으로 드러날 수 있습니다. 침착해 보이려는 노력 아래 눌러 둔 감정이 쌓여 있을 수 있습니다. 어른스러움은 감정을 없애는 것이 아니라 이름을 붙여 다루는 것입니다. 오늘 하나의 감정에만이라도 솔직해져 보세요.",
+  "basis": "Waite reversed: Dishonest, double-dealing man, roguery, exaction; Mathers reversed: A Man of good position, but shifty in his Dealings, Distrust, Doubt; our_reversed 정본의 감정의 성숙이 뒤집힌 의미를 나의 내면·선택으로 투영; 꼬리: 'double-dealing'의 겉과 속 이중성을 감정 억압 알아차림 조언으로 전개"
+ },
+ "ace-of-pentacles": {
+  "text": "펜타클 에이스 역방향은 나 자신에게 풍요가 나를 든든하게 하는 대신 무겁게 하는 양상으로 드러날 수 있습니다. 가진 것과 지킬 것이 나를 전부 정의하게 두지 마세요. 이 안정이 본래 어떤 삶을 위한 것이었는지 떠올리면, 무게는 다시 든든함으로 돌아옵니다.",
+  "basis": "Waite reversed: The evil side of wealth, bad intelligence, also great riches, In any case it shews prosperity; Mathers reversed: Purse of Gold, Money, Gain, Help; our_reversed 정본의 풍요가 나를 든든하게 하는 대신 무겁게 하는 의미를 나의 내면·선택으로 투영; 꼬리: 'the evil side of wealth'의 무거워진 풍요를 소유와 자기 정체성 분리 조언으로 전개"
+ },
+ "two-of-pentacles": {
+  "text": "펜타클 2 역방향은 나 자신에게 균형 잡는 솜씨가 한계에 다다른 양상으로 드러날 수 있습니다. 괜찮은 척 웃는 얼굴 뒤의 피로를 모른 척하지 마세요. 공 하나쯤 내려놓아도 나는 무너지지 않습니다. 버티는 능력보다 고르는 능력이 지금의 나를 지킵니다.",
+  "basis": "Mathers 없음, Waite만 사용: Enforced gaiety, simulated enjoyment, literal sense, handwriting; our_reversed 정본의 균형 잡는 솜씨가 한계에 다다른 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Enforced gaiety/simulated enjoyment'의 꾸민 명랑을 과부하 인정 조언으로 전개"
+ },
+ "three-of-pentacles": {
+  "text": "펜타클 3 역방향은 나 자신에게 함께 짓는 일이 제 높이에 이르지 못한 양상으로 드러날 수 있습니다. 그럭저럭에 머문 것이 게으름이 아니라 기준이 흐려진 탓일 수 있습니다. 나에게 좋은 결과란 무엇인지 스스로 다시 정의해 보세요. 기준이 서면 손은 따라옵니다.",
+  "basis": "Waite reversed: Mediocrity, in work and otherwise, puerility, pettiness; Mathers reversed: Children, Sons, Daughters, Youths; our_reversed 정본의 함께 짓는 일이 제 높이에 이르지 못한 의미를 나의 내면·선택으로 투영; 꼬리: 'Mediocrity/pettiness'의 어중간함을 자기 기준 재정의 조언으로 전개"
+ },
+ "four-of-pentacles": {
+  "text": "펜타클 4 역방향은 나 자신에게 붙잡고 있던 것이 뜻대로 움직이지 않는 양상으로 드러날 수 있습니다. 꽉 쥔 손은 무언가를 지키는 동시에 나를 굳게 만들기도 합니다. 놓아도 괜찮은 것 하나를 골라 살짝 풀어 보세요. 느슨해진 만큼 마음이 숨 쉴 자리가 생깁니다.",
+  "basis": "Waite reversed: Suspense, delay, opposition; Mathers reversed: Obstacles, Hindrances; our_reversed 정본의 붙잡고 있던 것이 뜻대로 움직이지 않는 의미를 나의 내면·선택으로 투영; 꼬리: 'Suspense/delay, Obstacles'의 막힘을 움켜쥠 완화의 내면 조언으로 전개"
+ },
+ "five-of-pentacles": {
+  "text": "펜타클 5 역방향은 나 자신에게 어려움 위에 어수선함이 겹친 양상으로 드러날 수 있습니다. 힘든 시기일수록 자신을 돌보는 일을 맨 뒤로 미루기 쉽습니다. 오늘 정돈할 수 있는 작은 것 하나만 손보세요. 나를 챙기는 감각이 돌아오면 도움도 눈에 들어옵니다.",
+  "basis": "Mathers 없음, Waite만 사용: Disorder, chaos, ruin, discord; our_reversed 정본의 어려움 위에 어수선함이 겹친 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Disorder/discord'의 어수선함을 자기 돌봄의 작은 질서 조언으로 전개"
+ },
+ "six-of-pentacles": {
+  "text": "펜타클 6 역방향은 나 자신에게 주고받음의 흐름이 어딘가에서 어긋난 양상으로 드러날 수 있습니다. 베풀며 은근히 바랐던 것, 받으며 눌러 둔 미안함을 알아차려 보세요. 나는 무엇을 주고 무엇을 받아야 채워지는 사람인지 아는 것이 이 카드의 숙제입니다.",
+  "basis": "Waite reversed: Desire, cupidity, envy, jealousy; Mathers reversed: Disgraceful Love, Imprudence, License, Profligacy; our_reversed 정본의 주고받음의 흐름이 어딘가에서 어긋난 의미를 나의 내면·선택으로 투영; 꼬리: 'Desire/envy/jealousy'의 셈과 부러움을 주고받음의 자기 이해 조언으로 전개"
+ },
+ "seven-of-pentacles": {
+  "text": "펜타클 7 역방향은 나 자신에게 들인 것에 대한 마음이 기대보다 걱정 쪽으로 기울어 있는 양상으로 드러날 수 있습니다. 불안은 답이 아니라 살펴보라는 신호입니다. 내가 이 일에 무엇을 기대했는지 처음으로 돌아가 확인하면, 이어 갈 것과 거둘 것이 나뉩니다.",
+  "basis": "Waite reversed: Cause for anxiety regarding money which it may be proposed to lend; Mathers reversed: Disturbance, Worry, Anxiety, Melancholy; our_reversed 정본의 들인 것에 대한 마음이 기대보다 걱정 쪽으로 기울어 있는 의미를 나의 내면·선택으로 투영; 꼬리: 'Anxiety/Melancholy'의 걱정을 기대의 재확인 조언으로 전개"
+ },
+ "eight-of-pentacles": {
+  "text": "펜타클 8 역방향은 나 자신에게 일과 나 사이가 조금 헐거워진 양상으로 드러날 수 있습니다. 손은 움직이는데 마음이 떠나 있다면, 처음 이 일이 좋았던 순간을 떠올려 보세요. 남에게 보이기 위해서가 아니라 나를 위해 다듬는 작업 하나가 이유를 되찾아 줍니다.",
+  "basis": "Waite reversed: Voided ambition, vanity, cupidity, exaction; Mathers reversed: Flattery, Usury, Hypocrisy, Shifty; our_reversed 정본의 일과 나 사이가 조금 헐거워진 의미를 나의 내면·선택으로 투영; 꼬리: 'Voided ambition/vanity'의 옅어진 동기를 초심 회복 조언으로 전개"
+ },
+ "nine-of-pentacles": {
+  "text": "펜타클 9 역방향은 나 자신에게 스스로 일군 안정에 어딘가 미덥지 못한 구석이 있는 양상으로 드러날 수 있습니다. 겉의 여유보다 그 아래의 기반을 살펴보세요. 내가 어떤 약속과 습관 위에 서 있는지 점검하는 일은 의심이 아니라 나를 지키는 정돈입니다.",
+  "basis": "Waite reversed: Roguery, deception, voided project, bad faith; Mathers reversed: Deceit, Bad faith, Artifices, Deception; our_reversed 정본의 스스로 일군 안정에 어딘가 미덥지 못한 구석이 있는 의미를 나의 내면·선택으로 투영; 꼬리: 'bad faith/voided project'의 미덥지 못한 토대를 자기 기반 점검 조언으로 전개"
+ },
+ "ten-of-pentacles": {
+  "text": "펜타클 10 역방향은 나 자신에게 오래 쌓아 온 안정이 운에 기대어 흔들리는 양상으로 드러날 수 있습니다. 흔들리는 시기일수록 무엇이 나를 지탱해 왔는지 눈에 들어옵니다. 운에 맡길 것과 스스로 지킬 것을 나누어 보면 붙들 기둥이 분명해집니다.",
+  "basis": "Waite reversed: Chance, fatality, loss, robbery; Mathers reversed: Gambling, Dissipation, Robbery, Loss; our_reversed 정본의 오래 쌓아 온 안정이 운에 기대어 흔들리는 의미를 나의 내면·선택으로 투영; 꼬리: 'Chance/Gambling/Loss'의 운에 기댄 흔들림을 자기 기둥 확인 조언으로 전개"
+ },
+ "page-of-pentacles": {
+  "text": "펜타클 페이지 역방향은 나 자신에게 배우려던 마음이 좀처럼 한곳에 머물지 못하는 양상으로 드러날 수 있습니다. 거창한 계획 대신 오늘 끝낼 수 있는 한 가지를 정해 보세요. 작게라도 끝을 본 경험이 쌓이면, 흩어졌던 주의와 자신감이 함께 돌아옵니다.",
+  "basis": "Mathers 없음, Waite만 사용: Prodigality, dissipation, liberality, luxury; our_reversed 정본의 배우려던 마음이 좀처럼 한곳에 머물지 못하는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Prodigality/dissipation'의 흩어진 집중을 작은 완결 경험 조언으로 전개"
+ },
+ "knight-of-pentacles": {
+  "text": "펜타클 나이트 역방향은 나 자신에게 꾸준함이 어느새 제자리걸음으로 굳어 버린 양상으로 드러날 수 있습니다. 멈춘 감각은 게으름이 아니라 같은 길을 너무 오래 걸었다는 신호일 수 있습니다. 익숙한 하루의 순서를 아주 조금만 바꿔 보세요. 걸음이 다시 가벼워집니다.",
+  "basis": "Waite reversed: inertia, idleness, repose of that kind, stagnation; Mathers reversed: A brave Man, but out of Employment, Idle, Unemployed; our_reversed 정본의 꾸준함이 어느새 제자리걸음으로 굳어 버린 의미를 나의 내면·선택으로 투영; 꼬리: 'stagnation/discouragement'의 굳은 반복을 작은 변주 조언으로 전개"
+ },
+ "queen-of-pentacles": {
+  "text": "펜타클 퀸 역방향은 나 자신에게 돌보는 마음이 걱정과 의심 쪽으로 기울어 버린 양상으로 드러날 수 있습니다. 돌봄의 순서에서 나를 맨 뒤에 두지 마세요. 몸을 먼저 쉬게 하고 안심시켜 주면, 걱정과 의심은 원래의 다정함으로 돌아갈 길을 찾습니다.",
+  "basis": "Waite reversed: Evil, suspicion, suspense, fear; Mathers reversed: Certain Evil, a suspicious Woman, a Woman justly regarded with Suspicion, Doubt; our_reversed 정본의 돌보는 마음이 걱정과 의심 쪽으로 기울어 버린 의미를 나의 내면·선택으로 투영; 꼬리: 'suspicion/fear/mistrust'의 기운 돌봄을 자기 우선 돌봄 조언으로 전개"
+ },
+ "king-of-pentacles": {
+  "text": "펜타클 킹 역방향은 나 자신에게 쌓아 올린 힘이 본래의 쓰임에서 벗어나 있는 양상으로 드러날 수 있습니다. 이룬 것의 크기가 나의 전부는 아닙니다. 이 힘을 처음 무엇을 위해 길렀는지 기억해 내면, 지금 내려놓아야 할 것도 함께 보입니다.",
+  "basis": "Waite reversed: Vice, weakness, ugliness, perversity; Mathers reversed: An old and vicious Man, a Dangerous Man, Doubt, Fear; our_reversed 정본의 쌓아 올린 힘이 본래의 쓰임에서 벗어나 있는 의미를 나의 내면·선택으로 투영; 꼬리: 'corruption/peril'의 벗어난 쓰임을 성취와 자기 가치 분리 조언으로 전개"
+ },
+ "ace-of-swords": {
+  "text": "소드 에이스 역방향은 나 자신에게 명료함의 칼이 지나치게 세게 휘둘리는 양상으로 드러날 수 있습니다. 그 칼끝이 자신을 향해 있지는 않은지 먼저 확인해 보세요. 옳은 지적도 힘 조절이 필요합니다. 명료함은 나를 베는 데가 아니라 길을 여는 데 쓰일 때 빛납니다.",
+  "basis": "Waite reversed: The same, but the results are disastrous, another account says— conception, childbirth; Mathers reversed: Embarrassment, Foolish and Hopeless Love, Obstacle, Hindrance; our_reversed 정본의 명료함의 칼이 지나치게 세게 휘둘리는 의미를 나의 내면·선택으로 투영; 꼬리: 'the results are disastrous'의 과한 힘을 자기 비판의 칼끝 점검 조언으로 전개"
+ },
+ "two-of-swords": {
+  "text": "소드 2 역방향은 나 자신에게 미뤄 둔 결정이 어느새 감춤으로 이어진 양상으로 드러날 수 있습니다. 회피는 거짓이 아니라 지친 마음의 방편이었을 수 있습니다. 다만 내가 무엇을 보지 않으려 하는지 정도는 스스로 알아 두세요. 아는 것만으로 반은 풀립니다.",
+  "basis": "Mathers 없음, Waite만 사용: Imposture, falsehood, duplicity, disloyalty; our_reversed 정본의 미뤄 둔 결정이 어느새 감춤으로 이어진 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Imposture/duplicity'의 감춤을 회피 대상 자각 조언으로 전개"
+ },
+ "three-of-swords": {
+  "text": "소드 3 역방향은 나 자신에게 아픔이 정리되지 못한 채 머릿속을 어지럽히는 양상으로 드러날 수 있습니다. 아픔 자체보다 그 둘레를 도는 생각이 나를 더 지치게 할 수 있습니다. 분석은 잠시 멈추고, 아팠다는 사실만 먼저 인정해 주세요. 정리는 그다음에 따라옵니다.",
+  "basis": "Waite reversed: Mental alienation, error, loss, distraction; Mathers reversed: Error, Confusion, Misrule, Disorder; our_reversed 정본의 아픔이 정리되지 못한 채 머릿속을 어지럽히는 의미를 나의 내면·선택으로 투영; 꼬리: 'distraction/confusion'의 어지러운 반추를 감정 인정 우선 조언으로 전개"
+ },
+ "four-of-swords": {
+  "text": "소드 4 역방향은 나 자신에게 쉼의 시간이 끝을 향해 가고 있는 양상으로 드러날 수 있습니다. 돌아갈 준비가 되었는지 확인하는 기준은 조급함이 아니라 호흡입니다. 숨이 고르게 쉬어진다면, 아껴 쓸 곳을 정해 천천히 일상에 발을 들여 보세요.",
+  "basis": "Waite reversed: Wise administration, circumspection, economy, avarice; Mathers reversed: Economy, Precaution, Regulation of Expenditure; our_reversed 정본의 쉼의 시간이 끝을 향해 가고 있는 의미를 나의 내면·선택으로 투영; 꼬리: 'circumspection/economy'의 신중한 복귀를 회복 상태 자가 확인 조언으로 전개"
+ },
+ "five-of-swords": {
+  "text": "소드 5 역방향은 나 자신에게 이미 끝난 다툼이 마음속에서는 아직 끝나지 않은 양상으로 드러날 수 있습니다. 되새김은 나를 지키려는 마음이지만, 오래 쥐면 상처가 됩니다. 그 다툼에서 배운 것 하나만 남기고 나머지는 배웅해 주세요. 끝맺음도 자기 존중입니다.",
+  "basis": "Waite reversed: The same, burial and obsequies; Mathers reversed: Losses Trouble (same signification, whether reversed or not; our_reversed 정본의 이미 끝난 다툼이 마음속에서는 아직 끝나지 않은 의미를 나의 내면·선택으로 투영; 꼬리: 'burial and obsequies'의 장례 상징을 내적 갈등의 배웅 조언으로 전개"
+ },
+ "six-of-swords": {
+  "text": "소드 6 역방향은 나 자신에게 조용히 건너가려던 것이 말이 되어 나오려는 양상으로 드러날 수 있습니다. 혼자 삭이는 데 익숙해서 털어놓는 일이 어색할 수 있습니다. 일기든 믿는 사람이든, 안전한 곳을 하나 정해 마음을 조금만 옮겨 보세요. 꺼낸 만큼 건너가기 쉬워집니다.",
+  "basis": "Waite reversed: Declaration, confession, publicity, one account says that it is a proposal of love; Mathers reversed: Declaration, Love proposed, Revelation, Surprise; our_reversed 정본의 조용히 건너가려던 것이 말이 되어 나오려는 의미를 나의 내면·선택으로 투영; 꼬리: 'Declaration/confession'의 말이 되려는 마음을 안전한 표현처 마련 조언으로 전개"
+ },
+ "seven-of-swords": {
+  "text": "소드 7 역방향은 나 자신에게 주위에 말이 많아진 양상으로 드러날 수 있습니다. 조언과 소문이 섞여 들어올수록 내 중심이 어디 있는지가 중요해집니다. 흘려보낼 말과 새겨들을 말을 가르는 기준은 결국 내가 무엇을 원하는지에 있습니다. 그 기준부터 조용히 세워 보세요.",
+  "basis": "Waite reversed: Good advice, counsel, instruction, slander; Mathers reversed: Wise Advice, Good Counsel, Wisdom, Prudence; our_reversed 정본의 주위에 말이 많아진 의미를 나의 내면·선택으로 투영; 꼬리: 'Good advice/slander/babbling'의 뒤섞인 말을 내면 기준 세우기 조언으로 전개"
+ },
+ "eight-of-swords": {
+  "text": "소드 8 역방향은 나 자신에게 매여 있던 자리가 흔들리기 시작한 양상으로 드러날 수 있습니다. 얽매임이 풀리는 중인지 더 조이는 중인지 몰라 불안할 수 있습니다. 확실한 것 몇 가지만 손에 쥐고, 되돌릴 수 있는 한 걸음부터 떼어 보세요. 묶임의 절반은 생각 속에 있습니다.",
+  "basis": "Waite reversed: Disquiet, difficulty, opposition, accident; Mathers reversed: Treachery in the Past, Event, Accident, Remarkable Incident; our_reversed 정본의 매여 있던 자리가 흔들리기 시작한 의미를 나의 내면·선택으로 투영; 꼬리: 'Disquiet/what is unforeseen'의 불안한 풀림을 확실성 확보와 소보폭 조언으로 전개"
+ },
+ "nine-of-swords": {
+  "text": "소드 9 역방향은 나 자신에게 걱정이 안으로 잠겨 버린 양상으로 드러날 수 있습니다. 걱정을 혼자 안에 잠가 두면 크기가 점점 부풀어 오릅니다. 종이에 꺼내어 적고, 오늘 손댈 수 있는 것 하나에만 표시해 보세요. 나머지는 오늘의 몫이 아닙니다.",
+  "basis": "Waite reversed: Imprisonment, suspicion, doubt, reasonable fear; Mathers reversed: Wise distrust, Suspicion, Fear, Doubt; our_reversed 정본의 걱정이 안으로 잠겨 버린 의미를 나의 내면·선택으로 투영; 꼬리: 'Imprisonment/doubt/reasonable fear'의 갇힌 걱정을 외재화와 선별 조언으로 전개"
+ },
+ "ten-of-swords": {
+  "text": "소드 10 역방향은 나 자신에게 바닥을 지나 형편이 나아지기 시작한 양상으로 드러날 수 있습니다. 지나온 바닥이 나의 실패담으로만 남지 않도록, 그 시간을 견딘 자신을 한 번은 인정해 주세요. 회복의 첫 기둥은 스스로에 대한 신뢰입니다.",
+  "basis": "Waite reversed: Advantage, profit, success, favour; Mathers reversed: Passing Success, Momentary Advantage; our_reversed 정본의 바닥을 지나 형편이 나아지기 시작한 의미를 나의 내면·선택으로 투영; 꼬리: 'Advantage... none permanent'의 회복 초입을 자기 서사 재구성 조언으로 전개"
+ },
+ "page-of-swords": {
+  "text": "소드 페이지 역방향은 나 자신에게 예리한 호기심이 방향을 잃은 양상으로 드러날 수 있습니다. 모으기만 한 생각과 정보가 나를 더 예민하게 만들 수 있습니다. 무엇이 알고 싶었는지 질문을 다시 세워 보세요. 방향을 찾은 총명함은 경계 대신 이해에 쓰입니다.",
+  "basis": "Mathers 없음, Waite만 사용: More evil side of these qualities, what is unforeseen, unprepared state, sickness is also intimated; our_reversed 정본의 예리한 호기심이 방향을 잃은 의미를 나의 내면·자기인식으로 투영; 꼬리: 'unprepared state/unforeseen'의 방향 잃은 경계를 질문 재정립 조언으로 전개"
+ },
+ "knight-of-swords": {
+  "text": "소드 나이트 역방향은 나 자신에게 속도가 방향을 앞질러 버린 양상으로 드러날 수 있습니다. 빠른 결론으로 불안을 덮으려 하는 것은 아닌지 살펴보세요. 잠깐 멈춰 방향을 확인하는 일은 뒤처짐이 아니라, 나중의 긴 우회를 줄이는 준비입니다.",
+  "basis": "Waite reversed: Imprudence, incapacity, extravagance; Mathers reversed: A conceited fool, Ingenuousness, Simplicity; our_reversed 정본의 속도가 방향을 앞질러 버린 의미를 나의 내면·선택으로 투영; 꼬리: 'Imprudence/incapacity'의 준비 없는 속도를 불안 동기 자각 조언으로 전개"
+ },
+ "queen-of-swords": {
+  "text": "소드 퀸 역방향은 나 자신에게 맑아야 할 시선이 차갑게 굳어 있는 양상으로 드러날 수 있습니다. 그 날카로움은 본래 상처받지 않으려는 마음에서 나왔을 것입니다. 지키려던 것을 기억해 내면, 정확함을 잃지 않고도 나에게 따뜻한 말을 고를 수 있습니다.",
+  "basis": "Waite reversed: Malice, bigotry, artifice, prudery; Mathers reversed: A Bad Woman, ill-tempered and bigoted, Riches and Discord, Abundance together with Worry; our_reversed 정본의 맑아야 할 시선이 차갑게 굳어 있는 의미를 나의 내면·선택으로 투영; 꼬리: 'Malice/prudery'의 굳은 차가움을 방어의 기원 이해 조언으로 전개"
+ },
+ "king-of-swords": {
+  "text": "소드 킹 역방향은 나 자신에게 판단의 힘이 온기를 잃은 양상으로 드러날 수 있습니다. 옳음의 잣대를 나에게 가장 혹독하게 들이대고 있는지 돌아보세요. 원칙은 나를 누르는 도구가 아니라 지키는 울타리일 때 제 몫을 합니다.",
+  "basis": "Waite reversed: Cruelty, perversity, barbarity, perfidy; Mathers reversed: A Wicked Man, Chagrin, Worry, Grief; our_reversed 정본의 판단의 힘이 온기를 잃은 의미를 나의 내면·선택으로 투영; 꼬리: 'Cruelty/perversity'의 가혹한 판단을 자기 원칙의 용도 점검 조언으로 전개"
+ },
+ "ace-of-wands": {
+  "text": "완드 에이스 역방향은 나 자신에게 불씨가 아직 불로 옮겨붙지 못한 양상으로 드러날 수 있습니다. 열의가 사라졌다고 단정하기는 이릅니다. 시작을 누르고 있는 부담 하나를 치우고, 불씨가 좋아하는 작은 땔감부터 하나 얹어 보세요. 온기는 크기보다 지속에서 옵니다.",
+  "basis": "Mathers 없음, Waite만 사용: Fall, decadence, ruin, perdition; our_reversed 정본의 불씨가 아직 불로 옮겨붙지 못한 의미를 나의 내면·자기인식으로 투영; 꼬리: 'clouded joy/fall'의 눌린 불씨를 부담 제거와 소재점화 조언으로 전개"
+ },
+ "two-of-wands": {
+  "text": "완드 2 역방향은 나 자신에게 계획 바깥에서 찾아온 놀라움이 마음을 흔드는 양상으로 드러날 수 있습니다. 예상 밖의 일 앞에서 흔들리는 것은 약함이 아니라 살아 있는 감각입니다. 동요가 가라앉을 때까지 결정을 잠시 맡겨 두고, 이 놀라움이 나의 어떤 바람을 건드렸는지 살펴보세요.",
+  "basis": "Mathers 없음, Waite만 사용: Surprise, wonder, enchantment, emotion; our_reversed 정본의 계획 바깥에서 찾아온 놀라움이 마음을 흔드는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Surprise/emotion/trouble'의 동요를 감정 신호 해석 조언으로 전개"
+ },
+ "three-of-wands": {
+  "text": "완드 3 역방향은 나 자신에게 길었던 어려움이 서서히 걷혀 가는 양상으로 드러날 수 있습니다. 애쓴 결실이 아직 다 보이지 않아 스스로를 의심하기 쉬운 때입니다. 지나온 수고를 먼저 인정해 주세요. 배는 돌아오는 중이고, 항해는 이미 내가 해낸 일입니다.",
+  "basis": "Mathers 없음, Waite만 사용: The end of troubles, suspension or cessation of adversity, toil and disappointment; our_reversed 정본의 길었던 어려움이 서서히 걷혀 가는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'end of troubles/disappointment'의 더딘 결실을 수고 인정 조언으로 전개"
+ },
+ "four-of-wands": {
+  "text": "완드 4 역방향은 나 자신에게 안정과 기쁨이 소박하게 이어지는 양상으로 드러날 수 있습니다. 화려한 성취가 아니어도 지금의 안온함은 충분히 축하할 이유가 됩니다. 스스로 만들어 온 이 잔잔한 안정에 당연함 대신 고마움을 붙여 보세요.",
+  "basis": "Mathers 없음, Waite만 사용: The meaning remains unaltered, it is prosperity, increase, felicity; our_reversed 정본의 안정과 기쁨이 소박하게 이어지는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'meaning unaltered: prosperity/felicity'의 이어지는 안정을 자기 인정 조언으로 전개"
+ },
+ "five-of-wands": {
+  "text": "완드 5 역방향은 나 자신에게 가벼운 겨루기였던 것이 진짜 다툼으로 엉켜 버린 양상으로 드러날 수 있습니다. 내 안의 여러 목소리가 서로 다투느라 본래의 질문이 흐려졌을 수 있습니다. 이기고 싶은 것인지 풀고 싶은 것인지 정하고 나면, 첫 매듭이 눈에 들어옵니다.",
+  "basis": "Mathers 없음, Waite만 사용: Litigation, disputes, trickery, contradiction; our_reversed 정본의 가벼운 겨루기였던 것이 진짜 다툼으로 엉켜 버린 의미를 나의 내면·자기인식으로 투영; 꼬리: 'disputes/contradiction'의 얽힌 다툼을 내면 갈등의 목적 확인 조언으로 전개"
+ },
+ "six-of-wands": {
+  "text": "완드 6 역방향은 나 자신에게 기다리던 좋은 소식이 자꾸 미뤄지는 양상으로 드러날 수 있습니다. 소식을 기다리는 동안 자신에 대한 평가까지 미루지는 마세요. 이미 해낸 일의 목록은 바깥의 인정과 무관하게 유효합니다. 그 목록이 불안보다 오래갑니다.",
+  "basis": "Mathers 없음, Waite만 사용: Apprehension, fear, as of a victorious enemy at the gate, treachery; our_reversed 정본의 기다리던 좋은 소식이 자꾸 미뤄지는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Apprehension/indefinite delay'의 늦어지는 인정을 자기 평가 독립 조언으로 전개"
+ },
+ "seven-of-wands": {
+  "text": "완드 7 역방향은 나 자신에게 지켜야 할 자리에서 마음이 갈피를 잡지 못하는 양상으로 드러날 수 있습니다. 모두를 상대로 나를 증명할 필요는 없습니다. 정말 지키고 싶은 나의 한 가지를 정하면 망설임은 줄어들고, 흔들리던 발밑이 단단해집니다.",
+  "basis": "Mathers 없음, Waite만 사용: Perplexity, embarrassments, anxiety, It is also a caution against indecision; our_reversed 정본의 지켜야 할 자리에서 마음이 갈피를 잡지 못하는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Perplexity/caution against indecision'의 갈피 잃음을 핵심 하나 정하기 조언으로 전개"
+ },
+ "eight-of-wands": {
+  "text": "완드 8 역방향은 나 자신에게 멀리 날아가야 할 화살이 가까운 곳에 떨어지는 양상으로 드러날 수 있습니다. 조급함과 비교가 화살을 안쪽으로 돌리고 있는지 살펴보세요. 남과 견주던 힘을 나의 목표로 되돌리면, 같은 에너지가 자책 대신 추진력이 됩니다.",
+  "basis": "Mathers 없음, Waite만 사용: Arrows of jealousy, internal dispute, stingings of conscience, quarrels; our_reversed 정본의 멀리 날아가야 할 화살이 가까운 곳에 떨어지는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'jealousy/stingings of conscience'의 안으로 도는 화살을 비교-자책 전환 조언으로 전개"
+ },
+ "nine-of-wands": {
+  "text": "완드 9 역방향은 나 자신에게 버티는 힘이 바닥을 보이기 시작한 양상으로 드러날 수 있습니다. 여기까지 버틴 것만으로 이미 많은 일을 한 것입니다. 마지막 힘까지 쥐어짜기 전에 쉼과 도움을 계획에 넣어 보세요. 방어선은 내가 무너지지 않아야 지켜집니다.",
+  "basis": "Mathers 없음, Waite만 사용: Obstacles, adversity, calamity; our_reversed 정본의 버티는 힘이 바닥을 보이기 시작한 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Obstacles/adversity'의 소진된 방어를 자기 보존 우선 조언으로 전개"
+ },
+ "ten-of-wands": {
+  "text": "완드 10 역방향은 나 자신에게 무거운 짐에 얽힌 사정까지 더해진 양상으로 드러날 수 있습니다. 짊어진 것들 가운데 애초에 내 몫이 아닌 짐이 섞여 있을 수 있습니다. 하나씩 꺼내어 이름을 확인하고, 아닌 것은 제자리로 돌려보내 주세요. 가벼워질 권리는 나에게 있습니다.",
+  "basis": "Mathers 없음, Waite만 사용: Contrarieties, difficulties, intrigues, and their analogies; our_reversed 정본의 무거운 짐에 얽힌 사정까지 더해진 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Contrarieties/intrigues'의 겹짐을 책임 경계 확인 조언으로 전개"
+ },
+ "page-of-wands": {
+  "text": "완드 페이지 역방향은 나 자신에게 반갑지 않은 소식이나 어수선한 말들이 마음을 흔드는 양상으로 드러날 수 있습니다. 어수선한 말들 속에서는 판단보다 거리 두기가 먼저입니다. 소문에 내어 주던 자리를 줄이고, 오늘의 결정 하나만 내 손으로 내려 보세요. 그만큼 마음의 중심이 돌아옵니다.",
+  "basis": "Mathers 없음, Waite만 사용: Anecdotes, announcements, evil news, Also indecision and the instability which accompanies it; our_reversed 정본의 반갑지 않은 소식이나 어수선한 말들이 마음을 흔드는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'evil news/indecision/instability'의 흔들림을 거리 두기와 자기 결정 조언으로 전개"
+ },
+ "knight-of-wands": {
+  "text": "완드 나이트 역방향은 나 자신에게 힘차게 달리던 길이 중간에 끊긴 양상으로 드러날 수 있습니다. 끊긴 자리에서 곧바로 다시 내달리고 싶은 마음을 잠시 눌러 보세요. 무엇이 흐름을 끊었는지 이해하고 나면, 같은 자리에서 다시 넘어지지 않을 수 있습니다.",
+  "basis": "Mathers 없음, Waite만 사용: Rupture, division, interruption, discord; our_reversed 정본의 힘차게 달리던 길이 중간에 끊긴 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Rupture/interruption'의 끊긴 추진을 원인 이해 우선 조언으로 전개"
+ },
+ "queen-of-wands": {
+  "text": "완드 퀸 역방향은 나 자신에게 따뜻함이 사라진 것이 아니라, 조금 더 조심스럽고 실속 있는 결로 바뀐 양상으로 드러날 수 있습니다. 경계심이 늘어난 것은 그만큼 아끼는 것이 많아졌다는 뜻이기도 합니다. 다만 그 신중함 뒤에 숨은 기대 하나는 스스로 확인해 두세요.",
+  "basis": "Mathers 없음, Waite만 사용: Good, economical, obliging, serviceable; our_reversed 정본의 따뜻함이 사라진 것이 아니라, 조금 더 조심스럽고 실속 있는 결로 바뀐 의미를 나의 내면·자기인식으로 투영; 꼬리: 'economical/jealousy 가능성'의 조심스러워진 온기를 숨은 기대 자각 조언으로 전개"
+ },
+ "king-of-wands": {
+  "text": "완드 킹 역방향은 나 자신에게 선한 뜻이 엄격한 자기 기준으로 드러나는 양상일 수 있습니다. 높은 기준은 나를 아끼는 마음에서 나왔을 것입니다. 기준을 낮추지 않아도 좋으니, 통과하지 못한 날의 나에게도 너그러운 말 한마디를 남겨 주세요.",
+  "basis": "Mathers 없음, Waite만 사용: Good, but severe, austere, yet tolerant; our_reversed 정본의 선한 뜻이 엄격한 태도로 나타나는 의미를 나의 내면·자기인식으로 투영; 꼬리: 'Good, but severe; austere, yet tolerant'의 엄격한 선의를 자기 관용 조언으로 전개"
+ }
+}
