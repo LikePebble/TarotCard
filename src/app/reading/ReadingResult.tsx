@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { motion } from "motion/react";
+import { CaretDown } from "@phosphor-icons/react";
 import { CardArtViewer } from "@/components/CardArtViewer";
 import { type Card } from "@/data/cards";
 import { focusLabelOf, focusParagraphOf } from "@/data/focus";
@@ -32,6 +33,30 @@ function nameKoOf(card: Card): string {
 function descriptionOf(card: Card): string[] {
   const ko = koCards[card.slug]?.description;
   return (ko && ko.length > 0 ? ko : card.en.description).split("\n\n");
+}
+
+/**
+ * 역방향일 때 정방향 본문·테마(·포지션 문장)를 접어 담는 토글.
+ * 정방향 텍스트는 "결실이 무르익는다"처럼 결과를 단언하는 경우가 많아,
+ * 역방향 해석 옆에 그대로 펼쳐두면 정반대 톤이 한 화면에서 부딪힌다(78장 중
+ * 절반 이상이 그렇다). 역방향을 주연으로 올리고 정방향은 여기 접어, 궁금한
+ * 사람만 "본래의 의미"로 펼쳐 보게 한다. 기본은 접힘.
+ */
+function UprightDetails({ children }: { children: ReactNode }) {
+  return (
+    <details className="group mt-5 border-t border-line pt-3 lg:max-w-[520px]">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 text-[12.5px] text-muted hover:text-cream lg:text-[13.5px]">
+        카드 본래의 의미
+        <CaretDown
+          size={13}
+          weight="bold"
+          className="transition-transform group-open:rotate-180"
+          aria-hidden
+        />
+      </summary>
+      <div className="mt-1">{children}</div>
+    </details>
+  );
 }
 
 /** 아트가 왜 뒤집혔는지 알리는 소형 배지. 카드명 옆에 붙는다. */
@@ -70,6 +95,29 @@ export function OneCardResult({
   // 레거시·마이그레이션 기록에는 orientations가 없거나 짧을 수 있다 — 정방향으로 본다.
   const orientation: Orientation = orientations?.[0] ?? "upright";
   const reversed = orientation === "reversed";
+
+  // 정방향 본문 + 테마. 정방향 카드면 그대로 보이고, 역방향이면 토글에 접힌다.
+  const uprightContent = (
+    <>
+      <div className="space-y-3 font-serif text-[15px] text-body lg:max-w-[520px] lg:text-base">
+        {paragraphs.map((paragraph) => (
+          <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+        ))}
+      </div>
+      {/* 테마 라벨은 머리말이 담당한다. 여기는 테마별 해석문이 있을 때만. */}
+      {themeParagraph ? (
+        <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
+          <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+            {focusLabelOf(focus)}
+          </p>
+          <p className="mt-1.5 font-serif text-[15px] text-body lg:text-base">
+            {themeParagraph}
+          </p>
+        </div>
+      ) : null}
+    </>
+  );
+
   return (
     <motion.main
       initial={reducedMotion ? false : { opacity: 0, y: 16 }}
@@ -101,33 +149,22 @@ export function OneCardResult({
           </span>
           {reversed ? <ReversedBadge /> : null}
         </h1>
-        <div className="mt-4 space-y-3 font-serif text-[15px] text-body lg:mt-6 lg:max-w-[520px] lg:text-base">
-          {paragraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-          ))}
+        {/* 역방향이면 역방향 해석을 주연으로 올리고 정방향은 토글에 접는다.
+            정방향이면 정방향 본문이 그대로 주연이다. */}
+        <div className="mt-4 lg:mt-6">
+          {reversed ? (
+            <>
+              <div className="space-y-3 font-serif text-[15px] text-body lg:max-w-[520px] lg:text-base">
+                {reversedParagraphs(card).map((p) => (
+                  <p key={p.slice(0, 24)}>{p}</p>
+                ))}
+              </div>
+              <UprightDetails>{uprightContent}</UprightDetails>
+            </>
+          ) : (
+            uprightContent
+          )}
         </div>
-        {/* 테마 라벨은 머리말이 담당한다. 여기는 테마별 해석문이 있을 때만
-            나온다 — 라벨만 남은 빈 블록을 만들지 않는다. */}
-        {themeParagraph ? (
-          <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
-            <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-              {focusLabelOf(focus)}
-            </p>
-            <p className="mt-1.5 font-serif text-[15px] text-body lg:text-base">
-              {themeParagraph}
-            </p>
-          </div>
-        ) : null}
-        {reversed ? (
-          <div className="mt-5 border-t border-line pt-4 lg:max-w-[520px]">
-            <p className="text-[12.5px] text-gold lg:text-[13.5px]">역방향</p>
-            <div className="mt-1.5 space-y-3 font-serif text-[15px] text-body lg:text-base">
-              {reversedParagraphs(card).map((p) => (
-                <p key={p.slice(0, 24)}>{p}</p>
-              ))}
-            </div>
-          </div>
-        ) : null}
         {collectionCount !== undefined ? (
           <div className="mt-5 flex items-baseline justify-between rounded-[14px] border border-line-gold px-[18px] py-3.5 text-[13.5px] lg:mt-8 lg:inline-flex lg:gap-3.5 lg:text-[14.5px]">
             <span>컬렉션에 추가되었습니다</span>
@@ -222,6 +259,33 @@ export function ThreeCardResult({
   const positionSentence = koPositions[selected.slug]?.[POSITION_KEYS[index]];
   const themeParagraph = focusParagraphOf(focus, selected.slug);
 
+  // 정방향: 포지션 문장 + 본문 + 테마. 포지션 문장도 정방향 어조라(예: "결실이
+  // 무르익어 다가온다") 역방향이면 함께 접는다.
+  const uprightContent = (
+    <>
+      {positionSentence ? (
+        <p className="text-[15px] leading-[1.6] text-cream lg:text-[17px]">
+          {positionSentence}
+        </p>
+      ) : null}
+      <div className="mt-3 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
+        {descriptionOf(selected).map((paragraph) => (
+          <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+        ))}
+      </div>
+      {themeParagraph ? (
+        <div className="mt-3.5 border-t border-line pt-3">
+          <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+            {focusLabelOf(focus)}
+          </p>
+          <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
+            {themeParagraph}
+          </p>
+        </div>
+      ) : null}
+    </>
+  );
+
   return (
     <motion.main
       initial={reducedMotion ? false : { opacity: 0, y: 16 }}
@@ -303,37 +367,21 @@ export function ThreeCardResult({
               {selected.nameEn}
             </span>
           </h2>
-          {positionSentence ? (
-            <p className="mt-3 text-[15px] leading-[1.6] text-cream lg:text-[17px]">
-              {positionSentence}
-            </p>
-          ) : null}
-          <div className="mt-3 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
-            {descriptionOf(selected).map((paragraph) => (
-              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-            ))}
+          {/* 역방향이면 역방향 해석을 주연으로, 정방향은 토글에 접는다. */}
+          <div className="mt-3">
+            {reversed ? (
+              <>
+                <div className="space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
+                  {reversedParagraphs(selected).map((p) => (
+                    <p key={p.slice(0, 24)}>{p}</p>
+                  ))}
+                </div>
+                <UprightDetails>{uprightContent}</UprightDetails>
+              </>
+            ) : (
+              uprightContent
+            )}
           </div>
-          {/* 테마 라벨은 머리말이 담당한다. 여기는 테마별 해석문이 있을 때만. */}
-          {themeParagraph ? (
-            <div className="mt-3.5 border-t border-line pt-3">
-              <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-                {focusLabelOf(focus)}
-              </p>
-              <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
-                {themeParagraph}
-              </p>
-            </div>
-          ) : null}
-          {reversed ? (
-            <div className="mt-3.5 border-t border-line pt-3">
-              <p className="text-[12.5px] text-gold lg:text-[13.5px]">역방향</p>
-              <div className="mt-1 space-y-2.5 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
-                {reversedParagraphs(selected).map((p) => (
-                  <p key={p.slice(0, 24)}>{p}</p>
-                ))}
-              </div>
-            </div>
-          ) : null}
         </motion.div>
       </div>
       {collectionCount !== undefined ? (
