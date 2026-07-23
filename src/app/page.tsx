@@ -1,13 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
-
-const heroCards = [
-  { src: "/tarotdeck/themoon.jpeg", alt: "달 The Moon", cls: "hc1" },
-  { src: "/tarotdeck/thestar.jpeg", alt: "별 The Star", cls: "hc2" },
-  { src: "/tarotdeck/thesun.jpeg", alt: "태양 The Sun", cls: "hc3" },
-];
+import { HomeHero } from "./HomeHero";
 
 export default function HomePage() {
   return (
@@ -36,20 +30,7 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-        <div className="hero-fan mt-2 min-h-[300px] flex-1 lg:h-[480px] lg:flex-none">
-          {heroCards.map((card) => (
-            <div key={card.src} className={`fan-card ${card.cls}`}>
-              <Image
-                src={card.src}
-                alt={card.alt}
-                fill
-                sizes="(min-width: 1024px) 240px, 140px"
-                className="object-cover"
-                priority
-              />
-            </div>
-          ))}
-        </div>
+        <HomeHero />
       </main>
       <TabBar />
     </div>

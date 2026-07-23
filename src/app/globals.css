@@ -106,49 +106,8 @@ body {
 }
 }
 
-/* Home hero fan */
-@layer components {
-.hero-fan {
-  position: relative;
-}
-.hero-fan .fan-card {
-  position: absolute;
-  left: 50%;
-  top: 34px;
-  width: 140px;
-  aspect-ratio: 2 / 3.4;
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--color-ink-2);
-  box-shadow: 0 18px 44px rgba(8, 5, 0, 0.6);
-}
-.hero-fan .hc1 {
-  transform: translateX(calc(-50% - 96px)) rotate(-13deg) translateY(16px);
-  opacity: 0.85;
-}
-.hero-fan .hc2 {
-  transform: translateX(-50%) translateY(-6px);
-  z-index: 2;
-}
-.hero-fan .hc3 {
-  transform: translateX(calc(-50% + 96px)) rotate(13deg) translateY(16px);
-  opacity: 0.85;
-}
-@media (min-width: 1024px) {
-  .hero-fan .fan-card {
-    width: 240px;
-    top: 50px;
-    border-radius: 14px;
-  }
-  .hero-fan .hc1 {
-    transform: translateX(calc(-50% - 160px)) rotate(-9deg) translateY(12px);
-  }
-  .hero-fan .hc3 {
-    transform: translateX(calc(-50% + 160px)) rotate(8deg) translateY(12px);
-  }
-}
-
 /* Draw fan: rotation driven by --fan-i (integer offset from center) */
+@layer components {
 .draw-fan {
   position: relative;
   --fan-step: 12deg;
@@ -502,3 +461,4 @@ body {
   }
 }
 }
+
