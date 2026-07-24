@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { cards } from "../cards";
 import { cardLore, loreBySlug } from "./index";
+import { loreCups } from "./cups";
 import { loreMajor } from "./major";
 import { loreWands } from "./wands";
 
@@ -58,6 +59,16 @@ describe("완드 lore", () => {
       { label: "원소", value: "불" },
       { label: "수비학", value: "시작" },
     ]);
+  });
+});
+
+describe("컵 lore", () => {
+  it("14장 전수 존재", () => {
+    const cupSlugs = cards.filter((c) => c.suit === "cups").map((c) => c.slug);
+    for (const slug of cupSlugs) {
+      expect(loreCups[slug], `${slug} 누락`).toBeDefined();
+    }
+    expect(Object.keys(loreCups)).toHaveLength(14);
   });
 });
 
