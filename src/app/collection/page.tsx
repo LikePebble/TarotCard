@@ -6,7 +6,8 @@ import { DeckCard } from "@/components/DeckCard";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { decksByDefaultFirst } from "@/data/decks";
-import { collectedCount, useEntitlements } from "@/lib/entitlements";
+import { isDevTools } from "@/lib/dev-reset";
+import { collectedCount, grantDeckLocal, revokeDeckLocal, ownsDeck, useEntitlements } from "@/lib/entitlements";
 import { useSelectedDeck } from "@/lib/store";
 
 export default function CollectionPage() {
@@ -61,6 +62,20 @@ export default function CollectionPage() {
             );
           })}
         </div>
+        {isDevTools ? (
+          <div className="mt-6 flex flex-wrap gap-2">
+            {["wolha-biwon", "k-pop-museverse"].map((id) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => (ownsDeck(id, ent) ? revokeDeckLocal(id) : grantDeckLocal(id))}
+                className="text-[12px] text-muted underline underline-offset-4 hover:text-cream"
+              >
+                [개발] {id} {ownsDeck(id, ent) ? "회수" : "지급"}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </main>
       <TabBar />
     </div>

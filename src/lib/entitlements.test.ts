@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   EMPTY_ENTITLEMENTS,
+  grantedWith,
   parseEntitlements,
   ownsDeck,
   collectedCount,
@@ -9,6 +10,15 @@ import {
 
 const NONE = EMPTY_ENTITLEMENTS;
 const OWNS_WOLHA = { ownedDeckIds: ["wolha-biwon"], adFree: false };
+
+describe("grantedWith", () => {
+  it("덱을 추가한다(중복 없이)", () => {
+    const a = grantedWith(EMPTY_ENTITLEMENTS, "wolha-biwon");
+    expect(a.ownedDeckIds).toEqual(["wolha-biwon"]);
+    const b = grantedWith(a, "wolha-biwon");
+    expect(b.ownedDeckIds).toEqual(["wolha-biwon"]);
+  });
+});
 
 describe("parseEntitlements", () => {
   it("정상 객체를 그대로 정규화", () => {

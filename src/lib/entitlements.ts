@@ -64,6 +64,24 @@ export function setLocalEntitlements(e: Entitlements): void {
   notifyLocal("entitlements");
 }
 
+/** 덱을 더한 새 엔타이틀먼트(순수, 멱등). */
+export function grantedWith(ent: Entitlements, deckId: string): Entitlements {
+  if (ent.ownedDeckIds.includes(deckId)) return ent;
+  return { ...ent, ownedDeckIds: [...ent.ownedDeckIds, deckId] };
+}
+
+/** 개발용: 로컬 캐시에 덱을 지급/회수한다(서버 없이 소유 모델 검증). */
+export function grantDeckLocal(deckId: string): void {
+  setLocalEntitlements(grantedWith(loadEntitlements(), deckId));
+}
+export function revokeDeckLocal(deckId: string): void {
+  const cur = loadEntitlements();
+  setLocalEntitlements({
+    ...cur,
+    ownedDeckIds: cur.ownedDeckIds.filter((id) => id !== deckId),
+  });
+}
+
 /** 로그아웃 시 로컬 캐시를 비운다(다음 계정에 안 섞이게). */
 export function clearLocalEntitlements(): void {
   if (typeof window !== "undefined") {
