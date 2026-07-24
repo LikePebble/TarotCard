@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { cards } from "../cards";
 import { cardLore, loreBySlug } from "./index";
 import { loreMajor } from "./major";
+import { loreWands } from "./wands";
 
 describe("cardLore", () => {
   it("lore가 없는 slug에 null을 돌려준다", () => {
@@ -29,6 +30,33 @@ describe("메이저 아르카나 lore", () => {
     expect(view).not.toBeNull();
     expect(view!.correspondence).toEqual([
       { label: "점성술", value: "천왕성 · 공기" },
+    ]);
+  });
+});
+
+describe("완드 lore", () => {
+  it("14장 전수 존재", () => {
+    const wandSlugs = cards.filter((c) => c.suit === "wands").map((c) => c.slug);
+    for (const slug of wandSlugs) {
+      expect(loreWands[slug], `${slug} 누락`).toBeDefined();
+    }
+    expect(Object.keys(loreWands)).toHaveLength(14);
+  });
+  it("마이너 숫자 카드 대응은 원소·수비학·점성술 3행", () => {
+    const view = cardLore("two-of-wands");
+    expect(view).not.toBeNull();
+    expect(view!.correspondence).toEqual([
+      { label: "원소", value: "불" },
+      { label: "수비학", value: "균형 · 선택" },
+      { label: "점성술", value: "화성 · 양자리" },
+    ]);
+  });
+  it("에이스는 점성술 행이 없다", () => {
+    const view = cardLore("ace-of-wands");
+    expect(view).not.toBeNull();
+    expect(view!.correspondence).toEqual([
+      { label: "원소", value: "불" },
+      { label: "수비학", value: "시작" },
     ]);
   });
 });
