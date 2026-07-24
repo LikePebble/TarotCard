@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   EMPTY_ENTITLEMENTS,
+  parseEntitlements,
   ownsDeck,
   collectedCount,
   collectedSlugs,
@@ -8,6 +9,22 @@ import {
 
 const NONE = EMPTY_ENTITLEMENTS;
 const OWNS_WOLHA = { ownedDeckIds: ["wolha-biwon"], adFree: false };
+
+describe("parseEntitlements", () => {
+  it("정상 객체를 그대로 정규화", () => {
+    expect(parseEntitlements({ ownedDeckIds: ["wolha-biwon"], adFree: true }))
+      .toEqual({ ownedDeckIds: ["wolha-biwon"], adFree: true });
+  });
+  it("깨진 값은 EMPTY로", () => {
+    expect(parseEntitlements(null)).toEqual(EMPTY_ENTITLEMENTS);
+    expect(parseEntitlements({ ownedDeckIds: "x" })).toEqual(EMPTY_ENTITLEMENTS);
+    expect(parseEntitlements({})).toEqual(EMPTY_ENTITLEMENTS);
+  });
+  it("ownedDeckIds의 비문자열 원소는 걸러낸다", () => {
+    expect(parseEntitlements({ ownedDeckIds: ["a", 1, null], adFree: 0 }))
+      .toEqual({ ownedDeckIds: ["a"], adFree: false });
+  });
+});
 
 describe("ownsDeck", () => {
   it("클래식은 항상 소유(행 없이도)", () => {
