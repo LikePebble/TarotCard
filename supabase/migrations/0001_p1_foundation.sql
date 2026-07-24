@@ -5,7 +5,8 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   created_at timestamptz not null default now(),
   display_name text,
-  selected_deck_id text not null default 'classic'
+  selected_deck_id text not null default 'classic',
+  ad_free boolean not null default false
 );
 
 create table if not exists public.readings (
@@ -42,11 +43,20 @@ create table if not exists public.journal_entries (
   primary key (user_id, entry_date)
 );
 
+create table if not exists public.entitlements (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  deck_id text not null, -- 소유한 프리미엄 덱. 클래식은 행 없이 암묵 소유.
+  granted_at timestamptz not null default now(),
+  source text not null default 'grant', -- 지급 출처. 실결제 붙으면 'purchase'|<pg>.
+  primary key (user_id, deck_id)
+);
+
 -- Row Level Security
 alter table public.profiles enable row level security;
 alter table public.readings enable row level security;
 alter table public.collection enable row level security;
 alter table public.journal_entries enable row level security;
+alter table public.entitlements enable row level security;
 
 create policy "own profile" on public.profiles
   for all using (auth.uid() = id) with check (auth.uid() = id);
@@ -55,6 +65,8 @@ create policy "own readings" on public.readings
 create policy "own collection" on public.collection
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "own journal" on public.journal_entries
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "own entitlements" on public.entitlements
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
 -- 신규 가입 시 profiles 행 자동 생성

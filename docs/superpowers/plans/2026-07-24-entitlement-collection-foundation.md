@@ -645,12 +645,14 @@ git commit -m "Add the entitlements table and ad_free column"
 
 **Files:**
 - Create: `src/lib/sync/entitlements-remote.ts`
-- Modify: `src/components/SyncBridge.tsx` (로그인 시 pull 호출)
+- Modify: `src/lib/sync/pusher.ts` (로그인 병합 블록에서 pull 호출)
 - Modify: `src/lib/auth/session.ts` (로그아웃 시 `clearLocalEntitlements`)
+
+**계획 정정(구현 중 발견):** 로그인 pull은 `SyncBridge`가 아니라 **`pusher.ts`의 `setSyncUser`** 병합 블록(`syncOnLogin`/`syncJournalOnLogin`)에서 일어난다. SyncBridge는 push만 한다. 엔타이틀먼트 pull도 그 블록에 얹고, 기존과 같은 **`isStale` 가드**(로그아웃 뒤 늦게 끝난 pull이 지워진 캐시를 되살리지 않게)를 태운다.
 
 **Interfaces:**
 - Consumes: `getBrowserSupabase` from `@/lib/supabase/client`; `setLocalEntitlements`, `loadEntitlements`, `grantedWith` from `@/lib/entitlements`.
-- Produces: `pullRemoteEntitlements(): Promise<void>`, `grantDeck(deckId: string): Promise<void>`.
+- Produces: `pullRemoteEntitlements(isStale?: () => boolean): Promise<void>`, `grantDeck(deckId: string): Promise<void>`.
 
 - [ ] **Step 1: 서버 계층 구현**
 
@@ -663,9 +665,12 @@ import {
   grantedWith,
 } from "@/lib/entitlements";
 
-/** 서버의 엔타이틀먼트 + profiles.ad_free를 로컬 캐시에 반영한다.
- *  미설정·비로그인·실패면 로컬을 그대로 둔다(서버가 권위지만 오프라인 표시 유지). */
-export async function pullRemoteEntitlements(): Promise<void> {
+/** 서버의 엔타이틀먼트 + profiles.ad_free를 로컬 캐시에 반영한다(서버 권위, pull만).
+ *  미설정·비로그인·실패면 로컬을 그대로 둔다. isStale은 왕복 사이 세션이 바뀌었는지
+ *  — 로그아웃 뒤 늦게 끝난 pull이 지워진 캐시를 되살리지 않게 한다(store/journal과 동일). */
+export async function pullRemoteEntitlements(
+  isStale: () => boolean = () => false,
+): Promise<void> {
   const supabase = getBrowserSupabase();
   if (!supabase) return;
   const { data: auth } = await supabase.auth.getUser();
@@ -676,7 +681,7 @@ export async function pullRemoteEntitlements(): Promise<void> {
     supabase.from("entitlements").select("deck_id").eq("user_id", uid),
     supabase.from("profiles").select("ad_free").eq("id", uid).single(),
   ]);
-  if (ent.error) return; // 실패 시 로컬 유지
+  if (ent.error || isStale()) return; // 실패·스테일이면 로컬 유지
   const ownedDeckIds = (ent.data ?? []).map((r) => r.deck_id as string);
   const adFree = prof.data?.ad_free === true;
   setLocalEntitlements({ ownedDeckIds, adFree });
@@ -697,9 +702,16 @@ export async function grantDeck(deckId: string): Promise<void> {
 }
 ```
 
-- [ ] **Step 2: 로그인 시 pull 배선**
+- [ ] **Step 2: 로그인 병합 블록에 pull 배선**
 
-`src/components/SyncBridge.tsx`에서 기존 로그인/세션 진입 시 collection·journal을 pull하는 자리 근처에 `pullRemoteEntitlements()`도 호출한다(같은 effect·같은 조건). import 추가. (기존 pull 호출 패턴을 그대로 따른다.)
+`src/lib/sync/pusher.ts`:
+- 상단 import에 `import { pullRemoteEntitlements } from "@/lib/sync/entitlements-remote";` 추가.
+- `setSyncUser`의 `merge` async 블록에서 `syncJournalOnLogin` 호출 **다음 줄**에 한 줄 추가:
+```ts
+      const journal = await syncJournalOnLogin(userId, isStale);
+      await pullRemoteEntitlements(isStale); // 엔타이틀먼트는 서버 권위 → pull만
+      if (isStale()) return;
+```
 
 - [ ] **Step 3: 로그아웃 시 캐시 정리**
 

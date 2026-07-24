@@ -2,6 +2,7 @@ import { loadJournal } from "@/lib/journal";
 import { loadStore } from "@/lib/store";
 import { setSyncState } from "@/lib/sync/status";
 import { syncJournalOnLogin, syncOnLogin } from "@/lib/sync/sync";
+import { pullRemoteEntitlements } from "@/lib/sync/entitlements-remote";
 import { pushLocalJournal } from "@/lib/sync/journal-remote";
 import { pushLocalStore } from "@/lib/sync/remote";
 
@@ -138,6 +139,7 @@ export function setSyncUser(userId: string | null): void {
     try {
       const storeOutcome = await syncOnLogin(userId, isStale);
       const journal = await syncJournalOnLogin(userId, isStale);
+      await pullRemoteEntitlements(isStale); // 엔타이틀먼트는 서버 권위 → pull만
       if (isStale()) return;
       journalPullOk = journal.pullOk;
       const failed = storeOutcome === "failed" || journal.outcome === "failed";
