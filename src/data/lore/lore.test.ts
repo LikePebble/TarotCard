@@ -113,7 +113,18 @@ describe("lore 형식", () => {
       if (lore.astrology !== undefined) {
         expect(lore.astrology.trim(), `${slug} astrology`).not.toBe("");
       }
+      const names = lore.symbols.map((s) => s.name);
+      expect(new Set(names).size, `${slug} symbol name 중복`).toBe(names.length);
       expect(cards.some((c) => c.slug === slug), `${slug}는 실제 카드`).toBe(true);
+    }
+  });
+  it("에이스·코트는 점성술 대응이 없다", () => {
+    // 스펙: 데칸은 마이너 2~10만. 에이스·코트에 astrology가 들어오면 스펙 위반이다.
+    const noAstrology = cards.filter(
+      (c) => c.suit !== null && (c.number === 1 || c.number >= 11),
+    );
+    for (const card of noAstrology) {
+      expect(loreBySlug[card.slug]?.astrology, `${card.slug} astrology 금지`).toBeUndefined();
     }
   });
 });
