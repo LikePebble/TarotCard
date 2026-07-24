@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 게스트 미수집 칩 + `/login`, 도감 수집됨 필터, 덱 정보 모달을 붙이고, 역방향 변형 624건을 Codex 저작 + Opus 4.8 검수로 재작성한다.
+**Goal:** 게스트 미수집 칩 + `/login`, 도감 수집됨 필터, 덱 정보 모달을 붙이고, 역방향 변형 624건을 Codex 저작 + Opus 5 검수로 재작성한다.
 
-**Architecture:** 이중 트랙 — Task 1에서 Codex 백그라운드 잡 6개(테마 5 + 포지션 1)를 먼저 발사해 `.scratch/reversed-rewrite/*.json`에 산출하고, 도는 동안 UI 3건(Task 2~5)을 진행한다. Task 6에서 산출을 TS 파일로 재조립·검증하고 Task 7에서 Opus 4.8이 검수한다.
+**Architecture:** 이중 트랙 — Task 1에서 Codex 백그라운드 잡 6개(테마 5 + 포지션 1)를 먼저 발사해 `.scratch/reversed-rewrite/*.json`에 산출하고, 도는 동안 UI 3건(Task 2~5)을 진행한다. Task 6에서 산출을 TS 파일로 재조립·검증하고 Task 7에서 Opus 5이 검수한다.
 
 **Tech Stack:** Next.js(App Router), TypeScript, vitest, Codex(codex:codex-rescue 백그라운드 잡), Supabase auth(기존 `useSession`).
 
@@ -15,7 +15,7 @@
 - 테스트·타입체크: `./node_modules/.bin/vitest run` / `./node_modules/.bin/tsc --noEmit`. dev 서버가 떠 있는 동안 `npm run build` 금지.
 - Codex 샌드박스: `.git` read-only(커밋 불가), `npx` 불가 → 검증·커밋은 컨트롤러가 한다. Codex 잡 지시문에 커밋·테스트 단계를 넣지 않는다.
 - 톤: 겁주지 않는 성찰적 존댓말. 예언 단정("~할 것입니다") 금지.
-- 재저작 검수는 **Opus 4.8 서브에이전트 고정**(사용자 지정). 저작은 **Codex**(사용자 지정).
+- 재저작 검수는 **Opus 5 서브에이전트 고정**(사용자 지정). 저작은 **Codex**(사용자 지정).
 - 수집 판정: 카드별 만남 기록 `store.collection[deckId][slug]`(로그인 사용자만 "수집"으로 표기). 게스트 판정은 `useSession()`의 `user === null`.
 - 데이터 구조·키 불변: `reversedFocus`(5테마×78), `reversedPositions`(78×{past,present,future})의 export명·타입·slug 키를 바꾸지 않는다. 텍스트만 교체.
 
@@ -780,12 +780,12 @@ git commit -m "Rewrite the reversed theme and position variants"
 
 ---
 
-### Task 7: Opus 4.8 검수 → 반영
+### Task 7: Opus 5 검수 → 반영
 
 **Files:**
 - Modify: `src/data/reversed-focus.ts`, `src/data/reversed-positions.ts` (검수 반영)
 
-- [ ] **Step 1: Opus 4.8 서브에이전트 디스패치** — **반드시 `model: "opus"`**(사용자 지정). 프롬프트에 포함:
+- [ ] **Step 1: Opus 5 서브에이전트 디스패치** — **반드시 `model: "opus"`**(사용자 지정). 프롬프트에 포함:
   - 대상: `src/data/reversed-focus.ts`·`reversed-positions.ts` 전량 정독
   - 기준 ① **정본 대비 워딩 독립성**(핵심): `src/data/reversed.ts`와 대조 — 구절 재사용·템플릿 답습 탐지 ② 테마·포지션 반영도: 각 텍스트가 그 테마/시점의 구체 상황으로 서 있는가 ③ 근거 정합: `docs/reversed-variants-basis-2026-07-23/`의 Waite·Mathers 키워드와 의미가 이어지는가(샘플 심층 + 전수 훑기) ④ 톤: 겁주지 않는 성찰적 존댓말, 예언 단정 금지
   - 산출: 파일:slug(테마/시점)별 지적 목록(심각도 구분), 수정 금지 — 보고만
