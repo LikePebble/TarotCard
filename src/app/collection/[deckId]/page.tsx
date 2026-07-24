@@ -17,6 +17,8 @@ import {
   useEntitlements,
 } from "@/lib/entitlements";
 import { useArcanaStore, useSelectedDeck } from "@/lib/store";
+import { visibleCards } from "@/lib/catalog-filter";
+import { useSession } from "@/lib/auth/session";
 
 const FILTERS = [
   { id: "major", label: "메이저" },
@@ -24,6 +26,7 @@ const FILTERS = [
   { id: "wands", label: "완드" },
   { id: "swords", label: "소드" },
   { id: "pentacles", label: "펜타클" },
+  { id: "collected", label: "수집됨" },
 ] as const;
 
 type FilterId = (typeof FILTERS)[number]["id"];
@@ -37,6 +40,7 @@ export default function DeckCatalogPage({
   const { store } = useArcanaStore();
   const ent = useEntitlements();
   const { deckId: defaultDeckId, select } = useSelectedDeck();
+  const { user } = useSession();
   const [filter, setFilter] = useState<FilterId>("major");
 
   const deck = decks.find((d) => d.id === deckId && d.active);
@@ -48,9 +52,8 @@ export default function DeckCatalogPage({
   const isDefault = defaultDeckId === deck.id;
   const total = collectedCount(deck.id, ent);
   const owned = ownsDeck(deck.id, ent);
-  const visible = cards.filter((card) =>
-    filter === "major" ? card.arcana === "major" : card.suit === filter,
-  );
+  const collectedSet = new Set(Object.keys(store?.collection[deck.id] ?? {}));
+  const visible = visibleCards(cards, filter, collectedSet);
 
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden lg:h-auto lg:min-h-[100dvh] lg:overflow-visible">
@@ -151,6 +154,24 @@ export default function DeckCatalogPage({
             </button>
           ))}
         </div>
+
+        {filter === "collected" && store && visible.length === 0 ? (
+          <div className="mt-5 rounded-2xl border border-line bg-ink-1 p-6">
+            <p className="font-display text-lg font-semibold">
+              아직 수집한 카드가 없습니다.
+            </p>
+            <p className="mt-1 text-[13.5px] text-muted">
+              {user === null
+                ? "로그인하면 뽑은 카드가 도감에 수집됩니다."
+                : "리딩에서 뽑은 카드가 이곳에 모입니다."}
+            </p>
+            {user === null ? (
+              <Link href="/login" className="btn btn-gold mt-4 w-full sm:w-auto sm:px-8">
+                로그인하기
+              </Link>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="mt-4 grid grid-cols-3 gap-y-3.5 gap-x-3 lg:mt-8 lg:grid-cols-6 lg:gap-[22px]">
           {visible.map((card) => {
