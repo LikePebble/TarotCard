@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { CaretLeft } from "@phosphor-icons/react";
 import { CardArt } from "@/components/CardArt";
 import { CardBack } from "@/components/CardBack";
+import { DeckInfoModal } from "@/components/DeckInfoModal";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { cards } from "@/data/cards";
@@ -44,6 +45,7 @@ export default function DeckCatalogPage({
   // 세션 확인 중에는 게스트로 단정하지 않는다 — 로그인 사용자에게 로그인 유도가 스치는 것을 막는다.
   const isGuest = !sessionLoading && user === null;
   const [filter, setFilter] = useState<FilterId>("major");
+  const [infoOpen, setInfoOpen] = useState(false);
 
   const deck = decks.find((d) => d.id === deckId && d.active);
   // 모르는 덱은 클래식으로 둔갑시키지 않는다 — 옛 카드 상세 URL이 조용히
@@ -81,19 +83,28 @@ export default function DeckCatalogPage({
                 <span className="text-sm font-normal text-muted">/ 78</span>
               </p>
             </div>
-            {isDefault ? (
-              <p className="mt-2 text-[13px] text-gold-soft">
-                기본 덱 · 리딩에서 이 덱으로 뽑습니다
-              </p>
-            ) : (
+            <div className="mt-2 flex items-center gap-4">
+              {isDefault ? (
+                <p className="text-[13px] text-gold-soft">
+                  기본 덱 · 리딩에서 이 덱으로 뽑습니다
+                </p>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => select(deck.id)}
+                  className="min-h-11 text-[13px] text-muted underline underline-offset-4 hover:text-cream"
+                >
+                  기본 덱으로 설정
+                </button>
+              )}
               <button
                 type="button"
-                onClick={() => select(deck.id)}
-                className="mt-2 min-h-11 text-[13px] text-muted underline underline-offset-4 hover:text-cream"
+                onClick={() => setInfoOpen(true)}
+                className="min-h-11 text-[13px] text-muted underline underline-offset-4 hover:text-cream"
               >
-                기본 덱으로 설정
+                덱 정보
               </button>
-            )}
+            </div>
           </div>
           <div className="hidden lg:block lg:text-right">
             <p className="font-display text-[40px] font-semibold text-gold-soft">
@@ -220,6 +231,9 @@ export default function DeckCatalogPage({
           })}
         </div>
       </main>
+      {infoOpen ? (
+        <DeckInfoModal deck={deck} onClose={() => setInfoOpen(false)} />
+      ) : null}
       <TabBar />
     </div>
   );

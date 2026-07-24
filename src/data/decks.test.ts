@@ -19,6 +19,15 @@ describe("decks", () => {
   });
 });
 
+describe("decks info", () => {
+  it("모든 활성 덱은 소개 문구를 가진다", () => {
+    for (const deck of decks.filter((d) => d.active)) {
+      expect(deck.info.description.length, `${deck.id} description`).toBeGreaterThan(0);
+      for (const p of deck.info.description) expect(p.trim()).not.toBe("");
+    }
+  });
+});
+
 describe("decksByDefaultFirst", () => {
   it("기본 덱을 맨 앞에 놓는다", () => {
     const sorted = decksByDefaultFirst("k-pop-museverse");
