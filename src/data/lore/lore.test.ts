@@ -3,6 +3,7 @@ import { cards } from "../cards";
 import { cardLore, loreBySlug } from "./index";
 import { loreCups } from "./cups";
 import { loreMajor } from "./major";
+import { lorePentacles } from "./pentacles";
 import { loreSwords } from "./swords";
 import { loreWands } from "./wands";
 
@@ -80,6 +81,19 @@ describe("소드 lore", () => {
       expect(loreSwords[slug], `${slug} 누락`).toBeDefined();
     }
     expect(Object.keys(loreSwords)).toHaveLength(14);
+  });
+});
+
+describe("펜타클 lore", () => {
+  it("14장 전수 존재", () => {
+    const pentacleSlugs = cards.filter((c) => c.suit === "pentacles").map((c) => c.slug);
+    for (const slug of pentacleSlugs) {
+      expect(lorePentacles[slug], `${slug} 누락`).toBeDefined();
+    }
+    expect(Object.keys(lorePentacles)).toHaveLength(14);
+  });
+  it("78장 전체가 채워졌다", () => {
+    expect(Object.keys(loreBySlug)).toHaveLength(78);
   });
 });
 
