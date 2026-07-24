@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useArcanaStore } from "@/lib/store";
+import { useSession } from "@/lib/auth/session";
 
 function formatKoDate(iso: string): string {
   const d = new Date(iso);
@@ -17,14 +19,30 @@ export function CollectHistory({
   deckId: string;
 }) {
   const { store } = useArcanaStore();
+  const { user, loading } = useSession();
   const entry = store?.collection[deckId]?.[slug];
 
   return (
     <div className="mt-7 border-t border-line pt-5 lg:mt-10 lg:pt-7">
-      {store === null ? (
+      {store === null || loading ? (
         <p className="text-[12.5px] text-muted" aria-hidden>
           {" "}
         </p>
+      ) : user === null ? (
+        <div>
+          <span className="inline-block rounded-full border border-line px-3 py-1 text-[12px] text-muted">
+            미수집
+          </span>
+          <p className="mt-2.5 text-[14px] text-muted">
+            로그인하면 이 카드가 도감에 수집됩니다.
+          </p>
+          <Link
+            href="/login"
+            className="btn btn-gold mt-3.5 w-full sm:w-auto sm:px-8"
+          >
+            로그인하고 수집하기
+          </Link>
+        </div>
       ) : entry ? (
         <div className="flex gap-10 lg:gap-14">
           <div>
