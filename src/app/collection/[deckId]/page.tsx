@@ -40,7 +40,9 @@ export default function DeckCatalogPage({
   const { store } = useArcanaStore();
   const ent = useEntitlements();
   const { deckId: defaultDeckId, select } = useSelectedDeck();
-  const { user } = useSession();
+  const { user, loading: sessionLoading } = useSession();
+  // 세션 확인 중에는 게스트로 단정하지 않는다 — 로그인 사용자에게 로그인 유도가 스치는 것을 막는다.
+  const isGuest = !sessionLoading && user === null;
   const [filter, setFilter] = useState<FilterId>("major");
 
   const deck = decks.find((d) => d.id === deckId && d.active);
@@ -161,11 +163,11 @@ export default function DeckCatalogPage({
               아직 수집한 카드가 없습니다.
             </p>
             <p className="mt-1 text-[13.5px] text-muted">
-              {user === null
+              {isGuest
                 ? "로그인하면 뽑은 카드가 도감에 수집됩니다."
                 : "리딩에서 뽑은 카드가 이곳에 모입니다."}
             </p>
-            {user === null ? (
+            {isGuest ? (
               <Link href="/login" className="btn btn-gold mt-4 w-full sm:w-auto sm:px-8">
                 로그인하기
               </Link>
