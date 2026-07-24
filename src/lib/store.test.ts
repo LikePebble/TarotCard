@@ -7,6 +7,7 @@ import {
   readingById,
   setLocalStore,
   slotState,
+  togetherDays,
   type ArcanaStore,
   type ArcanaStore as Store,
 } from "@/lib/store";
@@ -25,6 +26,25 @@ function reading(over: Partial<import("@/lib/store").ReadingRecord>): import("@/
     cards: ["thefool"],
     orientations: ["upright"],
     ...over,
+  };
+}
+
+function storeWith(dates: string[]): ArcanaStore {
+  return {
+    version: 2,
+    collection: {},
+    readings: dates.map((d, i) => ({
+      id: `r${i}`,
+      at: `${d}T09:00:00.000Z`,
+      localDate: d,
+      isoWeek: "2026-W30",
+      spread: "one" as const,
+      typeId: "ONE_CARD" as const,
+      category: "day",
+      deckId: "classic",
+      cards: ["the-fool"],
+      orientations: ["upright" as const],
+    })),
   };
 }
 
@@ -227,5 +247,15 @@ describe("clearLocalStore", () => {
     clearLocalStore();
     off();
     expect(fn).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("togetherDays", () => {
+  it("서로 다른 localDate 수를 센다(중복 제거)", () => {
+    expect(togetherDays(storeWith(["2026-07-24", "2026-07-24", "2026-07-23"]))).toBe(2);
+  });
+  it("빈 스토어/null은 0", () => {
+    expect(togetherDays(storeWith([]))).toBe(0);
+    expect(togetherDays(null)).toBe(0);
   });
 });

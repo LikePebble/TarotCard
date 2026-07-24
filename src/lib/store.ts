@@ -261,6 +261,13 @@ export function collectedCount(store: ArcanaStore, deckId: string): number {
   return Object.keys(store.collection[deckId] ?? {}).length;
 }
 
+/** 함께한 날 = 카드를 뽑은 서로 다른 날 수. 티어·이벤트의 서버 지표이기도 하다
+ *  (readings가 이미 서버 동기화되므로 별도 저장이 필요 없다). */
+export function togetherDays(store: ArcanaStore | null): number {
+  if (!store) return 0;
+  return new Set(store.readings.map((r) => r.localDate)).size;
+}
+
 /** 저장된 리딩을 id로 찾는다 (결과 재열람용, /reading/[id]). */
 export function readingById(
   store: ArcanaStore,
