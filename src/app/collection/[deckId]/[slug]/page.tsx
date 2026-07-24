@@ -6,6 +6,7 @@ import { CardArtViewer } from "@/components/CardArtViewer";
 import { CollectHistory } from "@/components/CollectHistory";
 import { CollectedCardNav } from "@/components/CollectedCardNav";
 import { DesktopNav } from "@/components/SiteNav";
+import { LoreSections } from "@/components/LoreSections";
 import { cardBySlug, cards, romanNumeral } from "@/data/cards";
 import { decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
@@ -116,6 +117,7 @@ export default async function CardDetailPage({
                 ))}
               </div>
             </details>
+            <LoreSections slug={card.slug} deckId={deck.id} />
             <CollectHistory slug={card.slug} deckId={deck.id} />
             <CollectedCardNav deckId={deck.id} slug={card.slug} />
           </div>
