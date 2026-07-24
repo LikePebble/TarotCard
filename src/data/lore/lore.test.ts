@@ -3,6 +3,7 @@ import { cards } from "../cards";
 import { cardLore, loreBySlug } from "./index";
 import { loreCups } from "./cups";
 import { loreMajor } from "./major";
+import { loreSwords } from "./swords";
 import { loreWands } from "./wands";
 
 describe("cardLore", () => {
@@ -69,6 +70,16 @@ describe("컵 lore", () => {
       expect(loreCups[slug], `${slug} 누락`).toBeDefined();
     }
     expect(Object.keys(loreCups)).toHaveLength(14);
+  });
+});
+
+describe("소드 lore", () => {
+  it("14장 전수 존재", () => {
+    const swordSlugs = cards.filter((c) => c.suit === "swords").map((c) => c.slug);
+    for (const slug of swordSlugs) {
+      expect(loreSwords[slug], `${slug} 누락`).toBeDefined();
+    }
+    expect(Object.keys(loreSwords)).toHaveLength(14);
   });
 });
 
