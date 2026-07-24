@@ -6,20 +6,19 @@ import { CaretRight, Notebook, Sparkle } from "@phosphor-icons/react";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { useJournal } from "@/lib/journal";
-import { collectedCount, useArcanaStore, useSelectedDeck } from "@/lib/store";
+import { togetherDays, useArcanaStore } from "@/lib/store";
 import { AccountCard } from "./AccountCard";
 
 export default function MyPage() {
   const { store } = useArcanaStore();
   const { store: journal } = useJournal();
-  const { deckId } = useSelectedDeck();
 
   const readings = store?.readings.length ?? 0;
-  const collected = store ? collectedCount(store, deckId) : 0;
+  const together = togetherDays(store);
   const days = journal ? Object.keys(journal).length : 0;
 
   const stats = [
-    { label: "수집", value: collected, unit: "/ 78" },
+    { label: "함께한 날", value: together, unit: "" },
     { label: "리딩", value: readings, unit: "회" },
     { label: "기록", value: days, unit: "일" },
   ];

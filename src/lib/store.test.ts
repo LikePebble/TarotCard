@@ -129,7 +129,7 @@ describe("slotState — 과거·현재·미래 (주 1회, 카테고리 무관)",
   });
 });
 
-import { newReadingRecord, withReadingRecorded, collectedCount } from "@/lib/store";
+import { newReadingRecord, withReadingRecorded } from "@/lib/store";
 
 describe("newReadingRecord", () => {
   it("at·spread로 파생 필드를 채운다", () => {
@@ -163,8 +163,9 @@ describe("withReadingRecorded", () => {
       orientations: ["upright"],
     });
     const next = withReadingRecorded(store, rec);
-    expect(collectedCount(next, "wolha-biwon")).toBe(1);
-    expect(collectedCount(next, "classic")).toBe(0);
+    // 만남 기록(encounters)은 뽑은 덱만 채운다. 완성도(소유)와는 별개다.
+    expect(Object.keys(next.collection["wolha-biwon"] ?? {}).length).toBe(1);
+    expect(Object.keys(next.collection["classic"] ?? {}).length).toBe(0);
     expect(next.readings).toHaveLength(1);
     expect(next.collection["wolha-biwon"].thefool.count).toBe(1);
   });

@@ -11,7 +11,12 @@ import { TabBar } from "@/components/TabBar";
 import { cards } from "@/data/cards";
 import { decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
-import { collectedCount, useArcanaStore, useSelectedDeck } from "@/lib/store";
+import {
+  collectedCount,
+  ownsDeck,
+  useEntitlements,
+} from "@/lib/entitlements";
+import { useArcanaStore, useSelectedDeck } from "@/lib/store";
 
 const FILTERS = [
   { id: "major", label: "메이저" },
@@ -30,6 +35,7 @@ export default function DeckCatalogPage({
 }) {
   const { deckId } = use(params);
   const { store } = useArcanaStore();
+  const ent = useEntitlements();
   const { deckId: defaultDeckId, select } = useSelectedDeck();
   const [filter, setFilter] = useState<FilterId>("major");
 
@@ -40,7 +46,8 @@ export default function DeckCatalogPage({
   if (!deck) notFound();
 
   const isDefault = defaultDeckId === deck.id;
-  const total = store ? collectedCount(store, deck.id) : 0;
+  const total = collectedCount(deck.id, ent);
+  const owned = ownsDeck(deck.id, ent);
   const visible = cards.filter((card) =>
     filter === "major" ? card.arcana === "major" : card.suit === filter,
   );
@@ -147,7 +154,7 @@ export default function DeckCatalogPage({
 
         <div className="mt-4 grid grid-cols-3 gap-y-3.5 gap-x-3 lg:mt-8 lg:grid-cols-6 lg:gap-[22px]">
           {visible.map((card) => {
-            const collected = !!store?.collection[deck.id]?.[card.slug];
+            const collected = owned;
             const nameKo = koCards[card.slug]?.nameKo ?? card.nameEn;
             const label = (
               <p

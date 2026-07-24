@@ -5,6 +5,7 @@ import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { cardBySlug, cards } from "@/data/cards";
 import { koCards } from "@/data/ko";
 import { neighborSlugs } from "@/lib/collection-nav";
+import { collectedSlugs, useEntitlements } from "@/lib/entitlements";
 import { useArcanaStore } from "@/lib/store";
 
 const ORDERED_SLUGS = cards.map((c) => c.slug);
@@ -34,6 +35,7 @@ export function CollectedCardNav({
   slug: string;
 }) {
   const { store } = useArcanaStore();
+  const ent = useEntitlements();
 
   // 마운트 전(store===null)에도 바깥 행 높이는 고정 — 안쪽만 비운다.
   // 그래야 로드 직후 화살표가 나타나거나 사라질 때 레이아웃이 흔들리지 않는다.
@@ -46,7 +48,7 @@ export function CollectedCardNav({
     );
   }
 
-  const collected = new Set(Object.keys(store.collection[deckId] ?? {}));
+  const collected = collectedSlugs(deckId, ent);
   const { prev, next } = neighborSlugs(ORDERED_SLUGS, collected, slug);
 
   return (

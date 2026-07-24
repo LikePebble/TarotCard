@@ -6,10 +6,11 @@ import { DeckCard } from "@/components/DeckCard";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { decksByDefaultFirst } from "@/data/decks";
-import { collectedCount, useArcanaStore, useSelectedDeck } from "@/lib/store";
+import { collectedCount, useEntitlements } from "@/lib/entitlements";
+import { useSelectedDeck } from "@/lib/store";
 
 export default function CollectionPage() {
-  const { store } = useArcanaStore();
+  const ent = useEntitlements();
   const { deckId: defaultDeckId, select } = useSelectedDeck();
   const list = decksByDefaultFirst(defaultDeckId);
 
@@ -27,7 +28,7 @@ export default function CollectionPage() {
 
         <div className="mt-5 flex flex-col gap-2.5 lg:mt-8">
           {list.map((deck) => {
-            const collected = store ? collectedCount(store, deck.id) : 0;
+            const collected = collectedCount(deck.id, ent);
             const isDefault = deck.id === defaultDeckId;
             return (
               <div

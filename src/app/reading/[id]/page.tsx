@@ -12,8 +12,7 @@ import { OneCardResult, ThreeCardResult } from "../ReadingResult";
 
 /**
  * 저장된 리딩 결과를 id로 재열람한다. draw의 갓-뽑은 리빌과 같은 결과
- * 컴포넌트를 쓰되, collectionCount를 넘기지 않아 "추가되었습니다" 배너는
- * 숨긴다(이미 지난 리딩이므로).
+ * 컴포넌트를 쓴다.
  */
 export default function ReadingResultPage({
   params,

@@ -13,7 +13,6 @@ import { focusLabelOf } from "@/data/focus";
 import { pickOrientations, secureRand } from "@/lib/orientation";
 import {
   blockingReading,
-  collectedCount,
   getPendingFocus,
   getPendingSpread,
   loadStore,
@@ -101,7 +100,6 @@ export default function DrawPage() {
   const [flippingFanId, setFlippingFanId] = useState<number | null>(null);
   const [chargingFanId, setChargingFanId] = useState<number | null>(null);
   const [flashing, setFlashing] = useState(false);
-  const [count, setCount] = useState<number | null>(null);
   // 셔플 사이클 수. CSS(--shuf-cycles)와 타이머가 같은 값을 봐야 끊김이 없다.
   const [shuffleCycles, setShuffleCycles] = useState(2);
   const [readingRecord, setReadingRecord] = useState<ReadingRecord | null>(null);
@@ -143,7 +141,6 @@ export default function DrawPage() {
     setFlippingFanId(null);
     setChargingFanId(null);
     setFlashing(false);
-    setCount(null);
     setReadingRecord(null);
     recordedRef.current = false;
     if (reducedRef.current) {
@@ -198,7 +195,6 @@ export default function DrawPage() {
         // 방향은 기록 시점에 뽑는다. uid()와 같은 이유로 보안 난수를 쓴다.
         orientations: pickOrientations(slugs.length, secureRand),
       });
-      setCount(collectedCount(result.store, deckId));
       setReadingRecord(result.record);
     },
     [deckId],
@@ -555,7 +551,6 @@ export default function DrawPage() {
             deckId={deckId}
             focus={focus}
             orientations={readingRecord?.orientations}
-            collectionCount={count}
             reducedMotion={!!reducedMotion}
             localDate={readingRecord?.localDate ?? null}
           />
@@ -565,7 +560,6 @@ export default function DrawPage() {
             deckId={deckId}
             focus={focus}
             orientations={readingRecord?.orientations}
-            collectionCount={count}
             reducedMotion={!!reducedMotion}
             localDate={readingRecord?.localDate ?? null}
           />

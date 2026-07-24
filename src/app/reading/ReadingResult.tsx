@@ -70,17 +70,12 @@ function ReversedBadge() {
   );
 }
 
-/**
- * 오늘의 카드 결과. 갓 뽑은 리빌(draw)과 재열람(/reading/[id])이 공유한다.
- * collectionCount가 주어지면 "컬렉션에 추가되었습니다" 배너를 보여준다(신규 리빌).
- * localDate가 있으면 그날 일기 링크를 액션에 포함한다.
- */
+/** 오늘의 카드 결과. 갓 뽑은 리빌(draw)과 재열람(/reading/[id])이 공유한다. */
 export function OneCardResult({
   card,
   deckId,
   focus,
   orientations,
-  collectionCount,
   reducedMotion,
   localDate,
 }: {
@@ -88,7 +83,6 @@ export function OneCardResult({
   deckId: string;
   focus: string;
   orientations?: Orientation[];
-  collectionCount?: number | null;
   reducedMotion: boolean;
   localDate: string | null;
 }) {
@@ -181,14 +175,6 @@ export function OneCardResult({
             uprightContent
           )}
         </div>
-        {collectionCount !== undefined ? (
-          <div className="mt-5 flex items-baseline justify-between rounded-[14px] border border-line-gold px-[18px] py-3.5 text-[13.5px] lg:mt-8 lg:inline-flex lg:gap-3.5 lg:text-[14.5px]">
-            <span>컬렉션에 추가되었습니다</span>
-            <b className="font-display text-[15px] font-semibold text-gold-soft">
-              {collectionCount ?? "-"} / 78
-            </b>
-          </div>
-        ) : null}
         <div className="mt-5 flex flex-col gap-2.5 lg:mt-8 lg:flex-row lg:gap-3.5">
           <ResultActions deckId={deckId} slug={card.slug} localDate={localDate} />
         </div>
@@ -226,7 +212,6 @@ export function ThreeCardResult({
   deckId,
   focus,
   orientations,
-  collectionCount,
   reducedMotion,
   localDate,
 }: {
@@ -234,7 +219,6 @@ export function ThreeCardResult({
   deckId: string;
   focus: string;
   orientations?: Orientation[];
-  collectionCount?: number | null;
   reducedMotion: boolean;
   localDate: string | null;
 }) {
@@ -423,14 +407,6 @@ export function ThreeCardResult({
           </div>
         </motion.div>
       </div>
-      {collectionCount !== undefined ? (
-        <div className="mt-6 flex items-baseline justify-between rounded-[14px] border border-line-gold px-[18px] py-3.5 text-[13.5px] lg:text-[14.5px]">
-          <span>3장이 컬렉션에 추가되었습니다</span>
-          <b className="font-display text-[15px] font-semibold text-gold-soft">
-            {collectionCount ?? "-"} / 78
-          </b>
-        </div>
-      ) : null}
       <div className="mt-5 flex flex-col gap-2.5 lg:flex-row lg:justify-center lg:gap-3.5">
         <ResultActions deckId={deckId} slug={selected.slug} localDate={localDate} />
       </div>
