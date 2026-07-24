@@ -1,11 +1,8 @@
 "use client";
 
 import { UserCircle } from "@phosphor-icons/react";
-import {
-  signInWithProvider,
-  signOutAndClear,
-  useSession,
-} from "@/lib/auth/session";
+import { signOutAndClear, useSession } from "@/lib/auth/session";
+import { SignInButtons } from "@/components/SignInButtons";
 import { useSyncStatus, type SyncState } from "@/lib/sync/status";
 
 const card =
@@ -94,21 +91,8 @@ export function AccountCard() {
           </span>
         </span>
       </span>
-      <div className="mt-4 flex flex-col gap-2.5 sm:flex-row">
-        <button
-          type="button"
-          onClick={() => void signInWithProvider("kakao")}
-          className="btn btn-gold flex-1"
-        >
-          카카오로 시작
-        </button>
-        <button
-          type="button"
-          onClick={() => void signInWithProvider("google")}
-          className="btn btn-ghost flex-1"
-        >
-          구글로 시작
-        </button>
+      <div className="mt-4">
+        <SignInButtons />
       </div>
     </div>
   );
