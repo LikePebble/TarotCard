@@ -126,7 +126,8 @@ export default function DeckCatalogPage({
           />
         </div>
 
-        {store && total === 0 ? (
+        {/* 소유 기준 안내는 수집됨 필터에선 숨긴다 — 그 필터의 만남 기록 빈 상태와 제목이 겹친다. */}
+        {store && total === 0 && filter !== "collected" ? (
           <div className="mt-5 rounded-2xl border border-line bg-ink-1 p-6 lg:mt-10 lg:flex lg:items-center lg:justify-between lg:p-8">
             <div>
               <p className="font-display text-lg font-semibold lg:text-[21px]">
