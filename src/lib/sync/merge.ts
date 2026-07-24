@@ -1,8 +1,8 @@
 import type { ArcanaStore, CollectionEntry, ReadingRecord } from "@/lib/store";
 import type { JournalStore } from "@/lib/journal";
 
-/** 리딩에서 덱별 도감을 재계산한다(firstAt=최초 at, count=등장 수). */
-export function recomputeCollection(
+/** 리딩에서 덱별 만남 기록을 재계산한다(firstAt=최초 at, count=등장 수). */
+export function recomputeEncounters(
   readings: ReadingRecord[],
 ): ArcanaStore["collection"] {
   const byAt = [...readings].sort((x, y) => x.at.localeCompare(y.at));
@@ -19,14 +19,14 @@ export function recomputeCollection(
   return collection;
 }
 
-/** 두 스토어를 병합: 리딩 union(id 기준), 도감은 재계산으로 정합성 보장. */
+/** 두 스토어를 병합: 리딩 union(id 기준), 만남 기록은 재계산으로 정합성 보장. */
 export function mergeStores(a: ArcanaStore, b: ArcanaStore): ArcanaStore {
   const byId = new Map<string, ReadingRecord>();
   for (const r of [...a.readings, ...b.readings]) {
     if (!byId.has(r.id)) byId.set(r.id, r);
   }
   const readings = [...byId.values()];
-  return { version: 2, collection: recomputeCollection(readings), readings };
+  return { version: 2, collection: recomputeEncounters(readings), readings };
 }
 
 /**

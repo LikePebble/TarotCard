@@ -1,6 +1,6 @@
 import { getBrowserSupabase } from "@/lib/supabase/client";
 import type { ArcanaStore, ReadingRecord } from "@/lib/store";
-import { recomputeCollection } from "@/lib/sync/merge";
+import { recomputeEncounters } from "@/lib/sync/merge";
 import type { PullResult, SyncOutcome } from "@/lib/sync/outcome";
 
 type ReadingRow = {
@@ -67,7 +67,7 @@ export async function pullRemoteStore(
   const readings = (data as ReadingRow[]).map(rowToReading);
   return {
     outcome: "ok",
-    data: { version: 2, collection: recomputeCollection(readings), readings },
+    data: { version: 2, collection: recomputeEncounters(readings), readings },
   };
 }
 

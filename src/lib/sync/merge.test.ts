@@ -4,7 +4,7 @@ import type { JournalStore } from "@/lib/journal";
 import {
   mergeJournals,
   mergeStores,
-  recomputeCollection,
+  recomputeEncounters,
 } from "@/lib/sync/merge";
 
 function rec(over: Partial<ReadingRecord>): ReadingRecord {
@@ -23,7 +23,7 @@ function rec(over: Partial<ReadingRecord>): ReadingRecord {
   };
 }
 
-describe("recomputeCollection", () => {
+describe("recomputeEncounters", () => {
   it("덱별로 등장 수와 최초 at을 집계한다", () => {
     const readings = [
       rec({ id: "a", at: "2026-07-19T05:00:00.000Z", cards: ["thefool"] }),
@@ -39,7 +39,7 @@ describe("recomputeCollection", () => {
         cards: ["thefool"],
       }),
     ];
-    const col = recomputeCollection(readings);
+    const col = recomputeEncounters(readings);
     expect(col.classic.thefool).toEqual({
       firstAt: "2026-07-19T05:00:00.000Z",
       count: 2,

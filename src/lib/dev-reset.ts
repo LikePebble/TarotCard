@@ -8,7 +8,7 @@ import {
   type ArcanaStore,
   type ReadingRecord,
 } from "@/lib/store";
-import { recomputeCollection } from "@/lib/sync/merge";
+import { recomputeEncounters } from "@/lib/sync/merge";
 
 /** 개발 빌드에서만 테스트용 도구를 노출한다(배포본에는 나오지 않는다). */
 export const isDevTools = process.env.NODE_ENV !== "production";
@@ -40,7 +40,7 @@ export function resetCurrentReadings(): ArcanaStore {
   const readings = store.readings.filter((r) => !gatesDraw(r, now));
   const next: ArcanaStore = {
     version: 2,
-    collection: recomputeCollection(readings),
+    collection: recomputeEncounters(readings),
     readings,
   };
   setLocalStore(next); // 저장이 곧 알림이라 열려 있는 화면이 함께 갱신된다.
