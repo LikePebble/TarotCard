@@ -10,6 +10,15 @@ function sentenceCount(text: string): number {
   return (text.match(/[.!?](\s|$)/g) ?? []).length;
 }
 
+/** 가독성 규칙(문장 40자 내외)의 상한. 검수에서 길이 무검증이 지적돼 추가했다. */
+const MAX_SENTENCE_CHARS = 45;
+
+function longestSentence(text: string): number {
+  return Math.max(
+    ...text.split(/(?<=[.!?])\s+/).map((s) => s.trim().length),
+  );
+}
+
 describe.each([
   ["정방향", koPositions],
   ["역방향", reversedPositions],
@@ -24,6 +33,11 @@ describe.each([
         const n = sentenceCount(text);
         expect(n, `${slug}/${key} 문장 수 ${n}`).toBeGreaterThanOrEqual(2);
         expect(n, `${slug}/${key} 문장 수 ${n}`).toBeLessThanOrEqual(4);
+        const longest = longestSentence(text);
+        expect(
+          longest,
+          `${slug}/${key} 최장 문장 ${longest}자`,
+        ).toBeLessThanOrEqual(MAX_SENTENCE_CHARS);
       }
     }
   });

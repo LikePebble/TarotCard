@@ -33,7 +33,7 @@ export const reversedCards: Record<string, ReversedText> = {
     en: "Reversed, the Emperor shows structure loosening its grip. Sometimes that looks like kindness where sternness was expected; sometimes the framework you are building is simply not ready to bear weight yet, and things catch and stall along the way.\n\nFor now, gentleness may hold more together than force. Just keep sight of why you wanted the structure in the first place — the rules can be rebuilt later, once they have had time to mature.",
   },
   "the-hierophant": {
-    ko: "역방향의 교황은 어울림과 화합이 앞서는 때를 비춥니다. 다만 그 다정함이 지나쳐 모두의 뜻에 지나치게 맞추고 있나요? 그러느라 자신의 뜻을 말하지 못하는지 묻는 카드입니다.\n\n좋은 관계를 위해 무엇을 양보하고 있는지 한번 살펴보세요. 친절과 동의는 같은 것이 아닙니다. 부드럽고 분명하게 자신의 자리를 지켜 보세요. 지금 필요한 배움일 수 있습니다.",
+    ko: "역방향의 교황은 어울림과 화합이 앞서는 때를 비춥니다. 다만 그 다정함이 지나칠 수 있습니다. 모두의 뜻에 맞추느라 자신의 뜻을 말하지 못하고 있는지 묻는 카드입니다.\n\n좋은 관계를 위해 무엇을 양보하고 있는지 한번 살펴보세요. 친절과 동의는 같은 것이 아닙니다. 부드럽고 분명하게 자신의 자리를 지켜 보세요. 지금 필요한 배움일 수 있습니다.",
     en: "Reversed, the Hierophant speaks of harmony and belonging — and asks, gently, what they are costing you. Kindness may be tipping into over-accommodation, agreement offered so easily that your own convictions never quite get said aloud.\n\nNotice what you concede for the sake of getting along. Being kind and going along are not the same thing. The lesson here may be learning to hold your place in the circle softly, but clearly.",
   },
   "the-lovers": {
@@ -73,7 +73,7 @@ export const reversedCards: Record<string, ReversedText> = {
     en: "Reversed, Temperance shows a blend that is not quite taking. Commitments, relationships, and hopes may be competing for the same hours rather than flowing together, and some combinations may simply not belong in the same cup.\n\nInstead of working harder to mix everything, first ask whether these elements actually suit one another. Setting down an ill-matched pairing is also a form of balance. Harmony often begins not with adding more, but with pouring a little out.",
   },
   "the-devil": {
-    ko: "역방향의 악마는 작고 눈에 띄지 않는 고리들로 이어진 묶임을 비춥니다. 크고 뚜렷한 사슬은 아닙니다. 사소한 미련과 자잘한 자기 비하가 힘을 빼앗을 수 있습니다. 못 본 척해 온 패턴도 마찬가지입니다.\n\n거창한 결심보다 작은 알아차림이 먼저입니다. 오늘 나를 붙잡은 가장 작은 고리 하나를 찾아보세요. 작은 사슬은 작게 풀립니다. 그 하나를 푸는 감각이 나머지를 푸는 길을 알려 줍니다.",
+    ko: "역방향의 악마는 크고 뚜렷한 사슬이 아닌 묶임을 비춥니다. 작고 눈에 띄지 않는 고리들로 이어져 있습니다. 사소한 미련과 자잘한 자기 비하가 힘을 빼앗을 수 있습니다. 못 본 척해 온 패턴도 마찬가지입니다.\n\n거창한 결심보다 작은 알아차림이 먼저입니다. 오늘 나를 붙잡은 가장 작은 고리 하나를 찾아보세요. 작은 사슬은 작게 풀립니다. 그 하나를 푸는 감각이 나머지를 푸는 길을 알려 줍니다.",
     en: "Reversed, the Devil binds not with heavy chains but with small, almost invisible ones. Minor habits, little self-diminishments, patterns kept just out of sight — each too small to seem worth naming, together quietly draining your strength.\n\nStart with noticing rather than with grand resolutions. Find the smallest link that caught you today. Small chains come undone in small ways, and the feel of loosening one teaches your hands how to loosen the rest.",
   },
   "the-tower": {
@@ -121,7 +121,7 @@ export const reversedCards: Record<string, ReversedText> = {
     en: "Reversed, the Five of Cups shows the gaze lifting at last from what was lost. News arrives, ties return, and reconnection is in the air — though some of what you hope for may still be a picture the heart has painted rather than what is there.\n\nWelcome what comes back, and check each piece gently. If you can tell real comfort from hope grasped too quickly, the recovery will stand on firmer ground.",
   },
   "six-of-cups": {
-    ko: "역방향의 컵 6은 시선이 과거에서 앞으로 옮겨 가는 길목을 비춥니다. 추억이 주던 온기는 옅어지지 않습니다. 이제 그 온기를 딛고 다가올 것을 맞이할 준비가 되어 가는 때입니다.\n\n오래 간직해 온 것 가운데 무엇을 가져갈지 골라 보세요. 무엇을 두고 갈지도 함께 정해 보시기 바랍니다. 그리움은 짐이 아니라 방향이 될 수 있습니다. 곧 도착할 새로움에 자리를 조금 비워 두세요.",
+    ko: "역방향의 컵 6은 시선이 과거에서 앞으로 옮겨 가는 길목을 비춥니다. 추억이 주던 온기는 옅어지지 않습니다. 이제 그 온기를 딛고 다가올 것을 맞이할 준비가 되어 가는 때입니다.\n\n오래 간직해 온 것 가운데 무엇을 가져가고 무엇을 두고 갈지 골라 보세요. 그리움은 짐이 아니라 방향이 될 수 있습니다. 곧 도착할 새로움에 자리를 조금 비워 두세요.",
     en: "Reversed, the Six of Cups marks the turn where the gaze moves from what was to what is coming. The warmth of memory is not fading — you are learning to stand on it and face forward.\n\nChoose what to carry from the past and what to leave in its keeping. Longing can be a compass rather than a weight. Clear a little room for the new thing that is nearly here.",
   },
   "seven-of-cups": {
@@ -133,7 +133,7 @@ export const reversedCards: Record<string, ReversedText> = {
     en: "Reversed, the Eight of Cups shows the departing step pausing as reasons to stay come back into view. Joy may be rekindling in a place you thought had gone cold, or something worth returning and celebrating may be arriving.\n\nOnly ask yourself whether staying is a choice or a postponement. If what you feel is genuine gladness at being back, then this time, let yourself enjoy it fully.",
   },
   "nine-of-cups": {
-    ko: "역방향의 컵 9는 만족의 겉면 아래를 들여다보게 하는 카드입니다. 바라던 것을 얻었는데 어딘가 허전할 수 있습니다. 작은 흠 하나가 자꾸 눈에 밟히는 때이기도 합니다. 그 틈으로 오히려 진짜 원하는 것이 보이기 시작합니다.\n\n완벽하지 않아도 충분히 잘된 결과일 수 있습니다. 부족한 부분은 고치되, 이미 이룬 것의 값어치까지 깎아내리지는 마세요. 정직한 만족이 과시보다 오래갑니다.",
+    ko: "역방향의 컵 9는 만족의 겉면 아래를 들여다보게 하는 카드입니다. 바라던 것을 얻었는데 어딘가 허전할 수 있습니다. 작은 흠 하나가 자꾸 눈에 밟히는 때이기도 합니다. 그 틈으로 오히려 진짜 원하는 것이 보이기 시작합니다.\n\n완벽하지 않다고 실패한 것은 아닙니다. 부족한 부분은 고치되, 이미 이룬 것의 값어치까지 깎아내리지는 마세요. 정직한 만족이 과시보다 오래갑니다.",
     en: "Reversed, the Nine of Cups looks beneath the surface of satisfaction. You may have what you wished for and still feel a small hollowness, or one flaw may keep catching your eye. Through that very gap, what you truly want begins to show itself.\n\nImperfect does not mean failed. Mend what falls short, but do not talk down the worth of what you have built. An honest contentment outlasts a displayed one.",
   },
   "ten-of-cups": {
@@ -181,7 +181,7 @@ export const reversedCards: Record<string, ReversedText> = {
     en: "Reversed, the Six of Pentacles reflects a flow of giving and receiving that has slipped out of balance. You may find yourself measuring your share against someone else's, or offering help that quietly carries conditions. What looked like a fair exchange may be tilted.\n\nSet down the arithmetic for a moment. Noticing what you hoped to receive by giving, and what still lingers as envy, is often enough to let the current run clean again.",
   },
   "seven-of-pentacles": {
-    ko: "역방향의 펜타클 7은 들인 것에 대한 마음을 비춥니다. 그 마음이 기대보다 걱정 쪽으로 기운 때입니다. 돈과 시간, 정성을 더 들여도 되는지 확신이 서지 않을 수 있습니다. 그래서 자꾸 셈을 다시 하게 되는 상태입니다.\n\n불안 자체가 답을 주지는 않지만, 살펴보라는 신호는 됩니다. 무엇을 근거로 기대했는지 처음으로 돌아가 확인해 보세요. 계속 가꿀 자리와 거둬들일 자리가 그때 나뉩니다.",
+    ko: "역방향의 펜타클 7은 들인 것을 향한 마음이 기대보다 걱정 쪽으로 기운 때를 비춥니다. 돈이든 시간이든 정성이든, 더 부어도 되는지 확신이 서지 않습니다. 그래서 자꾸 셈을 다시 하게 되는 상태입니다.\n\n불안 자체가 답을 주지는 않지만, 살펴보라는 신호는 됩니다. 무엇을 근거로 기대했는지 처음으로 돌아가 확인해 보세요. 계속 가꿀 자리와 거둬들일 자리가 그때 나뉩니다.",
     en: "Reversed, the Seven of Pentacles reflects an investment that has begun to feel more like worry than hope. Whether it is money, time, or care, you may be unsure whether to keep pouring in, counting and recounting what you have already given.\n\nThe anxiety itself is not an answer, but it is a signal to look closely. Go back to what you originally expected and why. That is where it becomes clear what deserves more tending and what is ready to be gathered back.",
   },
   "eight-of-pentacles": {
@@ -225,7 +225,7 @@ export const reversedCards: Record<string, ReversedText> = {
     en: "Reversed, the Three of Swords reflects a hurt that has not settled, circling the mind instead. The thoughts around the wound may be noisier than the wound itself, and in the confusion, misreadings can stack on top of the original pain.\n\nLet the hand that keeps untangling by thinking rest for a while. Write a single sentence naming what hurt — that is enough. A tangled thread begins to loosen the moment it has a name.",
   },
   "four-of-swords": {
-    ko: "역방향의 소드 4는 쉼의 시간이 끝을 향해 가고 있음을 비춥니다. 물러나 있던 자리에서 다시 일상을 꾸릴 준비가 되어 가는 때입니다. 이제 필요한 것은 큰 결단보다 신중한 살림입니다.\n\n한꺼번에 복귀하려 하지 말고, 힘을 아껴 쓰는 순서를 먼저 정해 보세요. 어디에 기운을 쓸지 미리 정해 두세요. 어디를 비워 둘지도 정하면 회복해 둔 것을 잃지 않고 돌아갈 수 있습니다.",
+    ko: "역방향의 소드 4는 쉼의 시간이 끝을 향해 가고 있음을 비춥니다. 물러나 있던 자리에서 다시 일상을 꾸릴 준비가 되어 가는 때입니다. 이제 필요한 것은 큰 결단보다 신중한 살림입니다.\n\n한꺼번에 복귀하려 하지 말고, 힘을 아껴 쓰는 순서를 먼저 정해 보세요. 어디에 기운을 쓰고 어디를 비워 둘지 미리 정해 두세요. 그러면 회복해 둔 것을 잃지 않고 돌아갈 수 있습니다.",
     en: "Reversed, the Four of Swords suggests that a season of rest is drawing toward its close. You are becoming ready to pick up ordinary life again — and what this return asks for is not a bold move but careful housekeeping.\n\nRather than coming back all at once, decide first how to spend your strength sparingly. Choose where your energy goes and what stays set aside, and you can re-enter without losing what the rest restored.",
   },
   "five-of-swords": {
@@ -245,7 +245,7 @@ export const reversedCards: Record<string, ReversedText> = {
     en: "Reversed, the Eight of Swords reflects a bound place beginning to shake. The unsettling part is that the movement comes from unexpected directions, and it is hard to tell whether you are being loosened or tangled further — an unease without one clear source.\n\nRather than trying to hold every variable, take stock of the few things that are certain right now. When the ground is unsteady, one step at a time is the fastest way across.",
   },
   "nine-of-swords": {
-    ko: "역방향의 소드 9는 걱정이 안으로 잠겨 버린 상태를 비춥니다. 의심과 부끄러움이 스스로를 가두는 벽이 되었습니다. 하지만 두려움 가운데 일부는 실제 살펴볼 일을 가리킬 수 있습니다.\n\n두려움을 전부 몰아내려 하기보다, 하나씩 앞에 놓고 물어보세요. 지난 일의 메아리인지, 지금 손볼 수 있는 일인지요. 가려내는 순간 벽은 문이 되기 시작합니다.",
+    ko: "역방향의 소드 9는 걱정이 안으로 잠겨 버린 상태를 비춥니다. 의심과 부끄러움이 스스로를 가두는 벽이 되었을 수 있습니다. 하지만 두려움 가운데 일부는 실제 살펴볼 일을 가리킬 수 있습니다.\n\n두려움을 전부 몰아내려 하기보다, 하나씩 앞에 놓고 물어보세요. 지난 일의 메아리인지, 지금 손볼 수 있는 일인지요. 가려내는 순간 벽은 문이 되기 시작합니다.",
     en: "Reversed, the Nine of Swords reflects worry that has locked itself inward. Doubt and shame have become walls of your own building — yet some of this fear may not be groundless at all, but pointing at something that genuinely asks to be checked.\n\nInstead of trying to banish every fear, set them out one by one and ask: is this an echo of what already happened, or something I can attend to now? The moment you sort them, the wall starts becoming a door.",
   },
   "ten-of-swords": {
