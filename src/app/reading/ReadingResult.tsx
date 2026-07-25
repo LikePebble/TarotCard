@@ -42,13 +42,13 @@ function descriptionOf(card: Card): string[] {
  * 정방향 텍스트는 "결실이 무르익는다"처럼 결과를 단언하는 경우가 많아,
  * 역방향 해석 옆에 그대로 펼쳐두면 정반대 톤이 한 화면에서 부딪힌다(78장 중
  * 절반 이상이 그렇다). 역방향을 주연으로 올리고 정방향은 여기 접어, 궁금한
- * 사람만 "본래의 의미"로 펼쳐 보게 한다. 기본은 접힘.
+ * 사람만 "정방향 해석 보기"로 펼쳐 보게 한다. 기본은 접힘.
  */
 function UprightDetails({ children }: { children: ReactNode }) {
   return (
     <details className="group mt-5 border-t border-line pt-3 lg:max-w-[520px]">
       <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 text-[12.5px] text-muted hover:text-cream lg:text-[13.5px]">
-        카드 본래의 의미
+        정방향 해석 보기
         <CaretDown
           size={13}
           weight="bold"
@@ -380,7 +380,7 @@ export function ThreeCardResult({
           </h2>
           {/* 역방향이면 역방향 해석을 주연으로, 정방향은 토글에 접는다. */}
           <div className="mt-3">
-{reversed ? (
+            {reversed ? (
               <>
                 {reversedPositionSentence ? (
                   <p className="text-[15px] leading-[1.7] text-cream lg:text-[17px]">
