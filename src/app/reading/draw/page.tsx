@@ -446,8 +446,13 @@ export default function DrawPage() {
                   // 각도는 처음 깔린 자리(i)로 고정한다. 뽑힌 카드를 배열에서
                   // 빼고 남은 수로 다시 계산하면 부채꼴 전체가 재정렬돼,
                   // 한 장을 뽑을 때마다 옆 카드들이 솟구쳐 보인다.
-                  if (pickedFanIds.includes(fanId)) return null;
-                  const offset = i - (fan.length - 1) / 2;
+                  //
+                  // 뽑힌 카드를 걷어내는 것은 3카드에서만이다 — 원카드는 뽑은
+                  // 카드가 그 자리에서 리프트·글로우·플립을 마쳐야 한다.
+                  if (spread === "three" && pickedFanIds.includes(fanId)) {
+                    return null;
+                  }
+                  const offset = i - (FAN_SIZE - 1) / 2;
                   const isFlipping = flippingFanId === fanId;
                   const isCharging = chargingFanId === fanId;
                   const dimmedOne =
