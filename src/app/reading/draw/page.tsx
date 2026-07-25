@@ -259,7 +259,6 @@ export default function DrawPage() {
     const nextPicked = [...pickedFanIds, fanId];
     if (reducedMotion) {
       setPickedFanIds(nextPicked);
-      setFan((current) => current.filter((id) => id !== fanId));
       if (nextPicked.length === 3) {
         record(
           deck.slice(0, 3).map((c) => c.slug),
@@ -278,7 +277,6 @@ export default function DrawPage() {
       setFlashing(false);
       setChargingFanId(null);
       setPickedFanIds(nextPicked);
-      setFan((current) => current.filter((id) => id !== fanId));
       if (nextPicked.length === 3) {
         const slugs = deck.slice(0, 3).map((c) => c.slug);
         later(450, () => {
@@ -445,6 +443,10 @@ export default function DrawPage() {
               style={{ "--shuf-cycles": shuffleCycles } as React.CSSProperties}
             >
               {fan.map((fanId, i) => {
+                  // 각도는 처음 깔린 자리(i)로 고정한다. 뽑힌 카드를 배열에서
+                  // 빼고 남은 수로 다시 계산하면 부채꼴 전체가 재정렬돼,
+                  // 한 장을 뽑을 때마다 옆 카드들이 솟구쳐 보인다.
+                  if (pickedFanIds.includes(fanId)) return null;
                   const offset = i - (fan.length - 1) / 2;
                   const isFlipping = flippingFanId === fanId;
                   const isCharging = chargingFanId === fanId;

@@ -203,13 +203,13 @@ function panelInitial(direction: number) {
   return { opacity: 0, x: direction > 0 ? 24 : -24 };
 }
 
-// 테마 라벨의 시점별 프레임. 과거 카드의 조언은 "지금"에 와닿고, 현재 카드는
-// "오늘의" 한가운데를 말하며, 미래 카드는 "앞날을 위해" 미리 건넨다.
-// 다섯 테마("나 자신" 포함) 모두에서 조사가 성립하는 형태만 쓴다.
+// 테마 라벨의 시점별 프레임. 지나간 카드는 조언을 "남기고", 지금의 카드는
+// 그 말을 "건네며", 앞날의 카드는 "미리" 건넨다. 다섯 테마("나 자신" 포함)
+// 모두에서 조사가 성립하도록 "~에 대해" 형태로 통일한다.
 const THEME_FRAMES: Record<(typeof POSITION_KEYS)[number], (label: string) => string> = {
-  past: (label) => `이 카드가 지금 ${label}에 대해 건네는 말`,
-  present: (label) => `이 카드가 오늘의 ${label}에 대해 건네는 말`,
-  future: (label) => `이 카드가 ${label}의 앞날을 위해 건네는 말`,
+  past: (label) => `이 카드가 ${label}에 대해 남긴 말`,
+  present: (label) => `이 카드가 ${label}에 대해 건네는 말`,
+  future: (label) => `이 카드가 ${label}에 대해 미리 건네는 말`,
 };
 
 /** 3카드 결과의 테마 블록. 시점 어긋남을 피해 포지션별 프레임으로 라벨을 만든다. */
