@@ -203,12 +203,29 @@ function panelInitial(direction: number) {
   return { opacity: 0, x: direction > 0 ? 24 : -24 };
 }
 
-/** 3카드 결과의 테마 블록. 시점 어긋남을 피해 "지금 이 테마에 대해"로 프레임한다. */
-function ThemeBlock({ focus, text }: { focus: string; text: string }) {
+// 테마 라벨의 시점별 프레임. 과거 카드의 조언은 "지금"에 와닿고, 현재 카드는
+// "오늘의" 한가운데를 말하며, 미래 카드는 "앞날을 위해" 미리 건넨다.
+// 다섯 테마("나 자신" 포함) 모두에서 조사가 성립하는 형태만 쓴다.
+const THEME_FRAMES: Record<(typeof POSITION_KEYS)[number], (label: string) => string> = {
+  past: (label) => `이 카드가 지금 ${label}에 대해 건네는 말`,
+  present: (label) => `이 카드가 오늘의 ${label}에 대해 건네는 말`,
+  future: (label) => `이 카드가 ${label}의 앞날을 위해 건네는 말`,
+};
+
+/** 3카드 결과의 테마 블록. 시점 어긋남을 피해 포지션별 프레임으로 라벨을 만든다. */
+function ThemeBlock({
+  focus,
+  positionKey,
+  text,
+}: {
+  focus: string;
+  positionKey: (typeof POSITION_KEYS)[number];
+  text: string;
+}) {
   return (
     <div className="mt-3.5 border-t border-line pt-3">
       <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-        이 카드가 지금 {focusLabelOf(focus)}에 대해 건네는 말
+        {THEME_FRAMES[positionKey](focusLabelOf(focus))}
       </p>
       <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
         {text}
@@ -310,7 +327,13 @@ export function ThreeCardResult({
           {positionSentence}
         </p>
       ) : null}
-      {themeParagraph ? <ThemeBlock focus={focus} text={themeParagraph} /> : null}
+      {themeParagraph ? (
+      <ThemeBlock
+        focus={focus}
+        positionKey={POSITION_KEYS[index]}
+        text={themeParagraph}
+      />
+    ) : null}
       <CanonicalDetails label={canonicalLabel} paragraphs={descriptionOf(selected)} />
     </>
   );
@@ -405,7 +428,13 @@ export function ThreeCardResult({
                     {reversedPositionSentence}
                   </p>
                 ) : null}
-                {reversedTheme ? <ThemeBlock focus={focus} text={reversedTheme} /> : null}
+                {reversedTheme ? (
+                  <ThemeBlock
+                    focus={focus}
+                    positionKey={POSITION_KEYS[index]}
+                    text={reversedTheme}
+                  />
+                ) : null}
                 <CanonicalDetails
                   label="카드 자체의 의미 보기"
                   paragraphs={reversedParagraphs(selected)}
