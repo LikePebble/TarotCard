@@ -265,30 +265,35 @@ export function ThreeCardResult({
     ? reversedFocusParagraphOf(focus, selected.slug)
     : null;
 
-  // 정방향: 포지션 문장 + 본문 + 테마. 포지션 문장도 정방향 어조라(예: "결실이
-  // 무르익어 다가온다") 역방향이면 함께 접는다.
+  // 3카드 위계: 포지션 문단(시점 어법)이 주연, 테마는 "지금 건네는 말"로 프레임,
+  // 무시점 정본은 접힘으로 내린다. 근거: docs/research/2026-07-25-position-based-interpretation.md
   const uprightContent = (
     <>
       {positionSentence ? (
-        <p className="text-[15px] leading-[1.6] text-cream lg:text-[17px]">
+        <p className="text-[15px] leading-[1.7] text-cream lg:text-[17px]">
           {positionSentence}
         </p>
       ) : null}
-      <div className="mt-3 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
-        {descriptionOf(selected).map((paragraph) => (
-          <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-        ))}
-      </div>
       {themeParagraph ? (
         <div className="mt-3.5 border-t border-line pt-3">
           <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-            {focusLabelOf(focus)}
+            이 카드가 지금 {focusLabelOf(focus)}에 건네는 말
           </p>
           <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
             {themeParagraph}
           </p>
         </div>
       ) : null}
+      <details className="mt-2.5">
+        <summary className="inline-block min-h-11 cursor-pointer pt-1.5 text-[13.5px] text-muted underline underline-offset-4 hover:text-cream">
+          카드 자체의 의미 보기
+        </summary>
+        <div className="mt-1 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
+          {descriptionOf(selected).map((paragraph) => (
+            <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+          ))}
+        </div>
+      </details>
     </>
   );
 
@@ -375,30 +380,33 @@ export function ThreeCardResult({
           </h2>
           {/* 역방향이면 역방향 해석을 주연으로, 정방향은 토글에 접는다. */}
           <div className="mt-3">
-            {reversed ? (
+{reversed ? (
               <>
-                {/* 역방향 전용 포지션 문장 — 정방향의 포지션 문장과 같은 자리. */}
                 {reversedPositionSentence ? (
-                  <p className="text-[15px] leading-[1.6] text-cream lg:text-[17px]">
+                  <p className="text-[15px] leading-[1.7] text-cream lg:text-[17px]">
                     {reversedPositionSentence}
                   </p>
                 ) : null}
-                <div className="mt-3 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
-                  {reversedParagraphs(selected).map((p) => (
-                    <p key={p.slice(0, 24)}>{p}</p>
-                  ))}
-                </div>
-                {/* 역방향 전용 테마 해석. */}
                 {reversedTheme ? (
                   <div className="mt-3.5 border-t border-line pt-3">
                     <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-                      {focusLabelOf(focus)}
+                      이 카드가 지금 {focusLabelOf(focus)}에 건네는 말
                     </p>
                     <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
                       {reversedTheme}
                     </p>
                   </div>
                 ) : null}
+                <details className="mt-2.5">
+                  <summary className="inline-block min-h-11 cursor-pointer pt-1.5 text-[13.5px] text-muted underline underline-offset-4 hover:text-cream">
+                    카드 자체의 의미 보기
+                  </summary>
+                  <div className="mt-1 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
+                    {reversedParagraphs(selected).map((p) => (
+                      <p key={p.slice(0, 24)}>{p}</p>
+                    ))}
+                  </div>
+                </details>
                 <UprightDetails>{uprightContent}</UprightDetails>
               </>
             ) : (
