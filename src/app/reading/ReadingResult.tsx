@@ -203,6 +203,42 @@ function panelInitial(direction: number) {
   return { opacity: 0, x: direction > 0 ? 24 : -24 };
 }
 
+/** 3카드 결과의 테마 블록. 시점 어긋남을 피해 "지금 이 테마에 대해"로 프레임한다. */
+function ThemeBlock({ focus, text }: { focus: string; text: string }) {
+  return (
+    <div className="mt-3.5 border-t border-line pt-3">
+      <p className="text-[12.5px] text-gold lg:text-[13.5px]">
+        이 카드가 지금 {focusLabelOf(focus)}에 대해 건네는 말
+      </p>
+      <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
+        {text}
+      </p>
+    </div>
+  );
+}
+
+/** 무시점 정본 해석의 접힘. label로 중첩 시 구분한다. */
+function CanonicalDetails({
+  label,
+  paragraphs,
+}: {
+  label: string;
+  paragraphs: string[];
+}) {
+  return (
+    <details className="mt-2.5">
+      <summary className="inline-block min-h-11 cursor-pointer pt-1.5 text-[13.5px] text-muted underline underline-offset-4 hover:text-cream">
+        {label}
+      </summary>
+      <div className="mt-1 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
+        {paragraphs.map((p) => (
+          <p key={p.slice(0, 24)}>{p}</p>
+        ))}
+      </div>
+    </details>
+  );
+}
+
 /**
  * 과거·현재·미래 결과. 갓 뽑은 리빌(draw)과 재열람(/reading/[id])이 공유한다.
  * 한 번에 한 포지션만 보여준다 — 전환 경로는 탭(←/→ 키 포함) 하나다.
@@ -267,33 +303,15 @@ export function ThreeCardResult({
 
   // 3카드 위계: 포지션 문단(시점 어법)이 주연, 테마는 "지금 건네는 말"로 프레임,
   // 무시점 정본은 접힘으로 내린다. 근거: docs/research/2026-07-25-position-based-interpretation.md
-  const uprightContent = (
+  const uprightContent = (canonicalLabel: string) => (
     <>
       {positionSentence ? (
         <p className="text-[15px] leading-[1.7] text-cream lg:text-[17px]">
           {positionSentence}
         </p>
       ) : null}
-      {themeParagraph ? (
-        <div className="mt-3.5 border-t border-line pt-3">
-          <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-            이 카드가 지금 {focusLabelOf(focus)}에 건네는 말
-          </p>
-          <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
-            {themeParagraph}
-          </p>
-        </div>
-      ) : null}
-      <details className="mt-2.5">
-        <summary className="inline-block min-h-11 cursor-pointer pt-1.5 text-[13.5px] text-muted underline underline-offset-4 hover:text-cream">
-          카드 자체의 의미 보기
-        </summary>
-        <div className="mt-1 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
-          {descriptionOf(selected).map((paragraph) => (
-            <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-          ))}
-        </div>
-      </details>
+      {themeParagraph ? <ThemeBlock focus={focus} text={themeParagraph} /> : null}
+      <CanonicalDetails label={canonicalLabel} paragraphs={descriptionOf(selected)} />
     </>
   );
 
@@ -387,30 +405,15 @@ export function ThreeCardResult({
                     {reversedPositionSentence}
                   </p>
                 ) : null}
-                {reversedTheme ? (
-                  <div className="mt-3.5 border-t border-line pt-3">
-                    <p className="text-[12.5px] text-gold lg:text-[13.5px]">
-                      이 카드가 지금 {focusLabelOf(focus)}에 건네는 말
-                    </p>
-                    <p className="mt-1 font-serif text-[14px] leading-[1.7] text-body lg:text-[15px]">
-                      {reversedTheme}
-                    </p>
-                  </div>
-                ) : null}
-                <details className="mt-2.5">
-                  <summary className="inline-block min-h-11 cursor-pointer pt-1.5 text-[13.5px] text-muted underline underline-offset-4 hover:text-cream">
-                    카드 자체의 의미 보기
-                  </summary>
-                  <div className="mt-1 space-y-2.5 font-serif text-[14.5px] leading-[1.7] text-body lg:text-[15.5px]">
-                    {reversedParagraphs(selected).map((p) => (
-                      <p key={p.slice(0, 24)}>{p}</p>
-                    ))}
-                  </div>
-                </details>
-                <UprightDetails>{uprightContent}</UprightDetails>
+                {reversedTheme ? <ThemeBlock focus={focus} text={reversedTheme} /> : null}
+                <CanonicalDetails
+                  label="카드 자체의 의미 보기"
+                  paragraphs={reversedParagraphs(selected)}
+                />
+                <UprightDetails>{uprightContent("정방향 카드 자체의 의미")}</UprightDetails>
               </>
             ) : (
-              uprightContent
+              uprightContent("카드 자체의 의미 보기")
             )}
           </div>
         </motion.div>

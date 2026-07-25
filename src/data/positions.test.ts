@@ -23,16 +23,17 @@ describe.each([
   ["정방향", koPositions],
   ["역방향", reversedPositions],
 ] as const)("%s 포지션 문단", (_label, table) => {
-  it("78×3 전수, 각 2~4문장", () => {
+  it("78×3 전수, 각 2~3문장", () => {
     for (const slug of SLUGS) {
       const entry = table[slug];
       expect(entry, slug).toBeDefined();
       for (const key of KEYS) {
         const text = entry[key];
         expect(text?.trim(), `${slug}/${key}`).toBeTruthy();
+        expect(text.includes("\n"), `${slug}/${key} 개행 포함`).toBe(false);
         const n = sentenceCount(text);
         expect(n, `${slug}/${key} 문장 수 ${n}`).toBeGreaterThanOrEqual(2);
-        expect(n, `${slug}/${key} 문장 수 ${n}`).toBeLessThanOrEqual(4);
+        expect(n, `${slug}/${key} 문장 수 ${n}`).toBeLessThanOrEqual(3);
         const longest = longestSentence(text);
         expect(
           longest,

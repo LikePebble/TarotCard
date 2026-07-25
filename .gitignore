@@ -8,3 +8,5 @@ next-env.d.ts
 # local env files (secrets — never commit; use .env.example as the template)
 .env*.local
 /out/
+
+.scratch/
