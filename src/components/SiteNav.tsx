@@ -1,8 +1,5 @@
+import Image from "next/image";
 import Link from "next/link";
-
-// 로고 이미지는 제거됨(브랜드 리뉴얼 대기). 새 로고를 받으면 이 텍스트 워드마크를
-// <Image>로 교체한다. 임시로 서비스명 텍스트를 둔다.
-const BRAND = "에그타로트";
 
 /** Desktop-only top navigation (lg and up). */
 export function DesktopNav({
@@ -17,9 +14,17 @@ export function DesktopNav({
     >
       <Link
         href="/"
-        className="font-display text-[19px] font-semibold tracking-[0.06em]"
+        aria-label="아르카 홈"
+        className="inline-flex min-h-11 items-center"
       >
-        {BRAND}
+        <Image
+          src="/brand/arca-logo.webp"
+          alt="아르카 타로"
+          width={160}
+          height={54}
+          className="h-auto w-[148px]"
+          priority
+        />
       </Link>
       <div className="flex items-center gap-7 text-[14.5px]">
         <Link
@@ -57,9 +62,20 @@ export function DesktopNav({
 export function MobileTopBar() {
   return (
     <header className="flex h-14 flex-none items-center px-5 lg:hidden">
-      <span className="font-display text-[17px] font-semibold tracking-[0.06em]">
-        {BRAND}
-      </span>
+      <Link
+        href="/"
+        aria-label="아르카 홈"
+        className="inline-flex min-h-11 items-center"
+      >
+        <Image
+          src="/brand/arca-logo.webp"
+          alt="아르카 타로"
+          width={128}
+          height={43}
+          className="h-auto w-[124px]"
+          priority
+        />
+      </Link>
     </header>
   );
 }

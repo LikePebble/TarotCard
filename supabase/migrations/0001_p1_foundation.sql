@@ -58,20 +58,53 @@ alter table public.collection enable row level security;
 alter table public.journal_entries enable row level security;
 alter table public.entitlements enable row level security;
 
-create policy "own profile" on public.profiles
-  for all using (auth.uid() = id) with check (auth.uid() = id);
+-- 브라우저에 노출되는 anon key의 테이블 권한을 명시적으로 최소화한다.
+-- service_role은 건드리지 않는다 — 지급·결제 같은 서버 작업은 그 역할만 사용한다.
+revoke all on public.profiles from anon, authenticated;
+revoke all on public.readings from anon, authenticated;
+revoke all on public.collection from anon, authenticated;
+revoke all on public.journal_entries from anon, authenticated;
+revoke all on public.entitlements from anon, authenticated;
+
+grant select on public.profiles to authenticated;
+grant update (display_name, selected_deck_id) on public.profiles to authenticated;
+grant select, insert, update, delete on public.readings to authenticated;
+grant select, insert, update, delete on public.collection to authenticated;
+grant select, insert, update, delete on public.journal_entries to authenticated;
+grant select on public.entitlements to authenticated;
+
+create policy "own profile select" on public.profiles
+  for select
+  to authenticated
+  using ((select auth.uid()) = id);
+create policy "own profile update" on public.profiles
+  for update
+  to authenticated
+  using ((select auth.uid()) = id)
+  with check ((select auth.uid()) = id);
 create policy "own readings" on public.readings
-  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+  for all
+  to authenticated
+  using ((select auth.uid()) = user_id)
+  with check ((select auth.uid()) = user_id);
 create policy "own collection" on public.collection
-  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+  for all
+  to authenticated
+  using ((select auth.uid()) = user_id)
+  with check ((select auth.uid()) = user_id);
 create policy "own journal" on public.journal_entries
-  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "own entitlements" on public.entitlements
-  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+  for all
+  to authenticated
+  using ((select auth.uid()) = user_id)
+  with check ((select auth.uid()) = user_id);
+create policy "own entitlements select" on public.entitlements
+  for select
+  to authenticated
+  using ((select auth.uid()) = user_id);
 
 -- 신규 가입 시 profiles 행 자동 생성
 create or replace function public.handle_new_user()
-returns trigger language plpgsql security definer set search_path = public as $$
+returns trigger language plpgsql security definer set search_path = '' as $$
 begin
   insert into public.profiles (id) values (new.id) on conflict do nothing;
   return new;

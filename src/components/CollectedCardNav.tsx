@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { cardBySlug, cards } from "@/data/cards";
 import { koCards } from "@/data/ko";
+import { cardDetailHref } from "@/lib/card-detail-nav";
 import { neighborSlugs } from "@/lib/collection-nav";
 import { collectedSlugs, useEntitlements } from "@/lib/entitlements";
 import { useArcanaStore } from "@/lib/store";
@@ -30,9 +31,11 @@ function labelOf(slug: string): string {
 export function CollectedCardNav({
   deckId,
   slug,
+  readingId,
 }: {
   deckId: string;
   slug: string;
+  readingId: string | null;
 }) {
   const { store } = useArcanaStore();
   const ent = useEntitlements();
@@ -54,7 +57,10 @@ export function CollectedCardNav({
   return (
     <div className={OUTER_CLASS}>
       {prev ? (
-        <Link href={`/collection/${deckId}/${prev}`} className={ARROW_CLASS}>
+        <Link
+          href={cardDetailHref(deckId, prev, readingId)}
+          className={ARROW_CLASS}
+        >
           <CaretLeft size={14} aria-hidden />
           {labelOf(prev)}
         </Link>
@@ -62,7 +68,10 @@ export function CollectedCardNav({
         <span className={ARROW_CLASS} />
       )}
       {next ? (
-        <Link href={`/collection/${deckId}/${next}`} className={ARROW_CLASS}>
+        <Link
+          href={cardDetailHref(deckId, next, readingId)}
+          className={ARROW_CLASS}
+        >
           {labelOf(next)}
           <CaretRight size={14} aria-hidden />
         </Link>

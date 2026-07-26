@@ -10,6 +10,7 @@ import { LoreSections } from "@/components/LoreSections";
 import { cardBySlug, cards, romanNumeral } from "@/data/cards";
 import { decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
+import { validReadingId } from "@/lib/card-detail-nav";
 
 const SUIT_KO = {
   cups: "컵",
@@ -34,20 +35,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const card = cardBySlug.get(slug);
-  if (!card) return { title: "에그타로트" };
+  if (!card) return { title: "아르카 | Arca" };
   const nameKo = koCards[card.slug]?.nameKo ?? card.nameEn;
   return {
-    title: `${nameKo} ${card.nameEn} | 에그타로트`,
+    title: `${nameKo} ${card.nameEn} | 아르카`,
     description: `${nameKo} 카드의 해석과 수집 이력을 확인하세요.`,
   };
 }
 
 export default async function CardDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ deckId: string; slug: string }>;
+  searchParams: Promise<{ readingId?: string | string[] }>;
 }) {
-  const { deckId, slug } = await params;
+  const [{ deckId, slug }, query] = await Promise.all([params, searchParams]);
   const deck = decks.find((d) => d.id === deckId && d.active);
   const card = cardBySlug.get(slug);
   if (!deck || !card) notFound();
@@ -66,7 +69,11 @@ export default async function CardDetailPage({
       ? `메이저 아르카나 ${romanNumeral(card.number)}`
       : `마이너 아르카나 · ${SUIT_KO[card.suit as keyof typeof SUIT_KO]}`;
 
-  const backHref = `/collection/${deck.id}`;
+  const readingId = validReadingId(query.readingId);
+  const backHref = readingId
+    ? `/reading/${encodeURIComponent(readingId)}`
+    : `/collection/${deck.id}`;
+  const backLabel = readingId ? "리딩으로 돌아가기" : deck.nameKo;
 
   return (
     <div className="flex min-h-[100dvh] flex-col">
@@ -77,7 +84,7 @@ export default async function CardDetailPage({
           className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted hover:text-cream"
         >
           <CaretLeft size={16} aria-hidden />
-          {deck.nameKo}
+          {backLabel}
         </Link>
       </nav>
       <main className="mx-auto w-full max-w-[1180px] flex-1 px-6 pb-10 pt-1 lg:px-[72px] lg:pb-[88px] lg:pt-14">
@@ -86,7 +93,7 @@ export default async function CardDetailPage({
           className="hidden items-center gap-1.5 text-sm text-muted hover:text-cream lg:inline-flex"
         >
           <CaretLeft size={16} aria-hidden />
-          {deck.nameKo}
+          {backLabel}
         </Link>
         <div className="lg:mt-10 lg:grid lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-[72px]">
           <div className="flex justify-center lg:block">
@@ -119,7 +126,11 @@ export default async function CardDetailPage({
             </details>
             <LoreSections slug={card.slug} deckId={deck.id} />
             <CollectHistory slug={card.slug} deckId={deck.id} />
-            <CollectedCardNav deckId={deck.id} slug={card.slug} />
+            <CollectedCardNav
+              deckId={deck.id}
+              slug={card.slug}
+              readingId={readingId}
+            />
           </div>
         </div>
       </main>

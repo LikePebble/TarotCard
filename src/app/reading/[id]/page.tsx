@@ -85,6 +85,7 @@ export default function ReadingResultPage({
           focus={reading.category}
           orientations={reading.orientations}
           reducedMotion={!!reducedMotion}
+          readingId={reading.id}
           localDate={reading.localDate}
         />
       ) : (
@@ -94,6 +95,7 @@ export default function ReadingResultPage({
           focus={reading.category}
           orientations={reading.orientations}
           reducedMotion={!!reducedMotion}
+          readingId={reading.id}
           localDate={reading.localDate}
         />
       )}

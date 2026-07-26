@@ -30,7 +30,8 @@ export default function CollectionPage() {
         <div className="mt-5 flex flex-col gap-2.5 lg:mt-8">
           {list.map((deck) => {
             const collected = collectedCount(deck.id, ent);
-            const isDefault = deck.id === defaultDeckId;
+            const owned = ownsDeck(deck.id, ent);
+            const isDefault = owned && deck.id === defaultDeckId;
             return (
               <div
                 key={deck.id}
@@ -49,7 +50,7 @@ export default function CollectionPage() {
                   </span>
                   <CaretRight size={18} className="text-muted" aria-hidden />
                 </Link>
-                {isDefault ? null : (
+                {owned && !isDefault ? (
                   <button
                     type="button"
                     onClick={() => select(deck.id)}
@@ -57,7 +58,7 @@ export default function CollectionPage() {
                   >
                     기본 덱으로 설정
                   </button>
-                )}
+                ) : null}
               </div>
             );
           })}

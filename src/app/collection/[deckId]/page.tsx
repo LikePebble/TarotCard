@@ -2,7 +2,7 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { CaretLeft } from "@phosphor-icons/react";
 import { CardArt } from "@/components/CardArt";
 import { CardBack } from "@/components/CardBack";
@@ -37,6 +37,7 @@ export default function DeckCatalogPage({
 }: {
   params: Promise<{ deckId: string }>;
 }) {
+  const router = useRouter();
   const { deckId } = use(params);
   const { store } = useArcanaStore();
   const ent = useEntitlements();
@@ -58,6 +59,10 @@ export default function DeckCatalogPage({
   const owned = ownsDeck(deck.id, ent);
   const collectedSet = new Set(Object.keys(store?.collection[deck.id] ?? {}));
   const visible = visibleCards(cards, filter, collectedSet);
+  const startReading = () => {
+    select(deck.id);
+    router.push("/reading");
+  };
 
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden lg:h-auto lg:min-h-[100dvh] lg:overflow-visible">
@@ -84,11 +89,11 @@ export default function DeckCatalogPage({
               </p>
             </div>
             <div className="mt-2 flex items-center gap-4">
-              {isDefault ? (
+              {owned && isDefault ? (
                 <p className="text-[13px] text-gold-soft">
                   기본 덱 · 리딩에서 이 덱으로 뽑습니다
                 </p>
-              ) : (
+              ) : owned ? (
                 <button
                   type="button"
                   onClick={() => select(deck.id)}
@@ -96,14 +101,25 @@ export default function DeckCatalogPage({
                 >
                   기본 덱으로 설정
                 </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setInfoOpen(true)}
-                className="min-h-11 text-[13px] text-muted underline underline-offset-4 hover:text-cream"
-              >
-                덱 정보
-              </button>
+              ) : null}
+              {owned ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={startReading}
+                    className="min-h-11 text-[13px] text-gold-soft underline underline-offset-4 hover:text-cream"
+                  >
+                    리딩 시작하기
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setInfoOpen(true)}
+                    className="min-h-11 text-[13px] text-muted underline underline-offset-4 hover:text-cream"
+                  >
+                    덱 정보
+                  </button>
+                </>
+              ) : null}
             </div>
           </div>
           <div className="hidden lg:block lg:text-right">
@@ -127,22 +143,24 @@ export default function DeckCatalogPage({
         </div>
 
         {/* 소유 기준 안내는 수집됨 필터에선 숨긴다 — 그 필터의 만남 기록 빈 상태와 제목이 겹친다. */}
-        {store && total === 0 && filter !== "collected" ? (
+        {store && !owned && filter !== "collected" ? (
           <div className="mt-5 rounded-2xl border border-line bg-ink-1 p-6 lg:mt-10 lg:flex lg:items-center lg:justify-between lg:p-8">
             <div>
               <p className="font-display text-lg font-semibold lg:text-[21px]">
-                아직 수집한 카드가 없습니다
+                이 덱의 이야기를 먼저 만나보세요
               </p>
               <p className="mt-1 text-[13.5px] text-muted lg:text-[15px]">
-                첫 리딩에서 뽑은 카드가 이곳에 모입니다.
+                {deck.nameKo}의 세계관과 78장 전체 이용 혜택을 확인할 수
+                있습니다.
               </p>
             </div>
-            <Link
-              href="/reading"
+            <button
+              type="button"
+              onClick={() => setInfoOpen(true)}
               className="btn btn-gold mt-4 w-full lg:mt-0 lg:w-auto"
             >
-              리딩 시작하기
-            </Link>
+              덱 정보 보기
+            </button>
           </div>
         ) : null}
 

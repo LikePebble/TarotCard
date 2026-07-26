@@ -77,6 +77,7 @@ export function OneCardResult({
   focus,
   orientations,
   reducedMotion,
+  readingId,
   localDate,
 }: {
   card: Card;
@@ -84,6 +85,7 @@ export function OneCardResult({
   focus: string;
   orientations?: Orientation[];
   reducedMotion: boolean;
+  readingId: string | null;
   localDate: string | null;
 }) {
   const paragraphs = descriptionOf(card);
@@ -176,7 +178,12 @@ export function OneCardResult({
           )}
         </div>
         <div className="mt-5 flex flex-col gap-2.5 lg:mt-8 lg:flex-row lg:gap-3.5">
-          <ResultActions deckId={deckId} slug={card.slug} localDate={localDate} />
+          <ResultActions
+            deckId={deckId}
+            slug={card.slug}
+            readingId={readingId}
+            localDate={localDate}
+          />
         </div>
       </div>
     </motion.main>
@@ -266,6 +273,7 @@ export function ThreeCardResult({
   focus,
   orientations,
   reducedMotion,
+  readingId,
   localDate,
 }: {
   picked: Card[];
@@ -273,6 +281,7 @@ export function ThreeCardResult({
   focus: string;
   orientations?: Orientation[];
   reducedMotion: boolean;
+  readingId: string | null;
   localDate: string | null;
 }) {
   const [index, setIndex] = useState(0);
@@ -448,7 +457,12 @@ export function ThreeCardResult({
         </motion.div>
       </div>
       <div className="mt-5 flex flex-col gap-2.5 lg:flex-row lg:justify-center lg:gap-3.5">
-        <ResultActions deckId={deckId} slug={selected.slug} localDate={localDate} />
+        <ResultActions
+          deckId={deckId}
+          slug={selected.slug}
+          readingId={readingId}
+          localDate={localDate}
+        />
       </div>
     </motion.main>
   );
