@@ -56,10 +56,15 @@ export async function signInWithProvider(
   if (error) throw error;
 }
 
-export async function signOut(): Promise<void> {
+export async function signOut(): Promise<boolean> {
   const supabase = getBrowserSupabase();
-  if (!supabase) return;
-  await supabase.auth.signOut();
+  if (!supabase) return false;
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error("[auth] 로그아웃 실패:", error);
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -70,15 +75,19 @@ export async function signOut(): Promise<void> {
  * 로컬을 비우는 이유는 공용 기기에서 남의 기록이 보이거나 다음 계정에
  * 섞이는 것을 막기 위해서다.
  */
-export async function signOutAndClear(): Promise<void> {
+export async function signOutAndClear(): Promise<boolean> {
   try {
     await flushPendingSync();
   } catch (e) {
     console.error("[sync] 로그아웃 전 flush 실패:", e);
   }
+
+  const signedOut = await signOut();
+  if (!signedOut) return false;
+
   clearLocalStore();
   clearLocalJournal();
   clearLocalEntitlements();
   resetSyncStatus(); // 다음 계정에 이전 사용자의 마지막 동기화 시각이 보이면 안 된다.
-  await signOut();
+  return true;
 }

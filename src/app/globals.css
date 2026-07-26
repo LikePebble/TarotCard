@@ -40,6 +40,92 @@ body {
   border-radius: 4px;
 }
 
+/* Home hero: fade the still image into the page and animate only its candlelight. */
+.home-hero-frame {
+  filter: drop-shadow(0 28px 52px rgba(8, 5, 0, 0.68));
+}
+
+.home-hero-media {
+  border-radius: 20px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 88% 90% at center,
+    #000 54%,
+    rgba(0, 0, 0, 0.92) 67%,
+    rgba(0, 0, 0, 0.42) 82%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 88% 90% at center,
+    #000 54%,
+    rgba(0, 0, 0, 0.92) 67%,
+    rgba(0, 0, 0, 0.42) 82%,
+    transparent 100%
+  );
+}
+
+.home-hero-candle-glow {
+  z-index: 1;
+  mix-blend-mode: screen;
+  will-change: opacity;
+}
+
+.home-hero-candle-glow-near {
+  background:
+    radial-gradient(circle at 6% 54%, rgba(255, 196, 112, 0.48), transparent 8%),
+    radial-gradient(circle at 18% 50%, rgba(255, 174, 80, 0.42), transparent 9%),
+    radial-gradient(circle at 26% 39%, rgba(255, 184, 90, 0.42), transparent 9%),
+    radial-gradient(circle at 72% 39%, rgba(255, 183, 90, 0.4), transparent 9%);
+  animation: home-candle-flicker-near 3.4s ease-in-out infinite;
+}
+
+.home-hero-candle-glow-far {
+  background:
+    radial-gradient(circle at 12% 61%, rgba(255, 164, 68, 0.38), transparent 9%),
+    radial-gradient(circle at 84% 35%, rgba(255, 189, 100, 0.42), transparent 9%),
+    radial-gradient(circle at 93% 48%, rgba(255, 172, 74, 0.42), transparent 9%);
+  animation: home-candle-flicker-far 2.7s ease-in-out infinite;
+}
+
+@keyframes home-candle-flicker-near {
+  0%,
+  100% {
+    opacity: 0.34;
+  }
+  38% {
+    opacity: 0.68;
+  }
+  64% {
+    opacity: 0.46;
+  }
+  82% {
+    opacity: 0.76;
+  }
+}
+
+@keyframes home-candle-flicker-far {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  27% {
+    opacity: 0.62;
+  }
+  58% {
+    opacity: 0.38;
+  }
+  76% {
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-candle-glow {
+    animation: none;
+    opacity: 0.42;
+    will-change: auto;
+  }
+}
+
 /* Card back: dark gradient, gold border, inset border, rotated-square motif */
 @layer components {
 .cardback {
@@ -461,4 +547,3 @@ body {
   }
 }
 }
-

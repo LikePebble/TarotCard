@@ -6,14 +6,35 @@ import { DeckCard } from "@/components/DeckCard";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { decksByDefaultFirst } from "@/data/decks";
-import { isDevTools } from "@/lib/dev-reset";
-import { collectedCount, grantDeckLocal, revokeDeckLocal, ownsDeck, useEntitlements } from "@/lib/entitlements";
+import {
+  deckAfterReleaseRevoke,
+  isDevTools,
+} from "@/lib/dev-reset";
+import {
+  collectedCount,
+  grantDeckLocal,
+  ownsDeck,
+  revokeDeckLocal,
+  useEntitlements,
+} from "@/lib/entitlements";
 import { useSelectedDeck } from "@/lib/store";
 
 export default function CollectionPage() {
   const ent = useEntitlements();
   const { deckId: defaultDeckId, select } = useSelectedDeck();
   const list = decksByDefaultFirst(defaultDeckId);
+  const premiumDecks = list.filter((deck) => deck.id !== "classic");
+
+  const toggleReleaseDeck = (deckId: string) => {
+    if (!ownsDeck(deckId, ent)) {
+      grantDeckLocal(deckId);
+      return;
+    }
+
+    revokeDeckLocal(deckId);
+    const nextDeckId = deckAfterReleaseRevoke(defaultDeckId, deckId);
+    if (nextDeckId !== defaultDeckId) select(nextDeckId);
+  };
 
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden lg:h-auto lg:min-h-[100dvh] lg:overflow-visible">
@@ -64,18 +85,35 @@ export default function CollectionPage() {
           })}
         </div>
         {isDevTools ? (
-          <div className="mt-6 flex flex-wrap gap-2">
-            {["wolha-biwon", "k-pop-museverse"].map((id) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => (ownsDeck(id, ent) ? revokeDeckLocal(id) : grantDeckLocal(id))}
-                className="text-[12px] text-muted underline underline-offset-4 hover:text-cream"
-              >
-                [개발] {id} {ownsDeck(id, ent) ? "회수" : "지급"}
-              </button>
-            ))}
-          </div>
+          <section
+            aria-labelledby="release-tools-title"
+            className="mt-6 rounded-2xl border border-dashed border-line-gold/60 bg-ink-1 p-4 lg:p-5"
+          >
+            <h2
+              id="release-tools-title"
+              className="font-display text-[16px] font-semibold text-gold-soft"
+            >
+              출시 테스트 도구
+            </h2>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-muted">
+              결제 연동 전 프리미엄 덱의 지급·회수와 기본 덱 전환을 검증합니다.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {premiumDecks.map((deck) => {
+                const owned = ownsDeck(deck.id, ent);
+                return (
+                  <button
+                    key={deck.id}
+                    type="button"
+                    onClick={() => toggleReleaseDeck(deck.id)}
+                    className="min-h-11 rounded-xl border border-line px-4 text-[13px] text-body transition-colors hover:border-line-gold hover:text-cream"
+                  >
+                    {deck.nameKo} 테스트 {owned ? "회수" : "지급"}
+                  </button>
+                );
+              })}
+            </div>
+          </section>
         ) : null}
       </main>
       <TabBar />

@@ -1,8 +1,9 @@
 "use client";
 
-import { UserCircle } from "@phosphor-icons/react";
+import Link from "next/link";
+import { useState } from "react";
+import { CircleNotch, UserCircle } from "@phosphor-icons/react";
 import { signOutAndClear, useSession } from "@/lib/auth/session";
-import { SignInButtons } from "@/components/SignInButtons";
 import { useSyncStatus, type SyncState } from "@/lib/sync/status";
 
 const card =
@@ -21,45 +22,55 @@ function syncLine(state: SyncState, lastSyncedAt: string | null): string {
   return "기록이 계정에 보관됩니다";
 }
 
+function accountProviderLabel(provider: unknown): string {
+  if (provider === "google") return "Google 계정";
+  if (provider === "kakao") return "카카오 계정";
+  return "소셜 계정";
+}
+
 export function AccountCard() {
   const { user, loading, configured } = useSession();
   const { state, lastSyncedAt } = useSyncStatus();
+  const [signingOut, setSigningOut] = useState(false);
+  const [logoutError, setLogoutError] = useState<string | null>(null);
 
-  // Supabase 미설정 → 준비 중(현행 게스트 모드).
-  if (!configured) {
+  if (loading) {
     return (
-      <div className={`${card} opacity-60`}>
-        <span className="flex items-center gap-3.5">
-          <UserCircle size={22} className="text-muted" aria-hidden />
-          <span>
-            <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
-              로그인 · 계정
-            </span>
-            <span className="text-[13px] text-muted lg:text-[14px]">
-              기기 간 보관 · 카카오/구글 로그인 · 준비 중
-            </span>
-          </span>
-        </span>
+      <div className={`${card} min-h-[92px]`} role="status">
+        <span className="sr-only">계정 정보를 불러오는 중</span>
       </div>
     );
   }
 
-  if (loading) {
-    return <div className={`${card} min-h-[68px]`} aria-hidden />;
-  }
-
   if (user) {
+    const providerLabel = accountProviderLabel(user.app_metadata.provider);
+
+    const handleSignOut = async () => {
+      setSigningOut(true);
+      setLogoutError(null);
+      const success = await signOutAndClear();
+      if (!success) {
+        setLogoutError(
+          "로그아웃하지 못했습니다. 연결 상태를 확인하고 다시 시도해 주세요.",
+        );
+        setSigningOut(false);
+      }
+    };
+
     return (
       <div className={card}>
-        <div className="flex items-center justify-between gap-3">
-          <span className="flex items-center gap-3.5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <span className="flex min-w-0 items-center gap-3.5">
             <UserCircle size={22} className="text-gold-soft" aria-hidden />
-            <span>
+            <span className="min-w-0">
               <span className="block font-display text-[16px] font-semibold lg:text-[18px]">
-                로그인됨
+                계정 정보
               </span>
-              <span className="block text-[13px] text-muted lg:text-[14px]">
-                {user.email ?? user.id}
+              <span className="block truncate text-[13px] text-body lg:text-[14px]">
+                {user.email ?? "이메일 정보 없음"}
+              </span>
+              <span className="block text-[12px] text-muted lg:text-[13px]">
+                {providerLabel}
               </span>
               <span className="block text-[12px] text-muted lg:text-[13px]">
                 {syncLine(state, lastSyncedAt)}
@@ -68,31 +79,47 @@ export function AccountCard() {
           </span>
           <button
             type="button"
-            onClick={() => void signOutAndClear()}
-            className="text-[13px] text-muted underline underline-offset-4 hover:text-cream"
+            onClick={() => void handleSignOut()}
+            disabled={signingOut}
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-line px-4 text-[13px] text-muted transition-colors hover:border-line-gold hover:text-cream disabled:cursor-not-allowed disabled:opacity-60"
           >
-            로그아웃
+            {signingOut ? (
+              <CircleNotch size={16} className="animate-spin" aria-hidden />
+            ) : null}
+            {signingOut ? "로그아웃 중…" : "로그아웃"}
           </button>
         </div>
+        {logoutError ? (
+          <p className="mt-3 text-[12.5px] text-gold-soft" role="alert">
+            {logoutError}
+          </p>
+        ) : null}
       </div>
     );
   }
 
   return (
     <div className={card}>
-      <span className="flex items-center gap-3.5">
-        <UserCircle size={22} className="text-gold-soft" aria-hidden />
-        <span>
-          <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
-            로그인
-          </span>
-          <span className="text-[13px] text-muted lg:text-[14px]">
-            기록을 기기 간에 안전하게 보관합니다.
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <span className="flex items-center gap-3.5">
+          <UserCircle size={22} className="text-gold-soft" aria-hidden />
+          <span>
+            <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
+              계정 연결
+            </span>
+            <span className="text-[13px] text-muted lg:text-[14px]">
+              {configured
+                ? "로그인하고 기록을 기기 간에 안전하게 보관하세요."
+                : "로그인 설정 상태를 확인할 수 있습니다."}
+            </span>
           </span>
         </span>
-      </span>
-      <div className="mt-4">
-        <SignInButtons />
+        <Link
+          href="/login"
+          className="btn btn-gold min-h-11 shrink-0 px-5 text-center"
+        >
+          로그인하러 가기
+        </Link>
       </div>
     </div>
   );
