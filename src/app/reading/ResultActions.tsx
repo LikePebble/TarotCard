@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { cardDetailHref } from "@/lib/card-detail-nav";
 import { JournalLink } from "./JournalLink";
 
 /**
@@ -12,16 +13,18 @@ import { JournalLink } from "./JournalLink";
 export function ResultActions({
   deckId,
   slug,
+  readingId,
   localDate,
 }: {
   deckId: string;
   slug: string;
+  readingId: string | null;
   localDate: string | null;
 }) {
   return (
     <>
       <Link
-        href={`/collection/${deckId}/${slug}`}
+        href={cardDetailHref(deckId, slug, readingId)}
         className="btn btn-gold w-full lg:w-auto"
       >
         카드 자세히 보기

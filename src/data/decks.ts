@@ -6,7 +6,10 @@ import type { Card } from "./cards";
 
 /** 덱 상품 정보. 문구·가격·이미지는 출시 전 교체 가능한 임시본이다. */
 export type DeckInfo = {
+  eyebrow?: string;
+  headline?: string;
   description: string[];
+  highlights?: string[];
   price?: number;
   /** public 기준 경로. 첫 장은 800×1360(10:17) 상품 이미지, 이후 장은 모달에서 세로 스크롤. */
   productImages?: string[];

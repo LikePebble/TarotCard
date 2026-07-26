@@ -1,9 +1,5 @@
 import { getBrowserSupabase } from "@/lib/supabase/client";
-import {
-  loadEntitlements,
-  setLocalEntitlements,
-  grantedWith,
-} from "@/lib/entitlements";
+import { setLocalEntitlements } from "@/lib/entitlements";
 
 /** 서버의 엔타이틀먼트 + profiles.ad_free를 로컬 캐시에 반영한다(서버 권위, pull만).
  *  미설정·비로그인·실패면 로컬을 그대로 둔다. isStale은 왕복 사이 세션이 바뀌었는지
@@ -21,22 +17,8 @@ export async function pullRemoteEntitlements(
     supabase.from("entitlements").select("deck_id").eq("user_id", uid),
     supabase.from("profiles").select("ad_free").eq("id", uid).single(),
   ]);
-  if (ent.error || isStale()) return; // 실패·스테일이면 로컬 유지
+  if (ent.error || prof.error || isStale()) return; // 실패·스테일이면 로컬 유지
   const ownedDeckIds = (ent.data ?? []).map((r) => r.deck_id as string);
   const adFree = prof.data?.ad_free === true;
   setLocalEntitlements({ ownedDeckIds, adFree });
-}
-
-/** 덱 지급을 서버에 쓰고 로컬을 낙관적으로 갱신한다. 나중에 결제 웹훅이 같은
- *  upsert를 호출한다(스키마 불변). 미설정이면 no-op. */
-export async function grantDeck(deckId: string): Promise<void> {
-  const supabase = getBrowserSupabase();
-  if (!supabase) return;
-  const { data: auth } = await supabase.auth.getUser();
-  const uid = auth.user?.id;
-  if (!uid) return;
-  const { error } = await supabase
-    .from("entitlements")
-    .upsert({ user_id: uid, deck_id: deckId }, { onConflict: "user_id,deck_id" });
-  if (!error) setLocalEntitlements(grantedWith(loadEntitlements(), deckId));
 }

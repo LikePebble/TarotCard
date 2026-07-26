@@ -559,6 +559,7 @@ export default function DrawPage() {
             focus={focus}
             orientations={readingRecord?.orientations}
             reducedMotion={!!reducedMotion}
+            readingId={readingRecord?.id ?? null}
             localDate={readingRecord?.localDate ?? null}
           />
         ) : (
@@ -568,6 +569,7 @@ export default function DrawPage() {
             focus={focus}
             orientations={readingRecord?.orientations}
             reducedMotion={!!reducedMotion}
+            readingId={readingRecord?.id ?? null}
             localDate={readingRecord?.localDate ?? null}
           />
         )}

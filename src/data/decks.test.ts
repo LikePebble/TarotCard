@@ -26,6 +26,17 @@ describe("decks info", () => {
       for (const p of deck.info.description) expect(p.trim()).not.toBe("");
     }
   });
+
+  it("프리미엄 덱은 커버와 마케팅 정보를 모두 가진다", () => {
+    for (const deck of decks.filter((d) => d.id !== "classic")) {
+      expect(deck.info.eyebrow, `${deck.id} eyebrow`).toBeTruthy();
+      expect(deck.info.headline, `${deck.id} headline`).toBeTruthy();
+      expect(deck.info.highlights, `${deck.id} highlights`).toHaveLength(3);
+      expect(deck.info.productImages, `${deck.id} cover`).toEqual([
+        `/decks/${deck.id}/deck-cover.webp`,
+      ]);
+    }
+  });
 });
 
 describe("decksByDefaultFirst", () => {

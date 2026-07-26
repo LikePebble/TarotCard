@@ -34,6 +34,7 @@ function TypeCard({
   title,
   titleClass = "",
   desc,
+  cadenceLabel,
   blockedNote,
   blocked,
   ariaBase,
@@ -46,6 +47,7 @@ function TypeCard({
   title: string;
   titleClass?: string;
   desc: string;
+  cadenceLabel: string;
   blockedNote: string;
   blocked: ReadingRecord | undefined;
   ariaBase: string;
@@ -82,11 +84,16 @@ function TypeCard({
   const inner = (
     <>
       <div>
-        <h2
-          className={`font-display text-[21px] font-semibold lg:text-[27px] ${titleClass}`}
-        >
-          {title}
-        </h2>
+        <div className="flex items-center gap-2.5">
+          <h2
+            className={`font-display text-[21px] font-semibold lg:text-[27px] ${titleClass}`}
+          >
+            {title}
+          </h2>
+          <span className="flex-none rounded-full border border-line-gold px-2.5 py-1 text-[11px] text-gold-soft">
+            {cadenceLabel}
+          </span>
+        </div>
         <p
           className={`mt-1 text-[13.5px] lg:text-[15px] ${
             blocked ? "text-gold-soft" : "text-muted lg:max-w-[300px]"
@@ -138,6 +145,7 @@ export function ReadingChoice() {
     <div className="mt-[18px] flex flex-col gap-[18px] lg:mt-12 lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-5">
       <TypeCard
         title="오늘의 카드"
+        cadenceLabel="하루 1회"
         desc="한 장의 카드로 오늘 하루의 흐름을 봅니다."
         blockedNote="오늘의 흐름은 이미 받으셨어요 · 결과 보기"
         blocked={blockedOne}
@@ -152,7 +160,8 @@ export function ReadingChoice() {
       <TypeCard
         title="과거 · 현재 · 미래"
         titleClass="whitespace-nowrap"
-        desc="세 장의 카드로 지나온 길과 다가올 길을 읽습니다."
+        cadenceLabel="주 1회"
+        desc="세 장의 카드로 이번 주의 과거·현재·미래 흐름을 읽습니다."
         blockedNote="이번 주의 흐름은 이미 받으셨어요 · 결과 보기"
         blocked={blockedThree}
         ariaBase="과거 현재 미래"

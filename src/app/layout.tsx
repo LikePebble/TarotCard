@@ -32,7 +32,7 @@ const chosun = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "에그타로트",
+  title: "아르카 | Arca",
   description:
     "하루 한 장, 나를 비추는 카드. 카드를 뽑고 해석을 읽으며 78장의 컬렉션을 완성해 보세요.",
 };
