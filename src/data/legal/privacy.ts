@@ -142,12 +142,12 @@ export const privacyDocument: LegalDocument = {
         "이용자와 그 법정대리인은 언제든지 자신의 개인정보에 대하여 열람, 정정, 삭제, 처리정지를 요구하실 수 있습니다.",
         "일기와 이 기기의 기록은 제8조의 방법으로 직접 삭제하실 수 있습니다. 그 밖의 요구는 아래 개인정보 보호책임자에게 서면이나 이메일로 알려 주시면 지체 없이 조치하겠습니다.",
         "서비스는 요구하신 분이 본인이거나 정당한 대리인인지 확인한 뒤 처리하며, 법령에서 정한 경우에는 요구를 제한할 수 있습니다.",
-        "아래 개인정보 보호책임자 정보와 문의처는 정식 출시 전까지 확정·표기될 예정이며, 현재는 아직 기재되지 않았습니다.",
+        "아르카는 사업자등록 없이 개인 개발자가 운영하며, 개인정보 보호책임자는 운영자 본인이 겸합니다. 아래 정보는 정식 출시 전까지 확정·표기될 예정이며, 현재는 아직 기재되지 않았습니다.",
       ],
       bullets: [
-        `개인정보 보호책임자: ${operator.privacyOfficer.name}`,
-        `직위: ${operator.privacyOfficer.position}`,
-        `문의 이메일: ${operator.privacyOfficer.email}`,
+        `개인정보 보호책임자: ${operator.operatorName}`,
+        `직위: ${operator.privacyOfficerPosition}`,
+        `문의 이메일: ${operator.contactEmail}`,
       ],
     },
     {

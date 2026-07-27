@@ -1,15 +1,22 @@
 /**
- * 서비스 운영자(사업자) 정보.
+ * 서비스 운영자 정보.
  *
- * ⚠️ 정식 출시 전 반드시 실제 값으로 교체할 것. 미기재 시 전자상거래법(전자상거래 등에서의
- * 소비자보호에 관한 법률) 제10조의 사업자 신원 정보 표시 의무 위반 소지가 있고,
- * 개인정보 보호법 제30조가 요구하는 개인정보 보호책임자·문의처 기재도 충족되지 않는다.
+ * 아르카는 사업자등록 없이 개인 개발자가 운영한다. 그래서 상호·사업자등록번호·
+ * 통신판매업 신고번호·사업장 주소를 두지 않는다. 없는 번호를 지어내는 것보다
+ * 항목 자체를 두지 않는 편이 정확하다.
  *
- * 아래 값은 전부 플레이스홀더다. 확인되지 않은 상호·주소·등록번호를 임의로 채워 넣지 말 것.
+ * 근거와 한계:
+ * - 전자상거래법 제10조의 사업자 신원 표시 의무는 재화·용역을 판매하는 통신판매업자에게
+ *   적용된다. 현재 아르카는 결제 기능이 없고 광고로만 운영하므로 해당하지 않는다.
+ * - 개인정보 보호법 제30조는 사업자 여부와 무관하게 개인정보처리자에게 적용된다.
+ *   따라서 개인정보 보호책임자와 연락처는 개인 운영이라도 반드시 밝혀야 한다.
+ *
+ * ⚠️ 프리미엄 덱 판매를 시작하는 순간 이야기가 달라진다. 유료 판매에는 사업자등록과
+ *    통신판매업 신고가 필요하고, 그때 아래 항목을 다시 늘려 약관에 반영해야 한다.
  */
 
-/** 아직 확정되지 않은 값. 화면에 그대로 노출되어 미기재 사실이 드러나도록 둔다. */
-export const OPERATOR_TBD = "(사업자 정보 입력 필요)";
+/** 아직 채우지 않은 값. 화면에 그대로 노출되어 미기재 사실이 드러나도록 둔다. */
+export const OPERATOR_TBD = "(운영자 정보 입력 필요)";
 
 export const operator = {
   /** 서비스 이름. */
@@ -17,34 +24,28 @@ export const operator = {
   /** 서비스 주소. */
   siteUrl: "https://arca.realm.ai.kr",
 
-  /** 상호(법인명 또는 사업자명). */
-  companyName: OPERATOR_TBD,
-  /** 대표자 성명. */
-  representative: OPERATOR_TBD,
-  /** 사업자등록번호. */
-  businessRegistrationNumber: OPERATOR_TBD,
-  /** 통신판매업 신고번호. */
-  mailOrderSalesNumber: OPERATOR_TBD,
-  /** 사업장 주소. */
-  address: OPERATOR_TBD,
-  /** 이용자 문의 이메일. */
+  /**
+   * 운영자로 표시할 이름. 실명 대신 활동명을 써도 된다.
+   * 개인정보 보호법이 요구하는 것은 책임 주체를 특정할 수 있는 표시와 연락처다.
+   */
+  operatorName: OPERATOR_TBD,
+  /**
+   * 이용자 문의 이메일. 개인 메일을 그대로 노출하면 스팸 수집 대상이 되므로
+   * 서비스 전용 주소를 따로 두기를 권한다.
+   */
   contactEmail: OPERATOR_TBD,
 
-  /** 개인정보 보호책임자. */
-  privacyOfficer: {
-    name: OPERATOR_TBD,
-    position: OPERATOR_TBD,
-    email: OPERATOR_TBD,
-  },
+  /**
+   * 개인정보 보호책임자. 개인 운영이므로 운영자 본인이 겸한다.
+   * 이름·이메일은 위 값을 그대로 쓴다(따로 관리할 이유가 없다).
+   */
+  privacyOfficerPosition: "운영자 본인",
 } as const;
 
-/** 약관·방침 하단에 공통으로 싣는 사업자 정보 목록. */
+/** 약관·방침 하단에 공통으로 싣는 운영자 정보 목록. */
 export const operatorBullets: string[] = [
-  `상호: ${operator.companyName}`,
-  `대표자: ${operator.representative}`,
-  `사업자등록번호: ${operator.businessRegistrationNumber}`,
-  `통신판매업 신고번호: ${operator.mailOrderSalesNumber}`,
-  `주소: ${operator.address}`,
+  `운영 형태: 개인 개발자 (사업자등록 없음)`,
+  `운영자: ${operator.operatorName}`,
   `문의 이메일: ${operator.contactEmail}`,
   `서비스 주소: ${operator.siteUrl}`,
 ];
