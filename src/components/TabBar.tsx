@@ -6,7 +6,10 @@ import { Cards, MoonStars, User } from "@phosphor-icons/react";
 
 export function TabBar() {
   const pathname = usePathname();
-  const myActive = pathname.startsWith("/my");
+  // 약관·방침은 MY에서 들어가는 문서다. DesktopNav도 MY를 활성으로 표시한다.
+  const legalActive =
+    pathname.startsWith("/terms") || pathname.startsWith("/privacy");
+  const myActive = pathname.startsWith("/my") || legalActive;
   const collectionActive = pathname.startsWith("/collection");
   const readingActive = !myActive && !collectionActive;
   const item =
