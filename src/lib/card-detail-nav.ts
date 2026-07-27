@@ -14,9 +14,13 @@ export function cardDetailHref(
   deckId: string,
   slug: string,
   readingId: string | null,
+  filter?: CatalogFilter,
 ): string {
   const pathname = `/collection/${deckId}/${slug}`;
-  return readingId
-    ? `${pathname}?readingId=${encodeURIComponent(readingId)}`
-    : pathname;
+  const query = new URLSearchParams();
+  if (readingId) query.set("readingId", readingId);
+  if (filter) query.set("filter", filter);
+  const search = query.toString();
+  return search ? `${pathname}?${search}` : pathname;
 }
+import type { CatalogFilter } from "@/lib/catalog-filter";

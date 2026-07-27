@@ -6,14 +6,14 @@ import {
 
 describe("card detail navigation", () => {
   it("리딩에서 진입하면 카드 상세 URL에 리딩 맥락을 보존한다", () => {
-    expect(cardDetailHref("wolha-biwon", "the-fool", "reading-123")).toBe(
-      "/collection/wolha-biwon/the-fool?readingId=reading-123",
+    expect(cardDetailHref("wolha-biwon", "the-fool", "reading-123", "major")).toBe(
+      "/collection/wolha-biwon/the-fool?readingId=reading-123&filter=major",
     );
   });
 
   it("도감에서 진입하면 카드 상세 URL에 리딩 맥락을 붙이지 않는다", () => {
-    expect(cardDetailHref("wolha-biwon", "the-fool", null)).toBe(
-      "/collection/wolha-biwon/the-fool",
+    expect(cardDetailHref("wolha-biwon", "the-fool", null, "cups")).toBe(
+      "/collection/wolha-biwon/the-fool?filter=cups",
     );
   });
 

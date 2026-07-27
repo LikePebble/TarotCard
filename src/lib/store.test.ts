@@ -187,6 +187,26 @@ describe("withReadingRecorded", () => {
     expect(store.collection.classic.thefool.count).toBe(2);
     expect(store.collection.classic.thefool.firstAt).toBe(firstAt);
   });
+
+  it("다음 날 다시 뽑을 수 있어도 기존 수집 카드는 유지한다", () => {
+    const store = withReadingRecorded(
+      { version: 2, collection: {}, readings: [] },
+      newReadingRecord({
+        id: "R1",
+        at: new Date(2026, 6, 19),
+        spread: "one",
+        category: "day",
+        deckId: "classic",
+        cards: ["thefool"],
+        orientations: ["upright"],
+      }),
+    );
+
+    expect(slotState(store, "one", "day", new Date(2026, 6, 20))).toEqual({
+      state: "available",
+    });
+    expect(store.collection.classic.thefool).toMatchObject({ count: 1 });
+  });
 });
 
 describe("readingById", () => {

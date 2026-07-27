@@ -10,8 +10,22 @@ import {
 } from "@/lib/store";
 import { recomputeEncounters } from "@/lib/sync/merge";
 
-/** 개발 빌드에서만 테스트용 도구를 노출한다(배포본에는 나오지 않는다). */
-export const isDevTools = process.env.NODE_ENV !== "production";
+/**
+ * 로컬 개발에서는 항상, 배포본에서는 명시적으로 허용한 경우에만 출시 테스트
+ * 도구를 노출한다. 결제 전 Preview/Production 검증에는 필요하지만 공개 출시 뒤
+ * 권한 우회를 남기지 않도록 운영 환경은 기본 비활성이다.
+ */
+export function releaseTestToolsEnabled(
+  nodeEnv: string | undefined,
+  releaseToolsFlag: string | undefined,
+): boolean {
+  return nodeEnv !== "production" || releaseToolsFlag === "true";
+}
+
+export const isDevTools = releaseTestToolsEnabled(
+  process.env.NODE_ENV,
+  process.env.NEXT_PUBLIC_ENABLE_RELEASE_TEST_TOOLS,
+);
 
 /**
  * 이 리딩이 지금 새 리딩을 막고 있는가(현재 주기에 속하는가).

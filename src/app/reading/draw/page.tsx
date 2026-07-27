@@ -10,6 +10,7 @@ import { CardBack } from "@/components/CardBack";
 import { DesktopNav } from "@/components/SiteNav";
 import { cards, type Card } from "@/data/cards";
 import { focusLabelOf } from "@/data/focus";
+import { fanStackOrder } from "@/lib/draw-fan";
 import { pickOrientations, secureRand } from "@/lib/orientation";
 import {
   blockingReading,
@@ -497,6 +498,7 @@ export default function DrawPage() {
                           "--deal-delay": `${Math.abs(offset) * 55}ms`,
                           "--shuf-i": i,
                           "--shuf-dir": i % 2 === 0 ? 1 : -1,
+                          "--fan-z": fanStackOrder(i, FAN_SIZE),
                         } as React.CSSProperties
                       }
                     >

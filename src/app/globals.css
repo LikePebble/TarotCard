@@ -6,6 +6,7 @@
   --color-ink-2: #221d16;
   --color-gold: #c9a24b;
   --color-gold-soft: #e0c078;
+  --color-notice: #e25555;
   --color-cream: #ece5d8;
   --color-muted: #9a8f7c;
   --color-body: #c8bfae;
@@ -38,6 +39,111 @@ body {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Home hero: fade the still image into the page and animate only its candlelight. */
+.home-hero-frame {
+  filter: drop-shadow(0 28px 52px rgba(8, 5, 0, 0.68));
+}
+
+.home-hero-media {
+  border-radius: 20px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 88% 90% at center,
+    #000 54%,
+    rgba(0, 0, 0, 0.92) 67%,
+    rgba(0, 0, 0, 0.42) 82%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 88% 90% at center,
+    #000 54%,
+    rgba(0, 0, 0, 0.92) 67%,
+    rgba(0, 0, 0, 0.42) 82%,
+    transparent 100%
+  );
+}
+
+.home-hero-edge-feather {
+  z-index: 3;
+  background:
+    linear-gradient(
+      to right,
+      rgba(20, 17, 13, 0.88) 0%,
+      transparent 15%,
+      transparent 85%,
+      rgba(20, 17, 13, 0.88) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(20, 17, 13, 0.68) 0%,
+      transparent 14%,
+      transparent 80%,
+      rgba(20, 17, 13, 0.94) 100%
+    );
+}
+
+.home-hero-candle-glow {
+  z-index: 1;
+  mix-blend-mode: screen;
+  will-change: opacity;
+}
+
+.home-hero-candle-glow-near {
+  background:
+    radial-gradient(circle at 6% 54%, rgba(255, 205, 126, 0.68), transparent 10%),
+    radial-gradient(circle at 18% 50%, rgba(255, 181, 88, 0.62), transparent 11%),
+    radial-gradient(circle at 26% 39%, rgba(255, 191, 98, 0.62), transparent 11%),
+    radial-gradient(circle at 72% 39%, rgba(255, 190, 98, 0.6), transparent 11%);
+  animation: home-candle-flicker-near 2.8s ease-in-out infinite;
+}
+
+.home-hero-candle-glow-far {
+  background:
+    radial-gradient(circle at 12% 61%, rgba(255, 171, 76, 0.58), transparent 11%),
+    radial-gradient(circle at 84% 35%, rgba(255, 197, 108, 0.62), transparent 11%),
+    radial-gradient(circle at 93% 48%, rgba(255, 180, 82, 0.62), transparent 11%);
+  animation: home-candle-flicker-far 2.2s ease-in-out infinite;
+}
+
+@keyframes home-candle-flicker-near {
+  0%,
+  100% {
+    opacity: 0.34;
+  }
+  38% {
+    opacity: 0.68;
+  }
+  64% {
+    opacity: 0.46;
+  }
+  82% {
+    opacity: 0.76;
+  }
+}
+
+@keyframes home-candle-flicker-far {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  27% {
+    opacity: 0.62;
+  }
+  58% {
+    opacity: 0.38;
+  }
+  76% {
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-candle-glow {
+    animation: none;
+    opacity: 0.42;
+    will-change: auto;
+  }
 }
 
 /* Card back: dark gradient, gold border, inset border, rotated-square motif */
@@ -93,16 +199,24 @@ body {
   background: var(--color-gold);
   color: #201808;
 }
-.btn-gold:hover {
-  background: var(--color-gold-soft);
-}
 .btn-ghost {
   border: 1px solid var(--color-line-gold);
   color: var(--color-cream);
   font-weight: 500;
 }
-.btn-ghost:hover {
+.btn-gold:active {
+  background: var(--color-gold-soft);
+}
+.btn-ghost:active {
   border-color: var(--color-gold);
+}
+@media (hover: hover) {
+  .btn-gold:hover {
+    background: var(--color-gold-soft);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-gold);
+  }
 }
 }
 
@@ -110,6 +224,7 @@ body {
 @layer components {
 .draw-fan {
   position: relative;
+  isolation: isolate;
   --fan-step: 12deg;
 }
 /* Positioning uses the individual translate/rotate properties, NOT the
@@ -131,6 +246,7 @@ body {
     scale 0.3s ease;
   box-shadow: 0 10px 30px rgba(8, 5, 0, 0.55);
   border-radius: 12px;
+  z-index: var(--fan-z, 0);
 }
 /* While choosing: the card under the pointer answers with a small lift and
    a soft gold border. No card is pre-highlighted at rest. */
@@ -461,4 +577,3 @@ body {
   }
 }
 }
-

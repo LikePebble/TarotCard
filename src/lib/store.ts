@@ -9,6 +9,11 @@ import {
   type ReadingTypeId,
   type SpreadType,
 } from "@/data/reading-types";
+import {
+  clearUnreadCollection,
+  markNewCollectionCards,
+  pruneUnreadCollection,
+} from "@/lib/collection-unseen";
 
 export type { SpreadType };
 
@@ -185,12 +190,18 @@ export function recordReading(input: {
   cards: string[];
   orientations: Orientation[];
 }): { store: ArcanaStore; record: ReadingRecord } {
+  const current = loadStore();
+  const previouslyCollected = current.collection[input.deckId] ?? {};
   const record = newReadingRecord({
     id: uid(),
     at: new Date(),
     ...input,
   });
-  const next = withReadingRecorded(loadStore(), record);
+  const next = withReadingRecorded(current, record);
+  markNewCollectionCards(
+    input.deckId,
+    input.cards.filter((slug) => !(slug in previouslyCollected)),
+  );
   saveStore(next);
   return { store: next, record };
 }
@@ -298,6 +309,7 @@ export function blockingReading(
 
 /** 병합/동기화 결과를 로컬 스토어에 반영한다(부작용). */
 export function setLocalStore(store: ArcanaStore): void {
+  pruneUnreadCollection(store);
   saveStore(store);
 }
 
@@ -310,6 +322,7 @@ export function clearLocalStore(): void {
       // 지우지 못해도 알림은 보낸다 — 화면은 다시 읽어 최선의 상태를 보여준다.
     }
   }
+  clearUnreadCollection();
   notifyLocal("store");
 }
 
