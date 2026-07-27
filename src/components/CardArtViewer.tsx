@@ -24,8 +24,8 @@ function distance(a: Point, b: Point) {
 
 /**
  * 상세 페이지의 카드 아트를 감싸, 탭하면 전체화면 뷰어를 연다.
- * 앱이 브라우저 핀치 줌(userScalable:false)을 막고 있으므로,
- * 뷰어 안에서 포인터 이벤트로 더블탭/핀치 줌·드래그 팬을 직접 구현한다.
+ * 뷰어 안에서는 카드 자체를 확대해 살필 수 있도록 포인터 이벤트로
+ * 더블탭/핀치 줌·드래그 팬을 직접 구현한다.
  */
 const DEFAULT_TRIGGER_CLASSNAME =
   "relative mt-1 block aspect-[2/3.4] w-[216px] cursor-zoom-in overflow-hidden rounded-xl bg-ink-2 shadow-[0_24px_60px_rgba(8,5,0,0.65)] lg:mt-0 lg:w-full lg:rounded-[14px] lg:shadow-[0_30px_80px_rgba(8,5,0,0.65)]";

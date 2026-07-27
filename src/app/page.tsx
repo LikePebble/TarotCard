@@ -15,7 +15,7 @@ export default function HomePage() {
             <br />
             나를 비추는 <em className="not-italic text-gold-soft">카드</em>
           </h1>
-          <p className="mt-3.5 max-w-[300px] text-[15px] text-muted lg:max-w-[420px] lg:text-[17px]">
+          <p className="mt-3.5 max-w-[300px] text-[15px] text-muted lg:max-w-[560px] lg:text-[17px]">
             카드를 뽑고 해석을 읽으며 78장의 컬렉션을 완성해 보세요.
           </p>
           <div className="mt-6 lg:mt-9 lg:flex lg:gap-3.5">
