@@ -1,15 +1,23 @@
 import type { Metadata, Viewport } from "next";
 import { Nanum_Myeongjo } from "next/font/google";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SyncBridge } from "@/components/SyncBridge";
 import "./globals.css";
 
+const SITE_URL = "https://arca.realm.ai.kr";
+
 // 본문 해석문(나눔명조). Google Fonts에서 로드.
+// preload:false — next/font가 한글 unicode-range 서브셋 93개를 전부 preload하면
+// 초기 페이로드에 약 2.8MB가 실린다. rel=preload는 unicode-range를 무시하므로
+// 브라우저의 지연 로딩이 무력화된다. display:"swap"과 함께 필요한 서브셋만 받게 둔다.
 const nanumMyeongjo = Nanum_Myeongjo({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-nanum-myeongjo",
   display: "swap",
+  preload: false,
 });
 
 // 타이틀(빛의 계승자체). KS X 1001 서브셋 self-host. 라이선스는 src/fonts/README.md.
@@ -30,10 +38,40 @@ const chosun = localFont({
   weight: "400",
 });
 
+const SITE_NAME = "아르카 타로";
+const SITE_TITLE = "아르카 타로 — 하루 한 장, 나를 비추는 카드 78장";
+const SITE_DESCRIPTION =
+  "78장의 타로 카드를 정방향과 역방향으로, 사랑·일·나 자신·건강·금전 다섯 가지 주제에 맞추어 한국어로 풀어냅니다. 오늘의 카드를 무료로 뽑고, 조용히 나를 돌아보는 시간을 가져 보세요.";
+const SITE_OG_IMAGE = {
+  url: "/decks/wolha-biwon/deck-cover.webp",
+  width: 800,
+  height: 1360,
+  alt: "아르카 타로 월하비원 덱 표지",
+};
+
 export const metadata: Metadata = {
-  title: "아르카 | Arca",
-  description:
-    "하루 한 장, 나를 비추는 카드. 카드를 뽑고 해석을 읽으며 78장의 컬렉션을 완성해 보세요.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  // URL 인스턴스로 두면 next/font가 아닌 metadata 리졸버가 각 페이지의 pathname으로
+  // 다시 계산해 준다(resolveAlternateUrl). 문자열 "/"를 쓰면 이 값이 하위 세그먼트로
+  // 그대로 상속돼 모든 페이지의 canonical이 홈을 가리킨다.
+  alternates: { canonical: new URL(SITE_URL) },
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: "/",
+    images: [SITE_OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [SITE_OG_IMAGE],
+  },
 };
 
 export const viewport: Viewport = {
@@ -53,6 +91,8 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <SyncBridge />
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

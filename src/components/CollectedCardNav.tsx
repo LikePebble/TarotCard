@@ -5,16 +5,8 @@ import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { cardBySlug, cards } from "@/data/cards";
 import { koCards } from "@/data/ko";
 import { cardDetailHref } from "@/lib/card-detail-nav";
-import {
-  catalogCardUnlocked,
-  type CatalogFilter,
-  visibleCards,
-} from "@/lib/catalog-filter";
+import { type CatalogFilter, visibleCards } from "@/lib/catalog-filter";
 import { neighborSlugs } from "@/lib/collection-nav";
-import { useArcanaStore } from "@/lib/store";
-import { useEntitlements, ownsDeck } from "@/lib/entitlements";
-import { useSession } from "@/lib/auth/session";
-import { collectionVisibility } from "@/lib/collection-access";
 
 const ARROW_CLASS =
   "inline-flex min-h-11 items-center gap-1.5 text-[13.5px] text-muted hover:text-gold-soft lg:text-[15px]";
@@ -43,18 +35,10 @@ export function CollectedCardNav({
   readingId: string | null;
   filter: CatalogFilter;
 }) {
-  const { store } = useArcanaStore();
-  const ent = useEntitlements();
-  const { user } = useSession();
-  const localEncounters = new Set(Object.keys(store?.collection[deckId] ?? {}));
-  const { owns, encounters } = collectionVisibility(
-    user !== null,
-    ownsDeck(deckId, ent),
-    localEncounters,
-  );
-  const orderedSlugs = visibleCards(cards, filter)
-    .filter((card) => catalogCardUnlocked(owns, encounters, card.slug))
-    .map((card) => card.slug);
+  // 수집 여부로 거르지 않는다. 덱 상품은 소유권이 아니라 수집 시간 단축권이고,
+  // 카드 상세 본문은 이미 누구에게나 열려 있다. 수집한 카드만 이어 주면 익명
+  // 방문자에게는 이전/다음이 0개라 234개 상세 페이지가 서로 끊긴다.
+  const orderedSlugs = visibleCards(cards, filter).map((card) => card.slug);
   const { prev, next } = neighborSlugs(orderedSlugs, slug);
 
   return (
