@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Nanum_Myeongjo } from "next/font/google";
 import localFont from "next/font/local";
-import { NoPinchZoom } from "@/components/NoPinchZoom";
 import { SyncBridge } from "@/components/SyncBridge";
 import "./globals.css";
 
@@ -39,11 +38,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#14110d",
-  // 앱형 UX: 손가락으로 화면 확대(핀치줌) 되지 않도록 고정.
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 };
 
 export default function RootLayout({
@@ -55,7 +51,6 @@ export default function RootLayout({
       className={`${heirOfLight.variable} ${nanumMyeongjo.variable} ${chosun.variable}`}
     >
       <body className="font-sans antialiased">
-        <NoPinchZoom />
         <SyncBridge />
         {children}
       </body>

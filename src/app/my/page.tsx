@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { CaretRight, Notebook, Sparkle } from "@phosphor-icons/react";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
@@ -10,6 +10,7 @@ import { togetherDays, useArcanaStore } from "@/lib/store";
 import { AccountCard } from "./AccountCard";
 
 export default function MyPage() {
+  const reducedMotion = useReducedMotion();
   const { store } = useArcanaStore();
   const { store: journal } = useJournal();
 
@@ -28,14 +29,16 @@ export default function MyPage() {
       <DesktopNav active="my" />
       <MobileTopBar />
       <motion.main
-        initial={{ opacity: 0, y: 10 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
         className="mx-auto w-full min-h-0 flex-1 overflow-y-auto px-5 pb-8 pt-2 lg:max-w-[760px] lg:overflow-visible lg:px-12 lg:pb-[88px] lg:pt-[72px]"
       >
-        <h1 className="font-display text-[27px] font-semibold lg:text-[40px]">MY</h1>
+        <h1 className="font-display text-[27px] font-semibold lg:text-[40px]">
+          MY
+        </h1>
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
-          당신이 만난 카드와 남긴 마음이 이곳에 쌓입니다.
+          당신이 만난 카드와 하루의 기록이 이곳에 쌓입니다.
         </p>
 
         <div className="mt-5 grid grid-cols-3 divide-x divide-line rounded-2xl border border-line bg-ink-1 lg:mt-8 lg:rounded-[16px]">

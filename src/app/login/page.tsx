@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   CaretLeft,
-  Sparkle,
   UserCircle,
   Cards,
   ArrowsClockwise,
@@ -46,8 +46,14 @@ export default function LoginPage() {
       <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col justify-center px-6 pb-20 pt-4">
         {/* 아르카나 모티프 상단 카드 엠블럼 */}
         <div className="relative mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-line-gold bg-ink-1/90 shadow-xl shadow-black/40 backdrop-blur-md">
-          <div className="absolute inset-1 rounded-xl border border-gold-soft/20" />
-          <Sparkle size={28} className="text-gold-soft" aria-hidden />
+          <Image
+            src="/icon.png"
+            alt="아르카 아이콘"
+            width={64}
+            height={64}
+            className="h-12 w-12 rounded-xl object-cover"
+            priority
+          />
         </div>
 
         <div className="mb-8 text-center">
@@ -57,7 +63,7 @@ export default function LoginPage() {
           <p className="mx-auto mt-2 max-w-[340px] text-sm leading-relaxed text-muted">
             {user
               ? "계정이 연결되어 기록과 수집 카드가 안전하게 보관됩니다."
-              : "카카오 및 Google 계정으로 간편하게 시작하고, 나만의 리딩 기록을 기기 간에 자유롭게 이어가세요."}
+              : "카카오 및 Google 계정으로 간편하게 시작하세요. 나만의 리딩 기록을 기기 간에 자유롭게 이어가세요."}
           </p>
         </div>
 
@@ -74,9 +80,14 @@ export default function LoginPage() {
           ) : user ? (
             <div className="flex flex-col gap-6 py-2">
               <div className="flex items-center gap-4 rounded-xl border border-line bg-ink-2/60 p-4">
-                <UserCircle size={40} className="text-gold-soft flex-shrink-0" />
+                <UserCircle
+                  size={40}
+                  className="text-gold-soft flex-shrink-0"
+                />
                 <div className="min-w-0 flex-1">
-                  <span className="block text-xs text-muted">현재 로그인된 계정</span>
+                  <span className="block text-xs text-muted">
+                    현재 로그인된 계정
+                  </span>
                   <span className="block truncate font-medium text-cream text-[15px]">
                     {user.email ?? user.id}
                   </span>
@@ -112,11 +123,21 @@ export default function LoginPage() {
                 </h2>
                 <ul className="space-y-2.5 text-[13px] text-body">
                   <li className="flex items-start gap-2.5">
-                    <ArrowsClockwise size={16} className="text-gold-soft flex-shrink-0 mt-0.5" aria-hidden />
-                    <span>기기 변경 시에도 타로 일지 및 뽑은 카드 자동 동기화</span>
+                    <ArrowsClockwise
+                      size={16}
+                      className="text-gold-soft flex-shrink-0 mt-0.5"
+                      aria-hidden
+                    />
+                    <span>
+                      기기 변경 시에도 타로 일지 및 뽑은 카드 자동 동기화
+                    </span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <Cards size={16} className="text-gold-soft flex-shrink-0 mt-0.5" aria-hidden />
+                    <Cards
+                      size={16}
+                      className="text-gold-soft flex-shrink-0 mt-0.5"
+                      aria-hidden
+                    />
                     <span>78장 타로 카드 도감 컬렉션 영구 보관</span>
                   </li>
                 </ul>
@@ -128,8 +149,8 @@ export default function LoginPage() {
         {/* 하단 캡션 */}
         {!user && (
           <p className="mt-6 text-center text-[12.5px] text-muted/80 leading-relaxed px-2">
-            로그인 없이도 기본 타로 리딩을 이용할 수 있으며, 모든 기록은
-            현재 기기에 안전하게 저장됩니다.
+            로그인 없이도 기본 타로 리딩을 이용할 수 있으며,<br></br>
+            모든 기록은 기기에 저장됩니다.
           </p>
         )}
       </main>

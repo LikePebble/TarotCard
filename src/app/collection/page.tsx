@@ -47,7 +47,7 @@ export default function CollectionPage() {
           컬렉션
         </h1>
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
-          덱마다 78장을 따로 모읍니다.
+          나만의 덱을 설정하고 78장의 타로카드를 수집해 보세요.
         </p>
 
         <div className="mt-5 flex flex-col gap-2.5 lg:mt-8">
@@ -55,16 +55,13 @@ export default function CollectionPage() {
             const localEncounters = new Set(
               Object.keys(store?.collection[deck.id] ?? {}),
             );
-            const { owns: owned, encounters: encountered } = collectionVisibility(
-              user !== null,
-              ownsDeck(deck.id, ent),
-              localEncounters,
-            );
-            const collected = catalogProgress(
-              owned,
-              encountered,
-              cards.length,
-            );
+            const { owns: owned, encounters: encountered } =
+              collectionVisibility(
+                user !== null,
+                ownsDeck(deck.id, ent),
+                localEncounters,
+              );
+            const collected = catalogProgress(owned, encountered, cards.length);
             const hasUnread =
               user !== null && (unreadByDeck[deck.id] ?? []).length > 0;
             const isDefault = deck.id === defaultDeckId;

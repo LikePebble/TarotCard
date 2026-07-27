@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { CaretLeft, CaretRight, Notebook } from "@phosphor-icons/react";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
@@ -27,6 +27,7 @@ function readingSummary(r: ReadingRecord): string {
 }
 
 export default function JournalPage() {
+  const reducedMotion = useReducedMotion();
   const { store } = useArcanaStore();
   const { store: journal } = useJournal();
   const [todayIso] = useState(() => localDateOf(new Date()));
@@ -60,7 +61,7 @@ export default function JournalPage() {
       </nav>
 
       <motion.main
-        initial={{ opacity: 0, y: 10 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
         className="mx-auto w-full min-h-0 flex-1 overflow-y-auto px-5 pb-8 pt-1 lg:max-w-[760px] lg:overflow-visible lg:px-12 lg:pb-[88px] lg:pt-6"
@@ -74,7 +75,7 @@ export default function JournalPage() {
 
         {loading ? (
           <div
-            className="mt-6 h-[420px] animate-pulse rounded-2xl border border-line bg-ink-1 lg:rounded-[18px]"
+            className="mt-6 h-[420px] animate-pulse rounded-2xl border border-line bg-ink-1 motion-reduce:animate-none lg:rounded-[18px]"
             aria-hidden
           />
         ) : (

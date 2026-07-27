@@ -145,8 +145,8 @@ export function ReadingChoice() {
     <div className="mt-[18px] flex flex-col gap-[18px] lg:mt-12 lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-5">
       <TypeCard
         title="오늘의 카드"
-        cadenceLabel="하루 1회"
-        desc="한 장의 카드로 오늘 하루의 흐름을 봅니다."
+        cadenceLabel="매일"
+        desc="한 장의 카드를 뽑아 오늘 하루 흐름을 살펴 보아요."
         blockedNote="오늘의 흐름은 이미 받으셨어요 · 결과 보기"
         blocked={blockedOne}
         ariaBase="오늘의 카드"
@@ -160,9 +160,9 @@ export function ReadingChoice() {
       <TypeCard
         title="과거 · 현재 · 미래"
         titleClass="whitespace-nowrap"
-        cadenceLabel="주 1회"
-        desc="세 장의 카드로 이번 주의 과거·현재·미래 흐름을 읽습니다."
-        blockedNote="이번 주의 흐름은 이미 받으셨어요 · 결과 보기"
+        cadenceLabel="이번 주"
+        desc="세 장의 카드를 뽑아 과거와 현재, 미래의 운명을 읽어 보세요."
+        blockedNote="이번 주의 운명은 이미 받으셨어요 · 결과 보기"
         blocked={blockedThree}
         ariaBase="과거 현재 미래"
         onStart={() => choose("three")}

@@ -2,7 +2,7 @@
 
 import { use, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { CardArt } from "@/components/CardArt";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
@@ -31,6 +31,7 @@ export default function JournalDayPage({
 }: {
   params: Promise<{ date: string }>;
 }) {
+  const reducedMotion = useReducedMotion();
   const { date } = use(params);
   const { store } = useArcanaStore();
   const { store: journal } = useJournal();
@@ -70,7 +71,7 @@ export default function JournalDayPage({
   };
 
   const dayNav =
-    "flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-line-gold hover:text-cream active:scale-95";
+    "flex h-11 w-11 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-line-gold hover:text-cream active:scale-95 motion-reduce:transform-none";
 
   return (
     <div className="flex min-h-[100dvh] flex-col">
@@ -88,7 +89,7 @@ export default function JournalDayPage({
 
       <motion.main
         key={date}
-        initial={{ opacity: 0, y: 10 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
         className="mx-auto w-full max-w-[680px] flex-1 px-5 pb-10 pt-1 lg:px-12 lg:pb-[88px] lg:pt-6"
@@ -188,7 +189,7 @@ export default function JournalDayPage({
             }}
             placeholder="오늘 마음에 남은 것을 적어 보세요."
             rows={8}
-            className="mt-2 w-full resize-y rounded-2xl border border-line bg-ink-1 p-4 font-serif text-[15px] leading-[1.75] text-body outline-none transition-colors focus:border-line-gold lg:rounded-[14px]"
+            className="mt-2 w-full resize-y rounded-2xl border border-line bg-ink-1 p-4 font-serif text-[15px] leading-[1.75] text-body transition-colors focus-visible:border-line-gold lg:rounded-[14px]"
           />
           <div className="mt-3 flex items-center gap-3">
             <button
@@ -201,7 +202,7 @@ export default function JournalDayPage({
             </button>
             {saved ? (
               <motion.span
-                initial={{ opacity: 0 }}
+                initial={reducedMotion ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="text-[13px] text-gold-soft"
               >
