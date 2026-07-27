@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import { CircleNotch, UserCircle } from "@phosphor-icons/react";
-import { signOutAndClear, useSession } from "@/lib/auth/session";
+import {
+  isLocalAuthDev,
+  setDevSession,
+  signOutAndClear,
+  useSession,
+} from "@/lib/auth/session";
 import { useSyncStatus, type SyncState } from "@/lib/sync/status";
 
 const card =
@@ -25,11 +30,12 @@ function syncLine(state: SyncState, lastSyncedAt: string | null): string {
 function accountProviderLabel(provider: unknown): string {
   if (provider === "google") return "Google 계정";
   if (provider === "kakao") return "카카오 계정";
+  if (provider === "development") return "로컬 개발 계정";
   return "소셜 계정";
 }
 
 export function AccountCard() {
-  const { user, loading, configured } = useSession();
+  const { user, loading, configured, devSession } = useSession();
   const { state, lastSyncedAt } = useSyncStatus();
   const [signingOut, setSigningOut] = useState(false);
   const [logoutError, setLogoutError] = useState<string | null>(null);
@@ -73,7 +79,9 @@ export function AccountCard() {
                 {providerLabel}
               </span>
               <span className="block text-[12px] text-muted lg:text-[13px]">
-                {syncLine(state, lastSyncedAt)}
+                {devSession
+                  ? "로컬 개발 모드 · 동기화하지 않음"
+                  : syncLine(state, lastSyncedAt)}
               </span>
             </span>
           </span>
@@ -121,6 +129,21 @@ export function AccountCard() {
           로그인하러 가기
         </Link>
       </div>
+      {isLocalAuthDev ? (
+        <div className="mt-4 border-t border-dashed border-line pt-4">
+          <p className="text-[12px] text-muted">
+            로컬 개발 전용 · 실제 계정이나 동기화에는 연결되지 않습니다.
+          </p>
+          <button
+            type="button"
+            onClick={() => setDevSession(true)}
+            disabled={devSession}
+            className="mt-2 min-h-11 rounded-xl border border-line px-4 text-[13px] text-body transition-colors hover:border-line-gold hover:text-cream disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            개발자 로그인으로 테스트
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -12,6 +12,7 @@ const mocks = vi.hoisted(() => ({
     },
     loading: false,
     configured: true,
+    devSession: false,
   },
   sync: {
     state: "idle" as const,
@@ -23,6 +24,8 @@ const mocks = vi.hoisted(() => ({
 vi.mock("@/lib/auth/session", () => ({
   useSession: () => mocks.session,
   signOutAndClear: mocks.signOutAndClear,
+  setDevSession: vi.fn(),
+  isLocalAuthDev: false,
 }));
 
 vi.mock("@/lib/sync/status", () => ({
@@ -36,6 +39,7 @@ describe("AccountCard", () => {
     mocks.session.user = null;
     mocks.session.loading = false;
     mocks.session.configured = true;
+    mocks.session.devSession = false;
   });
 
   it("미로그인 상태에서는 로그인 페이지로 가는 단일 CTA를 보여준다", () => {

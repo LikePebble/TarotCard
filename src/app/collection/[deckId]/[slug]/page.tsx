@@ -5,12 +5,14 @@ import { CaretLeft } from "@phosphor-icons/react/dist/ssr";
 import { CardArtViewer } from "@/components/CardArtViewer";
 import { CollectHistory } from "@/components/CollectHistory";
 import { CollectedCardNav } from "@/components/CollectedCardNav";
+import { MarkCollectionCardSeen } from "@/components/MarkCollectionCardSeen";
 import { DesktopNav } from "@/components/SiteNav";
 import { LoreSections } from "@/components/LoreSections";
 import { cardBySlug, cards, romanNumeral } from "@/data/cards";
 import { decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
 import { validReadingId } from "@/lib/card-detail-nav";
+import { catalogFilterOf, filterForCard } from "@/lib/catalog-filter";
 
 const SUIT_KO = {
   cups: "컵",
@@ -48,7 +50,7 @@ export default async function CardDetailPage({
   searchParams,
 }: {
   params: Promise<{ deckId: string; slug: string }>;
-  searchParams: Promise<{ readingId?: string | string[] }>;
+  searchParams: Promise<{ readingId?: string | string[]; filter?: string | string[] }>;
 }) {
   const [{ deckId, slug }, query] = await Promise.all([params, searchParams]);
   const deck = decks.find((d) => d.id === deckId && d.active);
@@ -70,9 +72,10 @@ export default async function CardDetailPage({
       : `마이너 아르카나 · ${SUIT_KO[card.suit as keyof typeof SUIT_KO]}`;
 
   const readingId = validReadingId(query.readingId);
+  const filter = catalogFilterOf(query.filter) ?? filterForCard(card);
   const backHref = readingId
     ? `/reading/${encodeURIComponent(readingId)}`
-    : `/collection/${deck.id}`;
+    : `/collection/${deck.id}?filter=${filter}`;
   const backLabel = readingId ? "리딩으로 돌아가기" : deck.nameKo;
 
   return (
@@ -88,6 +91,7 @@ export default async function CardDetailPage({
         </Link>
       </nav>
       <main className="mx-auto w-full max-w-[1180px] flex-1 px-6 pb-10 pt-1 lg:px-[72px] lg:pb-[88px] lg:pt-14">
+        <MarkCollectionCardSeen deckId={deck.id} slug={card.slug} />
         <Link
           href={backHref}
           className="hidden items-center gap-1.5 text-sm text-muted hover:text-cream lg:inline-flex"
@@ -130,6 +134,7 @@ export default async function CardDetailPage({
               deckId={deck.id}
               slug={card.slug}
               readingId={readingId}
+              filter={filter}
             />
           </div>
         </div>

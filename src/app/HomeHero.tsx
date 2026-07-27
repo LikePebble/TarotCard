@@ -27,6 +27,10 @@ export function HomeHero() {
             className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-0/45 via-transparent to-ink-0/20"
             aria-hidden
           />
+          <div
+            className="home-hero-edge-feather pointer-events-none absolute inset-0"
+            aria-hidden
+          />
         </div>
       </div>
     </div>

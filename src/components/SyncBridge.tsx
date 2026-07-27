@@ -10,12 +10,12 @@ import { schedulePush, setSyncUser } from "@/lib/sync/pusher";
  * layout에 한 번만 마운트한다. 게스트(미설정·미로그인)에서는 아무 일도 하지 않는다.
  */
 export function SyncBridge() {
-  const { user } = useSession();
+  const { user, devSession } = useSession();
 
   // 세션 전이 → 로그인 병합 또는 정리.
   useEffect(() => {
-    setSyncUser(user?.id ?? null);
-  }, [user]);
+    setSyncUser(devSession ? null : (user?.id ?? null));
+  }, [devSession, user]);
 
   // 로컬이 바뀌면 디바운스 push.
   useEffect(() => {

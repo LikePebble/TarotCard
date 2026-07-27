@@ -5,22 +5,26 @@ import { CaretRight } from "@phosphor-icons/react";
 import { DeckCard } from "@/components/DeckCard";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
+import { cards } from "@/data/cards";
 import { decksByDefaultFirst } from "@/data/decks";
+import { isDevTools } from "@/lib/dev-reset";
 import {
-  deckAfterReleaseRevoke,
-  isDevTools,
-} from "@/lib/dev-reset";
-import {
-  collectedCount,
   grantDeckLocal,
   ownsDeck,
   revokeDeckLocal,
   useEntitlements,
 } from "@/lib/entitlements";
-import { useSelectedDeck } from "@/lib/store";
+import { catalogProgress } from "@/lib/catalog-filter";
+import { useUnreadCollections } from "@/lib/collection-unseen";
+import { useArcanaStore, useSelectedDeck } from "@/lib/store";
+import { useSession } from "@/lib/auth/session";
+import { collectionVisibility } from "@/lib/collection-access";
 
 export default function CollectionPage() {
+  const { store } = useArcanaStore();
+  const unreadByDeck = useUnreadCollections();
   const ent = useEntitlements();
+  const { user } = useSession();
   const { deckId: defaultDeckId, select } = useSelectedDeck();
   const list = decksByDefaultFirst(defaultDeckId);
   const premiumDecks = list.filter((deck) => deck.id !== "classic");
@@ -32,8 +36,6 @@ export default function CollectionPage() {
     }
 
     revokeDeckLocal(deckId);
-    const nextDeckId = deckAfterReleaseRevoke(defaultDeckId, deckId);
-    if (nextDeckId !== defaultDeckId) select(nextDeckId);
   };
 
   return (
@@ -50,9 +52,22 @@ export default function CollectionPage() {
 
         <div className="mt-5 flex flex-col gap-2.5 lg:mt-8">
           {list.map((deck) => {
-            const collected = collectedCount(deck.id, ent);
-            const owned = ownsDeck(deck.id, ent);
-            const isDefault = owned && deck.id === defaultDeckId;
+            const localEncounters = new Set(
+              Object.keys(store?.collection[deck.id] ?? {}),
+            );
+            const { owns: owned, encounters: encountered } = collectionVisibility(
+              user !== null,
+              ownsDeck(deck.id, ent),
+              localEncounters,
+            );
+            const collected = catalogProgress(
+              owned,
+              encountered,
+              cards.length,
+            );
+            const hasUnread =
+              user !== null && (unreadByDeck[deck.id] ?? []).length > 0;
+            const isDefault = deck.id === defaultDeckId;
             return (
               <div
                 key={deck.id}
@@ -67,11 +82,12 @@ export default function CollectionPage() {
                       deck={deck}
                       collected={collected}
                       isDefault={isDefault}
+                      hasUnread={hasUnread}
                     />
                   </span>
                   <CaretRight size={18} className="text-muted" aria-hidden />
                 </Link>
-                {owned && !isDefault ? (
+                {!isDefault ? (
                   <button
                     type="button"
                     onClick={() => select(deck.id)}
@@ -96,7 +112,7 @@ export default function CollectionPage() {
               출시 테스트 도구
             </h2>
             <p className="mt-1 text-[12.5px] leading-relaxed text-muted">
-              결제 연동 전 프리미엄 덱의 지급·회수와 기본 덱 전환을 검증합니다.
+              결제 연동 전 프리미엄 덱의 전체 도감 지급·회수를 검증합니다.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {premiumDecks.map((deck) => {

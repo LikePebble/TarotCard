@@ -5,11 +5,16 @@ import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { cardBySlug, cards } from "@/data/cards";
 import { koCards } from "@/data/ko";
 import { cardDetailHref } from "@/lib/card-detail-nav";
+import {
+  catalogCardUnlocked,
+  type CatalogFilter,
+  visibleCards,
+} from "@/lib/catalog-filter";
 import { neighborSlugs } from "@/lib/collection-nav";
-import { collectedSlugs, useEntitlements } from "@/lib/entitlements";
 import { useArcanaStore } from "@/lib/store";
-
-const ORDERED_SLUGS = cards.map((c) => c.slug);
+import { useEntitlements, ownsDeck } from "@/lib/entitlements";
+import { useSession } from "@/lib/auth/session";
+import { collectionVisibility } from "@/lib/collection-access";
 
 const ARROW_CLASS =
   "inline-flex min-h-11 items-center gap-1.5 text-[13.5px] text-muted hover:text-gold-soft lg:text-[15px]";
@@ -24,41 +29,39 @@ function labelOf(slug: string): string {
 }
 
 /**
- * 카드 상세의 이전/다음 네비게이션. 78장 전체가 아니라 이 덱에서 수집한
- * 카드 사이만 오간다(도감 그리드와 같은 규칙). 수집 여부는 localStorage에만
- * 있어 서버가 모르므로 이 부분만 클라이언트로 뗀다.
+ * 카드 상세의 이전/다음 네비게이션. 진입한 도감 필터 안에서만 순서대로 이동하고
+ * 양 끝에서는 멈춘다.
  */
 export function CollectedCardNav({
   deckId,
   slug,
   readingId,
+  filter,
 }: {
   deckId: string;
   slug: string;
   readingId: string | null;
+  filter: CatalogFilter;
 }) {
   const { store } = useArcanaStore();
   const ent = useEntitlements();
-
-  // 마운트 전(store===null)에도 바깥 행 높이는 고정 — 안쪽만 비운다.
-  // 그래야 로드 직후 화살표가 나타나거나 사라질 때 레이아웃이 흔들리지 않는다.
-  if (store === null) {
-    return (
-      <div className={OUTER_CLASS}>
-        <span className={ARROW_CLASS} />
-        <span className={ARROW_CLASS} />
-      </div>
-    );
-  }
-
-  const collected = collectedSlugs(deckId, ent);
-  const { prev, next } = neighborSlugs(ORDERED_SLUGS, collected, slug);
+  const { user } = useSession();
+  const localEncounters = new Set(Object.keys(store?.collection[deckId] ?? {}));
+  const { owns, encounters } = collectionVisibility(
+    user !== null,
+    ownsDeck(deckId, ent),
+    localEncounters,
+  );
+  const orderedSlugs = visibleCards(cards, filter)
+    .filter((card) => catalogCardUnlocked(owns, encounters, card.slug))
+    .map((card) => card.slug);
+  const { prev, next } = neighborSlugs(orderedSlugs, slug);
 
   return (
     <div className={OUTER_CLASS}>
       {prev ? (
         <Link
-          href={cardDetailHref(deckId, prev, readingId)}
+          href={cardDetailHref(deckId, prev, readingId, filter)}
           className={ARROW_CLASS}
         >
           <CaretLeft size={14} aria-hidden />
@@ -69,7 +72,7 @@ export function CollectedCardNav({
       )}
       {next ? (
         <Link
-          href={cardDetailHref(deckId, next, readingId)}
+          href={cardDetailHref(deckId, next, readingId, filter)}
           className={ARROW_CLASS}
         >
           {labelOf(next)}

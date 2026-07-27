@@ -2,8 +2,8 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
-import { notFound, useRouter } from "next/navigation";
-import { CaretLeft } from "@phosphor-icons/react";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
+import { CaretLeft, Info } from "@phosphor-icons/react";
 import { CardArt } from "@/components/CardArt";
 import { CardBack } from "@/components/CardBack";
 import { DeckInfoModal } from "@/components/DeckInfoModal";
@@ -12,14 +12,26 @@ import { TabBar } from "@/components/TabBar";
 import { cards } from "@/data/cards";
 import { decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
+import { ownsDeck, useEntitlements } from "@/lib/entitlements";
 import {
-  collectedCount,
-  ownsDeck,
-  useEntitlements,
-} from "@/lib/entitlements";
-import { useArcanaStore, useSelectedDeck } from "@/lib/store";
-import { visibleCards } from "@/lib/catalog-filter";
+  setSelectedDeckId,
+  useArcanaStore,
+  useSelectedDeck,
+} from "@/lib/store";
+import {
+  catalogFilterOf,
+  catalogCardUnlocked,
+  catalogProgress,
+  type CatalogFilter,
+  visibleCards,
+} from "@/lib/catalog-filter";
+import { useUnreadCollection } from "@/lib/collection-unseen";
 import { useSession } from "@/lib/auth/session";
+import { collectionVisibility } from "@/lib/collection-access";
+import {
+  deckDetailCtaState,
+  deckReadingCtaLabel,
+} from "@/lib/deck-detail-cta";
 
 const FILTERS = [
   { id: "major", label: "메이저" },
@@ -27,10 +39,7 @@ const FILTERS = [
   { id: "wands", label: "완드" },
   { id: "swords", label: "소드" },
   { id: "pentacles", label: "펜타클" },
-  { id: "collected", label: "수집됨" },
 ] as const;
-
-type FilterId = (typeof FILTERS)[number]["id"];
 
 export default function DeckCatalogPage({
   params,
@@ -38,14 +47,13 @@ export default function DeckCatalogPage({
   params: Promise<{ deckId: string }>;
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { deckId } = use(params);
   const { store } = useArcanaStore();
   const ent = useEntitlements();
-  const { deckId: defaultDeckId, select } = useSelectedDeck();
-  const { user, loading: sessionLoading } = useSession();
-  // 세션 확인 중에는 게스트로 단정하지 않는다 — 로그인 사용자에게 로그인 유도가 스치는 것을 막는다.
-  const isGuest = !sessionLoading && user === null;
-  const [filter, setFilter] = useState<FilterId>("major");
+  const { user } = useSession();
+  const { deckId: defaultDeckId } = useSelectedDeck();
+  const unreadCollectionSet = useUnreadCollection(deckId);
   const [infoOpen, setInfoOpen] = useState(false);
 
   const deck = decks.find((d) => d.id === deckId && d.active);
@@ -55,12 +63,27 @@ export default function DeckCatalogPage({
   if (!deck) notFound();
 
   const isDefault = defaultDeckId === deck.id;
-  const total = collectedCount(deck.id, ent);
-  const owned = ownsDeck(deck.id, ent);
-  const collectedSet = new Set(Object.keys(store?.collection[deck.id] ?? {}));
-  const visible = visibleCards(cards, filter, collectedSet);
+  const actualOwned = ownsDeck(deck.id, ent);
+  const ctaState = deckDetailCtaState(user !== null, actualOwned);
+  const isPremium = deck.id !== "classic";
+  const localEncounters = new Set(Object.keys(store?.collection[deck.id] ?? {}));
+  const { owns: owned, encounters: collectedSet } = collectionVisibility(
+    user !== null,
+    actualOwned,
+    localEncounters,
+  );
+  const total = catalogProgress(owned, collectedSet, cards.length);
+  const filter = catalogFilterOf(searchParams.get("filter")) ?? "major";
+  const visible = visibleCards(cards, filter);
+  const selectFilter = (next: CatalogFilter) => {
+    router.replace(`/collection/${deck.id}?filter=${next}`, { scroll: false });
+  };
+  const unreadSet =
+    user === null ? new Set<string>() : unreadCollectionSet;
   const startReading = () => {
-    select(deck.id);
+    // 목적지에서 읽을 선택값만 저장한다. 현재 화면의 상태를 갱신하면
+    // 이동 직전에 CTA가 "지금 리딩받기"로 바뀌어 눌린 상태처럼 보인다.
+    setSelectedDeckId(deck.id);
     router.push("/reading");
   };
 
@@ -80,45 +103,39 @@ export default function DeckCatalogPage({
         <div className="lg:flex lg:items-end lg:justify-between">
           <div>
             <div className="flex items-end justify-between lg:block">
-              <h1 className="font-display text-[27px] font-semibold lg:text-[40px]">
-                {deck.nameKo}
-              </h1>
+              <div className="flex items-center gap-1">
+                <h1 className="font-display text-[27px] font-semibold lg:text-[40px]">
+                  {deck.nameKo}
+                </h1>
+                <button
+                  type="button"
+                  onClick={() => setInfoOpen(true)}
+                  className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-muted transition-colors hover:text-gold-soft"
+                  aria-label={`${deck.nameKo} 덱 정보 보기`}
+                  title="덱 정보 보기"
+                >
+                  <Info size={19} aria-hidden />
+                </button>
+              </div>
               <p className="font-display text-2xl font-semibold text-gold-soft lg:hidden">
                 {total}{" "}
                 <span className="text-sm font-normal text-muted">/ 78</span>
               </p>
             </div>
-            <div className="mt-2 flex items-center gap-4">
-              {owned && isDefault ? (
-                <p className="text-[13px] text-gold-soft">
-                  기본 덱 · 리딩에서 이 덱으로 뽑습니다
-                </p>
-              ) : owned ? (
-                <button
-                  type="button"
-                  onClick={() => select(deck.id)}
-                  className="min-h-11 text-[13px] text-muted underline underline-offset-4 hover:text-cream"
-                >
-                  기본 덱으로 설정
-                </button>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              {isDefault ? (
+                <span className="rounded-full border border-line-gold px-2.5 py-1 text-[12px] text-gold-soft">
+                  기본 덱
+                </span>
               ) : null}
-              {owned ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={startReading}
-                    className="min-h-11 text-[13px] text-gold-soft underline underline-offset-4 hover:text-cream"
-                  >
-                    리딩 시작하기
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setInfoOpen(true)}
-                    className="min-h-11 text-[13px] text-muted underline underline-offset-4 hover:text-cream"
-                  >
-                    덱 정보
-                  </button>
-                </>
+              {isPremium ? (
+                <span className="rounded-full border border-line px-2.5 py-1 text-[12px] text-muted">
+                  {ctaState === "guest"
+                    ? "로그인 후 수집"
+                    : owned
+                      ? "소장 중"
+                      : "리딩으로 수집 중"}
+                </span>
               ) : null}
             </div>
           </div>
@@ -142,72 +159,72 @@ export default function DeckCatalogPage({
           />
         </div>
 
-        {/* 소유 기준 안내는 수집됨 필터에선 숨긴다 — 그 필터의 만남 기록 빈 상태와 제목이 겹친다. */}
-        {store && !owned && filter !== "collected" ? (
-          <div className="mt-5 rounded-2xl border border-line bg-ink-1 p-6 lg:mt-10 lg:flex lg:items-center lg:justify-between lg:p-8">
-            <div>
-              <p className="font-display text-lg font-semibold lg:text-[21px]">
-                이 덱의 이야기를 먼저 만나보세요
-              </p>
-              <p className="mt-1 text-[13.5px] text-muted lg:text-[15px]">
-                {deck.nameKo}의 세계관과 78장 전체 이용 혜택을 확인할 수
-                있습니다.
-              </p>
-            </div>
+        <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap lg:mt-8">
+          <button
+            type="button"
+            onClick={startReading}
+            className="btn btn-gold w-full sm:w-auto"
+          >
+            {deckReadingCtaLabel(isDefault)}
+          </button>
+          {ctaState === "guest" ? (
+            <Link href="/login" className="btn btn-ghost w-full sm:w-auto">
+              로그인하고 카드 수집하기
+            </Link>
+          ) : ctaState === "member-unowned" ? (
             <button
               type="button"
-              onClick={() => setInfoOpen(true)}
-              className="btn btn-gold mt-4 w-full lg:mt-0 lg:w-auto"
+              disabled
+              aria-label="모든 카드 해금하기, 준비 중"
+              title="결제 기능 준비 중"
+              className="btn btn-ghost w-full cursor-not-allowed opacity-45 sm:w-auto"
             >
-              덱 정보 보기
+              모든 카드 해금하기
             </button>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
 
         <div
           className="-mx-5 mt-[18px] flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:mt-8 lg:flex-wrap lg:overflow-visible lg:px-0"
-          role="tablist"
-          aria-label="아르카나 필터"
         >
-          {FILTERS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              role="tab"
-              aria-selected={filter === item.id}
-              onClick={() => setFilter(item.id)}
-              className={`min-h-11 flex-none whitespace-nowrap rounded-full border px-4 text-[13px] lg:px-5 lg:text-[14px] ${
-                filter === item.id
-                  ? "border-gold text-gold-soft"
-                  : "border-line text-muted hover:text-cream"
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-
-        {filter === "collected" && store && visible.length === 0 ? (
-          <div className="mt-5 rounded-2xl border border-line bg-ink-1 p-6">
-            <p className="font-display text-lg font-semibold">
-              아직 수집한 카드가 없습니다.
-            </p>
-            <p className="mt-1 text-[13.5px] text-muted">
-              {isGuest
-                ? "로그인하면 뽑은 카드가 도감에 수집됩니다."
-                : "리딩에서 뽑은 카드가 이곳에 모입니다."}
-            </p>
-            {isGuest ? (
-              <Link href="/login" className="btn btn-gold mt-4 w-full sm:w-auto sm:px-8">
-                로그인하기
-              </Link>
-            ) : null}
+          <div className="contents" role="tablist" aria-label="아르카나 필터">
+            {FILTERS.map((item) => {
+              const hasUnread = visibleCards(cards, item.id).some((card) =>
+                unreadSet.has(card.slug),
+              );
+              return (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                aria-selected={filter === item.id}
+                onClick={() => selectFilter(item.id)}
+                className={`min-h-11 flex-none whitespace-nowrap rounded-full border px-4 text-[13px] lg:px-5 lg:text-[14px] ${
+                  filter === item.id
+                    ? "border-gold text-gold-soft"
+                    : "border-line text-muted hover:text-cream"
+                }`}
+              >
+                {item.label}
+                {hasUnread ? (
+                  <span
+                    className="relative -top-1 ml-1 inline-block size-1.5 rounded-full bg-notice"
+                    aria-label="새 카드 수집됨"
+                  />
+                ) : null}
+              </button>
+              );
+            })}
           </div>
-        ) : null}
+        </div>
 
         <div className="mt-4 grid grid-cols-3 gap-y-3.5 gap-x-3 lg:mt-8 lg:grid-cols-6 lg:gap-[22px]">
           {visible.map((card) => {
-            const collected = owned;
+            const collected = catalogCardUnlocked(
+              owned,
+              collectedSet,
+              card.slug,
+            );
             const nameKo = koCards[card.slug]?.nameKo ?? card.nameEn;
             const label = (
               <p
@@ -215,7 +232,15 @@ export default function DeckCatalogPage({
                   collected ? "" : "text-muted"
                 }`}
               >
-                {nameKo}
+                <span className="relative inline-block">
+                  {nameKo}
+                  {collected && unreadSet.has(card.slug) ? (
+                    <span
+                      className="absolute -right-2 -top-0.5 size-1.5 rounded-full bg-notice"
+                      aria-hidden
+                    />
+                  ) : null}
+                </span>
                 <br />
                 <span className={collected ? "text-muted" : ""}>
                   {card.nameEn}
@@ -225,8 +250,13 @@ export default function DeckCatalogPage({
             return collected ? (
               <Link
                 key={card.slug}
-                href={`/collection/${deck.id}/${card.slug}`}
+                href={`/collection/${deck.id}/${card.slug}?filter=${filter}`}
                 className="group block"
+                aria-label={
+                  unreadSet.has(card.slug)
+                    ? `${nameKo}, 새로 수집됨`
+                    : nameKo
+                }
               >
                 <div className="relative aspect-[2/3.4] overflow-hidden rounded-xl bg-ink-2 transition-transform duration-300 group-hover:scale-[1.03]">
                   <CardArt

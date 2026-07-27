@@ -27,14 +27,6 @@ export const isDevTools = releaseTestToolsEnabled(
   process.env.NEXT_PUBLIC_ENABLE_RELEASE_TEST_TOOLS,
 );
 
-/** 현재 기본 덱을 회수하면 미소유 덱이 선택된 채 남지 않게 클래식으로 복귀한다. */
-export function deckAfterReleaseRevoke(
-  selectedDeckId: string,
-  revokedDeckId: string,
-): string {
-  return selectedDeckId === revokedDeckId ? "classic" : selectedDeckId;
-}
-
 /**
  * 이 리딩이 지금 새 리딩을 막고 있는가(현재 주기에 속하는가).
  * 케이던스가 유형마다 달라 날짜만으로는 판단할 수 없다 — 오늘의 카드는 일,

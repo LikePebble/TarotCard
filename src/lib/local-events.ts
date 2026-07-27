@@ -5,12 +5,13 @@
  * 덕분에 호출부는 "저장"만 하면 되고 UI 갱신·서버 push를 몰라도 된다.
  * 의존성이 없어야 store/journal이 sync·supabase를 import하지 않는다.
  */
-export type LocalChannel = "store" | "journal" | "entitlements";
+export type LocalChannel = "store" | "journal" | "entitlements" | "auth";
 
 const subscribers: Record<LocalChannel, Set<() => void>> = {
   store: new Set(),
   journal: new Set(),
   entitlements: new Set(),
+  auth: new Set(),
 };
 
 /** 채널을 구독한다. 반환값을 호출하면 해지된다. */

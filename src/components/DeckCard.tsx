@@ -12,10 +12,12 @@ export function DeckCard({
   deck,
   collected,
   isDefault,
+  hasUnread,
 }: {
   deck: Deck;
   collected: number;
   isDefault: boolean;
+  hasUnread: boolean;
 }) {
   const percent = (collected / 78) * 100;
 
@@ -40,6 +42,12 @@ export function DeckCard({
           <span className="font-display text-[17px] font-semibold lg:text-[19px]">
             {deck.nameKo}
           </span>
+          {hasUnread ? (
+            <span
+              className="relative -top-1 size-1.5 rounded-full bg-notice"
+              aria-label="새 카드 수집됨"
+            />
+          ) : null}
           {isDefault ? (
             <span className="flex-none rounded-full border border-line-gold px-2 py-0.5 text-[11px] text-gold-soft">
               기본
