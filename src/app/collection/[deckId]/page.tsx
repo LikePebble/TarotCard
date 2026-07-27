@@ -249,39 +249,38 @@ export default function DeckCatalogPage({
                 </span>
               </p>
             );
-            // 아직 만나지 않은 카드도 상세로 링크한다. 상세 페이지 자체는
-            // 잠겨 있지 않고(미수집 안내를 스스로 보여 준다), 링크를 끊으면
-            // 234장의 카드 상세로 들어갈 길이 사이트 어디에도 남지 않는다.
-            // 잠금은 링크 유무가 아니라 앞면/뒷면 아트로만 표현한다.
-            const ariaLabel = collected
-              ? unreadSet.has(card.slug)
-                ? `${nameKo}, 새로 수집됨`
-                : `${nameKo}, 수집됨`
-              : `${nameKo}, 아직 수집하지 않음`;
-            return (
+            // 아직 만나지 않은 카드는 상세로 들어갈 수 없다. 뒤집힌 카드를
+            // 눌러 해석이 다 보이면 수집이라는 행위 자체가 의미를 잃는다.
+            // 크롤러의 도달 경로는 sitemap.ts가 맡는다.
+            return collected ? (
               <Link
                 key={card.slug}
                 href={cardDetailHref(deck.id, card.slug, null, filter)}
                 className="group block"
-                aria-label={ariaLabel}
+                aria-label={
+                  unreadSet.has(card.slug)
+                    ? `${nameKo}, 새로 수집됨`
+                    : nameKo
+                }
               >
-                {collected ? (
-                  <div className="relative aspect-[2/3.4] overflow-hidden rounded-xl bg-ink-2 transition-transform duration-300 group-hover:scale-[1.03]">
-                    <CardArt
-                      card={card}
-                      deckId={deck.id}
-                      sizes="(min-width: 1024px) 190px, 33vw"
-                    />
-                  </div>
-                ) : (
-                  <CardBack
+                <div className="relative aspect-[2/3.4] overflow-hidden rounded-xl bg-ink-2 transition-transform duration-300 group-hover:scale-[1.03]">
+                  <CardArt
+                    card={card}
                     deckId={deck.id}
                     sizes="(min-width: 1024px) 190px, 33vw"
-                    className="aspect-[2/3.4] w-full"
                   />
-                )}
+                </div>
                 {label}
               </Link>
+            ) : (
+              <div key={card.slug} aria-label={`${nameKo}, 아직 수집하지 않음`}>
+                <CardBack
+                  deckId={deck.id}
+                  sizes="(min-width: 1024px) 190px, 33vw"
+                  className="aspect-[2/3.4] w-full"
+                />
+                {label}
+              </div>
             );
           })}
         </div>
