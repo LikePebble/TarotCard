@@ -55,6 +55,13 @@ const SITE_OG_IMAGE = {
   alt: "아르카 타로 — 하루 한 장, 나를 비추는 카드",
 };
 
+/**
+ * Search Console "HTML 태그" 방식의 확인 코드(content 값만, 태그 전체가 아니다).
+ * 비어 있으면 태그를 내보내지 않는다 — 빈 content로 남으면 확인이 실패한다.
+ */
+const GOOGLE_SITE_VERIFICATION =
+  (process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? "").trim() || null;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: SITE_TITLE,
@@ -63,9 +70,16 @@ export const metadata: Metadata = {
   // 다시 계산해 준다(resolveAlternateUrl). 문자열 "/"를 쓰면 이 값이 하위 세그먼트로
   // 그대로 상속돼 모든 페이지의 canonical이 홈을 가리킨다.
   alternates: { canonical: new URL(SITE_URL) },
-  // 네이버 서치어드바이저 사이트 소유 확인. 구글은 GA 연동으로 확인하므로
-  // google 항목을 두지 않는다.
+  // 검색엔진 사이트 소유 확인.
+  //
+  // 구글은 GA 연동으로 확인하려 했으나 이 앱에서는 통하지 않는다. Search Console은
+  // 홈페이지 원본 HTML을 받아 gtag 스니펫을 찾는데, @next/third-parties의
+  // GoogleAnalytics는 afterInteractive라 서버 HTML에 preload 링크만 남기고
+  // 실제 스크립트와 gtag('config')는 하이드레이션 뒤 클라이언트에서 주입한다.
+  // 크롤러는 JS를 실행하지 않으므로 찾을 것이 없다. GA 계측 자체는 정상이고
+  // 소유 확인 방식만 맞지 않았던 것이라, 서버 렌더되는 메타 태그로 바꾼다.
   verification: {
+    ...(GOOGLE_SITE_VERIFICATION ? { google: GOOGLE_SITE_VERIFICATION } : {}),
     other: {
       "naver-site-verification":
         "1791e0af488a005563febe9dc474d108be5196de",
