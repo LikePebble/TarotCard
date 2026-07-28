@@ -6,9 +6,10 @@ import { DeckCard } from "@/components/DeckCard";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { cards } from "@/data/cards";
-import { decksByDefaultFirst } from "@/data/decks";
+import { decks, decksByDefaultFirst } from "@/data/decks";
 import { isDevTools } from "@/lib/dev-reset";
 import {
+  LAUNCH_PROMO_DECKS,
   grantDeckLocal,
   ownsDeck,
   revokeDeckLocal,
@@ -16,6 +17,11 @@ import {
 } from "@/lib/entitlements";
 import { catalogProgress } from "@/lib/catalog-filter";
 import { useUnreadCollections } from "@/lib/collection-unseen";
+import {
+  joinDeckNames,
+  launchPromoVariant,
+  promoDeckNames,
+} from "@/lib/launch-promo";
 import { useArcanaStore, useSelectedDeck } from "@/lib/store";
 import { useSession } from "@/lib/auth/session";
 import { collectionVisibility } from "@/lib/collection-access";
@@ -24,10 +30,19 @@ export default function CollectionPage() {
   const { store } = useArcanaStore();
   const unreadByDeck = useUnreadCollections();
   const ent = useEntitlements();
-  const { user } = useSession();
+  const { user, loading: sessionLoading } = useSession();
   const { deckId: defaultDeckId, select } = useSelectedDeck();
   const list = decksByDefaultFirst(defaultDeckId);
   const premiumDecks = list.filter((deck) => deck.id !== "classic");
+  // 기본 덱 설정에 따라 문구의 이름 순서가 흔들리지 않도록 원본 순서를 쓴다.
+  const promoDecks = promoDeckNames(decks);
+  const promoNames = joinDeckNames(promoDecks);
+  const promoVariant = launchPromoVariant(
+    LAUNCH_PROMO_DECKS,
+    sessionLoading,
+    user !== null,
+    promoDecks.length,
+  );
 
   const toggleReleaseDeck = (deckId: string) => {
     if (!ownsDeck(deckId, ent)) {
@@ -49,6 +64,58 @@ export default function CollectionPage() {
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
           나만의 덱을 설정하고 78장의 타로카드를 수집해 보세요.
         </p>
+
+        {/*
+          덱 목록보다 먼저 둔다. 아래 목록에서 프리미엄 덱이 모두 열린 것을 먼저
+          본 뒤에 이유를 읽으면, 그때는 이미 "원래 무료"라고 믿은 뒤다. 정식
+          출시에서 유료로 돌아설 때 "무료였는데 유료가 됐다"는 오해가 남지
+          않도록 열어 드린 이유와 기간을 먼저 밝힌다.
+
+          게스트에게는 같은 자리가 안내가 아니라 제안이다. 아래 목록은 로그인
+          전에는 모두 잠겨 보이므로(collectionVisibility), 무엇을 받게 되는지
+          여기서 먼저 말하지 않으면 로그인할 이유가 화면 어디에도 없다.
+        */}
+        {promoVariant === "guest" ? (
+          <section
+            aria-labelledby="launch-promo-title"
+            className="mt-4 rounded-2xl border border-line-gold bg-ink-1 p-4 lg:mt-6 lg:p-5"
+          >
+            <h2
+              id="launch-promo-title"
+              className="font-display text-[16px] font-semibold text-gold-soft lg:text-[18px]"
+            >
+              로그인하시면 프리미엄 덱을 드립니다
+            </h2>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-body lg:text-[14px]">
+              출시를 기념하여, 한정 기간 동안 로그인하신 분께 {promoNames}{" "}
+              프리미엄 덱을 드립니다.
+            </p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-muted lg:text-[13px]">
+              지금은 결제 없이 열어 드리며, 정식 출시 뒤에는 유료로 바뀔 수
+              있습니다.
+            </p>
+            <Link href="/login" className="btn btn-gold mt-4 w-full sm:w-auto">
+              로그인하고 덱 받기
+            </Link>
+          </section>
+        ) : promoVariant === "member" ? (
+          <section
+            aria-labelledby="launch-promo-title"
+            className="mt-4 rounded-2xl border border-line bg-ink-1 p-4 lg:mt-6 lg:p-5"
+          >
+            <h2
+              id="launch-promo-title"
+              className="font-display text-[15px] font-semibold text-gold-soft lg:text-[16px]"
+            >
+              출시 기념 한정 프로모션
+            </h2>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-muted lg:text-[13px]">
+              로그인해 주신 분께 {promoNames} 프리미엄 덱을 열어 드렸습니다.
+              한정 기간 동안 드리는 것이라, 정식 출시 뒤에는 유료로 바뀔 수
+              있습니다.
+            </p>
+          </section>
+        ) : null}
 
         <div className="mt-5 flex flex-col gap-2.5 lg:mt-8">
           {list.map((deck) => {

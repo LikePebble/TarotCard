@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { CheckCircle, X } from "@phosphor-icons/react";
 import type { Deck } from "@/data/decks";
+import { track } from "@/lib/analytics";
 
 /** 덱 상품 정보 모달. 첫 이미지는 10:17(800×1360) 규격, 나머지는 아래로 이어 스크롤. */
 export function DeckInfoModal({
@@ -15,10 +16,20 @@ export function DeckInfoModal({
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const onCloseRef = useRef(onClose);
+  const trackedDeckRef = useRef<string | null>(null);
 
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
+
+  // 이 모달은 열릴 때 마운트되고 닫힐 때 언마운트되므로 마운트가 곧 "열림"이다.
+  // ref로 덱 id를 기억해 리렌더와 StrictMode의 이펙트 2회 실행을 막는다.
+  // 계측을 호출부가 아니라 여기 두는 이유: 여는 자리가 늘어도 한 줄로 남는다.
+  useEffect(() => {
+    if (trackedDeckRef.current === deck.id) return;
+    trackedDeckRef.current = deck.id;
+    track("deck_modal_opened", { deck_id: deck.id });
+  }, [deck.id]);
 
   useEffect(() => {
     const prev = document.body.style.overflow;

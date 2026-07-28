@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { FlowHeader } from "@/components/FlowHeader";
 import { DesktopNav } from "@/components/SiteNav";
 import { focusOptionsFor } from "@/data/focus";
+import { ticketsExhaustedKey, track, trackOnce } from "@/lib/analytics";
 import { useSession } from "@/lib/auth/session";
 import {
   getPendingSpread,
@@ -42,6 +43,9 @@ export default function FocusPage() {
   }, [router]);
 
   const choose = (focus: string) => {
+    // spread는 이 화면에 들어온 시점에 이미 정해져 있다(없으면 /reading으로
+    // 되돌아간다). 그래도 null 자리에 문자열을 지어내지는 않는다.
+    if (spread) track("focus_selected", { spread, focus });
     setPendingFocus(focus);
     router.push("/reading/draw");
   };
@@ -56,6 +60,18 @@ export default function FocusPage() {
   const tickets = ticketStateOf(store, now, user !== null);
   const ready = spread !== null && (!usesTickets || ticketsReady);
   const options = ready && spread ? focusOptionsFor(spread) : [];
+
+  // "오늘은 여기까지" 행과 소진 안내문이 실제로 그려지는 조건. ticketsReady를
+  // 포함하므로 확정 전 잠정 상태로는 나가지 않는다. ReadingChoice와 같은
+  // 날짜 키를 쓰므로, 리딩 선택 → 주제 선택으로 이어 들어와도 하루 한 번이다.
+  const focusExhausted = usesTickets && ticketsReady && tickets.remaining === 0;
+  useEffect(() => {
+    if (!focusExhausted) return;
+    trackOnce(ticketsExhaustedKey(now), "tickets_exhausted", {
+      surface: "reading_focus",
+      spread: "one",
+    });
+  }, [focusExhausted, now]);
 
   return (
     <div className="flex min-h-[100dvh] flex-col">

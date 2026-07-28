@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion } from "motion/react";
 import { CaretDown } from "@phosphor-icons/react";
 import { CardArtViewer } from "@/components/CardArtViewer";
 import { type Card } from "@/data/cards";
+import type { SpreadType } from "@/data/reading-types";
+import { track } from "@/lib/analytics";
 import { focusLabelOf, focusParagraphOf } from "@/data/focus";
 import { koCards } from "@/data/ko";
 import { koPositions } from "@/data/ko-positions";
@@ -61,6 +63,30 @@ function UprightDetails({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * 결과 화면 진입 계측.
+ *
+ * 두 진입로(갓 뽑은 리빌 · /reading/[id] 재열람)가 이 컴포넌트를 공유하므로
+ * 여기 한 곳에 두면 두 경로가 모두 잡힌다.
+ *
+ * 중복 방지는 readingId를 기억하는 ref다. 3카드 결과는 탭을 바꿀 때마다,
+ * 1카드 결과는 정방향 토글을 펼칠 때마다 다시 그려지지만 ref가 같은 값을
+ * 들고 있어 다시 나가지 않는다. StrictMode의 이펙트 2회 실행도 ref가 인스턴스
+ * 수명 동안 유지되므로 막힌다. 반대로 다른 리딩으로 이동하면 컴포넌트가
+ * 새로 마운트되어 ref가 비고, 그건 진짜 새 열람이므로 다시 나가는 게 맞다.
+ *
+ * readingId가 null인 프레임(기록 직전)에는 보내지 않는다 — 값이 채워진
+ * 다음 렌더에서 정확히 한 번 나간다.
+ */
+function useResultViewed(spread: SpreadType, readingId: string | null): void {
+  const firedFor = useRef<string | null>(null);
+  useEffect(() => {
+    if (readingId === null || firedFor.current === readingId) return;
+    firedFor.current = readingId;
+    track("result_viewed", { spread });
+  }, [readingId, spread]);
+}
+
 /** 아트가 왜 뒤집혔는지 알리는 소형 배지. 카드명 옆에 붙는다. */
 function ReversedBadge() {
   return (
@@ -88,6 +114,7 @@ export function OneCardResult({
   readingId: string | null;
   localDate: string | null;
 }) {
+  useResultViewed("one", readingId);
   const paragraphs = descriptionOf(card);
   const themeParagraph = focusParagraphOf(focus, card.slug);
   // 레거시·마이그레이션 기록에는 orientations가 없거나 짧을 수 있다 — 정방향으로 본다.
@@ -284,6 +311,7 @@ export function ThreeCardResult({
   readingId: string | null;
   localDate: string | null;
 }) {
+  useResultViewed("three", readingId);
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
 

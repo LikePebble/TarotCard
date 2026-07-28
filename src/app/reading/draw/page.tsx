@@ -10,6 +10,7 @@ import { CardBack } from "@/components/CardBack";
 import { DesktopNav } from "@/components/SiteNav";
 import { cards, type Card } from "@/data/cards";
 import { focusLabelOf } from "@/data/focus";
+import { track } from "@/lib/analytics";
 import { fanStackOrder } from "@/lib/draw-fan";
 import { pickOrientations, secureRand } from "@/lib/orientation";
 import { useSession } from "@/lib/auth/session";
@@ -259,6 +260,14 @@ export default function DrawPage() {
         cards: slugs,
         // 방향은 기록 시점에 뽑는다. uid()와 같은 이유로 보안 난수를 쓴다.
         orientations: pickOrientations(slugs.length, secureRand),
+      });
+      // 퍼널의 전환 지점. 기록이 실제로 남은 뒤에만 보낸다 — 위의 두 갈래
+      // (이미 뽑음 / 오늘 소진)는 여기까지 오지 않는다. recordedRef가 이
+      // 함수 전체를 한 번으로 묶으므로 재시도·워치독으로 두 번 나가지 않는다.
+      track("draw_completed", {
+        spread: s,
+        focus: f,
+        deck_id: result.record.deckId,
       });
       setReadingRecord(result.record);
     },
