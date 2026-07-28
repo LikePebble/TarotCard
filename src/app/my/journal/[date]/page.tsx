@@ -4,13 +4,11 @@ import { use, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
-import { CardArt } from "@/components/CardArt";
+import { DayReadingTabs } from "@/components/DayReadingTabs";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
-import { cardBySlug } from "@/data/cards";
-import { koCards } from "@/data/ko";
 import { setEntry, useJournal } from "@/lib/journal";
 import { localDateOf } from "@/lib/period";
-import { useArcanaStore, type ReadingRecord } from "@/lib/store";
+import { useArcanaStore } from "@/lib/store";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -21,9 +19,6 @@ function addDays(iso: string, delta: number): string {
 function weekdayOf(iso: string): string {
   const [y, m, d] = iso.split("-").map(Number);
   return WEEKDAYS[new Date(y, m - 1, d).getDay()];
-}
-function readingTypeLabel(r: ReadingRecord): string {
-  return r.spread === "one" ? "오늘의 카드" : "과거 · 현재 · 미래";
 }
 
 export default function JournalDayPage({
@@ -125,41 +120,9 @@ export default function JournalDayPage({
         </div>
 
         {readings.length > 0 ? (
-          <div className="mt-6 flex flex-col gap-2.5">
-            {readings.map((r) => (
-              <Link
-                key={r.id}
-                href={`/reading/${r.id}`}
-                className="flex items-center gap-4 rounded-2xl border border-line bg-ink-1 p-4 transition-colors hover:border-line-gold lg:rounded-[14px]"
-              >
-                <span className="flex flex-none gap-1.5">
-                  {r.cards.map((slug) => {
-                    const card = cardBySlug.get(slug);
-                    if (!card) return null;
-                    return (
-                      <span
-                        key={slug}
-                        className="relative aspect-[2/3.4] w-9 overflow-hidden rounded-md bg-ink-2 lg:w-11"
-                      >
-                        <CardArt card={card} deckId={r.deckId} sizes="44px" />
-                      </span>
-                    );
-                  })}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[12px] text-gold-soft lg:text-[13px]">
-                    {readingTypeLabel(r)}
-                  </span>
-                  <span className="mt-0.5 block truncate text-[13.5px] text-body lg:text-[15px]">
-                    {r.cards
-                      .map((slug) => koCards[slug]?.nameKo ?? slug)
-                      .join(" · ")}
-                  </span>
-                </span>
-                <CaretRight size={16} className="flex-none text-muted" aria-hidden />
-              </Link>
-            ))}
-          </div>
+          // 날짜가 바뀌면 탭 선택도 새 날짜 기준으로 다시 잡히도록 key를 준다
+          // (App Router는 param만 바뀔 때 이 페이지를 리마운트하지 않는다).
+          <DayReadingTabs key={date} readings={readings} />
         ) : (
           <p className="mt-6 rounded-2xl border border-dashed border-line px-5 py-6 text-center text-[13.5px] text-muted lg:rounded-[14px]">
             이날의 리딩은 없어요. 그날의 마음만 남겨도 좋아요.
