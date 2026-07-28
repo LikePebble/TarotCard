@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import Link from "next/link";
 import { CaretRight } from "@phosphor-icons/react";
 import { CardArt } from "@/components/CardArt";
@@ -8,6 +8,7 @@ import { cardBySlug } from "@/data/cards";
 import { koCards } from "@/data/ko";
 import {
   activeReadingIndex,
+  orderedDayReadings,
   readingTabLabels,
   readingTypeLabel,
 } from "@/lib/day-readings";
@@ -22,18 +23,19 @@ export function DayReadingTabs({ readings }: { readings: ReadingRecord[] }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const index = activeReadingIndex(readings, selectedId);
-  const active = readings[index];
+  const ordered = orderedDayReadings(readings);
+  const index = activeReadingIndex(ordered.readings, selectedId);
+  const active = ordered.readings[index];
   if (!active) return null;
 
   // 탭 하나짜리 탭바는 군더더기다 — 리딩이 2개 이상일 때만 탭을 둔다.
-  const tabbed = readings.length > 1;
-  const labels = readingTabLabels(readings);
+  const tabbed = ordered.readings.length > 1;
+  const labels = readingTabLabels(ordered.readings);
   const panelId = "journal-reading-panel";
 
   const moveTab = (next: number) => {
-    const i = (next + readings.length) % readings.length;
-    setSelectedId(readings[i].id);
+    const i = (next + ordered.readings.length) % ordered.readings.length;
+    setSelectedId(ordered.readings[i].id);
     tabRefs.current[i]?.focus();
   };
 
@@ -49,7 +51,7 @@ export function DayReadingTabs({ readings }: { readings: ReadingRecord[] }) {
       moveTab(0);
     } else if (e.key === "End") {
       e.preventDefault();
-      moveTab(readings.length - 1);
+      moveTab(ordered.readings.length - 1);
     }
   };
 
@@ -62,27 +64,36 @@ export function DayReadingTabs({ readings }: { readings: ReadingRecord[] }) {
           onKeyDown={onKeyDown}
           className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0"
         >
-          {readings.map((r, i) => (
-            <button
-              key={r.id}
-              type="button"
-              role="tab"
-              ref={(el) => {
-                tabRefs.current[i] = el;
-              }}
-              id={`journal-reading-tab-${r.id}`}
-              aria-selected={i === index}
-              aria-controls={panelId}
-              tabIndex={i === index ? 0 : -1}
-              onClick={() => setSelectedId(r.id)}
-              className={`inline-flex min-h-11 flex-none items-center justify-center whitespace-nowrap rounded-full border px-4 text-[13px] transition-colors lg:text-[14px] ${
-                i === index
-                  ? "border-gold bg-ink-2 font-medium text-gold-soft"
-                  : "border-line text-muted hover:text-cream"
-              }`}
-            >
-              {labels[i]}
-            </button>
+          {ordered.readings.map((r, i) => (
+            <Fragment key={r.id}>
+              {/* 그룹 경계. bg-line은 칩 테두리와 같은 색이라 경계로 읽히지 않는다 —
+                  금선을 쓰고 위아래를 들여 칩 테두리와 구분되게 한다. */}
+              {i === ordered.oneCardCount && i > 0 ? (
+                <span
+                  aria-hidden
+                  className="mx-1.5 my-2 w-px flex-none self-stretch bg-line-gold"
+                />
+              ) : null}
+              <button
+                type="button"
+                role="tab"
+                ref={(el) => {
+                  tabRefs.current[i] = el;
+                }}
+                id={`journal-reading-tab-${r.id}`}
+                aria-selected={i === index}
+                aria-controls={panelId}
+                tabIndex={i === index ? 0 : -1}
+                onClick={() => setSelectedId(r.id)}
+                className={`inline-flex min-h-11 flex-none items-center justify-center whitespace-nowrap rounded-full border px-4 text-[13px] transition-colors lg:text-[14px] ${
+                  i === index
+                    ? "border-gold bg-ink-2 font-medium text-gold-soft"
+                    : "border-line text-muted hover:text-cream"
+                }`}
+              >
+                {labels[i]}
+              </button>
+            </Fragment>
           ))}
         </div>
       ) : null}
