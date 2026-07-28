@@ -8,7 +8,6 @@ import { CardBack } from "@/components/CardBack";
 import { cardBySlug } from "@/data/cards";
 import { focusLabelOf } from "@/data/focus";
 import { useSession } from "@/lib/auth/session";
-import { localDateOf } from "@/lib/period";
 import {
   blockingReading,
   setPendingSpread,
@@ -208,6 +207,8 @@ export function ReadingChoice() {
   const todayOnes =
     ticketsReady && store ? todayOneCardReadings(store.readings, now) : [];
   const oneExhausted = ticketsReady && tickets.remaining === 0;
+  // todayOneCardReadings는 뽑은 순으로 준다 — 마지막 원소가 가장 최근이다.
+  const lastOneToday = todayOnes[todayOnes.length - 1];
   const todayFaces: CardFace[] = todayOnes.map((r) => ({
     key: r.id,
     slug: r.cards[0],
@@ -224,12 +225,12 @@ export function ReadingChoice() {
       <TypeCard
         title="오늘의 카드"
         cadenceLabel="매일"
-        // 소진 상태에서는 "결과 보기"가 성립하지 않는다 — 오늘 받은 리딩이
-        // 여럿이라 그중 하나를 고를 근거가 없다. 그날 리딩을 전부 모아 보여
-        // 주는 그날의 일기로 보낸다.
+        // 소진 상태에서는 티켓제 이전과 같이 리딩 결과로 보낸다. 오늘 받은
+        // 리딩이 여럿이면 마지막에 받은 것을 연다 — 방금 본 것으로 돌아가는
+        // 쪽이 자연스럽고, 나머지는 이 패널에 카드로 이미 보이고 있다.
         note={
           oneExhausted
-            ? "오늘 받은 카드는 일기에 모여 있습니다 · 모아 보기"
+            ? "오늘의 흐름은 이미 받으셨습니다 · 결과 보기"
             : "한 장의 카드를 뽑아 오늘 하루 흐름을 살펴 보세요."
         }
         noteToned={oneExhausted}
@@ -243,10 +244,14 @@ export function ReadingChoice() {
         faces={todayFaces}
         // 티켓이 남았으면 뒷면 한 장을 덧붙여 "아직 뽑을 수 있다"를 카드 행에서도 보인다.
         pendingBacks={oneExhausted ? 0 : 1}
-        href={oneExhausted ? `/my/journal/${localDateOf(now)}` : undefined}
+        href={
+          oneExhausted && lastOneToday
+            ? `/reading/${lastOneToday.id}`
+            : undefined
+        }
         aria={
           oneExhausted
-            ? `오늘의 카드, 오늘 받은 카드 ${todayFaces.length}장 모아 보기`
+            ? "오늘의 카드 결과 보기"
             : todayFaces.length > 0
               ? `오늘의 카드, 오늘 ${todayFaces.length}장 받으셨습니다 · 새로 뽑기`
               : "오늘의 카드"
