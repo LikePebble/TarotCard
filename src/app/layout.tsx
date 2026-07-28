@@ -68,13 +68,16 @@ export const metadata: Metadata = {
         "1791e0af488a005563febe9dc474d108be5196de",
     },
   },
+  // og:url은 두지 않는다. canonical과 달리 Next가 페이지별로 다시 계산해 주지
+  // 않아, "/"로 두면 자체 openGraph가 없는 /reading·/collection·/my를 공유할 때
+  // og:url만 홈을 가리킨다. 없는 편이 틀린 것보다 낫다. 카드 상세는 스스로
+  // 정확한 url을 넣는다.
   openGraph: {
     type: "website",
     locale: "ko_KR",
     siteName: SITE_NAME,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    url: "/",
     images: [SITE_OG_IMAGE],
   },
   twitter: {

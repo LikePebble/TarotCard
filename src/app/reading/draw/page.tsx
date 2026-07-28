@@ -229,6 +229,29 @@ export default function DrawPage() {
     (slugs: string[], s: SpreadType, f: string) => {
       if (recordedRef.current) return;
       recordedRef.current = true;
+      // 기록 직전에 한 번 더 본다. 진입 시 검사는 이 탭이 열린 순간의 스토어만
+      // 봤으므로, 탭을 여러 개 미리 열어 두면 모두 available을 받은 뒤 차례로
+      // 기록해 하루 한도와 "같은 테마 재뽑기 불가"가 함께 뚫린다. 저장 직전에
+      // 최신 스토어로 다시 판정해 그 창을 닫는다.
+      const at = new Date();
+      const fresh = loadStore();
+      if (s === "one") {
+        const slot = slotState(fresh, "one", f, at, dailyTicketsFor(user !== null));
+        if (slot.state === "completed") {
+          router.replace(`/reading/${slot.readingId}`);
+          return;
+        }
+        if (slot.state === "exhausted") {
+          router.replace(`/my/journal/${localDateOf(at)}`);
+          return;
+        }
+      } else {
+        const blocked = blockingReading(fresh, "three", at);
+        if (blocked) {
+          router.replace(`/reading/${blocked.id}`);
+          return;
+        }
+      }
       const result = recordReading({
         spread: s,
         category: f,
@@ -239,7 +262,7 @@ export default function DrawPage() {
       });
       setReadingRecord(result.record);
     },
-    [deckId],
+    [deckId, router, user],
   );
 
   // Flow state must never depend solely on animation completion: rAF pauses
