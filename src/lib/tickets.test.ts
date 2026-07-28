@@ -4,6 +4,7 @@ import {
   DAILY_TICKETS_BASE,
   SIGNED_IN_BONUS,
   TICKET_BONUS_HINT,
+  TICKET_RESET_NOTE,
   dailyTicketsFor,
   ticketNoticeOf,
   ticketStateOf,
@@ -130,21 +131,39 @@ describe("ticketStateOf", () => {
 });
 
 describe("ticketNoticeOf", () => {
-  it("남은 장수를 알린다", () => {
+  it("남은 횟수를 알린다", () => {
     expect(ticketNoticeOf({ total: 2, used: 1, remaining: 1 })).toBe(
-      "오늘의 티켓 1장 남았습니다",
+      "오늘 1번 더 받으실 수 있습니다",
     );
   });
 
-  it("0장이면 소진 문구", () => {
+  it("0이면 모두 받으셨다고 알린다", () => {
     expect(ticketNoticeOf({ total: 2, used: 2, remaining: 0 })).toBe(
-      "오늘의 티켓을 모두 쓰셨습니다",
+      "오늘 받으실 수 있는 타로는 모두 받으셨습니다",
     );
+  });
+
+  // 하루 횟수를 재화처럼 부르지 않기로 했다. 문구가 다시 그쪽으로 돌아가지
+  // 않도록 고정한다.
+  it("재화 어휘를 쓰지 않는다", () => {
+    for (const s of [
+      { total: 2, used: 1, remaining: 1 },
+      { total: 2, used: 2, remaining: 0 },
+    ]) {
+      const notice = ticketNoticeOf(s);
+      for (const word of ["티켓", "소진", "차감", "쓰셨"]) {
+        expect(notice).not.toContain(word);
+      }
+    }
+    for (const word of ["티켓", "소진"]) {
+      expect(TICKET_RESET_NOTE).not.toContain(word);
+      expect(TICKET_BONUS_HINT).not.toContain(word);
+    }
   });
 });
 
 describe("TICKET_BONUS_HINT", () => {
-  it("보너스 장수를 상수에서 파생한다", () => {
-    expect(TICKET_BONUS_HINT).toContain(`${SIGNED_IN_BONUS}장 더`);
+  it("보너스 횟수를 상수에서 파생한다", () => {
+    expect(TICKET_BONUS_HINT).toContain(`${SIGNED_IN_BONUS}번 더`);
   });
 });

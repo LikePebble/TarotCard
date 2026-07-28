@@ -117,18 +117,19 @@ export default function FocusPage() {
               );
             }
 
-            // 티켓 소진. 상태를 흐림(색)만으로 두지 않고 문구로도 말한다.
+            // 오늘 더 받을 수 없는 주제. 상태를 흐림(색)만으로 두지 않고
+            // 문구로도 말하되, "소진"처럼 재화가 떨어진 말투는 쓰지 않는다.
             if (slot.state === "exhausted") {
               return (
                 <button
                   key={option.id}
                   type="button"
                   disabled
-                  aria-label={`${option.label}, 오늘의 티켓을 모두 쓰셨습니다`}
+                  aria-label={`${option.label}, 오늘은 여기까지입니다`}
                   className={`${row} cursor-not-allowed opacity-45`}
                 >
                   <span className={labelClass}>{option.label}</span>
-                  <span className={`${noteClass} text-muted`}>티켓 소진</span>
+                  <span className={`${noteClass} text-muted`}>오늘은 여기까지</span>
                 </button>
               );
             }

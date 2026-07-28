@@ -20,15 +20,18 @@ export const SIGNED_IN_BONUS = 1;
 
 /**
  * 소진 상태에서 회복 시점을 알리는 문구. 두 화면이 같은 말을 쓰도록 여기 둔다.
- * 앞 문장이 이미 "티켓"을 말하므로 주어를 되풀이하지 않는다.
+ *
+ * 문구에서 "티켓"이라는 말을 쓰지 않는다. 하루 횟수는 재화가 아니라 이 제품의
+ * 리듬이고, 차감·소진 같은 어휘를 앞세우면 성찰의 도구가 소모품처럼 읽힌다.
+ * 세는 일은 숫자에 맡기고, 말은 받는 쪽으로 한다.
  */
-export const TICKET_RESET_NOTE = "자정이 지나면 새로 채워집니다";
+export const TICKET_RESET_NOTE = "자정이 지나면 다시 열립니다";
 
 /**
  * 비로그인 사용자에게 보여 주는 로그인 유도 문구.
- * 장수는 상수에서 파생한다 — 지급량이 바뀌어도 문구가 거짓말을 하지 않게.
+ * 횟수는 상수에서 파생한다 — 지급량이 바뀌어도 문구가 거짓말을 하지 않게.
  */
-export const TICKET_BONUS_HINT = `로그인하시면 티켓을 매일 ${SIGNED_IN_BONUS}장 더 받으실 수 있습니다`;
+export const TICKET_BONUS_HINT = `로그인하시면 매일 ${SIGNED_IN_BONUS}번 더 받으실 수 있습니다`;
 
 export function dailyTicketsFor(signedIn: boolean): number {
   return DAILY_TICKETS_BASE + (signedIn ? SIGNED_IN_BONUS : 0);
@@ -66,9 +69,9 @@ export function ticketStateOf(
   return { total, used, remaining: Math.max(0, total - used) };
 }
 
-/** 잔량 안내 문구. */
+/** 잔량 안내 문구. TICKET_RESET_NOTE와 같은 이유로 "티켓"을 말하지 않는다. */
 export function ticketNoticeOf(state: TicketState): string {
   return state.remaining > 0
-    ? `오늘의 티켓 ${state.remaining}장 남았습니다`
-    : "오늘의 티켓을 모두 쓰셨습니다";
+    ? `오늘 ${state.remaining}번 더 받으실 수 있습니다`
+    : "오늘 받으실 수 있는 타로는 모두 받으셨습니다";
 }
