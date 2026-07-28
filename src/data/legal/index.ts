@@ -8,7 +8,7 @@ export type {
   LegalRevision,
   LegalSection,
 } from "./types";
-export { operator, operatorBullets, OPERATOR_TBD } from "./operator";
+export { operator, operatorBullets } from "./operator";
 export { termsDocument } from "./terms";
 export { privacyDocument } from "./privacy";
 

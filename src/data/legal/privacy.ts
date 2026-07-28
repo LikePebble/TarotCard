@@ -19,7 +19,7 @@ export const privacyDocument: LegalDocument = {
     {
       version: "0.10",
       effectiveDate: "2026-07-28",
-      summary: "탈퇴·기록 삭제 처리 기한(요청일부터 7일 이내)을 명시, 문의 이메일 기재",
+      summary: "탈퇴·기록 삭제 처리 기한(요청일부터 7일 이내)을 명시, 운영자 정보(이름·문의 이메일) 기재",
     },
     {
       version: "0.9",
