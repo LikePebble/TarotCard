@@ -157,6 +157,36 @@ describe("reconcileJournal", () => {
     expect(setLocalJournal).toHaveBeenCalledTimes(1);
   });
 
+  it("로그인 최초 병합은 같은 날짜에서 서버를 택한다", async () => {
+    vi.mocked(loadJournal).mockReturnValue({
+      "2026-07-28": entry("게스트로 쓴 글", "2026-07-28T09:00:00.000Z"),
+    });
+    vi.mocked(pullRemoteJournal).mockResolvedValue({
+      outcome: "ok",
+      data: {
+        "2026-07-28": entry("계정에 있던 글", "2026-07-28T01:00:00.000Z"),
+      },
+    });
+
+    await reconcileJournal("u1", () => false, { conflict: "remote" });
+    expect(setLocalJournal).toHaveBeenCalledWith({
+      "2026-07-28": entry("계정에 있던 글", "2026-07-28T01:00:00.000Z"),
+    });
+  });
+
+  it("갱신은 아직 올라가지 못한 로컬 글을 서버 옛 사본으로 덮지 않는다", async () => {
+    vi.mocked(loadJournal).mockReturnValue({
+      "2026-07-28": entry("방금 쓴 글", "2026-07-28T09:00:00.000Z"),
+    });
+    vi.mocked(pullRemoteJournal).mockResolvedValue({
+      outcome: "ok",
+      data: { "2026-07-28": entry("서버의 옛 사본", "2026-07-28T01:00:00.000Z") },
+    });
+
+    await reconcileJournal("u1", () => false, { conflict: "newer" });
+    expect(setLocalJournal).not.toHaveBeenCalled(); // 로컬이 이겨 바뀐 게 없다
+  });
+
   it("pull이 실패하면 prune 없이 올리기만 한다", async () => {
     vi.mocked(loadJournal).mockReturnValue({
       "2026-07-28": entry("메모", "2026-07-28T02:00:00.000Z"),

@@ -101,6 +101,50 @@ describe("mergeJournals", () => {
     expect(mergeJournals(local, remote)["2026-07-20"].body).toBe("로컬");
   });
 
+  /*
+   * 로그인 최초 병합(S3a "remote")과 이후 갱신(S3a "newer")은 같은 날짜가
+   * 양쪽에 있을 때만 갈린다. 갱신에서까지 서버를 우선하면, 방금 이 기기에서
+   * 쓰고 아직 올라가지 못한 글을 주기 갱신이 서버의 옛 사본으로 되돌린다.
+   */
+  describe('policy "remote" (로그인 최초 병합)', () => {
+    it("같은 날짜는 로컬이 더 최신이어도 서버를 택한다", () => {
+      const local: JournalStore = {
+        "2026-07-20": { body: "게스트로 쓴 글", updatedAt: "2026-07-20T09:00:00.000Z" },
+      };
+      const remote: JournalStore = {
+        "2026-07-20": { body: "계정에 있던 글", updatedAt: "2026-07-20T01:00:00.000Z" },
+      };
+      expect(mergeJournals(local, remote, "remote")["2026-07-20"].body).toBe(
+        "계정에 있던 글",
+      );
+    });
+
+    it("서버에 없는 날짜의 게스트 기록은 그대로 올라간다", () => {
+      const local: JournalStore = {
+        "2026-07-19": { body: "게스트만 쓴 날", updatedAt: "2026-07-19T09:00:00.000Z" },
+      };
+      const remote: JournalStore = {
+        "2026-07-20": { body: "계정에 있던 글", updatedAt: "2026-07-20T01:00:00.000Z" },
+      };
+      const merged = mergeJournals(local, remote, "remote");
+      expect(merged["2026-07-19"].body).toBe("게스트만 쓴 날");
+      expect(merged["2026-07-20"].body).toBe("계정에 있던 글");
+    });
+  });
+
+  it('policy "newer"는 기본값과 같다(로컬이 최신이면 로컬)', () => {
+    const local: JournalStore = {
+      "2026-07-20": { body: "방금 쓴 글", updatedAt: "2026-07-20T09:00:00.000Z" },
+    };
+    const remote: JournalStore = {
+      "2026-07-20": { body: "서버의 옛 사본", updatedAt: "2026-07-20T01:00:00.000Z" },
+    };
+    expect(mergeJournals(local, remote, "newer")["2026-07-20"].body).toBe(
+      "방금 쓴 글",
+    );
+    expect(mergeJournals(local, remote)["2026-07-20"].body).toBe("방금 쓴 글");
+  });
+
   it("빈 스토어끼리 병합하면 빈 스토어다", () => {
     expect(mergeJournals({}, {})).toEqual({});
   });

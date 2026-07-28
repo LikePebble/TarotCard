@@ -109,20 +109,31 @@ function startPush(): Promise<void> {
   return p;
 }
 
+/** 이 병합이 로그인 최초 병합인지, 그 이후의 갱신인지. */
+type ReconcileMode = "login" | "refresh";
+
 /**
  * 서버와 로컬을 양방향으로 맞춘다: pull → 병합 → push.
  *
  * 로그인 직후의 게스트 병합과 이후의 주기 갱신이 같은 경로를 쓴다 — 하는
  * 일이 같기 때문이다. 로그인 때만 이걸 돌리면 다른 기기의 기록은 재접속
  * 전까지 이 기기에 나타나지 않는다.
+ *
+ * 갈리는 것은 일기의 날짜 충돌 규칙 하나뿐이다(S3a).
  */
 async function reconcile(
   userId: string,
   isStale: () => boolean,
+  mode: ReconcileMode,
 ): Promise<"ok" | "failed" | "stale"> {
   const storeOutcome = await reconcileStore(userId, isStale);
   if (isStale()) return "stale";
-  const journal = await reconcileJournal(userId, isStale);
+  const journal = await reconcileJournal(userId, isStale, {
+    // 로그인 순간에는 계정에 쌓인 기록이 이 기기의 게스트 기록보다 우선한다.
+    // 이후 갱신에서까지 그러면, 방금 이 기기에서 쓰고 아직 올라가지 못한
+    // 글을 주기 갱신이 서버의 옛 사본으로 되돌린다.
+    conflict: mode === "login" ? "remote" : "newer",
+  });
   if (isStale()) return "stale";
   await pullRemoteEntitlements(isStale); // 엔타이틀먼트는 서버 권위 → pull만
   if (isStale()) return "stale";
@@ -136,7 +147,11 @@ async function reconcile(
  * reconcile을 "진행 중 작업"으로 등록해 실행한다.
  * onIncomplete는 중단(스테일)·예외로 아무것도 반영하지 못했을 때 불린다.
  */
-function runReconcile(userId: string, onIncomplete: () => void): Promise<void> {
+function runReconcile(
+  userId: string,
+  mode: ReconcileMode,
+  onIncomplete: () => void,
+): Promise<void> {
   const myEpoch = epoch;
   const isStale = () => epoch !== myEpoch;
   lastReconcileAt = Date.now();
@@ -146,7 +161,7 @@ function runReconcile(userId: string, onIncomplete: () => void): Promise<void> {
   setSyncState("syncing");
   const task = (async () => {
     try {
-      const result = await reconcile(userId, isStale);
+      const result = await reconcile(userId, isStale, mode);
       if (result === "stale") {
         onIncomplete();
         return;
@@ -199,7 +214,7 @@ export function refreshFromRemote(options: { force?: boolean } = {}): boolean {
   if (!options.force && now - lastReconcileAt < REFRESH_MIN_INTERVAL_MS) {
     return false;
   }
-  void runReconcile(userId, () => {});
+  void runReconcile(userId, "refresh", () => {});
   return true;
 }
 
@@ -233,7 +248,7 @@ export function setSyncUser(userId: string | null): void {
   currentUserId = userId;
   if (mergedFor === userId) return;
   mergedFor = userId;
-  void runReconcile(userId, () => releaseMerge(userId));
+  void runReconcile(userId, "login", () => releaseMerge(userId));
 }
 
 /**

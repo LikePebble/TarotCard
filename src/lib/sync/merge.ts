@@ -30,18 +30,36 @@ export function mergeStores(a: ArcanaStore, b: ArcanaStore): ArcanaStore {
 }
 
 /**
- * 일기 병합: 날짜별 last-write-wins(updatedAt 기준).
- * 동률이면 로컬을 택한다(로그인 이후 로컬이 권위).
- * updatedAt은 항상 ISO 문자열이라 사전식 비교 = 시간순 비교.
+ * 같은 날짜가 양쪽에 있을 때 무엇을 남길지 (S3a).
+ *
+ * - `"remote"` — 서버를 남긴다. **로그인 최초 병합**에서 쓴다. 계정에 쌓인
+ *   기록이 이 기기에 우연히 남아 있던 게스트 기록보다 사용자가 기대하는
+ *   "내 일기"에 가깝다.
+ * - `"newer"` — `updatedAt`이 최신인 쪽. 동률이면 로컬. **로그인 이후 갱신**에서
+ *   쓴다. 여기서까지 서버를 우선하면, 방금 이 기기에서 쓰고 아직 올라가지
+ *   못한 글을 주기 갱신이 서버의 옛 사본으로 되돌린다.
+ */
+export type JournalConflictPolicy = "remote" | "newer";
+
+/**
+ * 일기 병합. 한쪽에만 있는 날짜는 그대로 채택하고, 양쪽에 있는 날짜만
+ * policy로 가른다. updatedAt은 항상 ISO 문자열이라 사전식 비교 = 시간순 비교.
  */
 export function mergeJournals(
   local: JournalStore,
   remote: JournalStore,
+  policy: JournalConflictPolicy = "newer",
 ): JournalStore {
   const merged: JournalStore = { ...remote };
   for (const [date, entry] of Object.entries(local)) {
     const other = merged[date];
-    if (!other || entry.updatedAt >= other.updatedAt) merged[date] = entry;
+    if (!other) {
+      merged[date] = entry;
+      continue;
+    }
+    if (policy === "newer" && entry.updatedAt >= other.updatedAt) {
+      merged[date] = entry;
+    }
   }
   return merged;
 }

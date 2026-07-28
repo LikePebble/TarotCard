@@ -275,6 +275,7 @@ describe("pusher", () => {
     expect(mods.sync.reconcileJournal).toHaveBeenCalledWith(
       "u2",
       expect.any(Function),
+      { conflict: "remote" },
     );
   });
 
@@ -370,6 +371,33 @@ describe("refreshFromRemote", () => {
 
     gate.resolve("ok");
     await settle();
+  });
+
+  /*
+   * 로그인 순간에는 계정에 쌓인 기록이 이 기기의 게스트 기록보다 우선한다.
+   * 이후 갱신에서까지 서버를 우선하면, 방금 이 기기에서 쓰고 아직 올라가지
+   * 못한 글을 5분 주기 갱신이 서버의 옛 사본으로 되돌린다.
+   */
+  it("로그인 최초 병합은 일기 충돌에서 서버를 우선한다", async () => {
+    const { sync } = await loggedIn();
+    expect(sync.reconcileJournal).toHaveBeenCalledWith(
+      "u1",
+      expect.any(Function),
+      { conflict: "remote" },
+    );
+  });
+
+  it("이후 갱신은 최신 기록을 우선한다", async () => {
+    const { pusher, sync } = await loggedIn();
+    await vi.advanceTimersByTimeAsync(30_000);
+    pusher.refreshFromRemote();
+    await settle();
+
+    expect(sync.reconcileJournal).toHaveBeenLastCalledWith(
+      "u1",
+      expect.any(Function),
+      { conflict: "newer" },
+    );
   });
 
   it("대기 중이던 push 예약을 흡수한다", async () => {
