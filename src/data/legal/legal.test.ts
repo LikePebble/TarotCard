@@ -94,9 +94,12 @@ function hasHeading(doc: LegalDocument, fragment: string): boolean {
 }
 
 describe("이용약관", () => {
-  it("버전 0.9, 시행일 2026-07-28로 시작한다", () => {
-    expect(termsDocument.version).toBe("0.9");
-    expect(termsDocument.effectiveDate).toBe("2026-07-28");
+  // 버전 숫자를 박아 두면 개정할 때마다 이 테스트만 깨진다. 지켜야 할 것은
+  // 특정 숫자가 아니라 "본문의 시행 문구가 실제 버전·시행일과 같다"는 것이다.
+  it("부칙의 시행 문구가 실제 버전·시행일과 어긋나지 않는다", () => {
+    const body = bodyOf(termsDocument);
+    expect(body).toContain(`버전 ${termsDocument.version}`);
+    expect(body).toContain(formatLegalDate(termsDocument.effectiveDate));
   });
 
   it.each([
@@ -131,9 +134,10 @@ describe("이용약관", () => {
 });
 
 describe("개인정보처리방침", () => {
-  it("버전 0.9, 시행일 2026-07-28로 시작한다", () => {
-    expect(privacyDocument.version).toBe("0.9");
-    expect(privacyDocument.effectiveDate).toBe("2026-07-28");
+  it("부칙의 시행 문구가 실제 버전·시행일과 어긋나지 않는다", () => {
+    const body = bodyOf(privacyDocument);
+    expect(body).toContain(`버전 ${privacyDocument.version}`);
+    expect(body).toContain(formatLegalDate(privacyDocument.effectiveDate));
   });
 
   it.each([

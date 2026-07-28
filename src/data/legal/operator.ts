@@ -30,10 +30,13 @@ export const operator = {
    */
   operatorName: OPERATOR_TBD,
   /**
-   * 이용자 문의 이메일. 개인 메일을 그대로 노출하면 스팸 수집 대상이 되므로
-   * 서비스 전용 주소를 따로 두기를 권한다.
+   * 이용자 문의 이메일. 개인정보 열람·삭제 요구와 탈퇴 요청이 실제로 도착하는
+   * 창구이므로, 주기적으로 확인할 수 있는 주소여야 한다.
+   *
+   * 현재는 개인 메일을 쓰고 있다. 사이트에 공개되는 주소라 스팸 수집 대상이
+   * 되므로, 도메인 메일(contact@realm.ai.kr 등)이 준비되면 교체하기를 권한다.
    */
-  contactEmail: OPERATOR_TBD,
+  contactEmail: "rtsmna@hanmail.net",
 
   /**
    * 개인정보 보호책임자. 개인 운영이므로 운영자 본인이 겸한다.
