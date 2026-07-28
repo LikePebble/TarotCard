@@ -190,6 +190,10 @@ body {
   min-height: 52px;
   padding: 0 30px;
   cursor: pointer;
+  /* 라벨은 절대 접지 않는다. flex row에 여러 버튼이 나란히 설 때 기본값(normal)이면
+     칸이 좁아지는 만큼 "카드 자세히 / 보기"처럼 한국어 라벨이 두 줄로 쪼개진다.
+     nowrap이면 min-content가 라벨 전체 너비가 되어 flex가 그 아래로 줄이지 못한다. */
+  white-space: nowrap;
 }
 .btn-gold {
   background: var(--color-gold);
