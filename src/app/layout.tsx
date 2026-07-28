@@ -42,11 +42,14 @@ const SITE_NAME = "아르카 타로";
 const SITE_TITLE = "아르카 타로 — 하루 한 장, 나를 비추는 카드 78장";
 const SITE_DESCRIPTION =
   "78장의 타로 카드를 정방향과 역방향으로, 사랑·일·나 자신·건강·금전 다섯 가지 주제에 맞추어 한국어로 풀어냅니다. 오늘의 카드를 무료로 뽑고, 조용히 나를 돌아보는 시간을 가져 보세요.";
+// 공유 카드 전용 가로 이미지. 1200×630은 페이스북·X·카카오톡이 큰 카드로
+// 렌더하는 규격이다. 이전에 쓰던 덱 표지는 800×1360 세로라 가로 띠로 잘렸다.
+// webp 대신 jpg인 이유: 일부 메신저 크롤러가 webp 미리보기를 만들지 못한다.
 const SITE_OG_IMAGE = {
-  url: "/decks/wolha-biwon/deck-cover.webp",
-  width: 800,
-  height: 1360,
-  alt: "아르카 타로 월하비원 덱 표지",
+  url: "/brand/og-cover.jpg",
+  width: 1200,
+  height: 630,
+  alt: "아르카 타로 — 하루 한 장, 나를 비추는 카드",
 };
 
 export const metadata: Metadata = {
@@ -57,6 +60,14 @@ export const metadata: Metadata = {
   // 다시 계산해 준다(resolveAlternateUrl). 문자열 "/"를 쓰면 이 값이 하위 세그먼트로
   // 그대로 상속돼 모든 페이지의 canonical이 홈을 가리킨다.
   alternates: { canonical: new URL(SITE_URL) },
+  // 네이버 서치어드바이저 사이트 소유 확인. 구글은 GA 연동으로 확인하므로
+  // google 항목을 두지 않는다.
+  verification: {
+    other: {
+      "naver-site-verification":
+        "1791e0af488a005563febe9dc474d108be5196de",
+    },
+  },
   openGraph: {
     type: "website",
     locale: "ko_KR",
