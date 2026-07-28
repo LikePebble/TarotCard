@@ -50,10 +50,92 @@ export type AuthState = {
   devSession: boolean;
 };
 
+type AuthSnapshot = { user: SessionUser | null; loading: boolean };
+
+/** SSR·수화 시점의 값. 서버는 세션을 모르므로 항상 게스트에서 출발한다. */
+function guestSnapshot(): AuthSnapshot {
+  return { user: null, loading: isSupabaseConfigured };
+}
+
+/*
+ * 세션은 모듈 하나가 들고 훅은 구독만 한다.
+ *
+ * 훅 인스턴스마다 구독과 조회를 따로 내면 한 화면에서 컴포넌트 수만큼
+ * Auth 왕복이 생긴다(카드 상세 한 장에 SyncBridge·CollectHistory·
+ * CollectedCardNav·MarkCollectionCardSeen 넷이 동시에 붙는다).
+ *
+ * useSession은 이 스토어의 React 어댑터일 뿐이라, 스토어 쪽이 이 모듈의
+ * 시험 가능한 표면이다(이 리포는 React 컴포넌트를 유닛테스트하지 않는다).
+ */
+let snapshot: AuthSnapshot = guestSnapshot();
+const authSubscribers = new Set<() => void>();
+let authStarted = false;
+
+/** 지금까지 확정된 세션. 아직 조회 중이면 loading이 true다. */
+export function getAuthSnapshot(): AuthSnapshot {
+  return snapshot;
+}
+
+/** 세션 변경을 구독한다. 반환값을 호출하면 해지된다. */
+export function subscribeAuth(fn: () => void): () => void {
+  authSubscribers.add(fn);
+  return () => {
+    authSubscribers.delete(fn);
+  };
+}
+
+function emitAuth(): void {
+  for (const fn of [...authSubscribers]) {
+    try {
+      fn();
+    } catch (e) {
+      console.error("[auth] 구독자 오류:", e);
+    }
+  }
+}
+
+/**
+ * 새 세션을 반영한다. 사용자가 그대로면 **이전 객체를 그대로 둔다.**
+ *
+ * Supabase는 구독 즉시 INITIAL_SESSION을 쏘고 토큰 갱신·다른 탭의 로그인마다
+ * 이벤트를 또 보낸다. 그때마다 새 객체를 내려보내면 `[user]`에 걸린 effect가
+ * 전부 다시 도는데, SyncBridge의 경우 그것이 setSyncUser 재호출이 되어
+ * 진행 중인 서버 병합을 스테일로 만든다.
+ */
+function setSessionUser(next: SessionUser | null): void {
+  const sameUser = (next?.id ?? null) === (snapshot.user?.id ?? null);
+  const user = sameUser ? snapshot.user : next;
+  if (user === snapshot.user && !snapshot.loading) return;
+  snapshot = { user, loading: false };
+  emitAuth();
+}
+
+/** 세션 구독을 한 번만 시작한다. 클라이언트가 싱글턴이라 해지할 이유가 없다. */
+export function startAuth(): void {
+  if (authStarted) return;
+  authStarted = true;
+  const supabase = getBrowserSupabase();
+  if (!supabase) {
+    setSessionUser(null); // 미설정이면 로그인 자체가 없다. 즉시 게스트로 확정.
+    return;
+  }
+  /*
+   * getSession()은 로컬 저장소를 읽어 즉시 답하고, getUser()는 매번 Auth
+   * 서버를 왕복한다. 여기서 세션은 화면 표시와 "누구 것을 동기화할지"를
+   * 고르는 데만 쓰이고 실제 접근 통제는 서버의 RLS가 JWT로 판정하므로,
+   * 위조된 로컬 세션은 요청이 거절될 뿐 남의 데이터를 열지 못한다.
+   */
+  supabase.auth.getSession().then(({ data }) => {
+    setSessionUser(data.session?.user ?? null);
+  });
+  supabase.auth.onAuthStateChange((_event, session) => {
+    setSessionUser(session?.user ?? null);
+  });
+}
+
 /** 현재 세션 사용자. 미설정이면 항상 게스트(user=null). */
 export function useSession(): AuthState {
-  const [remoteUser, setRemoteUser] = useState<SessionUser | null>(null);
-  const [loading, setLoading] = useState(isSupabaseConfigured);
+  const [auth, setAuth] = useState<AuthSnapshot>(guestSnapshot);
   const [devSession, setDevSessionState] = useState(false);
 
   useEffect(() => {
@@ -64,26 +146,15 @@ export function useSession(): AuthState {
   }, []);
 
   useEffect(() => {
-    const supabase = getBrowserSupabase();
-    if (!supabase) return;
-    let active = true;
-    supabase.auth.getUser().then(({ data }) => {
-      if (!active) return;
-      setRemoteUser(data.user ?? null);
-      setLoading(false);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setRemoteUser(session?.user ?? null);
-    });
-    return () => {
-      active = false;
-      sub.subscription.unsubscribe();
-    };
+    startAuth();
+    const refresh = () => setAuth(getAuthSnapshot());
+    refresh(); // 이미 확정된 세션이 있으면 첫 수화 직후 바로 반영한다.
+    return subscribeAuth(refresh);
   }, []);
 
   return {
-    user: devSession ? DEV_USER : remoteUser,
-    loading: devSession ? false : loading,
+    user: devSession ? DEV_USER : auth.user,
+    loading: devSession ? false : auth.loading,
     configured: isSupabaseConfigured,
     devSession,
   };

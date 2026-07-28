@@ -1,12 +1,20 @@
 import { loadJournal } from "@/lib/journal";
 import { loadStore } from "@/lib/store";
 import { setSyncState } from "@/lib/sync/status";
-import { syncJournalOnLogin, syncOnLogin } from "@/lib/sync/sync";
+import { reconcileJournal, reconcileStore } from "@/lib/sync/sync";
 import { pullRemoteEntitlements } from "@/lib/sync/entitlements-remote";
 import { pushLocalJournal } from "@/lib/sync/journal-remote";
 import { pushLocalStore } from "@/lib/sync/remote";
 
 const DEBOUNCE_MS = 2000;
+
+/** 주기 갱신 간격. 탭이 보이는 동안에만 돈다. */
+export const REFRESH_INTERVAL_MS = 5 * 60_000;
+/**
+ * 갱신 최소 간격. 탭을 자주 오가도 왕복이 그만큼 늘지 않게 막는다.
+ * 네트워크 복귀처럼 지금 맞춰야 하는 경우는 force로 건너뛴다.
+ */
+const REFRESH_MIN_INTERVAL_MS = 30_000;
 
 /** 로그인 중인 사용자 id. 없으면 push 자체를 하지 않는다(게스트). */
 let currentUserId: string | null = null;
@@ -20,7 +28,7 @@ let pendingTimer: ReturnType<typeof setTimeout> | null = null;
  */
 let inFlight = 0;
 /**
- * 세션 세대. 진행 중인 로그인 병합은 await 중간에 멈출 수 없으므로,
+ * 세션 세대. 진행 중인 서버 병합은 await 중간에 멈출 수 없으므로,
  * 세션이 바뀌면 세대를 올려 뒤늦게 끝난 병합이 로컬을 되살리지 못하게 한다.
  */
 let epoch = 0;
@@ -35,10 +43,12 @@ let dirty = false;
  */
 let journalPullOk = false;
 /**
- * 진행 중인 동기화 작업(로그인 병합 또는 push). 로그아웃 flush가 push를 겹쳐
+ * 진행 중인 동기화 작업(서버 병합 또는 push). 로그아웃 flush가 push를 겹쳐
  * 띄우는 대신 이것을 기다리게 해서, 병합이 끝난 뒤에 로컬을 비우게 한다.
  */
 let activeSync: Promise<void> | null = null;
+/** 마지막으로 서버 병합을 시작한 시각. 갱신 간격을 재는 기준. */
+let lastReconcileAt = 0;
 
 function cancelPending() {
   if (pendingTimer !== null) {
@@ -54,6 +64,15 @@ function endSync() {
   if (inFlight > 0 || !dirty) return;
   dirty = false;
   schedulePush();
+}
+
+/**
+ * 이 사용자의 병합 완료 표시를 되돌린다. 중단된 병합은 아무것도 반영하지
+ * 못했으므로 다시 시도할 수 있어야 한다. 이미 다른 사용자로 넘어갔다면
+ * 그쪽 표시를 지우지 않는다.
+ */
+function releaseMerge(userId: string): void {
+  if (mergedFor === userId) mergedFor = null;
 }
 
 async function pushNow(): Promise<void> {
@@ -90,6 +109,64 @@ function startPush(): Promise<void> {
   return p;
 }
 
+/**
+ * 서버와 로컬을 양방향으로 맞춘다: pull → 병합 → push.
+ *
+ * 로그인 직후의 게스트 병합과 이후의 주기 갱신이 같은 경로를 쓴다 — 하는
+ * 일이 같기 때문이다. 로그인 때만 이걸 돌리면 다른 기기의 기록은 재접속
+ * 전까지 이 기기에 나타나지 않는다.
+ */
+async function reconcile(
+  userId: string,
+  isStale: () => boolean,
+): Promise<"ok" | "failed" | "stale"> {
+  const storeOutcome = await reconcileStore(userId, isStale);
+  if (isStale()) return "stale";
+  const journal = await reconcileJournal(userId, isStale);
+  if (isStale()) return "stale";
+  await pullRemoteEntitlements(isStale); // 엔타이틀먼트는 서버 권위 → pull만
+  if (isStale()) return "stale";
+  journalPullOk = journal.pullOk;
+  return storeOutcome === "failed" || journal.outcome === "failed"
+    ? "failed"
+    : "ok";
+}
+
+/**
+ * reconcile을 "진행 중 작업"으로 등록해 실행한다.
+ * onIncomplete는 중단(스테일)·예외로 아무것도 반영하지 못했을 때 불린다.
+ */
+function runReconcile(userId: string, onIncomplete: () => void): Promise<void> {
+  const myEpoch = epoch;
+  const isStale = () => epoch !== myEpoch;
+  lastReconcileAt = Date.now();
+  // 이 병합이 로컬 스냅샷을 다시 읽어 올리므로 대기 중인 push는 중복이다.
+  cancelPending();
+  inFlight += 1;
+  setSyncState("syncing");
+  const task = (async () => {
+    try {
+      const result = await reconcile(userId, isStale);
+      if (result === "stale") {
+        onIncomplete();
+        return;
+      }
+      setSyncState(result === "failed" ? "error" : "ok");
+    } catch (e) {
+      console.error("[sync] 서버 병합 실패:", e);
+      onIncomplete();
+      setSyncState("error");
+    } finally {
+      endSync();
+    }
+  })();
+  const tracked: Promise<void> = task.finally(() => {
+    if (activeSync === tracked) activeSync = null;
+  });
+  activeSync = tracked;
+  return tracked;
+}
+
 /** 2초 디바운스 push 예약. 게스트면 아무 일도 하지 않는다. */
 export function schedulePush(): void {
   const userId = currentUserId;
@@ -109,11 +186,36 @@ export function schedulePush(): void {
 }
 
 /**
+ * 서버 변경을 내려받아 로컬에 반영한다(탭 복귀·주기 갱신·네트워크 복귀).
+ * 실제로 시작했는지 돌려준다 — 호출자가 대안(예: push만)을 고를 수 있게.
+ *
+ * 진행 중인 동기화가 있으면 건너뛴다. 갱신은 놓치면 유실되는 변경이 아니라
+ * 다음 차례에 다시 하면 되는 일이다.
+ */
+export function refreshFromRemote(options: { force?: boolean } = {}): boolean {
+  const userId = currentUserId;
+  if (!userId || inFlight > 0) return false;
+  const now = Date.now();
+  if (!options.force && now - lastReconcileAt < REFRESH_MIN_INTERVAL_MS) {
+    return false;
+  }
+  void runReconcile(userId, () => {});
+  return true;
+}
+
+/**
  * 세션 전이를 알린다. 새 사용자로 로그인하면 게스트→계정 병합을 실행한다.
  * null(로그아웃)이면 대기 중 push를 버리고 상태를 초기화한다.
+ *
+ * 같은 사용자로 다시 알려오는 것은 전이가 아니다. Supabase는 구독 즉시
+ * INITIAL_SESSION을 쏘고 토큰 갱신마다 이벤트를 또 보내므로 한 로그인에
+ * 여러 번 불린다. 그때마다 세대를 올리면 진행 중인 병합이 자기 자신 때문에
+ * 스테일이 되어 pull 결과를 통째로 버린다.
  */
 export function setSyncUser(userId: string | null): void {
-  epoch += 1;
+  const changed = userId !== currentUserId;
+  if (changed) epoch += 1;
+
   if (!userId) {
     currentUserId = null;
     mergedFor = null;
@@ -127,35 +229,11 @@ export function setSyncUser(userId: string | null): void {
     return;
   }
   // 다른 계정으로 갈아탔다면 이전 계정 앞으로 잡아둔 예약은 버린다.
-  if (currentUserId !== userId) cancelPending();
+  if (changed) cancelPending();
   currentUserId = userId;
   if (mergedFor === userId) return;
   mergedFor = userId;
-  const myEpoch = epoch;
-  const isStale = () => epoch !== myEpoch;
-  const merge = (async () => {
-    inFlight += 1;
-    setSyncState("syncing");
-    try {
-      const storeOutcome = await syncOnLogin(userId, isStale);
-      const journal = await syncJournalOnLogin(userId, isStale);
-      await pullRemoteEntitlements(isStale); // 엔타이틀먼트는 서버 권위 → pull만
-      if (isStale()) return;
-      journalPullOk = journal.pullOk;
-      const failed = storeOutcome === "failed" || journal.outcome === "failed";
-      setSyncState(failed ? "error" : "ok");
-    } catch (e) {
-      console.error("[sync] 로그인 병합 실패:", e);
-      mergedFor = null; // 실패한 병합은 다음 세션 전이에서 다시 시도할 수 있어야 한다.
-      setSyncState("error");
-    } finally {
-      endSync();
-    }
-  })();
-  const tracked: Promise<void> = merge.finally(() => {
-    if (activeSync === tracked) activeSync = null;
-  });
-  activeSync = tracked;
+  void runReconcile(userId, () => releaseMerge(userId));
 }
 
 /**

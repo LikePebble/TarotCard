@@ -17,8 +17,8 @@ vi.mock("@/lib/sync/journal-remote", () => ({
   pushLocalJournal: vi.fn(async () => "ok"),
 }));
 vi.mock("@/lib/sync/sync", () => ({
-  syncOnLogin: vi.fn(async () => "ok"),
-  syncJournalOnLogin: vi.fn(async () => ({ outcome: "ok", pullOk: true })),
+  reconcileStore: vi.fn(async () => "ok"),
+  reconcileJournal: vi.fn(async () => ({ outcome: "ok", pullOk: true })),
 }));
 
 async function load() {
@@ -44,8 +44,8 @@ async function load() {
     outcome: "skipped",
   });
   vi.mocked(journalRemote.pushLocalJournal).mockResolvedValue("ok");
-  vi.mocked(sync.syncOnLogin).mockResolvedValue("ok");
-  vi.mocked(sync.syncJournalOnLogin).mockResolvedValue({
+  vi.mocked(sync.reconcileStore).mockResolvedValue("ok");
+  vi.mocked(sync.reconcileJournal).mockResolvedValue({
     outcome: "ok",
     pullOk: true,
   });
@@ -188,7 +188,7 @@ describe("pusher", () => {
 
   it("로그인 pull이 실패했으면 이후 push가 서버 행을 지우지 않는다", async () => {
     const mods = await load();
-    vi.mocked(mods.sync.syncJournalOnLogin).mockResolvedValue({
+    vi.mocked(mods.sync.reconcileJournal).mockResolvedValue({
       outcome: "failed",
       pullOk: false,
     });
@@ -222,11 +222,167 @@ describe("pusher", () => {
     pusher.setSyncUser("u1");
     pusher.setSyncUser("u1");
     await settle();
-    expect(sync.syncOnLogin).toHaveBeenCalledTimes(1);
+    expect(sync.reconcileStore).toHaveBeenCalledTimes(1);
 
     pusher.setSyncUser(null);
     pusher.setSyncUser("u1");
     await settle();
-    expect(sync.syncOnLogin).toHaveBeenCalledTimes(2);
+    expect(sync.reconcileStore).toHaveBeenCalledTimes(2);
+  });
+
+  /*
+   * Supabase는 한 번의 로그인에도 setSyncUser를 여러 번 부르게 만든다
+   * (구독 즉시 INITIAL_SESSION, 뒤이어 세션 조회 응답, 이후 토큰 갱신).
+   * 그 중복 통지가 진행 중인 병합을 스테일로 만들면 pull 결과가 통째로
+   * 버려지고, mergedFor 때문에 재시도도 되지 않는다.
+   */
+  it("같은 사용자로 다시 알려와도 진행 중인 병합을 스테일로 만들지 않는다", async () => {
+    const mods = await load();
+    let staleSeen: boolean | null = null;
+    vi.mocked(mods.sync.reconcileStore).mockImplementation(
+      async (_userId, isStale) => {
+        mods.pusher.setSyncUser("u1"); // 왕복 도중 도착한 중복 통지
+        staleSeen = isStale?.() ?? null;
+        return "ok";
+      },
+    );
+
+    mods.pusher.setSyncUser("u1");
+    await settle();
+
+    expect(staleSeen).toBe(false);
+    expect(mods.sync.reconcileStore).toHaveBeenCalledTimes(1);
+    expect(mods.sync.reconcileJournal).toHaveBeenCalledTimes(1);
+    expect(mods.status.getSyncStatus().state).toBe("ok");
+  });
+
+  it("다른 사용자로 갈아타면 진행 중인 병합을 스테일로 만든다", async () => {
+    const mods = await load();
+    let staleSeen: boolean | null = null;
+    vi.mocked(mods.sync.reconcileStore).mockImplementationOnce(
+      async (_userId, isStale) => {
+        mods.pusher.setSyncUser("u2");
+        staleSeen = isStale?.() ?? null;
+        return "ok";
+      },
+    );
+
+    mods.pusher.setSyncUser("u1");
+    await settle();
+
+    expect(staleSeen).toBe(true);
+    // u1 병합은 중단됐고, 대신 u2 병합이 돈다.
+    expect(mods.sync.reconcileJournal).toHaveBeenCalledWith(
+      "u2",
+      expect.any(Function),
+    );
+  });
+
+  it("로그아웃하면 진행 중인 병합을 스테일로 만든다", async () => {
+    const mods = await load();
+    let staleSeen: boolean | null = null;
+    vi.mocked(mods.sync.reconcileStore).mockImplementationOnce(
+      async (_userId, isStale) => {
+        mods.pusher.setSyncUser(null);
+        staleSeen = isStale?.() ?? null;
+        return "ok";
+      },
+    );
+
+    mods.pusher.setSyncUser("u1");
+    await settle();
+
+    expect(staleSeen).toBe(true);
+  });
+
+  it("병합이 예외로 끝나면 다음 통지에서 다시 시도한다", async () => {
+    const mods = await load();
+    vi.mocked(mods.sync.reconcileStore).mockRejectedValueOnce(
+      new Error("네트워크 끊김"),
+    );
+    vi.spyOn(console, "error").mockImplementation(() => {});
+
+    mods.pusher.setSyncUser("u1");
+    await settle();
+    expect(mods.status.getSyncStatus().state).toBe("error");
+
+    mods.pusher.setSyncUser("u1");
+    await settle();
+    expect(mods.sync.reconcileStore).toHaveBeenCalledTimes(2);
+    expect(mods.status.getSyncStatus().state).toBe("ok");
+  });
+});
+
+describe("refreshFromRemote", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("게스트면 아무 일도 하지 않는다", async () => {
+    const { pusher, sync } = await load();
+    expect(pusher.refreshFromRemote({ force: true })).toBe(false);
+    await settle();
+    expect(sync.reconcileStore).not.toHaveBeenCalled();
+  });
+
+  it("서버를 다시 읽어 로컬과 맞춘다", async () => {
+    const { pusher, sync } = await loggedIn();
+    expect(sync.reconcileStore).toHaveBeenCalledTimes(1);
+
+    await vi.advanceTimersByTimeAsync(30_000);
+    expect(pusher.refreshFromRemote()).toBe(true);
+    await settle();
+
+    expect(sync.reconcileStore).toHaveBeenCalledTimes(2);
+    expect(sync.reconcileJournal).toHaveBeenCalledTimes(2);
+  });
+
+  it("최소 간격 안에서는 건너뛴다", async () => {
+    const { pusher, sync } = await loggedIn();
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(pusher.refreshFromRemote()).toBe(false);
+    await settle();
+    expect(sync.reconcileStore).toHaveBeenCalledTimes(1);
+  });
+
+  it("force면 최소 간격을 무시한다(네트워크 복귀)", async () => {
+    const { pusher, sync } = await loggedIn();
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(pusher.refreshFromRemote({ force: true })).toBe(true);
+    await settle();
+    expect(sync.reconcileStore).toHaveBeenCalledTimes(2);
+  });
+
+  it("진행 중인 동기화가 있으면 건너뛴다", async () => {
+    const { pusher, remote, sync } = await loggedIn();
+    const gate = deferred<"ok">();
+    vi.mocked(remote.pushLocalStore).mockReturnValueOnce(gate.promise);
+
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(pusher.refreshFromRemote({ force: true })).toBe(false);
+    expect(sync.reconcileStore).toHaveBeenCalledTimes(1);
+
+    gate.resolve("ok");
+    await settle();
+  });
+
+  it("대기 중이던 push 예약을 흡수한다", async () => {
+    const { pusher, remote, sync } = await loggedIn();
+    await vi.advanceTimersByTimeAsync(30_000);
+
+    pusher.schedulePush(); // 2초 뒤 발화 예정
+    expect(pusher.refreshFromRemote()).toBe(true);
+    await vi.advanceTimersByTimeAsync(2000);
+    await settle();
+
+    // 갱신이 로컬 스냅샷을 다시 읽어 올리므로 예약돼 있던 push는 중복이다.
+    expect(sync.reconcileStore).toHaveBeenCalledTimes(2);
+    expect(remote.pushLocalStore).not.toHaveBeenCalled();
   });
 });
