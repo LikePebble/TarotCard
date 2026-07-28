@@ -22,9 +22,9 @@ import {
   catalogFilterOf,
   catalogCardUnlocked,
   catalogProgress,
-  type CatalogFilter,
   visibleCards,
 } from "@/lib/catalog-filter";
+import { cardDetailHref } from "@/lib/card-detail-nav";
 import { useUnreadCollection } from "@/lib/collection-unseen";
 import { useSession } from "@/lib/auth/session";
 import { collectionVisibility } from "@/lib/collection-access";
@@ -75,9 +75,6 @@ export default function DeckCatalogPage({
   const total = catalogProgress(owned, collectedSet, cards.length);
   const filter = catalogFilterOf(searchParams.get("filter")) ?? "major";
   const visible = visibleCards(cards, filter);
-  const selectFilter = (next: CatalogFilter) => {
-    router.replace(`/collection/${deck.id}?filter=${next}`, { scroll: false });
-  };
   const unreadSet =
     user === null ? new Set<string>() : unreadCollectionSet;
   const startReading = () => {
@@ -193,13 +190,18 @@ export default function DeckCatalogPage({
                 unreadSet.has(card.slug),
               );
               return (
-              <button
+              // 탭을 <a href>로 둔다. router.replace 핸들러만 있으면 크롤러가
+              // ?filter=cups 같은 다른 아르카나로 갈 길이 없어, 그리드에 걸린
+              // 나머지 56장의 카드 상세가 사이트 어디에서도 도달 불가가 된다.
+              // replace + scroll={false}로 기존 router.replace 거동을 그대로 둔다.
+              <Link
                 key={item.id}
-                type="button"
+                href={`/collection/${deck.id}?filter=${item.id}`}
+                replace
+                scroll={false}
                 role="tab"
                 aria-selected={filter === item.id}
-                onClick={() => selectFilter(item.id)}
-                className={`min-h-11 flex-none whitespace-nowrap rounded-full border px-4 text-[13px] lg:px-5 lg:text-[14px] ${
+                className={`inline-flex min-h-11 flex-none items-center justify-center whitespace-nowrap rounded-full border px-4 text-[13px] lg:px-5 lg:text-[14px] ${
                   filter === item.id
                     ? "border-gold text-gold-soft"
                     : "border-line text-muted hover:text-cream"
@@ -212,7 +214,7 @@ export default function DeckCatalogPage({
                     aria-label="새 카드 수집됨"
                   />
                 ) : null}
-              </button>
+              </Link>
               );
             })}
           </div>
@@ -247,10 +249,13 @@ export default function DeckCatalogPage({
                 </span>
               </p>
             );
+            // 아직 만나지 않은 카드는 상세로 들어갈 수 없다. 뒤집힌 카드를
+            // 눌러 해석이 다 보이면 수집이라는 행위 자체가 의미를 잃는다.
+            // 크롤러의 도달 경로는 sitemap.ts가 맡는다.
             return collected ? (
               <Link
                 key={card.slug}
-                href={`/collection/${deck.id}/${card.slug}?filter=${filter}`}
+                href={cardDetailHref(deck.id, card.slug, null, filter)}
                 className="group block"
                 aria-label={
                   unreadSet.has(card.slug)
@@ -268,7 +273,7 @@ export default function DeckCatalogPage({
                 {label}
               </Link>
             ) : (
-              <div key={card.slug}>
+              <div key={card.slug} aria-label={`${nameKo}, 아직 수집하지 않음`}>
                 <CardBack
                   deckId={deck.id}
                   sizes="(min-width: 1024px) 190px, 33vw"

@@ -9,7 +9,7 @@ import { MarkCollectionCardSeen } from "@/components/MarkCollectionCardSeen";
 import { DesktopNav } from "@/components/SiteNav";
 import { LoreSections } from "@/components/LoreSections";
 import { cardBySlug, cards, romanNumeral } from "@/data/cards";
-import { decks } from "@/data/decks";
+import { deckArtSrc, decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
 import { validReadingId } from "@/lib/card-detail-nav";
 import { catalogFilterOf, filterForCard } from "@/lib/catalog-filter";
@@ -30,18 +30,73 @@ export function generateStaticParams() {
     );
 }
 
+const SITE_URL = "https://arca.realm.ai.kr";
+// 루트 layout의 openGraph.siteName과 같은 값이어야 한다. 여기만 "아르카"로 두면
+// 같은 사이트가 공유 카드마다 다른 이름으로 보인다.
+const SITE_NAME = "아르카 타로";
+
+/**
+ * 해석문 앞부분을 검색결과 스니펫 길이로 자른다. 문장 중간에서 끊기지 않도록
+ * 마지막 문장 끝을 찾고, 그마저 없으면 어절 경계에서 자른다.
+ */
+function metaDescription(text: string, limit = 120): string {
+  const flat = text.replace(/\s+/g, " ").trim();
+  if (flat.length <= limit) return flat;
+  const window = flat.slice(0, limit);
+  const sentenceEnd = Math.max(
+    window.lastIndexOf("."),
+    window.lastIndexOf("!"),
+    window.lastIndexOf("?"),
+  );
+  if (sentenceEnd >= 40) return window.slice(0, sentenceEnd + 1);
+  const wordEnd = window.lastIndexOf(" ");
+  return `${(wordEnd >= 40 ? window.slice(0, wordEnd) : window).trimEnd()}…`;
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ deckId: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  const { deckId, slug } = await params;
   const card = cardBySlug.get(slug);
-  if (!card) return { title: "아르카 | Arca" };
+  const deck = decks.find((d) => d.id === deckId && d.active);
+  // title은 absolute로 둔다. 루트 layout에 title.template이 생기더라도
+  // 여기서 만든 완성형 제목 뒤에 접미사가 한 번 더 붙지 않게 하려는 것이다.
+  if (!card || !deck) return { title: { absolute: "아르카 | Arca" } };
   const nameKo = koCards[card.slug]?.nameKo ?? card.nameEn;
+  const description = metaDescription(
+    koCards[card.slug]?.description || card.en.description,
+  );
+  // 3개 덱은 아트만 다르고 해석 본문이 같다. 클래식을 정본으로 삼아
+  // 프리미엄 덱 156장과 ?filter=/?readingId= 변종을 한 URL로 모은다.
+  const canonical = `${SITE_URL}/collection/classic/${card.slug}`;
+  const title = `${nameKo} ${card.nameEn} 타로 카드 의미 · ${deck.nameKo} | 아르카`;
+  const image = {
+    url: `${SITE_URL}${deckArtSrc(deck.id, card)}`,
+    alt: `${deck.nameKo} ${nameKo} ${card.nameEn} 카드 아트`,
+  };
+
   return {
-    title: `${nameKo} ${card.nameEn} | 아르카`,
-    description: `${nameKo} 카드의 해석과 수집 이력을 확인하세요.`,
+    title: { absolute: title },
+    description,
+    alternates: { canonical },
+    openGraph: {
+      type: "article",
+      siteName: SITE_NAME,
+      title,
+      description,
+      url: canonical,
+      images: [image],
+    },
+    // twitter를 빼면 루트 layout의 트위터 태그를 그대로 상속한다. og는 이 카드인데
+    // 트위터 카드만 홈 제목·홈 이미지로 뜨는 어긋남이 생기므로 여기서 덮어쓴다.
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
   };
 }
 

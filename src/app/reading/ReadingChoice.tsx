@@ -6,14 +6,21 @@ import Link from "next/link";
 import { CardArt } from "@/components/CardArt";
 import { CardBack } from "@/components/CardBack";
 import { cardBySlug } from "@/data/cards";
+import { focusLabelOf } from "@/data/focus";
+import { useSession } from "@/lib/auth/session";
 import {
   blockingReading,
   setPendingSpread,
   useArcanaStore,
   useSelectedDeck,
-  type ReadingRecord,
   type SpreadType,
 } from "@/lib/store";
+import {
+  TICKET_BONUS_HINT,
+  ticketNoticeLinesOf,
+  ticketStateOf,
+} from "@/lib/tickets";
+import { todayOneCardReadings } from "@/lib/today-readings";
 import {
   isDevTools,
   resetCurrentReadings,
@@ -24,20 +31,45 @@ const panel =
   "flex w-full flex-col items-start gap-[18px] rounded-2xl border border-line bg-ink-1 p-6 text-left hover:border-line-gold lg:min-h-[330px] lg:justify-between lg:rounded-[14px] lg:p-10";
 
 /**
- * 리딩 유형 카드. 이번 주기에 이미 뽑았으면(blocked) 새로 시작하지 못하게
- * 하고 그 결과로 링크한다(리롤 방지). 아니면 유형을 골라 포커스 단계로 간다.
+ * 패널에 앞면으로 보여 줄 카드 한 장.
  *
- * blocked면 뒷면 대신 실제로 뽑은 카드(blocked.cards)를 보여준다 — 덱은 그때
- * 뽑을 때 쓴 blocked.deckId를 쓴다. 기본 덱을 바꿔도 실제로 받은 그림 그대로.
+ * deckId를 장마다 들고 다니는 이유: 덱은 그 리딩을 뽑을 때 쓴 것이어야 한다.
+ * 기본 덱을 바꿔도 실제로 받은 그림이 그대로 보여야 하고, "오늘의 카드"는
+ * 오늘 안에서도 장마다 덱이 다를 수 있다.
+ */
+type CardFace = {
+  key: string;
+  slug: string;
+  deckId: string;
+  /** 카드 아래 붙는 주제 이름. 없으면 라벨 없이 그림만 둔다(주 1회 유형). */
+  label?: string;
+};
+
+/**
+ * 리딩 유형 패널.
+ *
+ * href가 있으면 <Link>(이번 주기에 이미 뽑아 새로 시작할 수 없는 상태),
+ * 없으면 <button>(뽑기 가능)이다. 패널 전체가 하나의 조작 대상이므로 안에
+ * 링크나 버튼을 겹쳐 두지 않는다 — 카드 그림은 표시 전용이다.
+ *
+ * faces가 있으면 뒷면 대신 그 카드들을 앞면으로 보여 준다. 없으면 cardCount
+ * 만큼 뒷면을 깐다.
+ *
+ * ticketNote는 세 값을 구분한다: undefined면 티켓과 무관한 유형(주 1회)이라
+ * 자리를 아예 두지 않고, null이면 아직 확정 전이라 자리만 비워 두며(값이
+ * 바뀌며 깜빡이지 않게), 문자열이면 그대로 보여 준다.
  */
 function TypeCard({
   title,
   titleClass = "",
-  desc,
+  note,
+  noteToned,
   cadenceLabel,
-  blockedNote,
-  blocked,
-  ariaBase,
+  ticketNote,
+  faces,
+  pendingBacks = 0,
+  href,
+  aria,
   onStart,
   deckId,
   cardClassName,
@@ -46,40 +78,63 @@ function TypeCard({
 }: {
   title: string;
   titleClass?: string;
-  desc: string;
+  /** 설명문 또는 이미 받은 상태의 안내문. */
+  note: string;
+  /** 이미 받은 상태의 안내면 true — 설명문(muted)과 색을 가른다. */
+  noteToned: boolean;
   cadenceLabel: string;
-  blockedNote: string;
-  blocked: ReadingRecord | undefined;
-  ariaBase: string;
+  ticketNote?: string | null;
+  faces: CardFace[];
+  /** 받은 카드 뒤에 덧붙일 뒷면 수 — 아직 더 받을 수 있다는 표시. */
+  pendingBacks?: number;
+  href?: string;
+  aria: string;
   onStart: () => void;
   deckId: string;
   cardClassName: string;
   cardSizes: string;
   cardCount: number;
 }) {
-  const cardEls = blocked
-    ? blocked.cards.map((slug) => {
-        const card = cardBySlug.get(slug);
-        if (!card) return null;
-        // CardArt는 래퍼가 h-full w-full이라 크기 클래스를 직접 넘기면
-        // w-full과 충돌한다. CardBack과 달리 바깥에서 크기를 잡아 준다.
-        return (
-          <div
-            key={slug}
-            className={`relative overflow-hidden rounded-[12px] border border-line-gold ${cardClassName}`}
-          >
-            <CardArt card={card} deckId={blocked.deckId} sizes={cardSizes} />
-          </div>
-        );
-      })
-    : Array.from({ length: cardCount }, (_, i) => (
-        <CardBack
-          key={i}
-          deckId={deckId}
-          sizes={cardSizes}
-          className={cardClassName}
-        />
-      ));
+  const faceEls = faces.map((face) => {
+    const card = cardBySlug.get(face.slug);
+    if (!card) return null;
+    return (
+      <div
+        key={face.key}
+        className="flex flex-none flex-col items-center gap-1.5"
+      >
+        {/* CardArt는 래퍼가 h-full w-full이라 크기 클래스를 직접 넘기면
+            w-full과 충돌한다. CardBack과 달리 바깥에서 크기를 잡아 준다. */}
+        <div
+          className={`relative overflow-hidden rounded-[12px] border border-line-gold ${cardClassName}`}
+        >
+          <CardArt card={card} deckId={face.deckId} sizes={cardSizes} />
+        </div>
+        {face.label ? (
+          <span className="text-center text-[11px] text-muted lg:text-[12.5px]">
+            {face.label}
+          </span>
+        ) : null}
+      </div>
+    );
+  });
+
+  // 아직 아무것도 안 받았으면 이 유형이 몇 장짜리인지를 뒷면 수로 보여 준다.
+  // 이미 받은 게 있으면, 더 받을 수 있을 때만(pendingBacks) 뒷면을 덧붙인다.
+  // 받은 카드만 늘어놓으면 패널이 기록 표시처럼 보여, 아직 뽑을 수 있다는
+  // 사실이 문구에만 남고 카드 행에서는 사라진다.
+  const backCount = faces.length > 0 ? pendingBacks : cardCount;
+  const cardEls = [
+    ...faceEls,
+    ...Array.from({ length: backCount }, (_, i) => (
+      <CardBack
+        key={`back-${i}`}
+        deckId={deckId}
+        sizes={cardSizes}
+        className={cardClassName}
+      />
+    )),
+  ];
 
   const inner = (
     <>
@@ -96,31 +151,31 @@ function TypeCard({
         </div>
         <p
           className={`mt-1 text-[13.5px] lg:text-[15px] ${
-            blocked ? "text-gold-soft" : "text-muted lg:max-w-[300px]"
+            noteToned ? "text-gold-soft" : "text-muted lg:max-w-[300px]"
           }`}
         >
-          {blocked ? blockedNote : desc}
+          {note}
         </p>
+        {ticketNote === undefined ? null : ticketNote === null ? (
+          <p aria-hidden className="mt-1.5 min-h-[17px] lg:min-h-[19px]" />
+        ) : (
+          <p className="mt-1.5 min-h-[17px] whitespace-pre-line text-[12.5px] text-muted lg:min-h-[19px] lg:text-[13.5px]">
+            {ticketNote}
+          </p>
+        )}
       </div>
-      <div className="flex gap-1.5 lg:mt-7 lg:gap-2.5">{cardEls}</div>
+      <div className="flex items-start gap-1.5 lg:mt-7 lg:gap-2.5">
+        {cardEls}
+      </div>
     </>
   );
 
-  return blocked ? (
-    <Link
-      href={`/reading/${blocked.id}`}
-      aria-label={`${ariaBase} 결과 보기`}
-      className={panel}
-    >
+  return href ? (
+    <Link href={href} aria-label={aria} className={panel}>
       {inner}
     </Link>
   ) : (
-    <button
-      type="button"
-      onClick={onStart}
-      aria-label={ariaBase}
-      className={panel}
-    >
+    <button type="button" onClick={onStart} aria-label={aria} className={panel}>
       {inner}
     </button>
   );
@@ -129,6 +184,7 @@ function TypeCard({
 export function ReadingChoice() {
   const router = useRouter();
   const { store } = useArcanaStore();
+  const { user, loading } = useSession();
   const { deckId } = useSelectedDeck();
   const [now] = useState(() => new Date());
 
@@ -137,7 +193,27 @@ export function ReadingChoice() {
     router.push("/reading/focus");
   };
 
-  const blockedOne = store ? blockingReading(store, "one", now) : undefined;
+  // 티켓 수는 스토어(오늘 쓴 장수)와 세션(로그인 보너스 +1) 둘 다에 달려 있다.
+  // 둘 중 하나라도 정해지기 전에 그리면 "2장 → 3장"으로 값이 바뀌어 보이고,
+  // 소진 여부까지 뒤집힌다. JournalLink와 같은 방식으로 확정 전에는 티켓에
+  // 기대는 표시를 아예 내보내지 않는다.
+  const ticketsReady = store !== null && !loading;
+  const tickets = ticketStateOf(store, now, user !== null);
+
+  // 오늘 받은 "오늘의 카드"들. 오늘 쓴 티켓 수와 같은 스토어에서 파생되므로
+  // 티켓이 확정되기 전에는 함께 비워 둔다 — 카드만 먼저 나타났다가 티켓 문구가
+  // 뒤늦게 바뀌면 같은 사실을 두 번 다르게 말하는 꼴이 된다.
+  const todayOnes =
+    ticketsReady && store ? todayOneCardReadings(store.readings, now) : [];
+  const oneExhausted = ticketsReady && tickets.remaining === 0;
+  const todayFaces: CardFace[] = todayOnes.map((r) => ({
+    key: r.id,
+    slug: r.cards[0],
+    deckId: r.deckId,
+    label: focusLabelOf(r.category),
+  }));
+
+  // 과거·현재·미래는 주 1회라 티켓과 무관하다 — maxDailySlots를 넘기지 않는다.
   const blockedThree = store ? blockingReading(store, "three", now) : undefined;
   const gatingCount = gatingReadingCount(store);
 
@@ -146,10 +222,26 @@ export function ReadingChoice() {
       <TypeCard
         title="오늘의 카드"
         cadenceLabel="매일"
-        desc="한 장의 카드를 뽑아 오늘 하루 흐름을 살펴 보아요."
-        blockedNote="오늘의 흐름은 이미 받으셨어요 · 결과 보기"
-        blocked={blockedOne}
-        ariaBase="오늘의 카드"
+        // 소진이든 아니든 언제나 테마 선택 화면으로 보낸다. 그 화면이 테마마다
+        // 받음/받을 수 있음/티켓 소진을 이미 갈라 보여 주고, 받은 테마는 그
+        // 결과로 이어 준다. 여기서 리딩 하나를 골라 줄 이유가 없다.
+        note={
+          oneExhausted
+            ? "오늘의 흐름은 이미 받으셨습니다 · 다시 보기"
+            : "한 장의 카드를 뽑아 오늘 하루 흐름을 살펴 보세요."
+        }
+        noteToned={oneExhausted}
+        ticketNote={ticketsReady ? ticketNoticeLinesOf(tickets) : null}
+        faces={todayFaces}
+        // 티켓이 남았으면 뒷면 한 장을 덧붙여 "아직 뽑을 수 있다"를 카드 행에서도 보인다.
+        pendingBacks={oneExhausted ? 0 : 1}
+        aria={
+          oneExhausted
+            ? `오늘의 카드, 오늘 받으신 ${todayFaces.length}장 다시 보기`
+            : todayFaces.length > 0
+              ? `오늘의 카드, 오늘 ${todayFaces.length}장 받으셨습니다 · 새로 뽑기`
+              : "오늘의 카드"
+        }
         onStart={() => choose("one")}
         deckId={deckId}
         cardClassName="aspect-[2/3.4] w-[52px] lg:w-24"
@@ -161,16 +253,45 @@ export function ReadingChoice() {
         title="과거 · 현재 · 미래"
         titleClass="whitespace-nowrap"
         cadenceLabel="이번 주"
-        desc="세 장의 카드를 뽑아 과거와 현재, 미래의 운명을 읽어 보세요."
-        blockedNote="이번 주의 운명은 이미 받으셨어요 · 결과 보기"
-        blocked={blockedThree}
-        ariaBase="과거 현재 미래"
+        note={
+          blockedThree
+            ? "이번 주의 흐름은 이미 받으셨습니다 · 결과 보기"
+            : "세 장의 카드를 뽑아 과거와 현재, 미래의 흐름을 읽어 보세요."
+        }
+        noteToned={blockedThree !== undefined}
+        faces={
+          blockedThree
+            ? blockedThree.cards.map((slug, i) => ({
+                key: `${slug}-${i}`,
+                slug,
+                deckId: blockedThree.deckId,
+              }))
+            : []
+        }
+        href={blockedThree ? `/reading/${blockedThree.id}` : undefined}
+        aria={blockedThree ? "과거 현재 미래 결과 보기" : "과거 현재 미래"}
         onStart={() => choose("three")}
         deckId={deckId}
         cardClassName="aspect-[2/3.4] w-11 lg:w-[74px]"
         cardSizes="74px"
         cardCount={3}
       />
+
+      {/* 로그인 보너스 안내. 티켓이 확정되기 전에는 내보내지 않는다. 패널
+          자체가 button/Link라 카드 안에 링크를 넣을 수 없어 아래 줄로 뺀다. */}
+      {ticketsReady && user === null ? (
+        <Link
+          href="/login"
+          className="flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-line bg-ink-1 px-5 py-3.5 hover:border-line-gold lg:col-span-2 lg:rounded-[14px] lg:px-6"
+        >
+          <span className="text-[13px] text-muted lg:text-[14px]">
+            {TICKET_BONUS_HINT}
+          </span>
+          <span className="flex-none text-[13px] text-gold-soft lg:text-[14px]">
+            로그인
+          </span>
+        </Link>
+      ) : null}
 
       {isDevTools && gatingCount > 0 ? (
         <button

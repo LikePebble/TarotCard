@@ -43,6 +43,8 @@ export function CollectedCardNav({
   readingId: string | null;
   filter: CatalogFilter;
 }) {
+  // 수집한 카드 사이에서만 이동한다. 아직 만나지 않은 카드로 넘어가면
+  // 도감에서 뒷면을 눌러 들어가는 것과 같아져 수집의 의미가 사라진다.
   const { store } = useArcanaStore();
   const ent = useEntitlements();
   const { user } = useSession();

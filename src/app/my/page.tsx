@@ -92,6 +92,27 @@ export default function MyPage() {
 
           <AccountCard />
         </div>
+
+        <nav
+          aria-label="약관 및 정책"
+          className="mt-4 flex items-center justify-center gap-1 text-[12.5px] text-muted lg:mt-6 lg:text-[13.5px]"
+        >
+          <Link
+            href="/terms"
+            className="inline-flex min-h-11 items-center px-2 transition-colors hover:text-cream"
+          >
+            이용약관
+          </Link>
+          <span aria-hidden className="text-line">
+            ·
+          </span>
+          <Link
+            href="/privacy"
+            className="inline-flex min-h-11 items-center px-2 transition-colors hover:text-cream"
+          >
+            개인정보처리방침
+          </Link>
+        </nav>
       </motion.main>
       <TabBar />
     </div>

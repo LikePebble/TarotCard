@@ -1,15 +1,23 @@
 import type { Metadata, Viewport } from "next";
 import { Nanum_Myeongjo } from "next/font/google";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SyncBridge } from "@/components/SyncBridge";
 import "./globals.css";
 
+const SITE_URL = "https://arca.realm.ai.kr";
+
 // 본문 해석문(나눔명조). Google Fonts에서 로드.
+// preload:false — next/font가 한글 unicode-range 서브셋 93개를 전부 preload하면
+// 초기 페이로드에 약 2.8MB가 실린다. rel=preload는 unicode-range를 무시하므로
+// 브라우저의 지연 로딩이 무력화된다. display:"swap"과 함께 필요한 서브셋만 받게 둔다.
 const nanumMyeongjo = Nanum_Myeongjo({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-nanum-myeongjo",
   display: "swap",
+  preload: false,
 });
 
 // 타이틀(빛의 계승자체). KS X 1001 서브셋 self-host. 라이선스는 src/fonts/README.md.
@@ -30,10 +38,54 @@ const chosun = localFont({
   weight: "400",
 });
 
+const SITE_NAME = "아르카 타로";
+const SITE_TITLE = "아르카 타로 — 하루 한 장, 나를 비추는 카드 78장";
+const SITE_DESCRIPTION =
+  "78장의 타로 카드를 정방향과 역방향으로, 사랑·일·나 자신·건강·금전 다섯 가지 주제에 맞추어 한국어로 풀어냅니다. 오늘의 카드를 무료로 뽑고, 조용히 나를 돌아보는 시간을 가져 보세요.";
+// 공유 카드 전용 가로 이미지. 1200×630은 페이스북·X·카카오톡이 큰 카드로
+// 렌더하는 규격이다. 이전에 쓰던 덱 표지는 800×1360 세로라 가로 띠로 잘렸다.
+// webp 대신 jpg인 이유: 일부 메신저 크롤러가 webp 미리보기를 만들지 못한다.
+const SITE_OG_IMAGE = {
+  url: "/brand/og-cover.jpg",
+  width: 1200,
+  height: 630,
+  alt: "아르카 타로 — 하루 한 장, 나를 비추는 카드",
+};
+
 export const metadata: Metadata = {
-  title: "아르카 | Arca",
-  description:
-    "하루 한 장, 나를 비추는 카드. 카드를 뽑고 해석을 읽으며 78장의 컬렉션을 완성해 보세요.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  // URL 인스턴스로 두면 next/font가 아닌 metadata 리졸버가 각 페이지의 pathname으로
+  // 다시 계산해 준다(resolveAlternateUrl). 문자열 "/"를 쓰면 이 값이 하위 세그먼트로
+  // 그대로 상속돼 모든 페이지의 canonical이 홈을 가리킨다.
+  alternates: { canonical: new URL(SITE_URL) },
+  // 네이버 서치어드바이저 사이트 소유 확인. 구글은 GA 연동으로 확인하므로
+  // google 항목을 두지 않는다.
+  verification: {
+    other: {
+      "naver-site-verification":
+        "1791e0af488a005563febe9dc474d108be5196de",
+    },
+  },
+  // og:url은 두지 않는다. canonical과 달리 Next가 페이지별로 다시 계산해 주지
+  // 않아, "/"로 두면 자체 openGraph가 없는 /reading·/collection·/my를 공유할 때
+  // og:url만 홈을 가리킨다. 없는 편이 틀린 것보다 낫다. 카드 상세는 스스로
+  // 정확한 url을 넣는다.
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [SITE_OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [SITE_OG_IMAGE],
+  },
 };
 
 export const viewport: Viewport = {
@@ -53,6 +105,8 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <SyncBridge />
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

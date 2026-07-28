@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { cardDetailHref } from "@/lib/card-detail-nav";
+import { ShareCardButton } from "@/components/ShareCardButton";
 import { JournalLink } from "./JournalLink";
 
 /**
@@ -32,6 +33,7 @@ export function ResultActions({
       <Link href="/collection" className="btn btn-ghost w-full lg:w-auto">
         컬렉션 보기
       </Link>
+      <ShareCardButton deckId={deckId} slug={slug} />
       {localDate ? <JournalLink localDate={localDate} /> : null}
     </>
   );
