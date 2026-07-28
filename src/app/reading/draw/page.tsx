@@ -12,12 +12,16 @@ import { cards, type Card } from "@/data/cards";
 import { focusLabelOf } from "@/data/focus";
 import { fanStackOrder } from "@/lib/draw-fan";
 import { pickOrientations, secureRand } from "@/lib/orientation";
+import { useSession } from "@/lib/auth/session";
+import { localDateOf } from "@/lib/period";
+import { dailyTicketsFor } from "@/lib/tickets";
 import {
   blockingReading,
   getPendingFocus,
   getPendingSpread,
   loadStore,
   recordReading,
+  slotState,
   useSelectedDeck,
   type ReadingRecord,
   type SpreadType,
@@ -91,6 +95,7 @@ export default function DrawPage() {
   const router = useRouter();
   const reducedMotion = useReducedMotion();
   const { deckId } = useSelectedDeck();
+  const { user, loading } = useSession();
   const [ready, setReady] = useState(false);
   const [spread, setSpread] = useState<SpreadType>("one");
   const [focus, setFocus] = useState("");
@@ -105,6 +110,9 @@ export default function DrawPage() {
   const [shuffleCycles, setShuffleCycles] = useState(2);
   const [readingRecord, setReadingRecord] = useState<ReadingRecord | null>(null);
   const recordedRef = useRef(false);
+  // 진입 판정은 한 번만. 세션(user)이 뒤늦게 바뀌어도 뽑는 도중에 다시 셔플되면
+  // 안 된다.
+  const initRef = useRef(false);
   const watchdogRef = useRef<number | null>(null);
   const timersRef = useRef<number[]>([]);
   const hasShuffledRef = useRef(false);
@@ -166,23 +174,56 @@ export default function DrawPage() {
   );
 
   useEffect(() => {
+    if (initRef.current) return;
     const pendingSpread = getPendingSpread();
     const pendingFocus = getPendingFocus();
     if (!pendingSpread || !pendingFocus) {
       router.replace("/reading");
       return;
     }
-    // 이미 이번 주기에 뽑았으면(뒤로가기·직접 진입 등) 재기록을 막고 결과로 보낸다.
-    const blocked = blockingReading(loadStore(), pendingSpread, new Date());
-    if (blocked) {
-      router.replace(`/reading/${blocked.id}`);
-      return;
+    // 이미 이번 주기에 뽑았으면(뒤로가기·직접 진입 등) 재기록을 막고 보낸다.
+    const store = loadStore();
+    const at = new Date();
+    if (pendingSpread === "one") {
+      // 티켓이 여러 장인 지금은 blockingReading만으로 부족하다 — 티켓이 남아
+      // 있으면 같은 테마를 오늘 또 뽑아 기록하게 된다. 테마 단위로 보는
+      // slotState가 completed(리롤)와 exhausted(티켓 소진)를 갈라 준다.
+      const slot = slotState(
+        store,
+        "one",
+        pendingFocus,
+        at,
+        dailyTicketsFor(user !== null),
+      );
+      if (slot.state === "completed") {
+        router.replace(`/reading/${slot.readingId}`);
+        return;
+      }
+      // 세션 조회 중이면 로그인 보너스(+1)를 아직 모른다. 그 한 장이 판정을
+      // 가르는 경우는 exhausted뿐이므로(completed는 티켓과 무관하고,
+      // available은 보너스가 붙어도 available이다) 그때만 기다린다. 세션이
+      // 끝내 응답하지 않아도 뽑기 화면이 통째로 멈추지 않는다.
+      if (loading && slot.state === "exhausted") return;
+      if (slot.state === "exhausted") {
+        // 오늘 받은 리딩이 여럿이라 "그 결과"를 하나로 지목할 수 없다.
+        // 그날 리딩이 전부 모여 있는 그날의 일기로 보낸다.
+        router.replace(`/my/journal/${localDateOf(at)}`);
+        return;
+      }
+    } else {
+      // 과거·현재·미래는 주 1회. 티켓과 무관하므로 케이던스만 본다.
+      const blocked = blockingReading(store, "three", at);
+      if (blocked) {
+        router.replace(`/reading/${blocked.id}`);
+        return;
+      }
     }
+    initRef.current = true;
     setSpread(pendingSpread);
     setFocus(pendingFocus);
     setup();
     setReady(true);
-  }, [router, setup]);
+  }, [router, setup, loading, user]);
 
   const record = useCallback(
     (slugs: string[], s: SpreadType, f: string) => {
