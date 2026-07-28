@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
+import { markLoginPending } from "@/lib/analytics";
 import { getBrowserSupabase, isSupabaseConfigured } from "@/lib/supabase/client";
 import { clearLocalEntitlements } from "@/lib/entitlements";
 import { clearLocalJournal } from "@/lib/journal";
@@ -34,6 +35,8 @@ export function setDevSession(enabled: boolean): void {
   } catch {
     // storage가 막혀도 실제 로그인 흐름은 영향을 받지 않는다.
   }
+  // 실제 OAuth와 같은 표식을 남긴다 — 로그인 완료 계측이 한 경로만 보게.
+  if (enabled) markLoginPending("development");
   notifyLocal("auth");
 }
 
@@ -92,6 +95,11 @@ export async function signInWithProvider(
 ): Promise<void> {
   const supabase = getBrowserSupabase();
   if (!supabase) return;
+  // OAuth는 외부 사이트를 다녀오는 전체 페이지 이동이라, 이 문서에서 완료를
+  // 관측할 수 없다(/auth/callback도 서버 라우트라 gtag가 없다). 시도를
+  // sessionStorage에 남겨 두고, 돌아온 문서에서 세션이 확정되는 순간
+  // SyncBridge가 표식을 회수하며 login_completed를 보낸다.
+  markLoginPending(provider);
   const { error } = await supabase.auth.signInWithOAuth({
     provider,
     options: { redirectTo: `${window.location.origin}/auth/callback` },

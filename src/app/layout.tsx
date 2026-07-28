@@ -1,9 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Nanum_Myeongjo } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SyncBridge } from "@/components/SyncBridge";
+import { ADSENSE_CLIENT, GA_ID } from "@/lib/analytics";
 import "./globals.css";
 
 const SITE_URL = "https://arca.realm.ai.kr";
@@ -68,6 +71,11 @@ export const metadata: Metadata = {
         "1791e0af488a005563febe9dc474d108be5196de",
     },
   },
+  // AdSense 사이트 소유 확인용 메타. 게시자 ID가 없으면 other 자체를 두지 않아
+  // 태그가 한 줄도 나가지 않는다(빈 content로 남으면 심사에서 오히려 걸린다).
+  ...(ADSENSE_CLIENT
+    ? { other: { "google-adsense-account": ADSENSE_CLIENT } }
+    : {}),
   // og:url은 두지 않는다. canonical과 달리 Next가 페이지별로 다시 계산해 주지
   // 않아, "/"로 두면 자체 openGraph가 없는 /reading·/collection·/my를 공유할 때
   // og:url만 홈을 가리킨다. 없는 편이 틀린 것보다 낫다. 카드 상세는 스스로
@@ -107,6 +115,21 @@ export default function RootLayout({
         {children}
         <Analytics />
         <SpeedInsights />
+        {/* GA4. 측정 ID가 없으면 스크립트도 dataLayer도 만들지 않는다.
+            @next/third-parties는 Next 15가 권장하는 경로로, 스크립트 로딩
+            전략(afterInteractive)과 라우트 변경 시 page_view 전송을 대신 맡는다. */}
+        {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
+        {/* AdSense 라이브러리. 심사 신청 시점에 사이트에 스니펫이 있어야 해서
+            미리 넣지만, 게시자 ID가 없으면 렌더하지 않는다. 슬롯 배치는 여기서
+            하지 않는다 — 광고 단위는 별도 컴포넌트의 몫이다. */}
+        {ADSENSE_CLIENT ? (
+          <Script
+            id="adsbygoogle-init"
+            strategy="afterInteractive"
+            crossOrigin="anonymous"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+          />
+        ) : null}
       </body>
     </html>
   );

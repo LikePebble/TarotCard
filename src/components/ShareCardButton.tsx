@@ -4,6 +4,7 @@ import { ShareNetwork } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { koCards } from "@/data/ko";
 import { cardBySlug } from "@/data/cards";
+import { track, type ShareSurface } from "@/lib/analytics";
 import { cardSharePayload, runShare, shareNoticeOf } from "@/lib/share";
 
 /**
@@ -39,10 +40,13 @@ export function ShareCardButton({
   slug,
   // .btn은 inline-flex지만 gap이 없다. 아이콘과 글자가 붙지 않게 여기서 준다.
   className = "btn btn-ghost w-full gap-1.5 lg:w-auto",
+  surface = "reading_result",
 }: {
   deckId: string;
   slug: string;
   className?: string;
+  /** 이 버튼이 놓인 화면. 계측에서 자리를 구분하는 데만 쓴다. */
+  surface?: ShareSurface;
 }) {
   const [notice, setNotice] = useState<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -64,12 +68,18 @@ export function ShareCardButton({
       nameKo,
       card.nameEn,
     );
-    const message = shareNoticeOf(await runShare(navigator, payload, legacyCopy));
+    const outcome = await runShare(navigator, payload, legacyCopy);
+    // 결말까지 한 건에 담는다. 누른 횟수는 outcome을 합치면 나오고, 이렇게
+    // 두면 "눌렀지만 공유되지 않은" 비율을 GA에서 바로 갈라 볼 수 있다.
+    // 클릭 시점과 결말 시점에 각각 보내면 시트를 열어 둔 채 이탈한 경우가
+    // 두 이벤트 사이에 끼어 계산이 어긋난다.
+    track("share_clicked", { surface, outcome, deck_id: deckId });
+    const message = shareNoticeOf(outcome);
     if (!message) return;
     setNotice(message);
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => setNotice(null), 2400);
-  }, [deckId, slug]);
+  }, [deckId, slug, surface]);
 
   return (
     <>

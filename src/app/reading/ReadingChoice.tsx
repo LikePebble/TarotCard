@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ticketsExhaustedKey, track, trackOnce } from "@/lib/analytics";
 import { CardArt } from "@/components/CardArt";
 import { CardBack } from "@/components/CardBack";
 import { cardBySlug } from "@/data/cards";
@@ -189,6 +190,7 @@ export function ReadingChoice() {
   const [now] = useState(() => new Date());
 
   const choose = (spread: SpreadType) => {
+    track("reading_start", { spread });
     setPendingSpread(spread);
     router.push("/reading/focus");
   };
@@ -216,6 +218,18 @@ export function ReadingChoice() {
   // 과거·현재·미래는 주 1회라 티켓과 무관하다 — maxDailySlots를 넘기지 않는다.
   const blockedThree = store ? blockingReading(store, "three", now) : undefined;
   const gatingCount = gatingReadingCount(store);
+
+  // 소진 안내가 실제로 화면에 나온 순간에만 계측한다. oneExhausted는
+  // ticketsReady(스토어 + 세션 확정)를 이미 포함하므로, 마운트 직후의 잠정
+  // 상태(store=null → used=0)로 잘못 나갈 일이 없다. trackOnce의 키는 날짜
+  // 단위라 같은 탭에서 리렌더·재방문·주제 선택 화면까지 통틀어 하루 한 번이다.
+  useEffect(() => {
+    if (!oneExhausted) return;
+    trackOnce(ticketsExhaustedKey(now), "tickets_exhausted", {
+      surface: "reading_choice",
+      spread: "one",
+    });
+  }, [oneExhausted, now]);
 
   return (
     <div className="mt-[18px] flex flex-col gap-[18px] lg:mt-12 lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-5">
