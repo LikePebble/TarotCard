@@ -17,8 +17,7 @@ import {
 } from "@/lib/store";
 import {
   TICKET_BONUS_HINT,
-  TICKET_RESET_NOTE,
-  ticketNoticeOf,
+  ticketNoticeLinesOf,
   ticketStateOf,
 } from "@/lib/tickets";
 import { todayOneCardReadings } from "@/lib/today-readings";
@@ -160,7 +159,7 @@ function TypeCard({
         {ticketNote === undefined ? null : ticketNote === null ? (
           <p aria-hidden className="mt-1.5 min-h-[17px] lg:min-h-[19px]" />
         ) : (
-          <p className="mt-1.5 min-h-[17px] text-[12.5px] text-muted lg:min-h-[19px] lg:text-[13.5px]">
+          <p className="mt-1.5 min-h-[17px] whitespace-pre-line text-[12.5px] text-muted lg:min-h-[19px] lg:text-[13.5px]">
             {ticketNote}
           </p>
         )}
@@ -232,13 +231,7 @@ export function ReadingChoice() {
             : "한 장의 카드를 뽑아 오늘 하루 흐름을 살펴 보세요."
         }
         noteToned={oneExhausted}
-        ticketNote={
-          ticketsReady
-            ? tickets.remaining > 0
-              ? ticketNoticeOf(tickets)
-              : `${ticketNoticeOf(tickets)} · ${TICKET_RESET_NOTE}`
-            : null
-        }
+        ticketNote={ticketsReady ? ticketNoticeLinesOf(tickets) : null}
         faces={todayFaces}
         // 티켓이 남았으면 뒷면 한 장을 덧붙여 "아직 뽑을 수 있다"를 카드 행에서도 보인다.
         pendingBacks={oneExhausted ? 0 : 1}

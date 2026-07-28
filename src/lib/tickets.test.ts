@@ -6,6 +6,7 @@ import {
   TICKET_BONUS_HINT,
   TICKET_RESET_NOTE,
   dailyTicketsFor,
+  ticketNoticeLinesOf,
   ticketNoticeOf,
   ticketStateOf,
 } from "@/lib/tickets";
@@ -159,6 +160,20 @@ describe("ticketNoticeOf", () => {
       expect(TICKET_RESET_NOTE).not.toContain(word);
       expect(TICKET_BONUS_HINT).not.toContain(word);
     }
+  });
+});
+
+describe("ticketNoticeLinesOf", () => {
+  it("남아 있으면 회복 안내를 붙이지 않는다", () => {
+    const s = { total: 2, used: 1, remaining: 1 };
+    expect(ticketNoticeLinesOf(s)).toBe(ticketNoticeOf(s));
+  });
+
+  it("소진이면 마침표로 끊고 회복 안내를 다음 줄에 둔다", () => {
+    const lines = ticketNoticeLinesOf({ total: 2, used: 2, remaining: 0 }).split("\n");
+    expect(lines).toHaveLength(2);
+    expect(lines[0]).toBe("오늘 받으실 수 있는 타로는 모두 받으셨습니다.");
+    expect(lines[1]).toBe(TICKET_RESET_NOTE);
   });
 });
 

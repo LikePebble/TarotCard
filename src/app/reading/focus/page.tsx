@@ -16,8 +16,7 @@ import {
   type SpreadType,
 } from "@/lib/store";
 import {
-  TICKET_RESET_NOTE,
-  ticketNoticeOf,
+  ticketNoticeLinesOf,
   ticketStateOf,
 } from "@/lib/tickets";
 
@@ -81,12 +80,8 @@ export default function FocusPage() {
         {usesTickets ? (
           // 자리는 늘 잡아 두고 문구만 채운다 — 확정되는 순간 목록이 밀려
           // 내려가지 않게.
-          <p className="mt-2.5 min-h-[19px] text-[13px] text-muted lg:mt-3.5 lg:text-[14px]">
-            {ticketsReady
-              ? tickets.remaining > 0
-                ? ticketNoticeOf(tickets)
-                : `${ticketNoticeOf(tickets)} · ${TICKET_RESET_NOTE}`
-              : ""}
+          <p className="mt-2.5 min-h-[19px] whitespace-pre-line text-[13px] text-muted lg:mt-3.5 lg:text-[14px]">
+            {ticketsReady ? ticketNoticeLinesOf(tickets) : ""}
           </p>
         ) : null}
         <div className="mt-[22px] min-h-[330px] border-t border-line lg:mt-10">

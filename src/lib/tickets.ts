@@ -75,3 +75,14 @@ export function ticketNoticeOf(state: TicketState): string {
     ? `오늘 ${state.remaining}번 더 받으실 수 있습니다`
     : "오늘 받으실 수 있는 타로는 모두 받으셨습니다";
 }
+
+/**
+ * 화면에 실을 안내 전문. 소진일 때만 회복 시점을 덧붙이고, 두 문장은 줄을
+ * 나눈다 — 한 줄로 이으면 가운뎃점 뒤가 앞 문장의 조건처럼 붙어 읽힌다.
+ * 개행을 살리려면 보여 주는 쪽에 whitespace-pre-line이 있어야 한다.
+ */
+export function ticketNoticeLinesOf(state: TicketState): string {
+  return state.remaining > 0
+    ? ticketNoticeOf(state)
+    : `${ticketNoticeOf(state)}.\n${TICKET_RESET_NOTE}`;
+}
