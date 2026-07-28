@@ -94,10 +94,15 @@ merge한 뒤, 새 `main` SHA의 Production status도 별도로 `success`가 될 
 curl -I https://arcatarot.vercel.app/
 curl -I https://arcatarot.vercel.app/decks/wolha-biwon/deck-cover.webp
 curl -I https://arcatarot.vercel.app/decks/k-pop-museverse/deck-cover.webp
+curl -I https://arcatarot.vercel.app/brand/og-cover.jpg
+curl -sI https://arcatarot.vercel.app/robots.txt | head -1
+curl -s https://arcatarot.vercel.app/sitemap.xml | grep -c '<loc>'
 ```
 
-- 홈은 HTTP 200이고 메타데이터가 `아르카 | Arca`다.
+- 홈은 HTTP 200이고 제목이 `아르카 타로 — 하루 한 장, 나를 비추는 카드 78장`이다.
 - 두 커버는 HTTP 200과 `content-type: image/webp`다.
+- 공유 이미지는 HTTP 200과 `content-type: image/jpeg`다.
+- `robots.txt`는 200이고, sitemap의 `<loc>` 수가 정적 라우트 + 클래식 78장과 맞는다.
 - 브라우저에서 MY 로그인 상태와 프리미엄 덱 지급·기본 설정을 별도로 확인한다.
 
 ## 실패와 롤백
