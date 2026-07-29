@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { DayReadingTabs } from "@/components/DayReadingTabs";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
-import { setEntry, useJournal } from "@/lib/journal";
+import { entryOf, setEntry, useJournal } from "@/lib/journal";
 import { localDateOf } from "@/lib/period";
 import { useArcanaStore } from "@/lib/store";
 
@@ -49,7 +49,7 @@ export default function JournalDayPage({
     if (!journal) return;
     if (loadedDate.current !== date) {
       loadedDate.current = date;
-      setBody(journal[date]?.body ?? "");
+      setBody(entryOf(journal, date)?.body ?? "");
       setSaved(false);
     }
     setLoaded(true);
@@ -58,7 +58,8 @@ export default function JournalDayPage({
   const readings = (store?.readings ?? []).filter((r) => r.localDate === date);
   const isToday = date === todayIso;
   const canGoNext = todayIso !== null && date < todayIso;
-  const savedAt = journal?.[date]?.updatedAt;
+  // 지운 날은 "저장됨" 시각을 보여주지 않는다.
+  const savedAt = journal ? entryOf(journal, date)?.updatedAt : undefined;
 
   const save = () => {
     setEntry(date, body);

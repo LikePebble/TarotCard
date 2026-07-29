@@ -8,7 +8,7 @@ import { termsDocument } from "@/data/legal";
 
 const TITLE = "이용약관 — 아르카 타로";
 const DESCRIPTION =
-  "아르카 타로 서비스의 이용약관입니다. 타로 해석의 성격과 한계, 계정과 기록, 콘텐츠 저작권, 유료 서비스와 광고에 관한 사항을 안내합니다.";
+  "아르카 타로 서비스의 이용약관입니다. 타로 해석의 성격과 한계, 계정과 기록, 콘텐츠 저작권, 광고에 관한 사항을 안내합니다.";
 
 export const metadata: Metadata = {
   // absolute — layout에 title.template이 도입되더라도 접미사가 겹치지 않는다.

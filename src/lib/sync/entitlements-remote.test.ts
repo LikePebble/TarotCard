@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   getBrowserSupabase: vi.fn(),
   setLocalEntitlements: vi.fn(),
+  getUser: vi.fn(),
 }));
 
 vi.mock("@/lib/supabase/client", () => ({
@@ -23,11 +24,9 @@ function supabaseWith({
   profile: { data: { ad_free?: boolean } | null; error: unknown };
 }) {
   return {
-    auth: {
-      getUser: vi.fn().mockResolvedValue({
-        data: { user: { id: "user-1" } },
-      }),
-    },
+    // 호출자가 userId를 넘기므로 여기서 auth를 다시 물을 일이 없다.
+    // 남겨 두고 호출되지 않는 것을 확인한다.
+    auth: { getUser: mocks.getUser },
     from: vi.fn((table: string) => {
       if (table === "entitlements") {
         return {
@@ -51,6 +50,7 @@ describe("pullRemoteEntitlements", () => {
   beforeEach(() => {
     mocks.getBrowserSupabase.mockReset();
     mocks.setLocalEntitlements.mockReset();
+    mocks.getUser.mockReset();
   });
 
   it("두 원격 조회가 성공하면 로컬 권한을 서버 값으로 갱신한다", async () => {
@@ -64,12 +64,14 @@ describe("pullRemoteEntitlements", () => {
       }),
     );
 
-    await pullRemoteEntitlements();
+    await pullRemoteEntitlements("user-1");
 
     expect(mocks.setLocalEntitlements).toHaveBeenCalledWith({
       ownedDeckIds: ["wolha-biwon"],
       adFree: true,
     });
+    // 호출자가 누구인지 이미 안다. 여기서 Auth 왕복을 한 번 더 내지 않는다.
+    expect(mocks.getUser).not.toHaveBeenCalled();
   });
 
   it.each(["entitlements", "profile"] as const)(
@@ -88,7 +90,7 @@ describe("pullRemoteEntitlements", () => {
         }),
       );
 
-      await pullRemoteEntitlements();
+      await pullRemoteEntitlements("user-1");
 
       expect(mocks.setLocalEntitlements).not.toHaveBeenCalled();
     },
@@ -102,7 +104,7 @@ describe("pullRemoteEntitlements", () => {
       }),
     );
 
-    await pullRemoteEntitlements(() => true);
+    await pullRemoteEntitlements("user-1", () => true);
 
     expect(mocks.setLocalEntitlements).not.toHaveBeenCalled();
   });

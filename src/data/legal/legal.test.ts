@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatLegalDate,
   legalDocuments,
+  operator,
   privacyDocument,
   termsDocument,
   type LegalDocument,
@@ -76,10 +77,37 @@ describe("legal 문서 공통 규칙", () => {
     expect(new Set(headings).size).toBe(headings.length);
   });
 
-  it.each(documents)("$id: 사전 공개판임을 본문에서 알린다", (doc) => {
-    expect(bodyOf(doc)).toContain("사전 공개판");
+  // 1.0은 정본이다. 출시 전 초안임을 알리던 유보 문구가 남아 있으면 안 된다.
+  it.each(documents)("$id: 사전 공개판·출시 전 유보 문구가 남아 있지 않다", (doc) => {
+    const body = bodyOf(doc);
+    for (const banned of ["사전 공개판", "정식 출시", "정식으로 출시", "개정될 예정"]) {
+      expect(body).not.toContain(banned);
+    }
+  });
+
+  it.each(documents)("$id: 조 번호가 제1조부터 빠짐없이 이어진다", (doc) => {
+    const numbers = articleNumbers(doc);
+    expect(numbers.length).toBeGreaterThan(0);
+    expect(numbers).toEqual(numbers.map((_, i) => i + 1));
+  });
+
+  it.each(documents)("$id: 본문의 조 상호참조가 실제 존재하는 조를 가리킨다", (doc) => {
+    const existing = new Set(articleNumbers(doc));
+    const refs = [...bodyOf(doc).matchAll(/제(\d+)조/g)].map((m) => Number(m[1]));
+    expect(refs.length).toBeGreaterThan(0);
+    for (const ref of refs) {
+      expect(existing).toContain(ref);
+    }
   });
 });
+
+/** 문서의 조(條) 섹션 번호를 등장 순서대로 뽑는다. "이 약관에 대하여"·부칙 등은 제외. */
+function articleNumbers(doc: LegalDocument): number[] {
+  return doc.sections
+    .map((s) => /^제(\d+)조/.exec(s.heading))
+    .filter((m): m is RegExpExecArray => m !== null)
+    .map((m) => Number(m[1]));
+}
 
 /** 문서의 모든 본문 텍스트를 한 덩어리로 잇는다. */
 function bodyOf(doc: LegalDocument): string {
@@ -102,6 +130,25 @@ describe("이용약관", () => {
     expect(body).toContain(formatLegalDate(termsDocument.effectiveDate));
   });
 
+  /*
+   * 실제 게재가 시작될 때 동의를 다시 받지 않으려면, 지금 이용자가 읽는
+   * 약관에 (a) 광고 게재의 근거와 동의 간주, (b) 위치·형태·사업자가 바뀌어도
+   * 재동의를 받지 않는다는 것이 함께 있어야 한다. 둘 중 하나만으로는 부족하다.
+   */
+  it("광고 게재의 근거와 재동의 불요를 함께 밝힌다", () => {
+    const body = bodyOf(termsDocument);
+    expect(body).toContain("광고 게재에 동의하시는 것으로 봅니다");
+    expect(body).toContain("별도로 동의를 받지 않습니다");
+  });
+
+  // 결제는 아직 없다. 유료 조항은 실제로 결제를 붙일 때 세운다.
+  it("유료 전환을 예고하지 않는다", () => {
+    const body = bodyOf(termsDocument);
+    for (const hedge of ["유료로 바뀔", "유료 서비스", "결제 기능이 도입되는"]) {
+      expect(body).not.toContain(hedge);
+    }
+  });
+
   it.each([
     "목적",
     "정의",
@@ -111,7 +158,6 @@ describe("이용약관", () => {
     "계정",
     "이용자의 의무",
     "저작권",
-    "유료 서비스",
     "광고",
     "책임의 제한",
     "준거법",
@@ -203,9 +249,29 @@ describe("개인정보처리방침", () => {
     expect(body).toContain("DoubleClick");
   });
 
-  it("AdSense를 아직 도입하지 않았음을 밝힌다", () => {
+  /*
+   * 광고는 "게재할 수도 있다"가 아니라 게재한다는 전제로 고지한다. 이용자는
+   * 서비스를 이용하는 시점에 그 사실을 알고 동의하며, 실제 게재가 시작될 때
+   * 다시 동의를 받지 않는다. 그러려면 고지에 유보 표현이 남으면 안 된다.
+   */
+  it("광고 게재를 유보 없이 고지한다", () => {
     const body = bodyOf(privacyDocument);
-    expect(body).toContain("아직 도입되지 않았으며");
+    for (const hedge of ["아직 도입되지 않았", "도입을 준비", "도입되는 시점부터"]) {
+      expect(body).not.toContain(hedge);
+    }
+    expect(body).toContain("Google AdSense");
+  });
+
+  /*
+   * 개인정보 보호법 제30조는 개인정보 보호책임자의 성명(또는 부서명)과 연락처를
+   * 방침에 싣도록 한다. 운영 형태 같은 임의 항목은 덜어낼 수 있지만 이 둘은
+   * 아니다 — 운영자 정보를 정리하다 함께 지우는 사고를 막는다.
+   */
+  it("개인정보 보호책임자의 이름과 연락처를 싣는다", () => {
+    const body = bodyOf(privacyDocument);
+    expect(body).toContain("개인정보 보호책임자");
+    expect(body).toContain(operator.operatorName);
+    expect(body).toContain(operator.contactEmail);
   });
 
   it("RLS와 클라이언트 수정 불가 사실을 정확히 서술한다", () => {

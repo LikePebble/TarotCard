@@ -67,9 +67,13 @@ export default function CollectionPage() {
 
         {/*
           덱 목록보다 먼저 둔다. 아래 목록에서 프리미엄 덱이 모두 열린 것을 먼저
-          본 뒤에 이유를 읽으면, 그때는 이미 "원래 무료"라고 믿은 뒤다. 정식
-          출시에서 유료로 돌아설 때 "무료였는데 유료가 됐다"는 오해가 남지
-          않도록 열어 드린 이유와 기간을 먼저 밝힌다.
+          본 뒤에 이유를 읽으면, 그때는 이미 "원래 이런 것"이라고 믿은 뒤다.
+          한정 프로모션으로 열어 드렸다는 사실을 먼저 밝힌다.
+
+          유료 전환 예고는 넣지 않는다. 결제가 실제로 들어갈 때 약관에 유료
+          조항을 세우고 그 절차에 따라 알리기로 했다(약관 제3조). 근거 조문이
+          없는 상태에서 "유료로 바뀔 수 있습니다"만 화면에 두면, 지키지 못할
+          예고가 되거나 나중에 오해의 근거가 된다.
 
           게스트에게는 같은 자리가 안내가 아니라 제안이다. 아래 목록은 로그인
           전에는 모두 잠겨 보이므로(collectionVisibility), 무엇을 받게 되는지
@@ -91,8 +95,7 @@ export default function CollectionPage() {
               프리미엄 덱을 드립니다.
             </p>
             <p className="mt-1 text-[12.5px] leading-relaxed text-muted lg:text-[13px]">
-              지금은 결제 없이 열어 드리며, 정식 출시 뒤에는 유료로 바뀔 수
-              있습니다.
+              한정 기간 동안 드리는 것이라 기간이 끝나면 이 안내는 사라집니다.
             </p>
             <Link href="/login" className="btn btn-gold mt-4 w-full sm:w-auto">
               로그인하고 덱 받기
@@ -111,8 +114,7 @@ export default function CollectionPage() {
             </h2>
             <p className="mt-1 text-[12.5px] leading-relaxed text-muted lg:text-[13px]">
               로그인해 주신 분께 {promoNames} 프리미엄 덱을 열어 드렸습니다.
-              한정 기간 동안 드리는 것이라, 정식 출시 뒤에는 유료로 바뀔 수
-              있습니다.
+              한정 기간 동안 드리는 프로모션입니다.
             </p>
           </section>
         ) : null}

@@ -54,10 +54,12 @@ export function AccountCard() {
     const handleSignOut = async () => {
       setSigningOut(true);
       setLogoutError(null);
-      const success = await signOutAndClear();
-      if (!success) {
+      // 반환값은 "서버 revoke까지 성공했는가"다. 이 기기의 기록은 실패해도
+      // 항상 정리되므로(S5), 실패 문구가 "정리되지 않았다"고 말하면 안 된다.
+      const revoked = await signOutAndClear();
+      if (!revoked) {
         setLogoutError(
-          "로그아웃하지 못했습니다. 연결 상태를 확인하고 다시 시도해 주세요.",
+          "로그아웃 요청이 서버에 닿지 않았습니다. 이 기기의 기록은 정리했습니다. 연결 상태를 확인하고 다시 시도해 주세요.",
         );
         setSigningOut(false);
       }
