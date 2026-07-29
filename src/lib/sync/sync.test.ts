@@ -185,6 +185,40 @@ describe("reconcileJournal", () => {
     expect(setLocalJournal).not.toHaveBeenCalled(); // 로컬이 이겨 바뀐 게 없다
   });
 
+  /*
+   * 이 케이스가 "다른 기기에서 지운 일기가 이 기기에서 되살아난다"를 닫는다.
+   * 톰스톤 이전에는 서버에 그 날짜가 없다는 사실만 남아, 병합이 로컬의 글을
+   * 그대로 채택하고 다음 push가 서버에 다시 올렸다.
+   */
+  it("다른 기기에서 지운 날은 이 기기에서도 사라진다", async () => {
+    vi.mocked(loadJournal).mockReturnValue({
+      "2026-07-28": entry("아직 갖고 있던 글", "2026-07-28T01:00:00.000Z"),
+    });
+    vi.mocked(pullRemoteJournal).mockResolvedValue({
+      outcome: "ok",
+      data: { "2026-07-28": entry("", "2026-07-28T09:00:00.000Z") },
+    });
+
+    await reconcileJournal("u1", () => false, { conflict: "newer" });
+
+    expect(setLocalJournal).toHaveBeenCalledWith({
+      "2026-07-28": entry("", "2026-07-28T09:00:00.000Z"),
+    });
+  });
+
+  it("삭제 뒤에 이 기기에서 다시 쓴 글은 삭제를 이긴다", async () => {
+    vi.mocked(loadJournal).mockReturnValue({
+      "2026-07-28": entry("다시 쓴 글", "2026-07-28T12:00:00.000Z"),
+    });
+    vi.mocked(pullRemoteJournal).mockResolvedValue({
+      outcome: "ok",
+      data: { "2026-07-28": entry("", "2026-07-28T09:00:00.000Z") },
+    });
+
+    await reconcileJournal("u1", () => false, { conflict: "newer" });
+    expect(setLocalJournal).not.toHaveBeenCalled(); // 로컬이 이겨 바뀐 게 없다
+  });
+
   it("pull이 실패하면 prune 없이 올리기만 한다", async () => {
     vi.mocked(loadJournal).mockReturnValue({
       "2026-07-28": entry("메모", "2026-07-28T02:00:00.000Z"),

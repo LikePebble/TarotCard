@@ -159,6 +159,61 @@ describe("mergeJournals", () => {
     );
   });
 
+  /*
+   * 이 서브시스템이 오래 갖고 있던 결함 — 개별 삭제가 기기 사이에서 부활하는
+   * 것 — 을 닫는 자리다. 톰스톤이 없으면 "서버에 없음"과 "아직 안 올림"이
+   * 구분되지 않아 병합이 지운 날을 그대로 되살린다.
+   */
+  describe("톰스톤(지운 날)", () => {
+    const written = (at: string) => ({ body: "쓴 글", updatedAt: at });
+    const deleted = (at: string) => ({ body: "", updatedAt: at });
+
+    it("서버의 삭제가 더 최신이면 로컬의 글을 지운다", () => {
+      const merged = mergeJournals(
+        { "2026-07-20": written("2026-07-20T01:00:00.000Z") },
+        { "2026-07-20": deleted("2026-07-20T09:00:00.000Z") },
+        "newer",
+      );
+      expect(merged["2026-07-20"].body).toBe("");
+    });
+
+    it("로컬의 수정이 더 최신이면 삭제를 이긴다", () => {
+      const merged = mergeJournals(
+        { "2026-07-20": written("2026-07-20T09:00:00.000Z") },
+        { "2026-07-20": deleted("2026-07-20T01:00:00.000Z") },
+        "newer",
+      );
+      expect(merged["2026-07-20"].body).toBe("쓴 글");
+    });
+
+    it("로컬의 삭제가 더 최신이면 서버의 글을 지운다", () => {
+      const merged = mergeJournals(
+        { "2026-07-20": deleted("2026-07-20T09:00:00.000Z") },
+        { "2026-07-20": written("2026-07-20T01:00:00.000Z") },
+        "newer",
+      );
+      expect(merged["2026-07-20"].body).toBe("");
+    });
+
+    it("로그인 최초 병합에서는 계정의 삭제가 게스트의 글을 이긴다", () => {
+      const merged = mergeJournals(
+        { "2026-07-20": written("2026-07-20T09:00:00.000Z") },
+        { "2026-07-20": deleted("2026-07-20T01:00:00.000Z") },
+        "remote",
+      );
+      expect(merged["2026-07-20"].body).toBe("");
+    });
+
+    it("한쪽에만 있는 톰스톤도 그대로 채택한다(삭제가 전파되는 경로)", () => {
+      const merged = mergeJournals(
+        {},
+        { "2026-07-20": deleted("2026-07-20T09:00:00.000Z") },
+        "newer",
+      );
+      expect(merged["2026-07-20"].body).toBe("");
+    });
+  });
+
   it("빈 스토어끼리 병합하면 빈 스토어다", () => {
     expect(mergeJournals({}, {}, "newer")).toEqual({});
   });

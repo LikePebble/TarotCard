@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { CaretRight, Notebook, Sparkle } from "@phosphor-icons/react";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
-import { useJournal } from "@/lib/journal";
+import { useJournal, writtenDates } from "@/lib/journal";
 import { togetherDays, useArcanaStore } from "@/lib/store";
 import { AccountCard } from "./AccountCard";
 
@@ -16,7 +16,8 @@ export default function MyPage() {
 
   const readings = store?.readings.length ?? 0;
   const together = togetherDays(store);
-  const days = journal ? Object.keys(journal).length : 0;
+  // 지운 날(톰스톤)은 세지 않는다.
+  const days = journal ? writtenDates(journal).length : 0;
 
   const stats = [
     { label: "함께한 날", value: together, unit: "" },

@@ -58,6 +58,9 @@ export async function pullRemoteJournal(
  * upsert 먼저, 그 다음 options.prune이면 로컬에 없는 서버 행 삭제(로컬이 권위).
  * 로컬이 비어 있으면 삭제하지 않는다 — 파손된 localStorage가 백업을 지우지 못하게.
  *
+ * 지운 날은 **톰스톤(빈 본문)으로 올라간다.** 행을 지우면 다른 기기가 그것을
+ * "아직 안 올린 새 글"과 구분하지 못해 삭제를 되살린다(journal.ts 참조).
+ *
  * options는 선택 인자가 아니다. 서버 내용을 모르는 채(=pull 실패) 지우는 것은
  * 백업을 날리는 일이라, 호출자가 매번 prune 여부를 명시하게 강제한다.
  *
@@ -84,7 +87,14 @@ export async function pushLocalJournal(
   const changed = known
     ? dates.filter((d) => known.get(d) !== store[d].updatedAt)
     : dates;
-  /** 서버에 있다고 아는데 로컬에 없는 날짜 = 이 기기에서 지운 것. */
+  /**
+   * 서버에 있다고 아는데 로컬에 아예 없는 날짜.
+   *
+   * 톰스톤 도입 이후 삭제는 **행을 지우는 대신 빈 본문으로 남기므로**, 지운
+   * 날짜도 로컬에 남아 여기 걸리지 않는다. 실질적으로는 톰스톤 이전에 지운
+   * 기록만 지나는 마이그레이션 경로다. 남겨 두는 이유는 S4a의 안전망 —
+   * pull이 성공했을 때만 돌고, 로컬이 비면 아예 오지 않는다.
+   */
   const removed = known
     ? [...known.keys()].filter((d) => !(d in store))
     : null;

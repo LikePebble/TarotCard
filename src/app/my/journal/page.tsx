@@ -8,7 +8,7 @@ import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { cardBySlug } from "@/data/cards";
 import { koCards } from "@/data/ko";
-import { useJournal } from "@/lib/journal";
+import { useJournal, writtenDates } from "@/lib/journal";
 import { localDateOf } from "@/lib/period";
 import { useArcanaStore, type ReadingRecord } from "@/lib/store";
 import { CalendarMonth } from "./CalendarMonth";
@@ -41,7 +41,8 @@ export default function JournalPage() {
     byDate.set(r.localDate, list);
   }
   const readingDates = new Set(byDate.keys());
-  const journalDates = new Set(Object.keys(journal ?? {}));
+  // 지운 날(톰스톤)은 달력에도 최근 목록에도 나오지 않는다.
+  const journalDates = new Set(journal ? writtenDates(journal) : []);
   const recent = Array.from(new Set([...readingDates, ...journalDates]))
     .sort((a, b) => b.localeCompare(a))
     .slice(0, 6);

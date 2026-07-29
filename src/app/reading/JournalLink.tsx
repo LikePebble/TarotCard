@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useJournal } from "@/lib/journal";
+import { isWritten, useJournal } from "@/lib/journal";
 
 /**
  * "이날의 일기 보기/쓰기" 링크. 그날 일기 유무로 라벨이 갈린다.
@@ -15,7 +15,7 @@ export function JournalLink({ localDate }: { localDate: string }) {
   if (journal === null) return null;
   return (
     <Link href={`/my/journal/${localDate}`} className="btn btn-ghost w-full lg:w-auto">
-      {journal[localDate] ? "이날의 일기 보기" : "이날의 일기 쓰기"}
+      {isWritten(journal[localDate]) ? "이날의 일기 보기" : "이날의 일기 쓰기"}
     </Link>
   );
 }

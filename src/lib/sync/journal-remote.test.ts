@@ -58,11 +58,24 @@ function fakeSupabase(serverRows: Record<string, string> = {}) {
   return { client, upsert, inFilter, notFilter };
 }
 
+type JournalRowPush = {
+  user_id: string;
+  entry_date: string;
+  body: string;
+  updated_at: string;
+};
+
+/** upsert에 실린 행들. */
+function pushedRows(
+  upsert: ReturnType<typeof vi.fn>,
+  call = 0,
+): JournalRowPush[] {
+  return upsert.mock.calls[call][0] as JournalRowPush[];
+}
+
 /** upsert에 실린 날짜들. */
 function pushedDates(upsert: ReturnType<typeof vi.fn>, call = 0): string[] {
-  return (upsert.mock.calls[call][0] as { entry_date: string }[]).map(
-    (r) => r.entry_date,
-  );
+  return pushedRows(upsert, call).map((r) => r.entry_date);
 }
 
 describe("pushLocalJournal", () => {
@@ -197,6 +210,35 @@ describe("pushLocalJournal", () => {
 
     await pushLocalJournal("u1", local, { prune: true });
     expect(pushedDates(upsert, 1)).toEqual(["2026-07-27", "2026-07-28"]);
+  });
+
+  /*
+   * 삭제를 행 삭제가 아니라 빈 본문으로 올린다. 행을 지우면 그 날짜를 아직
+   * 들고 있는 기기가 "서버에 없네 = 아직 안 올렸네"로 읽고 되살려 버린다.
+   */
+  it("지운 날은 톰스톤으로 올린다(행을 지우지 않는다)", async () => {
+    const { client, upsert, inFilter, notFilter } = fakeSupabase({
+      "2026-07-28": "2026-07-28T01:00:00.000Z",
+    });
+    mocks.getBrowserSupabase.mockReturnValue(client);
+
+    await pullRemoteJournal("u1");
+    await pushLocalJournal(
+      "u1",
+      { "2026-07-28": entry("", "2026-07-28T09:00:00.000Z") },
+      { prune: true },
+    );
+
+    expect(pushedRows(upsert)).toEqual([
+      {
+        user_id: "u1",
+        entry_date: "2026-07-28",
+        body: "",
+        updated_at: "2026-07-28T09:00:00.000Z",
+      },
+    ]);
+    expect(inFilter).not.toHaveBeenCalled();
+    expect(notFilter).not.toHaveBeenCalled();
   });
 
   it("로컬이 비어 있으면 아무것도 하지 않는다(파손된 저장소 보호)", async () => {
