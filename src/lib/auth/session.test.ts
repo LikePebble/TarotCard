@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   clearLocalJournal: vi.fn(),
   clearLocalEntitlements: vi.fn(),
   resetSyncStatus: vi.fn(),
+  forgetMergedDevice: vi.fn(),
   authSignOut: vi.fn(),
   getSession: vi.fn(),
   getUser: vi.fn(),
@@ -42,6 +43,10 @@ vi.mock("@/lib/entitlements", () => ({
 
 vi.mock("@/lib/sync/status", () => ({
   resetSyncStatus: mocks.resetSyncStatus,
+}));
+
+vi.mock("@/lib/sync/first-merge", () => ({
+  forgetMergedDevice: mocks.forgetMergedDevice,
 }));
 
 import { signOutAndClear } from "@/lib/auth/session";
@@ -174,7 +179,7 @@ describe("signOutAndClear", () => {
     errorSpy.mockRestore();
   });
 
-  it("로그아웃이 성공한 뒤에만 이 기기의 계정 데이터를 지운다", async () => {
+  it("로그아웃이 성공하면 이 기기의 계정 데이터를 지운다", async () => {
     await expect(signOutAndClear()).resolves.toBe(true);
 
     expect(mocks.authSignOut).toHaveBeenCalledOnce();
@@ -184,7 +189,13 @@ describe("signOutAndClear", () => {
     expect(mocks.resetSyncStatus).toHaveBeenCalledOnce();
   });
 
-  it("로그아웃이 실패하면 로컬 기록을 유지하고 실패를 반환한다", async () => {
+  /*
+   * auth-js는 서버 revoke가 네트워크 오류·5xx로 실패해도 로컬 세션을 지우고
+   * SIGNED_OUT을 방출한 뒤 오류를 반환한다. 그때 로컬 기록을 남겨 두면 화면은
+   * 게스트인데 이전 사용자의 리딩·일기가 그대로 남고, 다음 계정이 로그인하면
+   * 로그인 병합이 그것을 자기 계정으로 올려 버린다(S5 위반).
+   */
+  it("서버 revoke가 실패해도 이 기기의 기록은 정리한다", async () => {
     mocks.authSignOut.mockResolvedValue({
       error: new Error("network unavailable"),
     });
@@ -192,10 +203,16 @@ describe("signOutAndClear", () => {
     await expect(signOutAndClear()).resolves.toBe(false);
 
     expect(errorSpy).toHaveBeenCalledOnce();
-    expect(mocks.clearLocalStore).not.toHaveBeenCalled();
-    expect(mocks.clearLocalJournal).not.toHaveBeenCalled();
-    expect(mocks.clearLocalEntitlements).not.toHaveBeenCalled();
-    expect(mocks.resetSyncStatus).not.toHaveBeenCalled();
+    expect(mocks.clearLocalStore).toHaveBeenCalledOnce();
+    expect(mocks.clearLocalJournal).toHaveBeenCalledOnce();
+    expect(mocks.clearLocalEntitlements).toHaveBeenCalledOnce();
+    expect(mocks.forgetMergedDevice).toHaveBeenCalledOnce();
+    expect(mocks.resetSyncStatus).toHaveBeenCalledOnce();
+  });
+
+  it("다음 로그인이 다시 게스트 병합이 되도록 병합 표식을 지운다", async () => {
+    await signOutAndClear();
+    expect(mocks.forgetMergedDevice).toHaveBeenCalledOnce();
   });
 
   it("동기화 flush가 실패해도 로그아웃과 로컬 정리를 계속한다", async () => {

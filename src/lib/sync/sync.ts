@@ -74,8 +74,8 @@ export type JournalReconcileResult = { outcome: SyncOutcome; pullOk: boolean };
  */
 export async function reconcileJournal(
   userId: string,
-  isStale: () => boolean = () => false,
-  options: { conflict?: JournalConflictPolicy } = {},
+  isStale: () => boolean,
+  options: { conflict: JournalConflictPolicy },
 ): Promise<JournalReconcileResult> {
   const pulled = await pullRemoteJournal(userId);
   if (isStale()) return { outcome: "skipped", pullOk: false };

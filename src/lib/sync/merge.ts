@@ -43,12 +43,16 @@ export type JournalConflictPolicy = "remote" | "newer";
 
 /**
  * 일기 병합. 한쪽에만 있는 날짜는 그대로 채택하고, 양쪽에 있는 날짜만
- * policy로 가른다. updatedAt은 항상 ISO 문자열이라 사전식 비교 = 시간순 비교.
+ * policy로 가른다.
+ *
+ * policy는 선택 인자가 아니다. prune(S4a)과 같은 이유다 — 기본값을 두면
+ * 호출부가 빠뜨렸을 때 조용히 다른 규칙으로 병합되고, 그 차이가 사용자 글의
+ * 유실로 나타난다. updatedAt은 항상 ISO 문자열이라 사전식 비교 = 시간순 비교.
  */
 export function mergeJournals(
   local: JournalStore,
   remote: JournalStore,
-  policy: JournalConflictPolicy = "newer",
+  policy: JournalConflictPolicy,
 ): JournalStore {
   const merged: JournalStore = { ...remote };
   for (const [date, entry] of Object.entries(local)) {

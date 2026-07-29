@@ -4,15 +4,11 @@ import { useEffect } from "react";
 import { takeLoginPending, track } from "@/lib/analytics";
 import { useSession } from "@/lib/auth/session";
 import { subscribeLocal } from "@/lib/local-events";
-import {
-  REFRESH_INTERVAL_MS,
-  refreshFromRemote,
-  schedulePush,
-  setSyncUser,
-} from "@/lib/sync/pusher";
+import { schedulePush, setSyncUser } from "@/lib/sync/pusher";
+import { wireRefreshTriggers } from "@/lib/sync/refresh-triggers";
 
 /**
- * 로컬 변경을 서버로 흘려보내는 다리. UI를 렌더하지 않는다.
+ * 로컬과 서버를 잇는 다리. UI를 렌더하지 않는다.
  * layout에 한 번만 마운트한다. 게스트(미설정·미로그인)에서는 아무 일도 하지 않는다.
  */
 export function SyncBridge() {
@@ -52,35 +48,14 @@ export function SyncBridge() {
   }, []);
 
   /*
-   * 서버 변경을 내려받는다.
+   * 서버 변경을 내려받을 시점들. 로그인 병합은 페이지 로드당 한 번뿐이라
+   * 그것만으로는 이 다리가 사실상 올리기 전용이 된다 — 다른 기기에서 남긴
+   * 기록이 이 기기에 영영 나타나지 않는다.
    *
-   * 로그인 병합은 페이지 로드당 한 번뿐이라, 그것만으로는 이 다리가 사실상
-   * 올리기 전용이 된다 — 다른 기기에서 남긴 기록이 이 기기에 영영 나타나지
-   * 않는다. 탭으로 돌아왔을 때와 주기적으로 다시 맞춘다.
-   *
-   * 화면이 보이지 않는 동안에는 돌리지 않는다. 백그라운드 탭이 조용히
-   * 왕복을 쌓아 봐야 볼 사람이 없다.
+   * 배선 자체는 refresh-triggers.ts에 있다. 틀려도 화면에 증상이 없어서
+   * 시험 가능한 자리에 두어야 하는 코드다.
    */
-  useEffect(() => {
-    const refreshIfVisible = () => {
-      if (document.visibilityState === "visible") refreshFromRemote();
-    };
-    // 네트워크 복귀는 밀린 변경을 올릴 마지막 기회이기도 하다. 갱신이
-    // 시작되면 그 안에 push가 들어 있고, 건너뛰었으면 push만 예약한다.
-    const onOnline = () => {
-      if (!refreshFromRemote({ force: true })) schedulePush();
-    };
-    const timer = setInterval(refreshIfVisible, REFRESH_INTERVAL_MS);
-    document.addEventListener("visibilitychange", refreshIfVisible);
-    window.addEventListener("focus", refreshIfVisible);
-    window.addEventListener("online", onOnline);
-    return () => {
-      clearInterval(timer);
-      document.removeEventListener("visibilitychange", refreshIfVisible);
-      window.removeEventListener("focus", refreshIfVisible);
-      window.removeEventListener("online", onOnline);
-    };
-  }, []);
+  useEffect(() => wireRefreshTriggers(document, window), []);
 
   return null;
 }

@@ -8,6 +8,7 @@ import { clearLocalEntitlements } from "@/lib/entitlements";
 import { clearLocalJournal } from "@/lib/journal";
 import { clearLocalStore } from "@/lib/store";
 import { flushPendingSync } from "@/lib/sync/pusher";
+import { forgetMergedDevice } from "@/lib/sync/first-merge";
 import { resetSyncStatus } from "@/lib/sync/status";
 import { notifyLocal, subscribeLocal } from "@/lib/local-events";
 
@@ -189,6 +190,15 @@ export async function signOut(): Promise<boolean> {
   return true;
 }
 
+/** 이 기기에 남은 계정 흔적을 모두 지운다. */
+function clearDeviceAccountData(): void {
+  clearLocalStore();
+  clearLocalJournal();
+  clearLocalEntitlements();
+  forgetMergedDevice(); // 다음 로그인은 다시 진짜 게스트→계정 병합이다(S3a).
+  resetSyncStatus(); // 다음 계정에 이전 사용자의 마지막 동기화 시각이 보이면 안 된다.
+}
+
 /**
  * 로그아웃: 대기 중 push를 먼저 올리고, 이 기기의 기록을 지운 뒤 세션을 끊는다.
  *
@@ -196,14 +206,21 @@ export async function signOut(): Promise<boolean> {
  * 갇히면 안 되고, 유실 범위는 마지막 성공 push 이후의 델타로 한정된다.
  * 로컬을 비우는 이유는 공용 기기에서 남의 기록이 보이거나 다음 계정에
  * 섞이는 것을 막기 위해서다.
+ *
+ * **`signOut()`이 오류를 돌려줘도 로컬은 비운다.** auth-js는 서버 revoke가
+ * 네트워크 오류·5xx로 실패해도 로컬 세션을 지우고 `SIGNED_OUT`을 방출한 뒤
+ * 오류를 반환한다(`GoTrueClient._signOut`). 그때 로컬을 남겨 두면 화면은
+ * 게스트인데 이전 사용자의 리딩·일기가 그대로 남고, 다음 계정이 로그인하면
+ * 로그인 병합이 **그것을 자기 계정으로 올려 버린다.** S5가 막으려던 바로 그
+ * 사고다. 반대 방향(불필요하게 비움)은 서버 사본에서 되돌아오므로 복구된다.
+ *
+ * 반환값은 "서버 revoke까지 성공했는가"이지 "이 기기가 정리됐는가"가 아니다.
+ * 정리는 항상 된다.
  */
 export async function signOutAndClear(): Promise<boolean> {
   if (hasDevSession()) {
     setDevSession(false);
-    clearLocalStore();
-    clearLocalJournal();
-    clearLocalEntitlements();
-    resetSyncStatus();
+    clearDeviceAccountData();
     return true;
   }
   try {
@@ -213,11 +230,6 @@ export async function signOutAndClear(): Promise<boolean> {
   }
 
   const signedOut = await signOut();
-  if (!signedOut) return false;
-
-  clearLocalStore();
-  clearLocalJournal();
-  clearLocalEntitlements();
-  resetSyncStatus(); // 다음 계정에 이전 사용자의 마지막 동기화 시각이 보이면 안 된다.
-  return true;
+  clearDeviceAccountData();
+  return signedOut;
 }

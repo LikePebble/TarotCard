@@ -20,6 +20,17 @@ vi.mock("@/lib/sync/sync", () => ({
   reconcileStore: vi.fn(async () => "ok"),
   reconcileJournal: vi.fn(async () => ({ outcome: "ok", pullOk: true })),
 }));
+// 모킹하지 않으면 실모듈이 Supabase 미설정으로 조용히 no-op이 되어, 이 갈래를
+// 통째로 지워도 테스트가 전부 통과한다.
+vi.mock("@/lib/sync/entitlements-remote", () => ({
+  pullRemoteEntitlements: vi.fn(async () => {}),
+}));
+// 이 표식은 localStorage에 있고 테스트 환경은 node라 window가 없다.
+// 모킹해서 "이미 병합한 기기"를 직접 만든다.
+vi.mock("@/lib/sync/first-merge", () => ({
+  hasMergedWith: vi.fn(() => false),
+  rememberMergedWith: vi.fn(),
+}));
 
 async function load() {
   vi.resetModules();
@@ -28,7 +39,9 @@ async function load() {
   const remote = await import("@/lib/sync/remote");
   const journalRemote = await import("@/lib/sync/journal-remote");
   const sync = await import("@/lib/sync/sync");
+  const entitlements = await import("@/lib/sync/entitlements-remote");
   const status = await import("@/lib/sync/status");
+  const firstMerge = await import("@/lib/sync/first-merge");
   const pusher = await import("@/lib/sync/pusher");
 
   // resetAllMocks가 구현까지 지우므로 기본 동작을 매번 다시 심는다.
@@ -49,8 +62,20 @@ async function load() {
     outcome: "ok",
     pullOk: true,
   });
+  vi.mocked(entitlements.pullRemoteEntitlements).mockResolvedValue(undefined);
+  vi.mocked(firstMerge.hasMergedWith).mockReturnValue(false);
 
-  return { store, journal, remote, journalRemote, sync, status, pusher };
+  return {
+    store,
+    journal,
+    remote,
+    journalRemote,
+    sync,
+    entitlements,
+    status,
+    firstMerge,
+    pusher,
+  };
 }
 
 /** 대기 중인 마이크로태스크를 모두 흘린다(디바운스 타이머는 건드리지 않는다). */
@@ -411,11 +436,25 @@ describe("refreshFromRemote", () => {
       order.push("journal");
       return { outcome: "ok", pullOk: true };
     });
+    vi.mocked(mods.entitlements.pullRemoteEntitlements).mockImplementation(
+      async () => {
+        order.push("entitlements");
+      },
+    );
 
     mods.pusher.setSyncUser("u1");
     // 첫 await 이전에 셋 다 시작돼 있어야 한다. 직렬이면 store 하나뿐이다.
-    expect(order).toEqual(["store", "journal"]);
+    expect(order).toEqual(["store", "journal", "entitlements"]);
     await settle();
+  });
+
+  it("엔타이틀먼트를 이미 아는 userId로 pull한다", async () => {
+    const { entitlements } = await loggedIn();
+    // 이 단언이 없으면 이 갈래를 통째로 지워도 전체 테스트가 통과한다.
+    expect(entitlements.pullRemoteEntitlements).toHaveBeenCalledWith(
+      "u1",
+      expect.any(Function),
+    );
   });
 
   it("대기 중이던 push 예약을 흡수한다", async () => {
@@ -429,6 +468,152 @@ describe("refreshFromRemote", () => {
 
     // 갱신이 로컬 스냅샷을 다시 읽어 올리므로 예약돼 있던 push는 중복이다.
     expect(sync.reconcileStore).toHaveBeenCalledTimes(2);
+    expect(remote.pushLocalStore).not.toHaveBeenCalled();
+  });
+});
+
+/*
+ * S3a의 "최초"는 이 기기가 이 계정과 처음 만나는 것이지 페이지를 새로 여는
+ * 것이 아니다. 이 구분이 없으면 세션 복원마다 서버 우선 병합이 돌아, 저장
+ * 버튼을 누르고 2초 안에 탭을 닫은 사용자의 글이 서버 옛 사본으로 덮인다.
+ */
+describe("로그인 최초 병합의 판정", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("처음 만나는 계정이면 서버 우선으로 병합한다", async () => {
+    const { sync, firstMerge } = await loggedIn();
+    expect(firstMerge.hasMergedWith).toHaveBeenCalledWith("u1");
+    expect(sync.reconcileJournal).toHaveBeenCalledWith(
+      "u1",
+      expect.any(Function),
+      { conflict: "remote" },
+    );
+  });
+
+  it("이미 병합한 기기의 재로드는 서버 우선이 아니다", async () => {
+    const mods = await load();
+    vi.mocked(mods.firstMerge.hasMergedWith).mockReturnValue(true);
+
+    mods.pusher.setSyncUser("u1");
+    await settle();
+
+    expect(mods.sync.reconcileJournal).toHaveBeenCalledWith(
+      "u1",
+      expect.any(Function),
+      { conflict: "newer" },
+    );
+  });
+
+  it("서버 일기를 실제로 본 뒤에만 병합 완료를 남긴다", async () => {
+    const { firstMerge } = await loggedIn();
+    expect(firstMerge.rememberMergedWith).toHaveBeenCalledWith("u1");
+  });
+
+  it("일기 pull이 실패했으면 병합 완료를 남기지 않는다", async () => {
+    const mods = await load();
+    vi.mocked(mods.sync.reconcileJournal).mockResolvedValue({
+      outcome: "failed",
+      pullOk: false,
+    });
+
+    mods.pusher.setSyncUser("u1");
+    await settle();
+
+    expect(mods.firstMerge.rememberMergedWith).not.toHaveBeenCalled();
+  });
+
+  it("갱신은 병합 완료를 남기지 않는다", async () => {
+    const { pusher, firstMerge } = await loggedIn();
+    vi.mocked(firstMerge.rememberMergedWith).mockClear();
+
+    await vi.advanceTimersByTimeAsync(30_000);
+    pusher.refreshFromRemote();
+    await settle();
+
+    expect(firstMerge.rememberMergedWith).not.toHaveBeenCalled();
+  });
+});
+
+/*
+ * 로그아웃은 "flush → 비움 → signOut → setSyncUser(null)"의 네 단계다.
+ * 그 틈에서 새 왕복이 시작되거나, 알면서 빠뜨린 변경이 생기거나, 뒤늦게
+ * 끝난 작업이 이전 계정의 흔적을 남기면 안 된다.
+ */
+describe("flushPendingSync", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("반환 뒤에는 새 갱신도 push도 시작되지 않는다", async () => {
+    const { pusher, sync, remote } = await loggedIn();
+    vi.mocked(sync.reconcileStore).mockClear();
+
+    await pusher.flushPendingSync(); // 마지막 push는 여기서 나간다
+    vi.mocked(remote.pushLocalStore).mockClear();
+
+    // signOut 왕복 중에 인터벌 틱·focus가 발화하는 상황.
+    expect(pusher.refreshFromRemote({ force: true })).toBe(false);
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(10_000);
+    await settle();
+
+    expect(sync.reconcileStore).not.toHaveBeenCalled();
+    expect(remote.pushLocalStore).not.toHaveBeenCalled();
+  });
+
+  it("진행 중이던 작업 도중에 들어온 변경을 마저 올린다", async () => {
+    const { pusher, remote } = await loggedIn();
+    const gate = deferred<"ok">();
+    vi.mocked(remote.pushLocalStore).mockReturnValueOnce(gate.promise);
+
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000); // push 진행 중
+    pusher.schedulePush(); // 그 스냅샷에 없는 저장 → dirty
+
+    const flushed = pusher.flushPendingSync(3000);
+    gate.resolve("ok");
+    await settle();
+    await flushed;
+
+    // 첫 push + dirty를 마저 올린 push.
+    expect(remote.pushLocalStore).toHaveBeenCalledTimes(2);
+  });
+
+  it("타임아웃을 넘긴 push가 이전 계정의 동기화 시각을 되살리지 않는다", async () => {
+    const { pusher, remote, status } = await loggedIn();
+    const gate = deferred<"ok">();
+    vi.mocked(remote.pushLocalStore).mockReturnValueOnce(gate.promise);
+
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+
+    const flushed = pusher.flushPendingSync(50);
+    await vi.advanceTimersByTimeAsync(50);
+    await flushed;
+
+    pusher.setSyncUser(null);
+    status.resetSyncStatus(); // 로그아웃이 마지막 동기화 시각을 지운다
+    gate.resolve("ok"); // 매달렸던 push가 뒤늦게 끝난다
+    await settle();
+
+    expect(status.getSyncStatus().lastSyncedAt).toBeNull();
+  });
+
+  it("게스트면 아무 일도 하지 않는다", async () => {
+    const { pusher, remote } = await load();
+    await pusher.flushPendingSync();
     expect(remote.pushLocalStore).not.toHaveBeenCalled();
   });
 });

@@ -85,7 +85,13 @@ describe("pushLocalJournal", () => {
     ).resolves.toBe("ok");
 
     expect(pushedDates(upsert)).toEqual(["2026-07-27", "2026-07-28"]);
-    expect(notFilter).toHaveBeenCalledTimes(1);
+    // postgrest의 .not()은 값을 그대로 URL에 붙인다. 필터 조립이 어긋나면
+    // 정리 요청이 조용히 죽으므로 인자까지 본다.
+    expect(notFilter).toHaveBeenCalledWith(
+      "entry_date",
+      "in",
+      '("2026-07-27","2026-07-28")',
+    );
     expect(inFilter).not.toHaveBeenCalled();
   });
 

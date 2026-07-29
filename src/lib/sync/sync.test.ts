@@ -125,7 +125,7 @@ describe("reconcileJournal", () => {
       data: { ...same },
     });
 
-    await reconcileJournal("u1");
+    await reconcileJournal("u1", () => false, { conflict: "newer" });
     expect(setLocalJournal).not.toHaveBeenCalled();
   });
 
@@ -140,7 +140,7 @@ describe("reconcileJournal", () => {
       },
     });
 
-    await reconcileJournal("u1");
+    await reconcileJournal("u1", () => false, { conflict: "newer" });
     expect(setLocalJournal).toHaveBeenCalledWith({
       "2026-07-28": entry("다른 기기에서 고친 메모", "2026-07-28T09:00:00.000Z"),
     });
@@ -153,7 +153,7 @@ describe("reconcileJournal", () => {
       data: { "2026-07-27": entry("어제 메모", "2026-07-27T09:00:00.000Z") },
     });
 
-    await reconcileJournal("u1");
+    await reconcileJournal("u1", () => false, { conflict: "newer" });
     expect(setLocalJournal).toHaveBeenCalledTimes(1);
   });
 
@@ -191,7 +191,7 @@ describe("reconcileJournal", () => {
     });
     vi.mocked(pullRemoteJournal).mockResolvedValue({ outcome: "failed" });
 
-    const result = await reconcileJournal("u1");
+    const result = await reconcileJournal("u1", () => false, { conflict: "newer" });
     expect(result.pullOk).toBe(false);
     expect(setLocalJournal).not.toHaveBeenCalled();
   });

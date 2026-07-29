@@ -6,6 +6,7 @@ import { pullRemoteEntitlements } from "@/lib/sync/entitlements-remote";
 import { pushLocalJournal } from "@/lib/sync/journal-remote";
 import { pushLocalStore } from "@/lib/sync/remote";
 import { forgetServerKnowledge } from "@/lib/sync/server-knowledge";
+import { hasMergedWith, rememberMergedWith } from "@/lib/sync/first-merge";
 
 const DEBOUNCE_MS = 2000;
 
@@ -39,8 +40,8 @@ let epoch = 0;
  */
 let dirty = false;
 /**
- * 로그인 때 일기 pull이 성공했는지. 실패했으면 서버에 무엇이 있는지 모르므로
- * 이번 세션의 push는 서버 행을 지우면 안 된다.
+ * 가장 최근 병합에서 일기 pull이 성공했는지. 실패했으면 서버에 무엇이 있는지
+ * 모르므로 그 뒤의 push는 서버 행을 지우면 안 된다. 병합마다 갱신된다.
  */
 let journalPullOk = false;
 /**
@@ -76,9 +77,16 @@ function releaseMerge(userId: string): void {
   if (mergedFor === userId) mergedFor = null;
 }
 
-async function pushNow(): Promise<void> {
-  const userId = currentUserId;
-  if (!userId) return;
+/**
+ * 이 결과를 상태 표시에 반영해도 되는지. 로그아웃이 끝난 뒤 뒤늦게 도착한
+ * push가 이전 계정의 "마지막 동기화 시각"을 되살리면, 다음 사용자가 남의
+ * 동기화 시각을 보게 된다 — 로그아웃이 지운 바로 그 표시다.
+ */
+function stillCurrent(userId: string): boolean {
+  return currentUserId === userId;
+}
+
+async function pushNow(userId: string): Promise<void> {
   inFlight += 1;
   setSyncState("syncing");
   // await 사이에 로그아웃이 로컬을 비울 수 있으므로 두 스냅샷을 먼저 뜬다.
@@ -92,18 +100,22 @@ async function pushNow(): Promise<void> {
     // 원격 계층은 예외 대신 결과를 돌려준다. 실패를 "ok"로 표시하면
     // 하지도 않은 백업을 했다고 말하는 셈이다.
     const failed = storePushed === "failed" || journalPushed === "failed";
-    setSyncState(failed ? "error" : "ok");
+    if (stillCurrent(userId)) setSyncState(failed ? "error" : "ok");
   } catch (e) {
     console.error("[sync] push 중 예외:", e);
-    setSyncState("error");
+    if (stillCurrent(userId)) setSyncState("error");
   } finally {
     endSync();
   }
 }
 
-/** pushNow를 "진행 중 작업"으로 등록해 실행한다. */
-function startPush(): Promise<void> {
-  const p: Promise<void> = pushNow().finally(() => {
+/**
+ * pushNow를 "진행 중 작업"으로 등록해 실행한다.
+ * userId를 인자로 받는 이유: 로그아웃 flush는 세션을 내려놓은 뒤에도 마지막
+ * push를 마저 올려야 한다.
+ */
+function startPush(userId: string): Promise<void> {
+  const p: Promise<void> = pushNow(userId).finally(() => {
     if (activeSync === p) activeSync = null;
   });
   activeSync = p;
@@ -142,6 +154,9 @@ async function reconcile(
   ]);
   if (isStale()) return "stale";
   journalPullOk = journal.pullOk;
+  // 서버 일기를 실제로 본 순간이 "게스트→계정 첫 만남"이 끝난 시점이다.
+  // 여기를 지나면 이 기기의 재로드는 LWW로 돌아간다(S3a).
+  if (mode === "login" && journal.pullOk) rememberMergedWith(userId);
   return storeOutcome === "failed" || journal.outcome === "failed"
     ? "failed"
     : "ok";
@@ -174,7 +189,7 @@ function runReconcile(
     } catch (e) {
       console.error("[sync] 서버 병합 실패:", e);
       onIncomplete();
-      setSyncState("error");
+      if (!isStale()) setSyncState("error");
     } finally {
       endSync();
     }
@@ -200,7 +215,7 @@ export function schedulePush(): void {
     pendingTimer = null;
     // 예약과 발화 사이에 세션이 바뀌었으면 남의 계정에 올리지 않는다.
     if (currentUserId !== userId) return;
-    void startPush();
+    void startPush(userId);
   }, DEBOUNCE_MS);
 }
 
@@ -255,30 +270,68 @@ export function setSyncUser(userId: string | null): void {
   currentUserId = userId;
   if (mergedFor === userId) return;
   mergedFor = userId;
-  void runReconcile(userId, "login", () => releaseMerge(userId));
+  // "최초"는 이 기기가 이 계정과 처음 만나는 것이지, 페이지를 새로 여는
+  // 것이 아니다. mergedFor는 모듈 상태라 새로고침마다 비므로 여기서
+  // 재지 않는다 — 그러면 세션 복원마다 서버 우선이 되어, 아직 올라가지
+  // 못한 이 계정 본인의 수정이 서버의 옛 사본으로 덮인다(S3a).
+  const mode: ReconcileMode = hasMergedWith(userId) ? "refresh" : "login";
+  void runReconcile(userId, mode, () => releaseMerge(userId));
 }
 
-/**
- * 대기 중인 push를 지금 실행한다(로그아웃 직전 등).
- * timeoutMs 안에 끝나지 않으면 그냥 반환한다 — 호출자를 매달지 않는다.
- *
- * 반환 직후 호출자가 로컬을 비우므로, 아직 도는 병합이 있으면 세대를 올려
- * 무효화한다. 그러지 않으면 늦게 끝난 병합이 지운 기록을 되살린다.
- */
-export async function flushPendingSync(timeoutMs = 3000): Promise<void> {
-  cancelPending();
-  if (!currentUserId) return;
+/** work가 끝나거나 남은 시간이 다하거나, 둘 중 먼저. 호출자를 매달지 않는다. */
+async function raceTimeout(work: Promise<void>, ms: number): Promise<void> {
+  if (ms <= 0) return;
   let timer: ReturnType<typeof setTimeout> | null = null;
   try {
     await Promise.race([
-      activeSync ?? startPush(),
+      work,
       new Promise<void>((resolve) => {
-        timer = setTimeout(resolve, timeoutMs);
+        timer = setTimeout(resolve, ms);
       }),
     ]);
   } finally {
-    // 빠르게 끝났으면 진 쪽 타이머를 3초 동안 붙들고 있지 않는다.
+    // 빠르게 끝났으면 진 쪽 타이머를 남은 시간 내내 붙들고 있지 않는다.
     if (timer !== null) clearTimeout(timer);
+  }
+}
+
+/**
+ * 대기 중인 push를 지금 실행한다(로그아웃 직전).
+ * timeoutMs 안에 끝나지 않으면 그냥 반환한다 — 호출자를 매달지 않는다.
+ *
+ * **반환 시점에 이 세션은 끝난 것으로 친다.** 호출자가 곧 로컬을 비우는데,
+ * 세대만 올리고 `currentUserId`를 남겨 두면 이어지는 `signOut()` 왕복 중에
+ * 주기 갱신이 **새 세대로** reconcile을 띄울 수 있다. 그 pull은 스테일이
+ * 아니므로 방금 비운 로컬에 이전 계정의 서버 데이터를 되살린다.
+ */
+export async function flushPendingSync(timeoutMs = 3000): Promise<void> {
+  cancelPending();
+  const userId = currentUserId;
+  if (!userId) return;
+
+  const startedAt = Date.now();
+  const remaining = () => timeoutMs - (Date.now() - startedAt);
+
+  try {
+    await raceTimeout(activeSync ?? startPush(userId), remaining());
+
+    /*
+     * 진행 중이던 작업 도중에 들어온 저장은 그 작업의 스냅샷에 없다. S6a대로
+     * dirty로 기억됐다가 endSync가 2초 디바운스로 재예약하는데, 곧 도착할
+     * setSyncUser(null)이 그 타이머를 죽인다. 그러면 flush는 **알면서 빠뜨리고**
+     * 성공 반환한 셈이 된다 — S5a가 수용한 것은 "flush 실패 시의 델타"까지다.
+     * 남은 시간이 있으면 한 번 더 올린다.
+     */
+    if (inFlight === 0 && (dirty || pendingTimer !== null)) {
+      dirty = false;
+      cancelPending();
+      await raceTimeout(startPush(userId), remaining());
+    }
+  } finally {
+    // 이 뒤로 새 병합·push가 시작되지 않게 세션을 내려놓는다. 뒤늦게 끝나는
+    // 작업은 세대가 올라가 무효화된다. setSyncUser(null)이 곧 도착하지만
+    // 그것은 React effect라 다음 렌더 틱까지 늦을 수 있다.
+    currentUserId = null;
     epoch += 1;
   }
 }

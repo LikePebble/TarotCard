@@ -79,7 +79,7 @@ describe("mergeJournals", () => {
     const remote: JournalStore = {
       "2026-07-21": { body: "서버만", updatedAt: "2026-07-21T01:00:00.000Z" },
     };
-    const merged = mergeJournals(local, remote);
+    const merged = mergeJournals(local, remote, "newer");
     expect(merged["2026-07-20"].body).toBe("로컬만");
     expect(merged["2026-07-21"].body).toBe("서버만");
   });
@@ -91,14 +91,14 @@ describe("mergeJournals", () => {
     const remote: JournalStore = {
       "2026-07-20": { body: "최신 서버", updatedAt: "2026-07-20T09:00:00.000Z" },
     };
-    expect(mergeJournals(local, remote)["2026-07-20"].body).toBe("최신 서버");
+    expect(mergeJournals(local, remote, "newer")["2026-07-20"].body).toBe("최신 서버");
   });
 
   it("updatedAt이 같으면 로컬을 택한다", () => {
     const at = "2026-07-20T01:00:00.000Z";
     const local: JournalStore = { "2026-07-20": { body: "로컬", updatedAt: at } };
     const remote: JournalStore = { "2026-07-20": { body: "서버", updatedAt: at } };
-    expect(mergeJournals(local, remote)["2026-07-20"].body).toBe("로컬");
+    expect(mergeJournals(local, remote, "newer")["2026-07-20"].body).toBe("로컬");
   });
 
   /*
@@ -144,7 +144,7 @@ describe("mergeJournals", () => {
     });
   });
 
-  it('policy "newer"는 기본값과 같다(로컬이 최신이면 로컬)', () => {
+  it('policy "newer"는 아직 못 올린 로컬 글을 서버 옛 사본으로 덮지 않는다', () => {
     const local: JournalStore = {
       "2026-07-20": { body: "방금 쓴 글", updatedAt: "2026-07-20T09:00:00.000Z" },
     };
@@ -157,11 +157,10 @@ describe("mergeJournals", () => {
     expect(mergeJournals(local, remote, "newer")["2026-07-20"].body).toBe(
       "방금 쓴 글",
     );
-    expect(mergeJournals(local, remote)["2026-07-20"].body).toBe("방금 쓴 글");
   });
 
   it("빈 스토어끼리 병합하면 빈 스토어다", () => {
-    expect(mergeJournals({}, {})).toEqual({});
+    expect(mergeJournals({}, {}, "newer")).toEqual({});
   });
 
   it("입력을 변형하지 않는다(순수)", () => {
@@ -171,7 +170,7 @@ describe("mergeJournals", () => {
     const remote: JournalStore = {
       "2026-07-20": { body: "서버", updatedAt: "2026-07-20T09:00:00.000Z" },
     };
-    mergeJournals(local, remote);
+    mergeJournals(local, remote, "newer");
     expect(local["2026-07-20"].body).toBe("로컬");
     expect(remote["2026-07-20"].body).toBe("서버");
   });
