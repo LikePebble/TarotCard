@@ -76,10 +76,37 @@ describe("legal 문서 공통 규칙", () => {
     expect(new Set(headings).size).toBe(headings.length);
   });
 
-  it.each(documents)("$id: 사전 공개판임을 본문에서 알린다", (doc) => {
-    expect(bodyOf(doc)).toContain("사전 공개판");
+  // 1.0은 정본이다. 출시 전 초안임을 알리던 유보 문구가 남아 있으면 안 된다.
+  it.each(documents)("$id: 사전 공개판·출시 전 유보 문구가 남아 있지 않다", (doc) => {
+    const body = bodyOf(doc);
+    for (const banned of ["사전 공개판", "정식 출시", "정식으로 출시", "개정될 예정"]) {
+      expect(body).not.toContain(banned);
+    }
+  });
+
+  it.each(documents)("$id: 조 번호가 제1조부터 빠짐없이 이어진다", (doc) => {
+    const numbers = articleNumbers(doc);
+    expect(numbers.length).toBeGreaterThan(0);
+    expect(numbers).toEqual(numbers.map((_, i) => i + 1));
+  });
+
+  it.each(documents)("$id: 본문의 조 상호참조가 실제 존재하는 조를 가리킨다", (doc) => {
+    const existing = new Set(articleNumbers(doc));
+    const refs = [...bodyOf(doc).matchAll(/제(\d+)조/g)].map((m) => Number(m[1]));
+    expect(refs.length).toBeGreaterThan(0);
+    for (const ref of refs) {
+      expect(existing).toContain(ref);
+    }
   });
 });
+
+/** 문서의 조(條) 섹션 번호를 등장 순서대로 뽑는다. "이 약관에 대하여"·부칙 등은 제외. */
+function articleNumbers(doc: LegalDocument): number[] {
+  return doc.sections
+    .map((s) => /^제(\d+)조/.exec(s.heading))
+    .filter((m): m is RegExpExecArray => m !== null)
+    .map((m) => Number(m[1]));
+}
 
 /** 문서의 모든 본문 텍스트를 한 덩어리로 잇는다. */
 function bodyOf(doc: LegalDocument): string {
@@ -111,7 +138,6 @@ describe("이용약관", () => {
     "계정",
     "이용자의 의무",
     "저작권",
-    "유료 서비스",
     "광고",
     "책임의 제한",
     "준거법",
