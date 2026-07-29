@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatLegalDate,
   legalDocuments,
+  operator,
   privacyDocument,
   termsDocument,
   type LegalDocument,
@@ -130,15 +131,14 @@ describe("이용약관", () => {
   });
 
   /*
-   * 광고 조항은 "게재할 수 있습니다"라는 허용 규정이 아니라 게재한다는 확정
-   * 서술이어야 한다. 실제 게재가 시작될 때 동의를 다시 받지 않으려면, 지금
-   * 이용자가 읽는 문장이 이미 그 사실을 말하고 있어야 하기 때문이다.
+   * 실제 게재가 시작될 때 동의를 다시 받지 않으려면, 지금 이용자가 읽는
+   * 약관에 (a) 광고 게재의 근거와 동의 간주, (b) 위치·형태·사업자가 바뀌어도
+   * 재동의를 받지 않는다는 것이 함께 있어야 한다. 둘 중 하나만으로는 부족하다.
    */
-  it("광고 게재를 확정 서술로 고지하고 재동의가 필요 없음을 밝힌다", () => {
+  it("광고 게재의 근거와 재동의 불요를 함께 밝힌다", () => {
     const body = bodyOf(termsDocument);
-    expect(body).toContain("광고를 게재하며");
+    expect(body).toContain("광고 게재에 동의하시는 것으로 봅니다");
     expect(body).toContain("별도로 동의를 받지 않습니다");
-    expect(body).not.toContain("광고를 게재할 수 있습니다");
   });
 
   // 결제는 아직 없다. 유료 조항은 실제로 결제를 붙일 때 세운다.
@@ -260,6 +260,18 @@ describe("개인정보처리방침", () => {
       expect(body).not.toContain(hedge);
     }
     expect(body).toContain("Google AdSense");
+  });
+
+  /*
+   * 개인정보 보호법 제30조는 개인정보 보호책임자의 성명(또는 부서명)과 연락처를
+   * 방침에 싣도록 한다. 운영 형태 같은 임의 항목은 덜어낼 수 있지만 이 둘은
+   * 아니다 — 운영자 정보를 정리하다 함께 지우는 사고를 막는다.
+   */
+  it("개인정보 보호책임자의 이름과 연락처를 싣는다", () => {
+    const body = bodyOf(privacyDocument);
+    expect(body).toContain("개인정보 보호책임자");
+    expect(body).toContain(operator.operatorName);
+    expect(body).toContain(operator.contactEmail);
   });
 
   it("RLS와 클라이언트 수정 불가 사실을 정확히 서술한다", () => {
