@@ -129,6 +129,26 @@ describe("이용약관", () => {
     expect(body).toContain(formatLegalDate(termsDocument.effectiveDate));
   });
 
+  /*
+   * 광고 조항은 "게재할 수 있습니다"라는 허용 규정이 아니라 게재한다는 확정
+   * 서술이어야 한다. 실제 게재가 시작될 때 동의를 다시 받지 않으려면, 지금
+   * 이용자가 읽는 문장이 이미 그 사실을 말하고 있어야 하기 때문이다.
+   */
+  it("광고 게재를 확정 서술로 고지하고 재동의가 필요 없음을 밝힌다", () => {
+    const body = bodyOf(termsDocument);
+    expect(body).toContain("광고를 게재하며");
+    expect(body).toContain("별도로 동의를 받지 않습니다");
+    expect(body).not.toContain("광고를 게재할 수 있습니다");
+  });
+
+  // 결제는 아직 없다. 유료 조항은 실제로 결제를 붙일 때 세운다.
+  it("유료 전환을 예고하지 않는다", () => {
+    const body = bodyOf(termsDocument);
+    for (const hedge of ["유료로 바뀔", "유료 서비스", "결제 기능이 도입되는"]) {
+      expect(body).not.toContain(hedge);
+    }
+  });
+
   it.each([
     "목적",
     "정의",
@@ -229,9 +249,17 @@ describe("개인정보처리방침", () => {
     expect(body).toContain("DoubleClick");
   });
 
-  it("AdSense를 아직 도입하지 않았음을 밝힌다", () => {
+  /*
+   * 광고는 "게재할 수도 있다"가 아니라 게재한다는 전제로 고지한다. 이용자는
+   * 서비스를 이용하는 시점에 그 사실을 알고 동의하며, 실제 게재가 시작될 때
+   * 다시 동의를 받지 않는다. 그러려면 고지에 유보 표현이 남으면 안 된다.
+   */
+  it("광고 게재를 유보 없이 고지한다", () => {
     const body = bodyOf(privacyDocument);
-    expect(body).toContain("아직 도입되지 않았으며");
+    for (const hedge of ["아직 도입되지 않았", "도입을 준비", "도입되는 시점부터"]) {
+      expect(body).not.toContain(hedge);
+    }
+    expect(body).toContain("Google AdSense");
   });
 
   it("RLS와 클라이언트 수정 불가 사실을 정확히 서술한다", () => {
