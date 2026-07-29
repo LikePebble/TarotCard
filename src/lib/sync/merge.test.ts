@@ -109,10 +109,16 @@ describe("mergeJournals", () => {
   describe('policy "remote" (로그인 최초 병합)', () => {
     it("같은 날짜는 로컬이 더 최신이어도 서버를 택한다", () => {
       const local: JournalStore = {
-        "2026-07-20": { body: "게스트로 쓴 글", updatedAt: "2026-07-20T09:00:00.000Z" },
+        "2026-07-20": {
+          body: "게스트로 쓴 글",
+          updatedAt: "2026-07-20T09:00:00.000Z",
+        },
       };
       const remote: JournalStore = {
-        "2026-07-20": { body: "계정에 있던 글", updatedAt: "2026-07-20T01:00:00.000Z" },
+        "2026-07-20": {
+          body: "계정에 있던 글",
+          updatedAt: "2026-07-20T01:00:00.000Z",
+        },
       };
       expect(mergeJournals(local, remote, "remote")["2026-07-20"].body).toBe(
         "계정에 있던 글",
@@ -121,10 +127,16 @@ describe("mergeJournals", () => {
 
     it("서버에 없는 날짜의 게스트 기록은 그대로 올라간다", () => {
       const local: JournalStore = {
-        "2026-07-19": { body: "게스트만 쓴 날", updatedAt: "2026-07-19T09:00:00.000Z" },
+        "2026-07-19": {
+          body: "게스트만 쓴 날",
+          updatedAt: "2026-07-19T09:00:00.000Z",
+        },
       };
       const remote: JournalStore = {
-        "2026-07-20": { body: "계정에 있던 글", updatedAt: "2026-07-20T01:00:00.000Z" },
+        "2026-07-20": {
+          body: "계정에 있던 글",
+          updatedAt: "2026-07-20T01:00:00.000Z",
+        },
       };
       const merged = mergeJournals(local, remote, "remote");
       expect(merged["2026-07-19"].body).toBe("게스트만 쓴 날");
@@ -137,7 +149,10 @@ describe("mergeJournals", () => {
       "2026-07-20": { body: "방금 쓴 글", updatedAt: "2026-07-20T09:00:00.000Z" },
     };
     const remote: JournalStore = {
-      "2026-07-20": { body: "서버의 옛 사본", updatedAt: "2026-07-20T01:00:00.000Z" },
+      "2026-07-20": {
+        body: "서버의 옛 사본",
+        updatedAt: "2026-07-20T01:00:00.000Z",
+      },
     };
     expect(mergeJournals(local, remote, "newer")["2026-07-20"].body).toBe(
       "방금 쓴 글",

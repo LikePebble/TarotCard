@@ -163,9 +163,7 @@ describe("reconcileJournal", () => {
     });
     vi.mocked(pullRemoteJournal).mockResolvedValue({
       outcome: "ok",
-      data: {
-        "2026-07-28": entry("계정에 있던 글", "2026-07-28T01:00:00.000Z"),
-      },
+      data: { "2026-07-28": entry("계정에 있던 글", "2026-07-28T01:00:00.000Z") },
     });
 
     await reconcileJournal("u1", () => false, { conflict: "remote" });

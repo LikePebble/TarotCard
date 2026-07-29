@@ -5,6 +5,7 @@ import { reconcileJournal, reconcileStore } from "@/lib/sync/sync";
 import { pullRemoteEntitlements } from "@/lib/sync/entitlements-remote";
 import { pushLocalJournal } from "@/lib/sync/journal-remote";
 import { pushLocalStore } from "@/lib/sync/remote";
+import { forgetServerKnowledge } from "@/lib/sync/server-knowledge";
 
 const DEBOUNCE_MS = 2000;
 
@@ -126,16 +127,19 @@ async function reconcile(
   isStale: () => boolean,
   mode: ReconcileMode,
 ): Promise<"ok" | "failed" | "stale"> {
-  const storeOutcome = await reconcileStore(userId, isStale);
-  if (isStale()) return "stale";
-  const journal = await reconcileJournal(userId, isStale, {
-    // 로그인 순간에는 계정에 쌓인 기록이 이 기기의 게스트 기록보다 우선한다.
-    // 이후 갱신에서까지 그러면, 방금 이 기기에서 쓰고 아직 올라가지 못한
-    // 글을 주기 갱신이 서버의 옛 사본으로 되돌린다.
-    conflict: mode === "login" ? "remote" : "newer",
-  });
-  if (isStale()) return "stale";
-  await pullRemoteEntitlements(isStale); // 엔타이틀먼트는 서버 권위 → pull만
+  // 리딩·일기·엔타이틀먼트는 서로 독립이다. 직렬로 돌리면 왕복이 그대로
+  // 더해진다 — 로그인 병합이 왕복 6~7회였던 이유가 이것이다. 각 갈래 안에서는
+  // pull이 push보다 먼저라는 순서가 그대로 지켜진다.
+  const [storeOutcome, journal] = await Promise.all([
+    reconcileStore(userId, isStale),
+    reconcileJournal(userId, isStale, {
+      // 로그인 순간에는 계정에 쌓인 기록이 이 기기의 게스트 기록보다 우선한다.
+      // 이후 갱신에서까지 그러면, 방금 이 기기에서 쓰고 아직 올라가지 못한
+      // 글을 주기 갱신이 서버의 옛 사본으로 되돌린다.
+      conflict: mode === "login" ? "remote" : "newer",
+    }),
+    pullRemoteEntitlements(userId, isStale), // 엔타이틀먼트는 서버 권위 → pull만
+  ]);
   if (isStale()) return "stale";
   journalPullOk = journal.pullOk;
   return storeOutcome === "failed" || journal.outcome === "failed"
@@ -240,6 +244,9 @@ export function setSyncUser(userId: string | null): void {
     // 막힌다. 로그아웃은 항상 완전한 초기화여야 한다(S5).
     inFlight = 0;
     activeSync = null;
+    // 다음 세션은 서버에 무엇이 있는지 모르는 데서 출발해야 한다. 남겨 두면
+    // 이미 올렸다고 착각한 기록이 영영 올라가지 않는다.
+    forgetServerKnowledge();
     cancelPending();
     return;
   }

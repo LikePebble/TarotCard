@@ -400,6 +400,24 @@ describe("refreshFromRemote", () => {
     );
   });
 
+  it("리딩·일기·엔타이틀먼트를 직렬이 아니라 함께 띄운다", async () => {
+    const mods = await load();
+    const order: string[] = [];
+    vi.mocked(mods.sync.reconcileStore).mockImplementation(async () => {
+      order.push("store");
+      return "ok";
+    });
+    vi.mocked(mods.sync.reconcileJournal).mockImplementation(async () => {
+      order.push("journal");
+      return { outcome: "ok", pullOk: true };
+    });
+
+    mods.pusher.setSyncUser("u1");
+    // 첫 await 이전에 셋 다 시작돼 있어야 한다. 직렬이면 store 하나뿐이다.
+    expect(order).toEqual(["store", "journal"]);
+    await settle();
+  });
+
   it("대기 중이던 push 예약을 흡수한다", async () => {
     const { pusher, remote, sync } = await loggedIn();
     await vi.advanceTimersByTimeAsync(30_000);
