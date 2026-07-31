@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { HomeHero } from "./HomeHero";
+import { HomePopup } from "@/components/HomePopup";
 
 export default function HomePage() {
   return (
@@ -33,6 +34,7 @@ export default function HomePage() {
         <HomeHero />
       </main>
       <TabBar />
+      <HomePopup />
     </div>
   );
 }
