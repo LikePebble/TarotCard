@@ -2,6 +2,7 @@
 
 import { use, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { DayReadingTabs } from "@/components/DayReadingTabs";
@@ -27,6 +28,7 @@ export default function JournalDayPage({
   params: Promise<{ date: string }>;
 }) {
   const reducedMotion = useReducedMotion();
+  const router = useRouter();
   const { date } = use(params);
   const { store } = useArcanaStore();
   const { store: journal } = useJournal();
@@ -35,7 +37,7 @@ export default function JournalDayPage({
   const [todayIso, setTodayIso] = useState<string | null>(null);
   const [body, setBody] = useState("");
   const [loaded, setLoaded] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [confirmingCancel, setConfirmingCancel] = useState(false);
   const loadedDate = useRef<string | null>(null);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export default function JournalDayPage({
     if (loadedDate.current !== date) {
       loadedDate.current = date;
       setBody(entryOf(journal, date)?.body ?? "");
-      setSaved(false);
+      setConfirmingCancel(false);
     }
     setLoaded(true);
   }, [journal, date]);
@@ -61,9 +63,48 @@ export default function JournalDayPage({
   // 지운 날은 "저장됨" 시각을 보여주지 않는다.
   const savedAt = journal ? entryOf(journal, date)?.updatedAt : undefined;
 
+  // 마지막으로 저장된 본문. 취소는 이 값으로 되돌린다.
+  const savedBody = journal ? (entryOf(journal, date)?.body ?? "") : "";
+  const dirty = loaded && body !== savedBody;
+
+  /**
+   * 저장하고 이 화면을 떠난다. 취소와 나가는 곳이 같아야 두 버튼이 대칭이 된다.
+   *
+   * "저장되었습니다"를 띄우지 않는다 — 떠나 버리면 읽을 사람이 없다. 확인은
+   * 돌아간 일별 기록의 달력이 대신한다(쓴 날에 표시가 붙는다).
+   */
   const save = () => {
     setEntry(date, body);
-    setSaved(true);
+    leave();
+  };
+
+  /**
+   * 취소: 지금 쓴 것을 버리고 이 화면을 떠난다.
+   *
+   * 본문을 되돌린 뒤 나가는 것이 아니라 그냥 나간다 — 저장하지 않았으므로
+   * 고친 내용은 애초에 어디에도 남지 않는다. 되돌리는 동작을 한 번 더 하면
+   * 떠나는 화면이 잠깐 깜빡일 뿐이다.
+   *
+   * 돌아갈 곳은 브라우저 히스토리다. 이 화면은 일별 기록에서도, 리딩 결과의
+   * "이날의 일기 쓰기"에서도 들어온다 — 어느 쪽으로 왔든 그리로 돌려보낸다.
+   * 주소로 곧장 열어 히스토리가 없을 때만 일별 기록으로 보낸다.
+   */
+  const leave = () => {
+    setConfirmingCancel(false);
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+      return;
+    }
+    router.push("/my/journal");
+  };
+
+  // 쓴 것이 있을 때만 묻는다. 버릴 것이 없으면 묻는 일 자체가 군더더기다.
+  const cancel = () => {
+    if (dirty) {
+      setConfirmingCancel(true);
+      return;
+    }
+    leave();
   };
 
   const dayNav =
@@ -149,30 +190,62 @@ export default function JournalDayPage({
             value={body}
             onChange={(e) => {
               setBody(e.target.value);
-              setSaved(false);
+              setConfirmingCancel(false);
             }}
             placeholder="오늘 마음에 남은 것을 적어 보세요."
             rows={8}
             className="mt-2 w-full resize-y rounded-2xl border border-line bg-ink-1 p-4 font-serif text-[15px] leading-[1.75] text-body transition-colors focus-visible:border-line-gold lg:rounded-[14px]"
           />
-          <div className="mt-3 flex items-center gap-3">
-            <button
-              type="button"
-              onClick={save}
-              disabled={!loaded}
-              className="btn btn-gold active:scale-[0.98] disabled:opacity-50"
-            >
-              저장
-            </button>
-            {saved ? (
-              <motion.span
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+            {confirmingCancel ? (
+              <motion.div
                 initial={reducedMotion ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-[13px] text-gold-soft"
+                className="flex flex-wrap items-center gap-x-3 gap-y-2"
+                role="alertdialog"
+                aria-label="취소 확인"
               >
-                저장되었습니다
-              </motion.span>
-            ) : null}
+                <span className="text-[13px] text-body">
+                  쓴 내용을 저장하지 않고 나갈까요?
+                </span>
+                <button
+                  type="button"
+                  onClick={leave}
+                  autoFocus
+                  className="min-h-11 px-1 text-[13px] font-medium text-notice underline underline-offset-4"
+                >
+                  버리고 나가기
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmingCancel(false)}
+                  className="min-h-11 px-1 text-[13px] text-muted underline underline-offset-4 transition-colors hover:text-cream"
+                >
+                  계속 쓰기
+                </button>
+              </motion.div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={save}
+                  disabled={!loaded}
+                  className="btn btn-gold active:scale-[0.98] disabled:opacity-50"
+                >
+                  저장
+                </button>
+                {/* 나가는 길이므로 늘 보인다 — 고친 게 있든 없든 떠날 수는 있어야
+                    하고, 있는 줄 몰라 못 찾는 편이 잘못 누르는 것보다 나쁘다.
+                    알약(.btn) 대신 텍스트 버튼으로 둬서 저장과 무게를 구분한다. */}
+                <button
+                  type="button"
+                  onClick={cancel}
+                  className="min-h-11 px-1 text-[13px] text-muted underline underline-offset-4 transition-colors hover:text-cream"
+                >
+                  취소
+                </button>
+              </>
+            )}
           </div>
         </div>
       </motion.main>

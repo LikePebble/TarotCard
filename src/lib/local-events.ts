@@ -5,11 +5,14 @@
  * 덕분에 호출부는 "저장"만 하면 되고 UI 갱신·서버 push를 몰라도 된다.
  * 의존성이 없어야 store/journal이 sync·supabase를 import하지 않는다.
  */
+/** deck과 popup을 store에 묶지 않는 이유: 저장 키가 다르고(선택 하나·본 적 있음
+ *  하나 vs 리딩·도감 전체), store를 울리면 화면 훅들이 관계없는 재조회를 한다. */
 export type LocalChannel =
   | "store"
   | "journal"
   | "entitlements"
   | "auth"
+  | "deck"
   | "popup";
 
 const subscribers: Record<LocalChannel, Set<() => void>> = {
@@ -17,6 +20,7 @@ const subscribers: Record<LocalChannel, Set<() => void>> = {
   journal: new Set(),
   entitlements: new Set(),
   auth: new Set(),
+  deck: new Set(),
   popup: new Set(),
 };
 

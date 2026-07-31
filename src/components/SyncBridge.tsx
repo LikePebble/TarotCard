@@ -41,9 +41,13 @@ export function SyncBridge() {
   useEffect(() => {
     const offStore = subscribeLocal("store", schedulePush);
     const offJournal = subscribeLocal("journal", schedulePush);
+    // 덱 선택도 여기로 잇는다. store.ts가 sync·supabase를 import하지 않는다는
+    // 층 분리를 지키려면 통지 채널이 유일한 연결 수단이다.
+    const offDeck = subscribeLocal("deck", schedulePush);
     return () => {
       offStore();
       offJournal();
+      offDeck();
     };
   }, []);
 
