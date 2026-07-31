@@ -206,7 +206,7 @@ export function OneCardResult({
         </div>
         {/* 버튼 라벨은 접히지 않으므로(.btn white-space: nowrap), 폭이 모자라면
             줄바꿈으로 흘려보낸다 — 안 그러면 가로로 넘친다. */}
-        <div className="mt-5 flex flex-col gap-2.5 lg:mt-8 lg:flex-row lg:flex-wrap lg:gap-3.5">
+        <div className="mt-5 flex flex-col gap-2.5 lg:mt-8 lg:flex-row lg:flex-wrap lg:justify-center lg:gap-3.5">
           <ResultActions
             deckId={deckId}
             slug={card.slug}
