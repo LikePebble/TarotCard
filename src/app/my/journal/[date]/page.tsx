@@ -37,7 +37,6 @@ export default function JournalDayPage({
   const [todayIso, setTodayIso] = useState<string | null>(null);
   const [body, setBody] = useState("");
   const [loaded, setLoaded] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [confirmingCancel, setConfirmingCancel] = useState(false);
   const loadedDate = useRef<string | null>(null);
 
@@ -53,7 +52,6 @@ export default function JournalDayPage({
     if (loadedDate.current !== date) {
       loadedDate.current = date;
       setBody(entryOf(journal, date)?.body ?? "");
-      setSaved(false);
       setConfirmingCancel(false);
     }
     setLoaded(true);
@@ -69,9 +67,15 @@ export default function JournalDayPage({
   const savedBody = journal ? (entryOf(journal, date)?.body ?? "") : "";
   const dirty = loaded && body !== savedBody;
 
+  /**
+   * 저장하고 이 화면을 떠난다. 취소와 나가는 곳이 같아야 두 버튼이 대칭이 된다.
+   *
+   * "저장되었습니다"를 띄우지 않는다 — 떠나 버리면 읽을 사람이 없다. 확인은
+   * 돌아간 일별 기록의 달력이 대신한다(쓴 날에 표시가 붙는다).
+   */
   const save = () => {
     setEntry(date, body);
-    setSaved(true);
+    leave();
   };
 
   /**
@@ -186,7 +190,6 @@ export default function JournalDayPage({
             value={body}
             onChange={(e) => {
               setBody(e.target.value);
-              setSaved(false);
               setConfirmingCancel(false);
             }}
             placeholder="오늘 마음에 남은 것을 적어 보세요."
@@ -241,15 +244,6 @@ export default function JournalDayPage({
                 >
                   취소
                 </button>
-                {saved ? (
-                  <motion.span
-                    initial={reducedMotion ? false : { opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-[13px] text-gold-soft"
-                  >
-                    저장되었습니다
-                  </motion.span>
-                ) : null}
               </>
             )}
           </div>
