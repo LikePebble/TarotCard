@@ -25,6 +25,13 @@ vi.mock("@/lib/sync/sync", () => ({
 vi.mock("@/lib/sync/entitlements-remote", () => ({
   pullRemoteEntitlements: vi.fn(async () => {}),
 }));
+// 같은 이유로 덱도 모킹한다. 실모듈은 store(localStorage)와 Supabase를 함께
+// 만지므로 node 환경에서 조용히 no-op이 된다.
+vi.mock("@/lib/sync/deck-remote", () => ({
+  reconcileSelectedDeck: vi.fn(async () => "ok"),
+  pushLocalDeck: vi.fn(async () => "ok"),
+  forgetPushedDeck: vi.fn(),
+}));
 // 이 표식은 localStorage에 있고 테스트 환경은 node라 window가 없다.
 // 모킹해서 "이미 병합한 기기"를 직접 만든다.
 vi.mock("@/lib/sync/first-merge", () => ({
@@ -40,6 +47,7 @@ async function load() {
   const journalRemote = await import("@/lib/sync/journal-remote");
   const sync = await import("@/lib/sync/sync");
   const entitlements = await import("@/lib/sync/entitlements-remote");
+  const deck = await import("@/lib/sync/deck-remote");
   const status = await import("@/lib/sync/status");
   const firstMerge = await import("@/lib/sync/first-merge");
   const pusher = await import("@/lib/sync/pusher");
@@ -63,6 +71,8 @@ async function load() {
     pullOk: true,
   });
   vi.mocked(entitlements.pullRemoteEntitlements).mockResolvedValue(undefined);
+  vi.mocked(deck.reconcileSelectedDeck).mockResolvedValue("ok");
+  vi.mocked(deck.pushLocalDeck).mockResolvedValue("ok");
   vi.mocked(firstMerge.hasMergedWith).mockReturnValue(false);
 
   return {
@@ -72,6 +82,7 @@ async function load() {
     journalRemote,
     sync,
     entitlements,
+    deck,
     status,
     firstMerge,
     pusher,
@@ -538,6 +549,67 @@ describe("로그인 최초 병합의 판정", () => {
     await settle();
 
     expect(firstMerge.rememberMergedWith).not.toHaveBeenCalled();
+  });
+});
+
+/*
+ * 선택한 기본 덱은 타임스탬프 없는 스칼라라 LWW로 물러설 수 없다. 그래서
+ * 서버를 당겨오는 것은 최초 병합 한 번뿐이고, 이후에는 올리기만 한다.
+ */
+describe("덱 선택 동기화", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("로그인 최초 병합에서 서버의 선택을 당겨온다", async () => {
+    const { deck } = await loggedIn();
+    expect(deck.reconcileSelectedDeck).toHaveBeenCalledWith(
+      "u1",
+      expect.any(Function),
+    );
+  });
+
+  it("주기 갱신에서는 당겨오지 않는다", async () => {
+    const mods = await load();
+    vi.mocked(mods.firstMerge.hasMergedWith).mockReturnValue(true);
+
+    mods.pusher.setSyncUser("u1");
+    await settle();
+
+    expect(mods.sync.reconcileStore).toHaveBeenCalledTimes(1); // 병합 자체는 돌았다
+    expect(mods.deck.reconcileSelectedDeck).not.toHaveBeenCalled();
+  });
+
+  it("push 때 로컬 선택을 함께 올린다", async () => {
+    const { pusher, deck } = await loggedIn();
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    await settle();
+    expect(deck.pushLocalDeck).toHaveBeenCalledWith("u1");
+  });
+
+  /*
+   * 동기화 배지가 답하는 질문은 "내 기록이 서버에 있는가"다. 덱은 선호값이라
+   * 그 답을 바꾸지 않는다 — 실패는 로그로 남고 다음 push가 다시 시도한다.
+   */
+  it("덱 push가 실패해도 동기화 상태를 error로 만들지 않는다", async () => {
+    const { pusher, deck, status } = await loggedIn();
+    vi.mocked(deck.pushLocalDeck).mockResolvedValueOnce("failed");
+    pusher.schedulePush();
+    await vi.advanceTimersByTimeAsync(2000);
+    await settle();
+    expect(status.getSyncStatus().state).toBe("ok");
+  });
+
+  it("로그아웃하면 올린 값에 대한 앎을 버린다", async () => {
+    const { pusher, deck } = await loggedIn();
+    pusher.setSyncUser(null);
+    expect(deck.forgetPushedDeck).toHaveBeenCalled();
   });
 });
 
