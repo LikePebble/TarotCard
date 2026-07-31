@@ -36,6 +36,7 @@ export default function JournalDayPage({
   const [body, setBody] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [confirmingCancel, setConfirmingCancel] = useState(false);
   const loadedDate = useRef<string | null>(null);
 
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function JournalDayPage({
       loadedDate.current = date;
       setBody(entryOf(journal, date)?.body ?? "");
       setSaved(false);
+      setConfirmingCancel(false);
     }
     setLoaded(true);
   }, [journal, date]);
@@ -70,9 +72,12 @@ export default function JournalDayPage({
     setSaved(true);
   };
 
+  // 취소는 되돌릴 수 없으므로 한 번 더 묻는다. 네이티브 confirm 대신 같은 줄에서
+  // 묻는다 — 화면 밖으로 튀어나가지 않고, 포커스를 가둘 필요도 없다.
   const cancel = () => {
     setBody(savedBody);
     setSaved(false);
+    setConfirmingCancel(false);
   };
 
   const dayNav =
@@ -159,41 +164,73 @@ export default function JournalDayPage({
             onChange={(e) => {
               setBody(e.target.value);
               setSaved(false);
+              setConfirmingCancel(false);
             }}
             placeholder="오늘 마음에 남은 것을 적어 보세요."
             rows={8}
             className="mt-2 w-full resize-y rounded-2xl border border-line bg-ink-1 p-4 font-serif text-[15px] leading-[1.75] text-body transition-colors focus-visible:border-line-gold lg:rounded-[14px]"
           />
-          <div className="mt-3 flex items-center gap-3">
-            <button
-              type="button"
-              onClick={save}
-              disabled={!loaded}
-              className="btn btn-gold active:scale-[0.98] disabled:opacity-50"
-            >
-              저장
-            </button>
-            {/* 되돌릴 것이 있을 때만 낸다. 늘 저장 옆에 서 있으면 잘못 누르기
-                쉽고, 고친 게 없을 때는 아무 일도 하지 않는 버튼이 된다.
-                알약(.btn) 대신 텍스트 버튼으로 둬서 저장과 무게를 구분한다. */}
-            {dirty ? (
-              <button
-                type="button"
-                onClick={cancel}
-                className="min-h-11 px-1 text-[13px] text-muted underline underline-offset-4 transition-colors hover:text-cream"
-              >
-                취소
-              </button>
-            ) : null}
-            {saved ? (
-              <motion.span
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+            {confirmingCancel ? (
+              <motion.div
                 initial={reducedMotion ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-[13px] text-gold-soft"
+                className="flex flex-wrap items-center gap-x-3 gap-y-2"
+                role="alertdialog"
+                aria-label="취소 확인"
               >
-                저장되었습니다
-              </motion.span>
-            ) : null}
+                <span className="text-[13px] text-body">
+                  고친 내용을 버릴까요?
+                </span>
+                <button
+                  type="button"
+                  onClick={cancel}
+                  autoFocus
+                  className="min-h-11 px-1 text-[13px] font-medium text-notice underline underline-offset-4"
+                >
+                  버리기
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmingCancel(false)}
+                  className="min-h-11 px-1 text-[13px] text-muted underline underline-offset-4 transition-colors hover:text-cream"
+                >
+                  계속 쓰기
+                </button>
+              </motion.div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={save}
+                  disabled={!loaded}
+                  className="btn btn-gold active:scale-[0.98] disabled:opacity-50"
+                >
+                  저장
+                </button>
+                {/* 되돌릴 것이 있을 때만 낸다. 늘 저장 옆에 서 있으면 잘못 누르기
+                    쉽고, 고친 게 없을 때는 아무 일도 하지 않는 버튼이 된다.
+                    알약(.btn) 대신 텍스트 버튼으로 둬서 저장과 무게를 구분한다. */}
+                {dirty ? (
+                  <button
+                    type="button"
+                    onClick={() => setConfirmingCancel(true)}
+                    className="min-h-11 px-1 text-[13px] text-muted underline underline-offset-4 transition-colors hover:text-cream"
+                  >
+                    취소
+                  </button>
+                ) : null}
+                {saved ? (
+                  <motion.span
+                    initial={reducedMotion ? false : { opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-[13px] text-gold-soft"
+                  >
+                    저장되었습니다
+                  </motion.span>
+                ) : null}
+              </>
+            )}
           </div>
         </div>
       </motion.main>
