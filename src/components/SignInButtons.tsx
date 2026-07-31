@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { CircleNotch } from "@phosphor-icons/react";
 import { signInWithProvider } from "@/lib/auth/session";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -84,6 +85,33 @@ export function SignInButtons({
           <span>Google로 시작하기</span>
         </button>
       </div>
+
+      {/* 약관 동의는 가입 행위로 갈음한다. 약관규제법 제3조 제2항이 요구하는
+          "일반적으로 예상되는 방법"이 온라인에서는 계약 시점의 링크 제공이다.
+          그래서 이 문구는 로그인 버튼과 같은 화면에 있어야 한다 — 옮기지 말 것.
+
+          ⚠️ 처리방침을 동의 대상으로 묶지 말 것. 개인정보처리방침은 개인정보
+          보호법 제30조상 수립·공개 의무 대상이지 동의를 받는 문서가 아니다.
+          아르카가 저장하는 항목은 계정 기록 보관·동기화라는 계약 이행에 필요한
+          범위이므로 제15조 제1항 제4호로 별도 동의 없이 처리한다. 결제나 맞춤형
+          광고를 도입하면 그 목적은 계약 이행이 아니므로 별도 동의가 필요해진다. */}
+      <p className="px-1 text-center text-[12px] leading-relaxed text-muted">
+        계속하면{" "}
+        <Link
+          href="/terms"
+          className="text-gold-soft underline underline-offset-2 hover:text-cream"
+        >
+          이용약관
+        </Link>
+        에 동의하는 것으로 봅니다. 개인정보 처리에 관한 사항은{" "}
+        <Link
+          href="/privacy"
+          className="text-gold-soft underline underline-offset-2 hover:text-cream"
+        >
+          개인정보처리방침
+        </Link>
+        에서 확인할 수 있습니다.
+      </p>
     </div>
   );
 }

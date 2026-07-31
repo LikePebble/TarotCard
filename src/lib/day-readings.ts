@@ -12,6 +12,32 @@ export type DayReading = {
   category: string; // focus id
 };
 
+export type OrderedDayReadings<T extends DayReading = DayReading> = {
+  readings: T[];
+  oneCardCount: number;
+};
+
+/** 탭에서 유형별 영역을 나눌 수 있도록 1장 리딩을 먼저, 각 영역은 뽑은 순서로 정렬한다. */
+export function orderedDayReadings<T extends DayReading>(readings: T[]): OrderedDayReadings<T> {
+  const sorted = readings
+    .map((reading, originalIndex) => ({ reading, originalIndex }))
+    .sort((a, b) => {
+      const spreadOrder = Number(a.reading.spread === "three") - Number(b.reading.spread === "three");
+      if (spreadOrder !== 0) return spreadOrder;
+      return a.reading.at < b.reading.at
+        ? -1
+        : a.reading.at > b.reading.at
+          ? 1
+          : a.originalIndex - b.originalIndex;
+    })
+    .map(({ reading }) => reading);
+
+  return {
+    readings: sorted,
+    oneCardCount: sorted.filter((reading) => reading.spread === "one").length,
+  };
+}
+
 /** 리딩 유형(스프레드) 이름. */
 export function readingTypeLabel(spread: SpreadType): string {
   return spread === "one" ? "오늘의 카드" : "과거 · 현재 · 미래";
@@ -30,20 +56,16 @@ function tabTopicLabel(category: string): string {
 
 /**
  * 탭 라벨(순수). 같은 날의 리딩은 주제(포커스)로 갈리므로 주제 이름을 기본으로
- * 쓴다. 유형 라벨은 선택된 패널 안에 이미 있어 탭에서 반복할 이유가 없다.
- * 다만 주제가 겹치면(예: 사랑 오늘의 카드 + 사랑 과거·현재·미래) 유형을 덧붙이고,
- * 그래도 겹치면 순번을 붙여 탭 이름이 중복되지 않게 한다.
+ * 쓴다. 3장 리딩은 한눈에 유형을 알 수 있도록 "3장"을 덧붙인다.
+ * 같은 유형 안에서 주제가 겹치면 순번을 붙여 탭 이름이 중복되지 않게 한다.
  */
 export function readingTabLabels(readings: DayReading[]): string[] {
-  const topics = readings.map((r) => tabTopicLabel(r.category));
-  const topicCount = countBy(topics);
-
-  const labels = readings.map((r, i) =>
-    topicCount.get(topics[i]) === 1
-      ? topics[i]
-      : `${topics[i]} (${readingTypeLabel(r.spread)})`,
+  const ordered = orderedDayReadings(readings).readings;
+  const labels = ordered.map((reading) =>
+    reading.spread === "three"
+      ? `${tabTopicLabel(reading.category)} 3장`
+      : tabTopicLabel(reading.category),
   );
-
   const labelCount = countBy(labels);
   const seen = new Map<string, number>();
   return labels.map((label) => {
@@ -66,9 +88,10 @@ function countBy(values: string[]): Map<string, number> {
  * at이 같으면 뒤에 저장된 쪽(=배열 뒤쪽)을 고른다.
  */
 export function defaultReadingTabIndex(readings: DayReading[]): number {
+  const ordered = orderedDayReadings(readings).readings;
   let best = 0;
-  for (let i = 1; i < readings.length; i += 1) {
-    if (readings[i].at >= readings[best].at) best = i;
+  for (let i = 1; i < ordered.length; i += 1) {
+    if (ordered[i].at >= ordered[best].at) best = i;
   }
   return best;
 }
@@ -81,6 +104,7 @@ export function activeReadingIndex(
   readings: DayReading[],
   selectedId: string | null,
 ): number {
-  const picked = readings.findIndex((r) => r.id === selectedId);
-  return picked === -1 ? defaultReadingTabIndex(readings) : picked;
+  const ordered = orderedDayReadings(readings).readings;
+  const picked = ordered.findIndex((r) => r.id === selectedId);
+  return picked === -1 ? defaultReadingTabIndex(ordered) : picked;
 }
