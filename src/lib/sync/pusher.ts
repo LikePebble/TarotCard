@@ -1,8 +1,14 @@
 import { loadJournal } from "@/lib/journal";
 import { loadStore } from "@/lib/store";
+import type { SyncOutcome } from "@/lib/sync/outcome";
 import { setSyncState } from "@/lib/sync/status";
 import { reconcileJournal, reconcileStore } from "@/lib/sync/sync";
 import { pullRemoteEntitlements } from "@/lib/sync/entitlements-remote";
+import {
+  forgetPushedDeck,
+  pushLocalDeck,
+  reconcileSelectedDeck,
+} from "@/lib/sync/deck-remote";
 import { pushLocalJournal } from "@/lib/sync/journal-remote";
 import { pushLocalStore } from "@/lib/sync/remote";
 import { forgetServerKnowledge } from "@/lib/sync/server-knowledge";
@@ -97,8 +103,13 @@ async function pushNow(userId: string): Promise<void> {
     const journalPushed = await pushLocalJournal(userId, journal, {
       prune: journalPullOk,
     });
+    await pushLocalDeck(userId);
     // 원격 계층은 예외 대신 결과를 돌려준다. 실패를 "ok"로 표시하면
     // 하지도 않은 백업을 했다고 말하는 셈이다.
+    //
+    // 덱 결과는 일부러 여기 넣지 않는다. 동기화 배지가 답하는 질문은 "내 기록이
+    // 서버에 있는가"이고, 덱은 선호값이라 그 답을 바꾸지 않는다. 실패는 로그로
+    // 남고 다음 push가 다시 시도한다.
     const failed = storePushed === "failed" || journalPushed === "failed";
     if (stillCurrent(userId)) setSyncState(failed ? "error" : "ok");
   } catch (e) {
@@ -132,14 +143,15 @@ type ReconcileMode = "login" | "refresh";
  * 일이 같기 때문이다. 로그인 때만 이걸 돌리면 다른 기기의 기록은 재접속
  * 전까지 이 기기에 나타나지 않는다.
  *
- * 갈리는 것은 일기의 날짜 충돌 규칙 하나뿐이다(S3a).
+ * 모드로 갈리는 것은 둘뿐이다: 일기의 날짜 충돌 규칙(S3a)과, 최초 병합에서만
+ * 도는 덱 선택.
  */
 async function reconcile(
   userId: string,
   isStale: () => boolean,
   mode: ReconcileMode,
 ): Promise<"ok" | "failed" | "stale"> {
-  // 리딩·일기·엔타이틀먼트는 서로 독립이다. 직렬로 돌리면 왕복이 그대로
+  // 리딩·일기·엔타이틀먼트·덱은 서로 독립이다. 직렬로 돌리면 왕복이 그대로
   // 더해진다 — 로그인 병합이 왕복 6~7회였던 이유가 이것이다. 각 갈래 안에서는
   // pull이 push보다 먼저라는 순서가 그대로 지켜진다.
   const [storeOutcome, journal] = await Promise.all([
@@ -151,6 +163,15 @@ async function reconcile(
       conflict: mode === "login" ? "remote" : "newer",
     }),
     pullRemoteEntitlements(userId, isStale), // 엔타이틀먼트는 서버 권위 → pull만
+    // 덱 선택은 **최초 병합에서만** 서버를 당겨온다. 이 값에는 타임스탬프가
+    // 없어 LWW로 물러설 수단이 없으므로, 갱신마다 pull하면 방금 이 기기에서
+    // 고르고 아직 못 올린 선택을 서버의 옛 값이 되돌린다(일기가 refresh에서
+    // "remote"를 쓰지 않는 것과 같은 이유). 대가는 다른 기기의 덱 변경이 이
+    // 기기의 다음 최초 병합 전까지 보이지 않는다는 것이고, 기기별 선호값으로서
+    // 수용한다.
+    mode === "login"
+      ? reconcileSelectedDeck(userId, isStale)
+      : Promise.resolve<SyncOutcome>("skipped"),
   ]);
   if (isStale()) return "stale";
   journalPullOk = journal.pullOk;
@@ -262,6 +283,8 @@ export function setSyncUser(userId: string | null): void {
     // 다음 세션은 서버에 무엇이 있는지 모르는 데서 출발해야 한다. 남겨 두면
     // 이미 올렸다고 착각한 기록이 영영 올라가지 않는다.
     forgetServerKnowledge();
+    // 덱도 같다: 다음 세션은 서버에 무엇이 있는지 모르는 데서 출발해야 한다.
+    forgetPushedDeck();
     cancelPending();
     return;
   }

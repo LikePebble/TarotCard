@@ -76,7 +76,12 @@ export default function FocusPage() {
   return (
     <div className="flex min-h-[100dvh] flex-col">
       <DesktopNav active="reading" />
-      <FlowHeader backHref="/reading" backLabel="리딩" step="2 / 3" />
+      <FlowHeader
+        backHref="/reading"
+        backLabel="리딩"
+        step="2 / 3"
+        contentClassName="max-w-[860px]"
+      />
       <main className="mx-auto w-full max-w-[860px] px-6 pb-8 pt-3 lg:px-12 lg:pb-24 lg:pt-[88px]">
         <p className="min-h-[21px] text-[13px] text-muted lg:mb-3.5 lg:text-[14px]">
           {spread === "three" ? (

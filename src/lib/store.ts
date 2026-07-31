@@ -342,29 +342,61 @@ export function useArcanaStore() {
 
 const DECK_KEY = "arcana.deck";
 
+/**
+ * 저장된 원본 선택. 소유 보정을 거치지 않는다.
+ *
+ * 동기화 계층이 서버에 올릴 때 쓴다 — 올려야 하는 것은 "지금 보여 주는 덱"이
+ * 아니라 **사용자가 고른 것**이다. 보정된 값을 올리면 소유가 잠시 비어 있던
+ * 기기가 다른 기기의 선택까지 클래식으로 되돌려 놓는다.
+ */
+export function getStoredDeckId(): string {
+  if (typeof window === "undefined") return DEFAULT_DECK_ID;
+  try {
+    return window.localStorage.getItem(DECK_KEY) ?? DEFAULT_DECK_ID;
+  } catch {
+    return DEFAULT_DECK_ID;
+  }
+}
+
+/**
+ * 화면과 리딩이 쓸 덱. 저장값을 그대로 돌려준다.
+ *
+ * 소유하지 않은 프리미엄 덱이 선택돼 있어도 가리지 않는다 — 미소유·미로그인
+ * 상태에서 고른 프리미엄 덱의 뒷면을 보여 주는 것은 구매를 유도하는 의도된
+ * 동작이고, `docs/release/pre-deployment-checklist.md`의 머지 게이트 항목이다.
+ * ("리딩 화면의 카드 뒷면이 방금 선택한 프리미엄 덱 자산이다")
+ * 여기에 소유 가드를 넣지 말 것.
+ */
 export function getSelectedDeckId(): string {
-  if (typeof window === "undefined") return "classic";
-  return window.localStorage.getItem(DECK_KEY) ?? "classic";
+  return getStoredDeckId();
 }
 
 export function setSelectedDeckId(id: string) {
   try {
     window.localStorage.setItem(DECK_KEY, id);
   } catch {}
+  // 저장 실패와 무관하게 알린다(saveStore와 같은 이유). 이 알림이 화면 갱신과
+  // 서버 push를 겸한다 — store가 sync·supabase를 몰라도 되는 층 분리다.
+  notifyLocal("deck");
 }
 
 /** Client hook: "classic" during SSR, then the persisted selection. */
 export function useSelectedDeck() {
-  const [deckId, setDeckId] = useState("classic");
+  const [deckId, setDeckId] = useState(DEFAULT_DECK_ID);
   const [ready, setReady] = useState(false);
+  const refresh = useCallback(() => setDeckId(getSelectedDeckId()), []);
   useEffect(() => {
-    setDeckId(getSelectedDeckId());
+    refresh();
     setReady(true);
-  }, []);
-  const select = useCallback((id: string) => {
-    setSelectedDeckId(id);
-    setDeckId(id);
-  }, []);
+    return subscribeLocal("deck", refresh);
+  }, [refresh]);
+  const select = useCallback(
+    (id: string) => {
+      setSelectedDeckId(id);
+      refresh();
+    },
+    [refresh],
+  );
   return { deckId, select, ready };
 }
 
