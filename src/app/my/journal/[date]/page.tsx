@@ -61,9 +61,18 @@ export default function JournalDayPage({
   // 지운 날은 "저장됨" 시각을 보여주지 않는다.
   const savedAt = journal ? entryOf(journal, date)?.updatedAt : undefined;
 
+  // 마지막으로 저장된 본문. 취소는 이 값으로 되돌린다.
+  const savedBody = journal ? (entryOf(journal, date)?.body ?? "") : "";
+  const dirty = loaded && body !== savedBody;
+
   const save = () => {
     setEntry(date, body);
     setSaved(true);
+  };
+
+  const cancel = () => {
+    setBody(savedBody);
+    setSaved(false);
   };
 
   const dayNav =
@@ -164,6 +173,18 @@ export default function JournalDayPage({
             >
               저장
             </button>
+            {/* 되돌릴 것이 있을 때만 낸다. 늘 저장 옆에 서 있으면 잘못 누르기
+                쉽고, 고친 게 없을 때는 아무 일도 하지 않는 버튼이 된다.
+                알약(.btn) 대신 텍스트 버튼으로 둬서 저장과 무게를 구분한다. */}
+            {dirty ? (
+              <button
+                type="button"
+                onClick={cancel}
+                className="min-h-11 px-1 text-[13px] text-muted underline underline-offset-4 transition-colors hover:text-cream"
+              >
+                취소
+              </button>
+            ) : null}
             {saved ? (
               <motion.span
                 initial={reducedMotion ? false : { opacity: 0 }}
