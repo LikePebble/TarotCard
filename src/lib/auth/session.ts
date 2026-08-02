@@ -6,7 +6,8 @@ import { markLoginPending } from "@/lib/analytics";
 import { getBrowserSupabase, isSupabaseConfigured } from "@/lib/supabase/client";
 import { clearLocalEntitlements } from "@/lib/entitlements";
 import { clearLocalJournal } from "@/lib/journal";
-import { clearLocalStore } from "@/lib/store";
+import { clearLocalStore, loadStore } from "@/lib/store";
+import { retainDrawUsageOnSignOut } from "@/lib/draw-guard";
 import { flushPendingSync } from "@/lib/sync/pusher";
 import { forgetMergedDevice } from "@/lib/sync/first-merge";
 import { resetSyncStatus } from "@/lib/sync/status";
@@ -220,6 +221,7 @@ function clearDeviceAccountData(): void {
 export async function signOutAndClear(): Promise<boolean> {
   if (hasDevSession()) {
     setDevSession(false);
+    retainDrawUsageOnSignOut(loadStore().readings);
     clearDeviceAccountData();
     return true;
   }
@@ -230,6 +232,7 @@ export async function signOutAndClear(): Promise<boolean> {
   }
 
   const signedOut = await signOut();
+  retainDrawUsageOnSignOut(loadStore().readings);
   clearDeviceAccountData();
   return signedOut;
 }

@@ -108,6 +108,11 @@ describe("slotState — 오늘의 타로 (카테고리별 일 1회, 기본 1슬�
     const s: Store = { version: 2, collection: {}, readings: [reading({ category: "love" })] };
     expect(slotState(s, "one", "work", day, 3)).toEqual({ state: "available" });
   });
+
+  it("로그아웃 전에 쓴 슬롯도 남은 하루 한도를 계산한다", () => {
+    const s: Store = { version: 2, collection: {}, readings: [] };
+    expect(slotState(s, "one", "day", day, 2, 2)).toEqual({ state: "exhausted" });
+  });
 });
 
 describe("slotState — 과거·현재·미래 (주 1회, 카테고리 무관)", () => {

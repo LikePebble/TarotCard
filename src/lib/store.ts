@@ -258,11 +258,15 @@ export function slotState(
   category: string,
   d: Date,
   maxDailySlots = 1,
+  retainedSlotsUsed = 0,
 ): SlotState {
   const existing = findReadingFor(store, spread, category, d);
   if (existing) return { state: "completed", readingId: existing.id };
   const type = readingTypeOf(spread);
-  if (type.cadenceUnit === "day" && dailySlotsUsed(store, spread, d) >= maxDailySlots) {
+  if (
+    type.cadenceUnit === "day" &&
+    dailySlotsUsed(store, spread, d) + retainedSlotsUsed >= maxDailySlots
+  ) {
     return { state: "exhausted" };
   }
   return { state: "available" };

@@ -3,10 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   flushPendingSync: vi.fn(),
   clearLocalStore: vi.fn(),
+  loadStore: vi.fn(),
   clearLocalJournal: vi.fn(),
   clearLocalEntitlements: vi.fn(),
   resetSyncStatus: vi.fn(),
   forgetMergedDevice: vi.fn(),
+  retainDrawUsageOnSignOut: vi.fn(),
   authSignOut: vi.fn(),
   getSession: vi.fn(),
   getUser: vi.fn(),
@@ -31,6 +33,11 @@ vi.mock("@/lib/sync/pusher", () => ({
 
 vi.mock("@/lib/store", () => ({
   clearLocalStore: mocks.clearLocalStore,
+  loadStore: mocks.loadStore,
+}));
+
+vi.mock("@/lib/draw-guard", () => ({
+  retainDrawUsageOnSignOut: mocks.retainDrawUsageOnSignOut,
 }));
 
 vi.mock("@/lib/journal", () => ({
@@ -173,6 +180,7 @@ describe("signOutAndClear", () => {
     errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     mocks.flushPendingSync.mockResolvedValue(undefined);
     mocks.authSignOut.mockResolvedValue({ error: null });
+    mocks.loadStore.mockReturnValue({ readings: [] });
   });
 
   afterEach(() => {
@@ -187,6 +195,7 @@ describe("signOutAndClear", () => {
     expect(mocks.clearLocalJournal).toHaveBeenCalledOnce();
     expect(mocks.clearLocalEntitlements).toHaveBeenCalledOnce();
     expect(mocks.resetSyncStatus).toHaveBeenCalledOnce();
+    expect(mocks.retainDrawUsageOnSignOut).toHaveBeenCalledWith([]);
   });
 
   /*

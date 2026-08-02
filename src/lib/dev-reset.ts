@@ -2,6 +2,7 @@
 
 import { readingTypeOf } from "@/data/reading-types";
 import { isoWeekOf, localDateOf } from "@/lib/period";
+import { resetRetainedDrawUsage } from "@/lib/draw-guard";
 import {
   loadStore,
   setLocalStore,
@@ -57,6 +58,7 @@ export function resetCurrentReadings(): ArcanaStore {
     collection: recomputeEncounters(readings),
     readings,
   };
+  resetRetainedDrawUsage(now);
   setLocalStore(next); // 저장이 곧 알림이라 열려 있는 화면이 함께 갱신된다.
   return next;
 }

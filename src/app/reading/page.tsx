@@ -40,7 +40,7 @@ export default function ReadingPage() {
               </p>
             </div>
             <Link
-              href="/collection"
+              href="/collection?from=reading"
               className="inline-flex min-h-11 flex-none items-center rounded-lg border border-line-gold px-3 text-[13px] text-gold-soft hover:text-cream"
             >
               덱 바꾸기

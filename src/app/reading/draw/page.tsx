@@ -11,9 +11,13 @@ import { DesktopNav } from "@/components/SiteNav";
 import { cards, type Card } from "@/data/cards";
 import { focusLabelOf } from "@/data/focus";
 import { track } from "@/lib/analytics";
-import { fanStackOrder } from "@/lib/draw-fan";
+import { fanRotation, fanStackOrder } from "@/lib/draw-fan";
 import { pickOrientations, secureRand } from "@/lib/orientation";
 import { useSession } from "@/lib/auth/session";
+import {
+  retainedDrawUsageAt,
+  retainRecordedDrawUsage,
+} from "@/lib/draw-guard";
 import { localDateOf } from "@/lib/period";
 import { dailyTicketsFor } from "@/lib/tickets";
 import {
@@ -170,6 +174,12 @@ export default function DrawPage() {
     () => () => {
       for (const id of timersRef.current) window.clearTimeout(id);
       if (watchdogRef.current !== null) window.clearTimeout(watchdogRef.current);
+      // 개발 Strict Mode는 마운트 직후 effect를 정리한 뒤 다시 실행한다.
+      // 첫 셔플 타이머만 지우고 이 표식을 남기면 두 번째 effect가 초기화를
+      // 건너뛰어 카드가 영구히 "섞는 중"에 머문다. 실제 언마운트에서도 다음
+      // 진입이 새 셔플로 시작해야 하므로 함께 되돌린다.
+      initRef.current = false;
+      hasShuffledRef.current = false;
     },
     [],
   );
@@ -195,6 +205,7 @@ export default function DrawPage() {
         pendingFocus,
         at,
         dailyTicketsFor(user !== null),
+        user ? 0 : retainedDrawUsageAt(at).oneSlotsUsed,
       );
       if (slot.state === "completed") {
         router.replace(`/reading/${slot.readingId}`);
@@ -214,6 +225,10 @@ export default function DrawPage() {
     } else {
       // 과거·현재·미래는 주 1회. 티켓과 무관하므로 케이던스만 본다.
       const blocked = blockingReading(store, "three", at);
+      if (!user && retainedDrawUsageAt(at).threeUsed) {
+        router.replace("/reading");
+        return;
+      }
       if (blocked) {
         router.replace(`/reading/${blocked.id}`);
         return;
@@ -237,7 +252,14 @@ export default function DrawPage() {
       const at = new Date();
       const fresh = loadStore();
       if (s === "one") {
-        const slot = slotState(fresh, "one", f, at, dailyTicketsFor(user !== null));
+        const slot = slotState(
+          fresh,
+          "one",
+          f,
+          at,
+          dailyTicketsFor(user !== null),
+          user ? 0 : retainedDrawUsageAt(at).oneSlotsUsed,
+        );
         if (slot.state === "completed") {
           router.replace(`/reading/${slot.readingId}`);
           return;
@@ -248,6 +270,10 @@ export default function DrawPage() {
         }
       } else {
         const blocked = blockingReading(fresh, "three", at);
+        if (!user && retainedDrawUsageAt(at).threeUsed) {
+          router.replace("/reading");
+          return;
+        }
         if (blocked) {
           router.replace(`/reading/${blocked.id}`);
           return;
@@ -261,6 +287,7 @@ export default function DrawPage() {
         // 방향은 기록 시점에 뽑는다. uid()와 같은 이유로 보안 난수를 쓴다.
         orientations: pickOrientations(slugs.length, secureRand),
       });
+      retainRecordedDrawUsage(result.record.spread, new Date(result.record.at));
       // 퍼널의 전환 지점. 기록이 실제로 남은 뒤에만 보낸다 — 위의 두 갈래
       // (이미 뽑음 / 오늘 소진)는 여기까지 오지 않는다. recordedRef가 이
       // 함수 전체를 한 번으로 묶으므로 재시도·워치독으로 두 번 나가지 않는다.
@@ -567,10 +594,19 @@ export default function DrawPage() {
                       } ${dimmedOne ? "dimmed" : ""}`}
                       style={
                         {
-                          "--fan-i": offset,
+                          "--fan-rotate": fanRotation(offset, spread),
+                          "--fan-rotate-desktop": fanRotation(
+                            offset,
+                            spread,
+                            true,
+                          ),
                           "--deal-delay": `${Math.abs(offset) * 55}ms`,
-                          "--shuf-i": i,
-                          "--shuf-dir": i % 2 === 0 ? 1 : -1,
+                          "--shuf-stack-y": `${i * -2.5}px`,
+                          "--shuf-delay": `${i * 85}ms`,
+                          "--shuf-out-x": `${i % 2 === 0 ? 96 : -96}px`,
+                          "--shuf-out-rotate": `${i % 2 === 0 ? 13 : -13}deg`,
+                          "--shuf-return-x": `${i % 2 === 0 ? -70 : 70}px`,
+                          "--shuf-return-rotate": `${i % 2 === 0 ? -9 : 9}deg`,
                           "--fan-z": fanStackOrder(i, FAN_SIZE),
                         } as React.CSSProperties
                       }
@@ -599,7 +635,7 @@ export default function DrawPage() {
                             className="absolute inset-0 [backface-visibility:hidden]"
                           />
                           <div className="absolute inset-0 overflow-hidden rounded-xl bg-ink-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                            {isFlipping && deck[0] ? (
+                            {deck[0] ? (
                               <CardArt
                                 card={deck[0]}
                                 deckId={deckId}

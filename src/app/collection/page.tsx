@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { CaretRight } from "@phosphor-icons/react";
 import { DeckCard } from "@/components/DeckCard";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
@@ -27,6 +28,7 @@ import { useSession } from "@/lib/auth/session";
 import { collectionVisibility } from "@/lib/collection-access";
 
 export default function CollectionPage() {
+  const router = useRouter();
   const { store } = useArcanaStore();
   const unreadByDeck = useUnreadCollections();
   const ent = useEntitlements();
@@ -51,6 +53,17 @@ export default function CollectionPage() {
     }
 
     revokeDeckLocal(deckId);
+  };
+
+  const selectDefaultDeck = (deckId: string) => {
+    select(deckId);
+    if (
+      typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("from") === "reading"
+    ) {
+      if (window.history.length > 1) router.back();
+      else router.replace("/reading");
+    }
   };
 
   return (
@@ -157,7 +170,7 @@ export default function CollectionPage() {
                 {!isDefault ? (
                   <button
                     type="button"
-                    onClick={() => select(deck.id)}
+                    onClick={() => selectDefaultDeck(deck.id)}
                     className="mt-3 min-h-11 text-[13px] text-muted underline underline-offset-4 hover:text-cream"
                   >
                     기본 덱으로 설정

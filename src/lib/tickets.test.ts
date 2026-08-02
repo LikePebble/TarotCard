@@ -51,6 +51,16 @@ describe("dailyTicketsFor", () => {
 });
 
 describe("ticketStateOf", () => {
+  it("로그아웃 전에 사용한 슬롯도 게스트 잔량에서 뺀다", () => {
+    expect(ticketStateOf({ version: 2, collection: {}, readings: [] }, new Date(2026, 7, 2), false, 2)).toMatchObject({
+      total: 2,
+      used: 2,
+      remaining: 0,
+    });
+  });
+});
+
+describe("ticketStateOf", () => {
   it("오늘 기록이 없으면 전부 남는다", () => {
     expect(ticketStateOf(storeOf([]), today, false)).toEqual({
       total: 2,
