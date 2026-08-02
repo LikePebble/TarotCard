@@ -27,7 +27,10 @@ import {
 import { cardDetailHref } from "@/lib/card-detail-nav";
 import { useUnreadCollection } from "@/lib/collection-unseen";
 import { useSession } from "@/lib/auth/session";
-import { collectionVisibility } from "@/lib/collection-access";
+import {
+  collectionVisibility,
+  shouldPromptGuestCollection,
+} from "@/lib/collection-access";
 import {
   deckDetailCtaState,
   deckReadingCtaLabel,
@@ -66,11 +69,16 @@ export default function DeckCatalogPage({
   const actualOwned = ownsDeck(deck.id, ent);
   const ctaState = deckDetailCtaState(user !== null, actualOwned);
   const isPremium = deck.id !== "classic";
+  const promptGuestCollection = shouldPromptGuestCollection(
+    user !== null,
+    deck.id,
+  );
   const localEncounters = new Set(Object.keys(store?.collection[deck.id] ?? {}));
   const { owns: owned, encounters: collectedSet } = collectionVisibility(
     user !== null,
     actualOwned,
     localEncounters,
+    deck.id,
   );
   const total = catalogProgress(owned, collectedSet, cards.length);
   const filter = catalogFilterOf(searchParams.get("filter")) ?? "major";
@@ -164,7 +172,7 @@ export default function DeckCatalogPage({
           >
             {deckReadingCtaLabel(isDefault)}
           </button>
-          {ctaState === "guest" ? (
+          {promptGuestCollection && ctaState === "guest" ? (
             <Link href="/login" className="btn btn-ghost w-full sm:w-auto">
               로그인하고 카드 수집하기
             </Link>

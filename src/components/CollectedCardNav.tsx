@@ -53,6 +53,7 @@ export function CollectedCardNav({
     user !== null,
     ownsDeck(deckId, ent),
     localEncounters,
+    deckId,
   );
   const orderedSlugs = visibleCards(cards, filter)
     .filter((card) => catalogCardUnlocked(owns, encounters, card.slug))

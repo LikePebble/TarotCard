@@ -129,6 +129,7 @@ export default function CollectionPage() {
                 user !== null,
                 ownsDeck(deck.id, ent),
                 localEncounters,
+                deck.id,
               );
             const collected = catalogProgress(owned, encountered, cards.length);
             const hasUnread =

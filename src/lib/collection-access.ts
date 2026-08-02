@@ -6,7 +6,18 @@ export function collectionVisibility(
   signedIn: boolean,
   owns: boolean,
   encounters: Set<string>,
+  deckId: string,
 ): { owns: boolean; encounters: Set<string> } {
-  if (!signedIn) return { owns: false, encounters: new Set() };
+  if (!signedIn && deckId !== "classic") {
+    return { owns: false, encounters: new Set() };
+  }
   return { owns, encounters };
+}
+
+/** 클래식은 누구나 전 카드를 바로 볼 수 있으므로 로그인 수집 유도가 필요 없다. */
+export function shouldPromptGuestCollection(
+  signedIn: boolean,
+  deckId: string,
+): boolean {
+  return !signedIn && deckId !== "classic";
 }

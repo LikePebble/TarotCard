@@ -1,3 +1,4 @@
+import chuchuTarot from "../../public/decks/chuchu-tarot-v1/deck.json";
 import kpopMuseverse from "../../public/decks/k-pop-museverse/deck.json";
 import wolhaBiwon from "../../public/decks/wolha-biwon/deck.json";
 import type { Card } from "./cards";
@@ -11,8 +12,10 @@ export type DeckInfo = {
   description: string[];
   highlights?: string[];
   price?: number;
-  /** public 기준 경로. 첫 장은 800×1360(10:17) 상품 이미지, 이후 장은 모달에서 세로 스크롤. */
+  /** public 기준 경로. 모달에서 순서대로 세로 스크롤한다. */
   productImages?: string[];
+  /** 상품 이미지 비율. 없으면 기존 덱 규격인 10:17을 쓴다. */
+  productImageAspectRatio?: string;
 };
 
 export type Deck = {
@@ -37,6 +40,13 @@ export const decks: Deck[] = [
         "모든 리딩과 도감에서 언제나 무료로 쓸 수 있습니다.",
       ],
     },
+  },
+  {
+    id: chuchuTarot.id,
+    nameKo: chuchuTarot.nameKo,
+    active: true,
+    cardBack: `/decks/${chuchuTarot.id}/card-back.webp`,
+    info: (chuchuTarot as { info?: DeckInfo }).info ?? FALLBACK_INFO,
   },
   {
     id: wolhaBiwon.id,

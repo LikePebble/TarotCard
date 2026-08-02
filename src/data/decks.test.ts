@@ -2,6 +2,14 @@ import { describe, expect, it } from "vitest";
 import { decks, deckById, decksByDefaultFirst } from "@/data/decks";
 
 describe("decks", () => {
+  it("클래식 다음에 츄츄의 하루를 둔다", () => {
+    expect(decks.slice(0, 2).map((deck) => deck.id)).toEqual([
+      "classic",
+      "chuchu-tarot-v1",
+    ]);
+    expect(deckById("chuchu-tarot-v1").nameKo).toBe("츄츄의 하루");
+  });
+
   it("id는 서로 겹치지 않고, deckById는 각 id의 덱을 돌려준다", () => {
     const ids = decks.map((deck) => deck.id);
     expect(new Set(ids).size).toBe(ids.length);

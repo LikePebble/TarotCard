@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useArcanaStore } from "@/lib/store";
 import { useSession } from "@/lib/auth/session";
+import { shouldPromptGuestCollection } from "@/lib/collection-access";
 
 function formatKoDate(iso: string): string {
   const d = new Date(iso);
@@ -21,6 +22,12 @@ export function CollectHistory({
   const { store } = useArcanaStore();
   const { user, loading } = useSession();
   const entry = store?.collection[deckId]?.[slug];
+  const promptGuestCollection = shouldPromptGuestCollection(
+    user !== null,
+    deckId,
+  );
+
+  if (user === null && deckId === "classic") return null;
 
   return (
     <div className="mt-7 border-t border-line pt-5 lg:mt-10 lg:pt-7">
@@ -28,7 +35,7 @@ export function CollectHistory({
         <p className="text-[12.5px] text-muted" aria-hidden>
           {" "}
         </p>
-      ) : user === null ? (
+      ) : promptGuestCollection ? (
         <div>
           <span className="inline-block rounded-full border border-line px-3 py-1 text-[12px] text-muted">
             미수집

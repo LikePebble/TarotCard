@@ -95,7 +95,9 @@ export function DeckInfoModal({
                 <div
                   key={src}
                   className="relative w-full overflow-hidden rounded-xl bg-ink-2"
-                  style={{ aspectRatio: "10 / 17" }}
+                  style={{
+                    aspectRatio: deck.info.productImageAspectRatio ?? "10 / 17",
+                  }}
                 >
                   <Image
                     src={src}
@@ -115,7 +117,7 @@ export function DeckInfoModal({
             </p>
           ) : null}
           {deck.info.headline ? (
-            <h3 className="mt-2 font-display text-[23px] font-semibold leading-[1.4] text-cream">
+            <h3 className="mt-2 whitespace-pre-line font-display text-[23px] font-semibold leading-[1.4] text-cream">
               {deck.info.headline}
             </h3>
           ) : null}
