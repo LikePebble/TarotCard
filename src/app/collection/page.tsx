@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { CaretRight } from "@phosphor-icons/react";
 import { DeckCard } from "@/components/DeckCard";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
@@ -27,6 +28,7 @@ import { useSession } from "@/lib/auth/session";
 import { collectionVisibility } from "@/lib/collection-access";
 
 export default function CollectionPage() {
+  const router = useRouter();
   const { store } = useArcanaStore();
   const unreadByDeck = useUnreadCollections();
   const ent = useEntitlements();
@@ -51,6 +53,17 @@ export default function CollectionPage() {
     }
 
     revokeDeckLocal(deckId);
+  };
+
+  const selectDefaultDeck = (deckId: string) => {
+    select(deckId);
+    if (
+      typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("from") === "reading"
+    ) {
+      if (window.history.length > 1) router.back();
+      else router.replace("/reading");
+    }
   };
 
   return (
@@ -97,7 +110,10 @@ export default function CollectionPage() {
             <p className="mt-1 text-[12.5px] leading-relaxed text-muted lg:text-[13px]">
               한정 기간 동안 드리는 것이라 기간이 끝나면 이 안내는 사라집니다.
             </p>
-            <Link href="/login" className="btn btn-gold mt-4 w-full sm:w-auto">
+            <Link
+              href="/login?next=/collection"
+              className="btn btn-gold mt-4 w-full sm:w-auto"
+            >
               로그인하고 덱 받기
             </Link>
           </section>
@@ -157,7 +173,7 @@ export default function CollectionPage() {
                 {!isDefault ? (
                   <button
                     type="button"
-                    onClick={() => select(deck.id)}
+                    onClick={() => selectDefaultDeck(deck.id)}
                     className="mt-3 min-h-11 text-[13px] text-muted underline underline-offset-4 hover:text-cream"
                   >
                     기본 덱으로 설정

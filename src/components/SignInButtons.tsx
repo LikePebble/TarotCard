@@ -36,7 +36,8 @@ export function SignInButtons({
     setLoadingProvider(provider);
     setNotice(null);
     try {
-      await signInWithProvider(provider);
+      const next = new URLSearchParams(window.location.search).get("next");
+      await signInWithProvider(provider, next);
     } catch (err) {
       console.error(`${provider} 로그인 오류:`, err);
       setNotice("로그인 요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");

@@ -220,12 +220,12 @@ body {
 }
 }
 
-/* Draw fan: rotation driven by --fan-i (integer offset from center) */
+/* Draw fan: preserve the original center-pivot arc while using browser-safe,
+   precomputed rotation values instead of unsupported CSS multiplication. */
 @layer components {
 .draw-fan {
   position: relative;
   isolation: isolate;
-  --fan-step: 12deg;
 }
 /* Positioning uses the individual translate/rotate properties, NOT the
    transform property: Motion's layout projection (layoutId slot flight)
@@ -239,7 +239,7 @@ body {
      on layoutId-tracked cards, which would collapse the arc pivot. */
   transform-origin: 50% 115% !important;
   translate: -50% var(--fan-lift, 0px);
-  rotate: calc(var(--fan-i, 0) * var(--fan-step));
+  rotate: var(--fan-rotate, 0deg);
   transition:
     rotate 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) var(--deal-delay, 0ms),
     translate 0.25s ease,
@@ -250,9 +250,9 @@ body {
 }
 /* While choosing: the card under the pointer answers with a small lift and
    a soft gold border. No card is pre-highlighted at rest. */
-.draw-fan .fan-card:not(:disabled):hover,
 .draw-fan .fan-card:not(:disabled):focus-visible,
-.draw-fan .fan-card:not(:disabled):active {
+.draw-fan .fan-card:not(:disabled):active,
+.draw-fan:not(.fan-three) .fan-card:not(:disabled):hover {
   translate: -50% calc(var(--fan-lift, 0px) - 10px);
 }
 .draw-fan .fan-card .cardback {
@@ -268,19 +268,11 @@ body {
   translate: -50% calc(var(--fan-lift, 0px) - 26px);
   z-index: 30;
 }
-/* Three-card mode: shallower step for 100px cards. Positioning is the same
-   bottom-anchored scheme as one-card — the pile must sit in the same spot in
-   both spreads (top-anchoring inside the clipped box cut cards off on lift). */
-.draw-fan.fan-three {
-  --fan-step: 9deg;
-}
 @media (min-width: 1024px) {
-  .draw-fan {
-    --fan-step: 8deg;
-  }
   .draw-fan .fan-card {
     bottom: 8px;
     transform-origin: 50% 120% !important;
+    rotate: var(--fan-rotate-desktop, var(--fan-rotate, 0deg));
   }
 }
 
@@ -444,29 +436,29 @@ body {
    전이가 발화하지 않아(스펙), 부채꼴로 한 프레임에 튄다. 끝난 뒤에 떼면 아래
    .fan-card의 rotate/translate 전이가 스택 → 부채꼴을 부드럽게 잇는다. */
 .draw-fan.is-shuffling .fan-card {
-  translate: -50% calc(var(--shuf-i) * -2.5px);
+  translate: -50% var(--shuf-stack-y);
   rotate: 0deg;
   animation: shuf-cycle 1.15s ease-in-out var(--shuf-cycles, 2);
-  animation-delay: calc(var(--shuf-i) * 85ms);
+  animation-delay: var(--shuf-delay);
   transition: none;
 }
 @keyframes shuf-cycle {
   0%,
   100% {
-    translate: -50% calc(var(--shuf-i) * -2.5px);
+    translate: -50% var(--shuf-stack-y);
     rotate: 0deg;
   }
   22% {
-    translate: calc(-50% + var(--shuf-dir) * 96px) -26px;
-    rotate: calc(var(--shuf-dir) * 13deg);
+    translate: calc(-50% + var(--shuf-out-x)) -26px;
+    rotate: var(--shuf-out-rotate);
   }
   46% {
-    translate: -50% calc(var(--shuf-i) * -2.5px);
+    translate: -50% var(--shuf-stack-y);
     rotate: 0deg;
   }
   68% {
-    translate: calc(-50% + var(--shuf-dir) * -70px) -14px;
-    rotate: calc(var(--shuf-dir) * -9deg);
+    translate: calc(-50% + var(--shuf-return-x)) -14px;
+    rotate: var(--shuf-return-rotate);
   }
 }
 

@@ -8,6 +8,7 @@ import { DesktopNav } from "@/components/SiteNav";
 import { focusOptionsFor } from "@/data/focus";
 import { ticketsExhaustedKey, track, trackOnce } from "@/lib/analytics";
 import { useSession } from "@/lib/auth/session";
+import { useRetainedDrawUsage } from "@/lib/draw-guard";
 import {
   getPendingSpread,
   setPendingFocus,
@@ -57,7 +58,11 @@ export default function FocusPage() {
   // 확정된다. 그 전에 그리면 잔량이 "2장 → 3장"으로 튀고 available/exhausted가
   // 뒤집혀 보이므로, 확정 전에는 목록 자체를 내보내지 않는다.
   const ticketsReady = store !== null && !loading;
-  const tickets = ticketStateOf(store, now, user !== null);
+  const retainedUsage = useRetainedDrawUsage(
+    now,
+    !loading && user === null,
+  );
+  const tickets = ticketStateOf(store, now, user !== null, retainedUsage.oneSlotsUsed);
   const ready = spread !== null && (!usesTickets || ticketsReady);
   const options = ready && spread ? focusOptionsFor(spread) : [];
 
@@ -109,7 +114,14 @@ export default function FocusPage() {
           {options.map((option) => {
             const slot: SlotState =
               usesTickets && store
-                ? slotState(store, "one", option.id, now, tickets.total)
+                ? slotState(
+                    store,
+                    "one",
+                    option.id,
+                    now,
+                    tickets.total,
+                    retainedUsage.oneSlotsUsed,
+                  )
                 : { state: "available" };
 
             // 오늘 이미 뽑은 테마는 막지 않고 그때 받은 결과로 보낸다.

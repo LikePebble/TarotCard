@@ -39,12 +39,17 @@ export default function ReadingPage() {
                 {deck.nameKo}
               </p>
             </div>
-            <Link
-              href="/collection"
-              className="inline-flex min-h-11 flex-none items-center rounded-lg border border-line-gold px-3 text-[13px] text-gold-soft hover:text-cream"
-            >
-              덱 바꾸기
-            </Link>
+            <div className="flex flex-none flex-col items-end gap-1.5">
+              <p className="whitespace-nowrap text-[11px] text-gold-soft">
+                모든 프리미엄 덱 이용 가능
+              </p>
+              <Link
+                href="/collection?from=reading"
+                className="inline-flex min-h-11 items-center rounded-lg border border-line-gold px-3 text-[13px] text-gold-soft hover:text-cream"
+              >
+                덱 바꾸기
+              </Link>
+            </div>
           </section>
         ) : null}
         <ReadingChoice />

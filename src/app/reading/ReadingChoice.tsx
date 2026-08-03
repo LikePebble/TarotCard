@@ -9,6 +9,7 @@ import { CardBack } from "@/components/CardBack";
 import { cardBySlug } from "@/data/cards";
 import { focusLabelOf } from "@/data/focus";
 import { useSession } from "@/lib/auth/session";
+import { useRetainedDrawUsage } from "@/lib/draw-guard";
 import {
   blockingReading,
   setPendingSpread,
@@ -70,6 +71,7 @@ function TypeCard({
   faces,
   pendingBacks = 0,
   href,
+  locked = false,
   aria,
   onStart,
   deckId,
@@ -89,6 +91,8 @@ function TypeCard({
   /** 받은 카드 뒤에 덧붙일 뒷면 수 — 아직 더 받을 수 있다는 표시. */
   pendingBacks?: number;
   href?: string;
+  /** 로그아웃으로 결과는 지웠지만, 같은 케이던스의 재뽑기는 막아야 하는 경우. */
+  locked?: boolean;
   aria: string;
   onStart: () => void;
   deckId: string;
@@ -171,7 +175,11 @@ function TypeCard({
     </>
   );
 
-  return href ? (
+  return locked ? (
+    <div aria-label={aria} aria-disabled className={`${panel} cursor-not-allowed opacity-45`}>
+      {inner}
+    </div>
+  ) : href ? (
     <Link href={href} aria-label={aria} className={panel}>
       {inner}
     </Link>
@@ -200,7 +208,11 @@ export function ReadingChoice() {
   // 소진 여부까지 뒤집힌다. JournalLink와 같은 방식으로 확정 전에는 티켓에
   // 기대는 표시를 아예 내보내지 않는다.
   const ticketsReady = store !== null && !loading;
-  const tickets = ticketStateOf(store, now, user !== null);
+  const retainedUsage = useRetainedDrawUsage(
+    now,
+    !loading && user === null,
+  );
+  const tickets = ticketStateOf(store, now, user !== null, retainedUsage.oneSlotsUsed);
 
   // 오늘 받은 "오늘의 카드"들. 오늘 쓴 티켓 수와 같은 스토어에서 파생되므로
   // 티켓이 확정되기 전에는 함께 비워 둔다 — 카드만 먼저 나타났다가 티켓 문구가
@@ -217,7 +229,12 @@ export function ReadingChoice() {
 
   // 과거·현재·미래는 주 1회라 티켓과 무관하다 — maxDailySlots를 넘기지 않는다.
   const blockedThree = store ? blockingReading(store, "three", now) : undefined;
+  const retainedThree = retainedUsage.threeUsed;
   const gatingCount = gatingReadingCount(store);
+  const resettableCount = Math.max(
+    gatingCount,
+    retainedUsage.oneSlotsUsed + Number(retainedThree),
+  );
 
   // 소진 안내가 실제로 화면에 나온 순간에만 계측한다. oneExhausted는
   // ticketsReady(스토어 + 세션 확정)를 이미 포함하므로, 마운트 직후의 잠정
@@ -275,9 +292,11 @@ export function ReadingChoice() {
             // 관용적으로 쓰는 말이라 서비스 안에서 허용한다. 예측하지 않는다는
             // 고지는 약관 제5조가 맡는다.
             ? "이번 주의 운명은 이미 받으셨습니다 · 결과 보기"
-            : "세 장의 카드를 뽑아 과거와 현재, 미래의 운명을 읽어 보세요."
+            : retainedThree
+              ? "이번 주의 운명은 이미 받으셨습니다"
+              : "세 장의 카드를 뽑아 과거와 현재, 미래의 운명을 읽어 보세요."
         }
-        noteToned={blockedThree !== undefined}
+        noteToned={blockedThree !== undefined || retainedThree}
         faces={
           blockedThree
             ? blockedThree.cards.map((slug, i) => ({
@@ -288,7 +307,14 @@ export function ReadingChoice() {
             : []
         }
         href={blockedThree ? `/reading/${blockedThree.id}` : undefined}
-        aria={blockedThree ? "과거 현재 미래 결과 보기" : "과거 현재 미래"}
+        locked={!blockedThree && retainedThree}
+        aria={
+          blockedThree
+            ? "과거 현재 미래 결과 보기"
+            : retainedThree
+              ? "과거 현재 미래, 이번 주는 이미 받았습니다"
+              : "과거 현재 미래"
+        }
         onStart={() => choose("three")}
         deckId={deckId}
         cardClassName="aspect-[2/3.4] w-11 lg:w-[74px]"
@@ -312,13 +338,13 @@ export function ReadingChoice() {
         </Link>
       ) : null}
 
-      {isDevTools && gatingCount > 0 ? (
+      {isDevTools && resettableCount > 0 ? (
         <button
           type="button"
           onClick={() => resetCurrentReadings()}
           className="justify-self-start text-[12px] text-muted underline underline-offset-4 hover:text-cream lg:col-span-2"
         >
-          [개발] 오늘·이번 주 리딩 {gatingCount}건 리셋
+          [개발] 오늘·이번 주 리딩 {resettableCount}건 리셋
         </button>
       ) : null}
     </div>

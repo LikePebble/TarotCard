@@ -6,7 +6,8 @@ import { markLoginPending } from "@/lib/analytics";
 import { getBrowserSupabase, isSupabaseConfigured } from "@/lib/supabase/client";
 import { clearLocalEntitlements } from "@/lib/entitlements";
 import { clearLocalJournal } from "@/lib/journal";
-import { clearLocalStore } from "@/lib/store";
+import { clearLocalStore, loadStore } from "@/lib/store";
+import { retainDrawUsageOnSignOut } from "@/lib/draw-guard";
 import { flushPendingSync } from "@/lib/sync/pusher";
 import { forgetMergedDevice } from "@/lib/sync/first-merge";
 import { resetSyncStatus } from "@/lib/sync/status";
@@ -161,9 +162,19 @@ export function useSession(): AuthState {
   };
 }
 
+/** OAuth 완료 뒤 돌아갈 앱 내부 경로만 callback에 싣는다. */
+export function oauthCallbackUrl(origin: string, next?: string | null): string {
+  const url = new URL("/auth/callback", origin);
+  if (next?.startsWith("/") && !next.startsWith("//")) {
+    url.searchParams.set("next", next);
+  }
+  return url.toString();
+}
+
 /** 카카오/구글 OAuth 로그인 시작. 미설정이면 no-op. */
 export async function signInWithProvider(
   provider: "google" | "kakao",
+  next?: string | null,
 ): Promise<void> {
   const supabase = getBrowserSupabase();
   if (!supabase) return;
@@ -174,7 +185,7 @@ export async function signInWithProvider(
   markLoginPending(provider);
   const { error } = await supabase.auth.signInWithOAuth({
     provider,
-    options: { redirectTo: `${window.location.origin}/auth/callback` },
+    options: { redirectTo: oauthCallbackUrl(window.location.origin, next) },
   });
   if (error) throw error;
 }
@@ -220,6 +231,7 @@ function clearDeviceAccountData(): void {
 export async function signOutAndClear(): Promise<boolean> {
   if (hasDevSession()) {
     setDevSession(false);
+    retainDrawUsageOnSignOut(loadStore().readings);
     clearDeviceAccountData();
     return true;
   }
@@ -230,6 +242,7 @@ export async function signOutAndClear(): Promise<boolean> {
   }
 
   const signedOut = await signOut();
+  retainDrawUsageOnSignOut(loadStore().readings);
   clearDeviceAccountData();
   return signedOut;
 }

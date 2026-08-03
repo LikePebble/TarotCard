@@ -63,9 +63,10 @@ export function ticketStateOf(
   store: ArcanaStore | null,
   d: Date,
   signedIn: boolean,
+  retainedSlotsUsed = 0,
 ): TicketState {
   const total = dailyTicketsFor(signedIn);
-  const used = store ? dailySlotsUsed(store, "one", d) : 0;
+  const used = (store ? dailySlotsUsed(store, "one", d) : 0) + retainedSlotsUsed;
   return { total, used, remaining: Math.max(0, total - used) };
 }
 

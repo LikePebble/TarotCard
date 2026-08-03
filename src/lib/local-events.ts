@@ -13,6 +13,7 @@ export type LocalChannel =
   | "entitlements"
   | "auth"
   | "deck"
+  | "draw-guard"
   | "popup";
 
 const subscribers: Record<LocalChannel, Set<() => void>> = {
@@ -21,6 +22,7 @@ const subscribers: Record<LocalChannel, Set<() => void>> = {
   entitlements: new Set(),
   auth: new Set(),
   deck: new Set(),
+  "draw-guard": new Set(),
   popup: new Set(),
 };
 
