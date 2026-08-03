@@ -2,7 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { dismissPopup, isDismissed, usePopup, type PopupRecord } from "@/lib/popup";
+import {
+  dismissPopup,
+  isDismissed,
+  popupLinkTarget,
+  usePopup,
+  type PopupRecord,
+} from "@/lib/popup";
 import { localDateOf } from "@/lib/period";
 import { fetchHomePopup } from "@/lib/popup-remote";
 
@@ -36,6 +42,7 @@ export function HomePopup() {
   }, [visible]);
 
   if (!visible || !popup || !todayIso) return null;
+  const linkTarget = popup.linkUrl ? popupLinkTarget(popup.linkUrl) : undefined;
   const close = () => setPopup(null);
   const dismiss = (mode: "forever" | "today") => {
     dismissPopup(popup.id, mode, todayIso);
@@ -62,7 +69,11 @@ export function HomePopup() {
         <button ref={closeRef} type="button" onClick={close} aria-label="팝업 닫기" className="absolute right-2 top-2 z-10 rounded-full px-2 py-1 text-lg text-muted hover:text-cream">×</button>
         {/* Supabase URL is runtime-only, so avoid build-time next/image remotePatterns. */}
         {popup.linkUrl ? (
-          <a href={popup.linkUrl} target="_blank" rel="noopener noreferrer">
+          <a
+            href={popup.linkUrl}
+            target={linkTarget}
+            rel={linkTarget === "_blank" ? "noopener noreferrer" : undefined}
+          >
             <img src={popup.imageUrl} alt={popup.imageAlt} className="mx-auto max-h-[70vh] w-auto object-contain" />
           </a>
         ) : (

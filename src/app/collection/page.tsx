@@ -110,7 +110,10 @@ export default function CollectionPage() {
             <p className="mt-1 text-[12.5px] leading-relaxed text-muted lg:text-[13px]">
               한정 기간 동안 드리는 것이라 기간이 끝나면 이 안내는 사라집니다.
             </p>
-            <Link href="/login" className="btn btn-gold mt-4 w-full sm:w-auto">
+            <Link
+              href="/login?next=/collection"
+              className="btn btn-gold mt-4 w-full sm:w-auto"
+            >
               로그인하고 덱 받기
             </Link>
           </section>

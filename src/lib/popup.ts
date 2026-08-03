@@ -51,6 +51,11 @@ export function withDismissal(
   return { ...store, [popupId]: mode === "forever" ? "forever" : todayIso };
 }
 
+/** 앱 내부 경로는 현재 탭에서, 외부 URL은 새 탭에서 연다. */
+export function popupLinkTarget(linkUrl: string): "_blank" | undefined {
+  return linkUrl.startsWith("/") ? undefined : "_blank";
+}
+
 export function dismissPopup(popupId: string, mode: "forever" | "today", todayIso = localDateOf(new Date())) {
   const next = withDismissal(loadPopup(), popupId, mode, todayIso);
   savePopup(next);

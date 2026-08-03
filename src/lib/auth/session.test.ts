@@ -56,7 +56,21 @@ vi.mock("@/lib/sync/first-merge", () => ({
   forgetMergedDevice: mocks.forgetMergedDevice,
 }));
 
-import { signOutAndClear } from "@/lib/auth/session";
+import { oauthCallbackUrl, signOutAndClear } from "@/lib/auth/session";
+
+describe("oauthCallbackUrl", () => {
+  it("로그인 뒤 컬렉션으로 돌아갈 내부 경로를 보존한다", () => {
+    expect(oauthCallbackUrl("https://arca.example", "/collection")).toBe(
+      "https://arca.example/auth/callback?next=%2Fcollection",
+    );
+  });
+
+  it("외부 URL 형태의 next는 싣지 않는다", () => {
+    expect(oauthCallbackUrl("https://arca.example", "//evil.example")).toBe(
+      "https://arca.example/auth/callback",
+    );
+  });
+});
 
 /**
  * 세션 스토어는 모듈 상태를 들고 있다. 테스트마다 resetModules + 동적 import로
