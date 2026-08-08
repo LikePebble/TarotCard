@@ -82,22 +82,26 @@ export function validateInquiry(input: unknown): InquiryValidation {
 
 export function inquiryEmailText(
   inquiry: InquiryInput,
-  user: { id: string; email: string },
+  user: { id: string; email: string | null } | null,
   submittedAt: Date,
 ): string {
   return [
     `말머리: ${inquiryCategoryLabel(inquiry.category)}`,
     `접수 시각: ${submittedAt.toISOString()}`,
-    `회원 이메일: ${user.email}`,
-    `회원 ID: ${user.id}`,
-    `답변받을 연락처: ${inquiry.responseContact ?? "로그인 계정 이메일"}`,
+    `접수 유형: ${user ? "회원" : "비회원"}`,
+    `회원 이메일: ${user?.email ?? "없음"}`,
+    `회원 ID: ${user?.id ?? "없음"}`,
+    `답변받을 연락처: ${inquiry.responseContact ?? user?.email ?? "입력 없음"}`,
     "",
     inquiry.message,
   ].join("\n");
 }
 
-export function inquiryReplyTo(inquiry: InquiryInput, accountEmail: string): string {
+export function inquiryReplyTo(
+  inquiry: InquiryInput,
+  accountEmail?: string | null,
+): string | undefined {
   const contact = inquiry.responseContact;
   if (contact && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) return contact;
-  return accountEmail;
+  return accountEmail ?? undefined;
 }

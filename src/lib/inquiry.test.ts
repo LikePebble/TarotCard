@@ -69,6 +69,15 @@ describe("inquiryReplyTo", () => {
       ),
     ).toBe("member@example.com");
   });
+
+  it("omits the reply target for a guest without an email contact", () => {
+    expect(
+      inquiryReplyTo(
+        { requestId, category: "suggestion", message: "문의 내용이 충분합니다." },
+        null,
+      ),
+    ).toBeUndefined();
+  });
 });
 
 describe("inquiryEmailText", () => {
@@ -89,5 +98,18 @@ describe("inquiryEmailText", () => {
     expect(text).toContain("회원 ID: user-1");
     expect(text).toContain("답변받을 연락처: reply@example.com");
     expect(text).toContain("로그인 상태를 확인해 주세요.");
+  });
+
+  it("marks a guest inquiry without inventing account information", () => {
+    const text = inquiryEmailText(
+      { requestId, category: "suggestion", message: "비회원 개선 의견입니다." },
+      null,
+      new Date("2026-08-08T01:02:03.000Z"),
+    );
+
+    expect(text).toContain("접수 유형: 비회원");
+    expect(text).toContain("회원 이메일: 없음");
+    expect(text).toContain("회원 ID: 없음");
+    expect(text).toContain("답변받을 연락처: 입력 없음");
   });
 });

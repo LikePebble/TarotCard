@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
@@ -25,14 +24,5 @@ export async function getServerSupabase(): Promise<SupabaseClient | null> {
         }
       },
     },
-  });
-}
-
-/** 서버 라우트 전용 관리자 클라이언트. 브라우저 번들에서 import하지 않는다. */
-export function getServiceSupabase(): SupabaseClient | null {
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !serviceKey) return null;
-  return createClient(url, serviceKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
   });
 }

@@ -98,21 +98,16 @@ export function InquiryModal({ onClose }: { onClose: () => void }) {
               <CircleNotch size={24} className="animate-spin text-gold-soft" aria-hidden />
               <span className="sr-only">로그인 정보를 확인하는 중</span>
             </div>
-          ) : !user ? (
-            <div className="py-5 text-center">
-              <p id="inquiry-modal-description" className="text-[14px] leading-relaxed text-body">
-                문의 처리와 답변을 위해 로그인이 필요합니다.
-              </p>
-              <Link href="/login?next=/my" className="btn btn-gold mt-5 min-h-11 px-6">
-                로그인하고 문의하기
-              </Link>
-            </div>
           ) : submitState === "success" ? (
             <div className="py-5 text-center" role="status">
               <CheckCircle size={42} className="mx-auto text-gold-soft" aria-hidden />
               <p className="mt-4 font-display text-[20px] font-semibold">접수가 완료됐습니다</p>
               <p id="inquiry-modal-description" className="mt-2 text-[13.5px] leading-relaxed text-muted">
-                남겨 주신 연락처 또는 로그인 계정 이메일로 답변드리겠습니다.
+                {user
+                  ? "남겨 주신 연락처 또는 로그인 계정 이메일로 답변드리겠습니다."
+                  : responseContact
+                    ? "남겨 주신 연락처로 답변드리겠습니다."
+                    : "남겨 주신 의견이 정상적으로 접수되었습니다."}
               </p>
               <button type="button" onClick={onClose} className="btn btn-gold mt-6 min-h-11 px-7">
                 확인
@@ -173,7 +168,9 @@ export function InquiryModal({ onClose }: { onClose: () => void }) {
                 className="mt-2 min-h-11 w-full rounded-xl border border-line bg-ink-2 px-3.5 text-[16px] text-cream outline-none transition-colors placeholder:text-muted/70 focus:border-line-gold focus:ring-2 focus:ring-gold-soft/30 disabled:opacity-60 lg:text-[14px]"
               />
               <p className="mt-1.5 text-[11.5px] leading-relaxed text-muted">
-                비워 두면 로그인 계정 이메일로 답변드립니다.
+                {user
+                  ? "비워 두면 로그인 계정 이메일로 답변드립니다."
+                  : "비워 두면 답변 없이 의견만 접수됩니다."}
               </p>
 
               {error ? (
