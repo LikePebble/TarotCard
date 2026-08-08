@@ -91,6 +91,15 @@ export type AnalyticsEvents = {
   tickets_exhausted: { surface: TicketSurface; spread: SpreadType };
   /** 덱 상품 정보 모달이 열림. */
   deck_modal_opened: { deck_id: string };
+  /**
+   * 오늘 첫 방문. 하루 한 번만 나간다.
+   *
+   * day_gap이 D1·D7 재방문율의 원자료다. GA4의 기본 유지율은 "앱을 열었나"만
+   * 보는데, 이 값은 **며칠 만에** 돌아왔는지를 직접 담으므로 코호트를 만들지
+   * 않고도 분포를 볼 수 있다. 첫 방문은 -1로 보낸다(GA4 파라미터는 null을
+   * 받지 않는다).
+   */
+  daily_return: { day_gap: number; streak: number };
 };
 
 export type AnalyticsEventName = keyof AnalyticsEvents;
@@ -108,6 +117,7 @@ const EVENT_NAME_SET: Record<AnalyticsEventName, true> = {
   login_completed: true,
   tickets_exhausted: true,
   deck_modal_opened: true,
+  daily_return: true,
 };
 
 /** 계측 중인 이벤트 이름 전부(테스트·문서용). */

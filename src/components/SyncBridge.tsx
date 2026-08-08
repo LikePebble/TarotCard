@@ -5,6 +5,7 @@ import { takeLoginPending, track } from "@/lib/analytics";
 import { useSession } from "@/lib/auth/session";
 import { subscribeLocal } from "@/lib/local-events";
 import { schedulePush, setSyncUser } from "@/lib/sync/pusher";
+import { recordVisit } from "@/lib/visit-streak";
 import { wireRefreshTriggers } from "@/lib/sync/refresh-triggers";
 
 /**
@@ -36,6 +37,21 @@ export function SyncBridge() {
     const method = takeLoginPending();
     if (method) track("login_completed", { method });
   }, [loading, user]);
+
+  /*
+   * 오늘 첫 방문을 기록하고 한 번만 계측한다. 이 다리가 layout에 딱 하나뿐이라
+   * 화면을 옮겨 다녀도 하루에 한 번으로 유지된다.
+   *
+   * 세션을 기다리지 않는다. 재방문은 게스트에게도 일어나고, 오히려 지금
+   * 알아야 할 것이 게스트의 재방문이다. `recordVisit`이 같은 날 두 번째
+   * 호출에서 아무것도 쓰지 않으므로 StrictMode의 이중 실행도 안전하다.
+   */
+  useEffect(() => {
+    const { isFirstToday, dayGap, state } = recordVisit();
+    if (!isFirstToday) return;
+    // GA4 파라미터는 null을 받지 않는다. 첫 방문은 -1로 구분한다.
+    track("daily_return", { day_gap: dayGap ?? -1, streak: state.streak });
+  }, []);
 
   // 로컬이 바뀌면 디바운스 push.
   useEffect(() => {

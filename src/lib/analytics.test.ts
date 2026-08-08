@@ -45,8 +45,9 @@ describe("normalizeGaId", () => {
 // 모아 두어야 스크립트는 실리는데 ads.txt는 404인 어긋남이 생기지 않는다.
 
 describe("이벤트 이름", () => {
-  it("퍼널 여덟 건을 모두 들고 있다", () => {
+  it("퍼널과 재방문 계측을 모두 들고 있다", () => {
     expect([...ANALYTICS_EVENT_NAMES].sort()).toEqual([
+      "daily_return",
       "deck_modal_opened",
       "draw_completed",
       "focus_selected",

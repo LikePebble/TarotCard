@@ -15,6 +15,7 @@ import { reversedFocusParagraphOf } from "@/data/reversed-focus";
 import { reversedPositions } from "@/data/reversed-positions";
 import type { Orientation } from "@/lib/store";
 import { ResultActions } from "./ResultActions";
+import { JournalQuickNote } from "@/components/JournalQuickNote";
 
 const POSITIONS = ["과거", "현재", "미래"] as const;
 const POSITION_KEYS = ["past", "present", "future"] as const;
@@ -214,6 +215,7 @@ export function OneCardResult({
             localDate={localDate}
           />
         </div>
+        {localDate ? <JournalQuickNote localDate={localDate} /> : null}
       </div>
     </motion.main>
   );
@@ -494,6 +496,7 @@ export function ThreeCardResult({
           localDate={localDate}
         />
       </div>
+      {localDate ? <JournalQuickNote localDate={localDate} /> : null}
     </motion.main>
   );
 }

@@ -10,6 +10,7 @@ import { clearLocalStore, loadStore } from "@/lib/store";
 import { retainDrawUsageOnSignOut } from "@/lib/draw-guard";
 import { flushPendingSync } from "@/lib/sync/pusher";
 import { forgetMergedDevice } from "@/lib/sync/first-merge";
+import { clearVisitState } from "@/lib/visit-streak";
 import { resetSyncStatus } from "@/lib/sync/status";
 import { notifyLocal, subscribeLocal } from "@/lib/local-events";
 
@@ -207,6 +208,7 @@ function clearDeviceAccountData(): void {
   clearLocalJournal();
   clearLocalEntitlements();
   forgetMergedDevice(); // 다음 로그인은 다시 진짜 게스트→계정 병합이다(S3a).
+  clearVisitState(); // 연속 기록도 이 기기의 계정 흔적이다.
   resetSyncStatus(); // 다음 계정에 이전 사용자의 마지막 동기화 시각이 보이면 안 된다.
 }
 
