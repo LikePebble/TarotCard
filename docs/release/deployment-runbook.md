@@ -26,8 +26,27 @@ Vercel Preview와 Production에 각각 아래 값을 관리한다.
 ```text
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
 NEXT_PUBLIC_ENABLE_RELEASE_TEST_TOOLS
+RESEND_API_KEY
+INQUIRY_FROM_EMAIL
+INQUIRY_RECIPIENT_EMAIL
 ```
+
+문의 메일 환경변수의 원칙:
+
+- `RESEND_API_KEY`는 Resend 발송 API 키다.
+- `SUPABASE_SERVICE_ROLE_KEY`는 문의 발송 상태만 갱신하는 서버 전용 키다. 절대
+  `NEXT_PUBLIC_` 접두사를 붙이거나 브라우저 코드에서 읽지 않는다.
+- `INQUIRY_FROM_EMAIL`은 Resend에서 인증된 도메인의 발신 주소다. 표시 이름을 포함한
+  `아르카 문의 <contact@realm.ai.kr>` 형식도 사용할 수 있다.
+- `INQUIRY_RECIPIENT_EMAIL`은 운영자가 문의를 받을 주소다. 생략하면 코드의 운영자
+  문의 주소를 사용한다.
+- 네 값은 서버 전용이므로 `NEXT_PUBLIC_` 접두사를 붙이지 않는다. Preview와
+  Production에 각각 등록한 뒤 실제 로그인 계정으로 문의 1건을 보내 수신과 회신
+  주소를 확인한다.
+- 문의 기능 배포 전에 `0003_inquiries.sql`을 적용하고, 월 1회 service role로
+  `select public.delete_expired_inquiries();`를 실행하도록 예약한다.
 
 `NEXT_PUBLIC_ENABLE_RELEASE_TEST_TOOLS`의 원칙:
 

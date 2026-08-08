@@ -5,6 +5,10 @@ const migration = readFileSync(
   new URL("../../../supabase/migrations/0001_p1_foundation.sql", import.meta.url),
   "utf8",
 );
+const collectionReadOnlyMigration = readFileSync(
+  new URL("../../../supabase/migrations/0004_collection_read_only.sql", import.meta.url),
+  "utf8",
+);
 
 describe("Supabase foundation security", () => {
   it("모든 사용자 데이터 테이블에 RLS를 활성화한다", () => {
@@ -68,5 +72,15 @@ describe("Supabase foundation security", () => {
       "returns trigger language plpgsql security definer set search_path = ''",
     );
     expect(migration).toContain("insert into public.profiles (id)");
+  });
+
+  it("레거시 collection은 기존 행을 보존하고 클라이언트 신규 쓰기를 막는다", () => {
+    expect(collectionReadOnlyMigration).toContain(
+      "revoke insert, update, delete on public.collection from authenticated;",
+    );
+    expect(collectionReadOnlyMigration).toMatch(
+      /create policy "own collection select" on public\.collection\s+for select\s+to authenticated/,
+    );
+    expect(collectionReadOnlyMigration).not.toMatch(/drop table\s+(?:if exists\s+)?public\.collection/i);
   });
 });

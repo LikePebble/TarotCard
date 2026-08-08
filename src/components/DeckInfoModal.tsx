@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { CheckCircle, X } from "@phosphor-icons/react";
 import type { Deck } from "@/data/decks";
 import { track } from "@/lib/analytics";
+import { useModalBehavior } from "@/lib/use-modal-behavior";
 
 /** 덱 상품 정보 모달. 첫 이미지는 10:17(800×1360) 규격, 나머지는 아래로 이어 스크롤. */
 export function DeckInfoModal({
@@ -14,13 +15,8 @@ export function DeckInfoModal({
   deck: Deck;
   onClose: () => void;
 }) {
-  const closeRef = useRef<HTMLButtonElement>(null);
-  const onCloseRef = useRef(onClose);
   const trackedDeckRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    onCloseRef.current = onClose;
-  }, [onClose]);
+  const { dialogRef, initialFocusRef } = useModalBehavior({ onClose });
 
   // 이 모달은 열릴 때 마운트되고 닫힐 때 언마운트되므로 마운트가 곧 "열림"이다.
   // ref로 덱 id를 기억해 리렌더와 StrictMode의 이펙트 2회 실행을 막는다.
@@ -30,29 +26,6 @@ export function DeckInfoModal({
     trackedDeckRef.current = deck.id;
     track("deck_modal_opened", { deck_id: deck.id });
   }, [deck.id]);
-
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    const opener =
-      document.activeElement instanceof HTMLElement
-        ? document.activeElement
-        : null;
-    document.body.style.overflow = "hidden";
-    closeRef.current?.focus();
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onCloseRef.current();
-      if (e.key === "Tab") {
-        e.preventDefault();
-        closeRef.current?.focus();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-      opener?.focus();
-    };
-  }, []);
 
   const images = deck.info.productImages ?? [];
   const titleId = `deck-info-${deck.id}-title`;
@@ -65,6 +38,7 @@ export function DeckInfoModal({
       role="presentation"
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -79,7 +53,7 @@ export function DeckInfoModal({
             {deck.nameKo}
           </h2>
           <button
-            ref={closeRef}
+            ref={initialFocusRef}
             type="button"
             onClick={onClose}
             aria-label="닫기"

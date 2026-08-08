@@ -1,7 +1,7 @@
 import { loadJournal } from "@/lib/journal";
 import { loadStore } from "@/lib/store";
 import type { SyncOutcome } from "@/lib/sync/outcome";
-import { setSyncState } from "@/lib/sync/status";
+import { setInitialSyncState, setSyncState } from "@/lib/sync/status";
 import { reconcileJournal, reconcileStore } from "@/lib/sync/sync";
 import { pullRemoteEntitlements } from "@/lib/sync/entitlements-remote";
 import {
@@ -286,6 +286,7 @@ export function setSyncUser(userId: string | null): void {
     // 덱도 같다: 다음 세션은 서버에 무엇이 있는지 모르는 데서 출발해야 한다.
     forgetPushedDeck();
     cancelPending();
+    setInitialSyncState("idle");
     return;
   }
   // 다른 계정으로 갈아탔다면 이전 계정 앞으로 잡아둔 예약은 버린다.
@@ -293,12 +294,17 @@ export function setSyncUser(userId: string | null): void {
   currentUserId = userId;
   if (mergedFor === userId) return;
   mergedFor = userId;
+  setInitialSyncState("syncing");
   // "최초"는 이 기기가 이 계정과 처음 만나는 것이지, 페이지를 새로 여는
   // 것이 아니다. mergedFor는 모듈 상태라 새로고침마다 비므로 여기서
   // 재지 않는다 — 그러면 세션 복원마다 서버 우선이 되어, 아직 올라가지
   // 못한 이 계정 본인의 수정이 서버의 옛 사본으로 덮인다(S3a).
   const mode: ReconcileMode = hasMergedWith(userId) ? "refresh" : "login";
-  void runReconcile(userId, mode, () => releaseMerge(userId));
+  void runReconcile(userId, mode, () => releaseMerge(userId)).finally(() => {
+    // 실패도 서버 확인 시도는 끝난 상태다. UI를 영구 잠그지 않고 offline으로
+    // 진행하게 하되, 일반 sync state의 error 표시는 그대로 남긴다.
+    if (currentUserId === userId) setInitialSyncState("ready");
+  });
 }
 
 /** work가 끝나거나 남은 시간이 다하거나, 둘 중 먼저. 호출자를 매달지 않는다. */

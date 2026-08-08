@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   isDismissed,
   popupLinkTarget,
+  safePopupImagePath,
+  safePopupLinkUrl,
   withDismissal,
   type PopupStore,
 } from "@/lib/popup";
@@ -25,5 +27,24 @@ describe("popup link target", () => {
 
   it("opens an external URL in a new tab", () => {
     expect(popupLinkTarget("https://example.com/event")).toBe("_blank");
+  });
+});
+
+describe("popup runtime values", () => {
+  it("accepts app paths and secure external links", () => {
+    expect(safePopupLinkUrl(" /collection ")).toBe("/collection");
+    expect(safePopupLinkUrl("https://example.com/event")).toBe("https://example.com/event");
+  });
+
+  it("rejects unsafe or unsupported links", () => {
+    expect(safePopupLinkUrl("javascript:alert(1)")).toBeNull();
+    expect(safePopupLinkUrl("http://example.com")).toBeNull();
+    expect(safePopupLinkUrl("//example.com")).toBeNull();
+  });
+
+  it("accepts only relative storage object paths", () => {
+    expect(safePopupImagePath("campaigns/launch.webp")).toBe("campaigns/launch.webp");
+    expect(safePopupImagePath("../secret.png")).toBeNull();
+    expect(safePopupImagePath("https://example.com/image.png")).toBeNull();
   });
 });

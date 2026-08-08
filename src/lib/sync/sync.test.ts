@@ -57,6 +57,7 @@ function storeOf(readings: ReadingRecord[]): ArcanaStore {
 describe("reconcileStore", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(setLocalStore).mockReturnValue(true);
   });
 
   it("서버가 보탠 리딩이 없으면 로컬을 다시 쓰지 않는다", async () => {
@@ -84,6 +85,17 @@ describe("reconcileStore", () => {
     expect(setLocalStore).toHaveBeenCalledTimes(1);
     const written = vi.mocked(setLocalStore).mock.calls[0][0];
     expect(written.readings.map((r) => r.id).sort()).toEqual(["r1", "r2"]);
+  });
+
+  it("서버 병합본을 기기에 저장하지 못하면 실패로 보고 push하지 않는다", async () => {
+    vi.mocked(loadStore).mockReturnValue(storeOf([]));
+    vi.mocked(pullRemoteStore).mockResolvedValue({
+      outcome: "ok",
+      data: storeOf([reading("r2", "2026-07-27T01:00:00.000Z")]),
+    });
+    vi.mocked(setLocalStore).mockReturnValue(false);
+
+    await expect(reconcileStore("u1")).resolves.toBe("failed");
   });
 
   it("pull이 실패하면 로컬을 건드리지 않고 올리기만 한다", async () => {

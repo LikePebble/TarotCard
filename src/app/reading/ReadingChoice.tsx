@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ticketsExhaustedKey, track, trackOnce } from "@/lib/analytics";
@@ -23,6 +23,8 @@ import {
   ticketStateOf,
 } from "@/lib/tickets";
 import { todayOneCardReadings } from "@/lib/today-readings";
+import { accountDataReady, useSyncStatus } from "@/lib/sync/status";
+import { usePeriodClock } from "@/lib/use-period-clock";
 import {
   isDevTools,
   resetCurrentReadings,
@@ -193,9 +195,10 @@ function TypeCard({
 export function ReadingChoice() {
   const router = useRouter();
   const { store } = useArcanaStore();
-  const { user, loading } = useSession();
+  const { user, loading, devSession } = useSession();
   const { deckId } = useSelectedDeck();
-  const [now] = useState(() => new Date());
+  const { initialSync } = useSyncStatus();
+  const now = usePeriodClock();
 
   const choose = (spread: SpreadType) => {
     track("reading_start", { spread });
@@ -207,7 +210,14 @@ export function ReadingChoice() {
   // 둘 중 하나라도 정해지기 전에 그리면 "2장 → 3장"으로 값이 바뀌어 보이고,
   // 소진 여부까지 뒤집힌다. JournalLink와 같은 방식으로 확정 전에는 티켓에
   // 기대는 표시를 아예 내보내지 않는다.
-  const ticketsReady = store !== null && !loading;
+  const ticketsReady =
+    store !== null &&
+    accountDataReady({
+      authLoading: loading,
+      signedIn: user !== null,
+      devSession,
+      initialSync,
+    });
   const retainedUsage = useRetainedDrawUsage(
     now,
     !loading && user === null,

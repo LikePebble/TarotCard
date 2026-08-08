@@ -1,5 +1,5 @@
 import { getBrowserSupabase } from "@/lib/supabase/client";
-import type { PopupRecord } from "@/lib/popup";
+import { safePopupImagePath, safePopupLinkUrl, type PopupRecord } from "@/lib/popup";
 
 export async function fetchHomePopup(): Promise<PopupRecord | null> {
   const supabase = getBrowserSupabase();
@@ -13,12 +13,15 @@ export async function fetchHomePopup(): Promise<PopupRecord | null> {
       .limit(1)
       .maybeSingle();
     if (error || !data) return null;
-    const imageUrl = supabase.storage.from("popups").getPublicUrl(data.image_path).data.publicUrl;
+    const imagePath = safePopupImagePath(data.image_path);
+    const imageAlt = typeof data.image_alt === "string" ? data.image_alt.trim() : "";
+    if (!imagePath || !imageAlt) return null;
+    const imageUrl = supabase.storage.from("popups").getPublicUrl(imagePath).data.publicUrl;
     return {
       id: data.id,
       imageUrl,
-      imageAlt: data.image_alt,
-      linkUrl: data.link_url,
+      imageAlt,
+      linkUrl: safePopupLinkUrl(data.link_url),
     };
   } catch {
     return null;

@@ -66,7 +66,12 @@ export function ticketStateOf(
   retainedSlotsUsed = 0,
 ): TicketState {
   const total = dailyTicketsFor(signedIn);
-  const used = (store ? dailySlotsUsed(store, "one", d) : 0) + retainedSlotsUsed;
+  // 기기 표식은 로그아웃 때 리딩 본문을 지운 뒤에도 같은 사용량을 보존하는
+  // 하한선이다. 현재 로컬 리딩과 더하면 방금 뽑은 1회를 두 번 세므로 큰 쪽을 쓴다.
+  const used = Math.max(
+    store ? dailySlotsUsed(store, "one", d) : 0,
+    retainedSlotsUsed,
+  );
   return { total, used, remaining: Math.max(0, total - used) };
 }
 

@@ -1,14 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  accountDataReady,
   getSyncStatus,
   resetSyncStatus,
+  setInitialSyncState,
   setSyncState,
   subscribeSyncStatus,
 } from "@/lib/sync/status";
 
 describe("sync status", () => {
   beforeEach(() => {
-    setSyncState("idle");
+    resetSyncStatus();
   });
 
   it("상태를 기록하고 돌려준다", () => {
@@ -37,7 +39,11 @@ describe("sync status", () => {
     const off = subscribeSyncStatus(fn);
     resetSyncStatus();
     off();
-    expect(getSyncStatus()).toEqual({ state: "idle", lastSyncedAt: null });
+    expect(getSyncStatus()).toEqual({
+      state: "idle",
+      initialSync: "idle",
+      lastSyncedAt: null,
+    });
     expect(fn).toHaveBeenCalled();
   });
 
@@ -47,5 +53,40 @@ describe("sync status", () => {
     setSyncState("syncing");
     off();
     expect(fn).toHaveBeenCalled();
+  });
+
+  it("최초 병합 준비 상태는 일반 push 상태와 독립적이다", () => {
+    setInitialSyncState("syncing");
+    setSyncState("ok");
+    expect(getSyncStatus().initialSync).toBe("syncing");
+    setInitialSyncState("ready");
+    expect(getSyncStatus().initialSync).toBe("ready");
+  });
+
+  it("로그인 계정만 최초 병합 완료를 기다린다", () => {
+    expect(
+      accountDataReady({
+        authLoading: false,
+        signedIn: false,
+        devSession: false,
+        initialSync: "idle",
+      }),
+    ).toBe(true);
+    expect(
+      accountDataReady({
+        authLoading: false,
+        signedIn: true,
+        devSession: false,
+        initialSync: "syncing",
+      }),
+    ).toBe(false);
+    expect(
+      accountDataReady({
+        authLoading: false,
+        signedIn: true,
+        devSession: false,
+        initialSync: "ready",
+      }),
+    ).toBe(true);
   });
 });

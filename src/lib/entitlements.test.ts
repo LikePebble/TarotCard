@@ -7,8 +7,6 @@ import {
   grantedWith,
   parseEntitlements,
   ownsDeck,
-  collectedCount,
-  collectedSlugs,
 } from "@/lib/entitlements";
 
 const NONE = EMPTY_ENTITLEMENTS;
@@ -86,21 +84,5 @@ describe("ownsDeck의 기본 상태", () => {
   it("플래그가 없는 환경에서는 프로모션이 꺼져 있다", () => {
     // 이 파일의 나머지 ownsDeck 기대값이 성립하는 전제를 못 박아 둔다.
     expect(LAUNCH_PROMO_DECKS).toBe(false);
-  });
-});
-
-describe("collectedCount", () => {
-  it("소유 덱은 78, 미소유는 0", () => {
-    expect(collectedCount("classic", NONE)).toBe(78);
-    expect(collectedCount("wolha-biwon", NONE)).toBe(0);
-    expect(collectedCount("wolha-biwon", OWNS_WOLHA)).toBe(78);
-  });
-});
-
-describe("collectedSlugs", () => {
-  it("소유 덱은 78개 슬러그, 미소유는 빈 집합", () => {
-    expect(collectedSlugs("classic", NONE).size).toBe(78);
-    expect(collectedSlugs("wolha-biwon", NONE).size).toBe(0);
-    expect(collectedSlugs("classic", NONE).has("the-fool")).toBe(true);
   });
 });

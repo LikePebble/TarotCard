@@ -56,6 +56,26 @@ export function popupLinkTarget(linkUrl: string): "_blank" | undefined {
   return linkUrl.startsWith("/") ? undefined : "_blank";
 }
 
+export function safePopupLinkUrl(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const value = raw.trim();
+  if (!value) return null;
+  if (value.startsWith("/") && !value.startsWith("//")) return value;
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" ? url.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+export function safePopupImagePath(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const value = raw.trim();
+  if (!value || value.startsWith("/") || value.includes("..") || value.includes(":")) return null;
+  return value;
+}
+
 export function dismissPopup(popupId: string, mode: "forever" | "today", todayIso = localDateOf(new Date())) {
   const next = withDismissal(loadPopup(), popupId, mode, todayIso);
   savePopup(next);

@@ -1,5 +1,6 @@
 import { getBrowserSupabase } from "@/lib/supabase/client";
 import type { ArcanaStore, ReadingRecord } from "@/lib/store";
+import { parseReadingRecord } from "@/lib/reading-record";
 import { recomputeEncounters } from "@/lib/sync/merge";
 import type { PullResult, SyncOutcome } from "@/lib/sync/outcome";
 import { knownReadingIds, rememberReadings } from "@/lib/sync/server-knowledge";
@@ -17,19 +18,19 @@ type ReadingRow = {
   orientations: string[];
 };
 
-function rowToReading(r: ReadingRow): ReadingRecord {
-  return {
+function rowToReading(r: ReadingRow): ReadingRecord | null {
+  return parseReadingRecord({
     id: r.id,
     at: r.created_at,
     localDate: r.local_date,
     isoWeek: r.iso_week,
-    spread: r.spread as ReadingRecord["spread"],
-    typeId: r.type_id as ReadingRecord["typeId"],
+    spread: r.spread,
+    typeId: r.type_id,
     category: r.category,
     deckId: r.deck_id,
     cards: r.cards,
-    orientations: r.orientations as ReadingRecord["orientations"],
-  };
+    orientations: r.orientations,
+  }, { requireKnownAssets: true });
 }
 
 function readingToRow(
@@ -65,11 +66,17 @@ export async function pullRemoteStore(
     if (error) console.error("[sync] 리딩 pull 실패:", error.message);
     return { outcome: "failed" };
   }
-  const readings = (data as ReadingRow[]).map(rowToReading);
+  const rows = data as ReadingRow[];
+  const readings = rows
+    .map(rowToReading)
+    .filter((reading): reading is ReadingRecord => reading !== null);
+  if (readings.length !== rows.length) {
+    console.error(`[sync] 형식이 잘못된 리딩 ${rows.length - readings.length}건 제외`);
+  }
   // 방금 서버에 무엇이 있는지 봤다. 이후 push는 이 목록에 없는 것만 올린다.
   rememberReadings(
     userId,
-    readings.map((r) => r.id),
+    rows.map((r) => r.id),
   );
   return {
     outcome: "ok",

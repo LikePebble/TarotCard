@@ -14,6 +14,7 @@ import {
   markNewCollectionCards,
   pruneUnreadCollection,
 } from "@/lib/collection-unseen";
+import { parseReadingRecord } from "@/lib/reading-record";
 
 export type { SpreadType };
 
@@ -77,7 +78,13 @@ export function migrateStore(raw: unknown): ArcanaStore {
     r.collection && typeof r.collection === "object" ? r.collection : null;
 
   if (r.version === 2 && collection && readings) {
-    return raw as ArcanaStore;
+    return {
+      version: 2,
+      collection: collection as ArcanaStore["collection"],
+      readings: readings
+        .map((reading) => parseReadingRecord(reading))
+        .filter((reading): reading is ReadingRecord => reading !== null),
+    };
   }
   if (r.version === 1 && collection && readings) {
     return {
@@ -102,16 +109,16 @@ export function loadStore(): ArcanaStore {
   }
 }
 
-function saveStore(store: ArcanaStore) {
+function saveStore(store: ArcanaStore): boolean {
   if (typeof window !== "undefined") {
     try {
       window.localStorage.setItem(STORE_KEY, JSON.stringify(store));
     } catch {
-      // storage full or unavailable; reading still works for the session
+      return false;
     }
   }
-  // 저장 실패와 무관하게 알린다: 인메모리 의도는 이미 바뀌었다.
   notifyLocal("store");
+  return true;
 }
 
 export type NewReadingInput = {
@@ -189,7 +196,7 @@ export function recordReading(input: {
   deckId: string;
   cards: string[];
   orientations: Orientation[];
-}): { store: ArcanaStore; record: ReadingRecord } {
+}): { store: ArcanaStore; record: ReadingRecord; persisted: boolean } {
   const current = loadStore();
   const previouslyCollected = current.collection[input.deckId] ?? {};
   const record = newReadingRecord({
@@ -198,12 +205,14 @@ export function recordReading(input: {
     ...input,
   });
   const next = withReadingRecorded(current, record);
-  markNewCollectionCards(
-    input.deckId,
-    input.cards.filter((slug) => !(slug in previouslyCollected)),
-  );
-  saveStore(next);
-  return { store: next, record };
+  const persisted = saveStore(next);
+  if (persisted) {
+    markNewCollectionCards(
+      input.deckId,
+      input.cards.filter((slug) => !(slug in previouslyCollected)),
+    );
+  }
+  return { store: next, record, persisted };
 }
 
 export type SlotState = {
@@ -265,7 +274,7 @@ export function slotState(
   const type = readingTypeOf(spread);
   if (
     type.cadenceUnit === "day" &&
-    dailySlotsUsed(store, spread, d) + retainedSlotsUsed >= maxDailySlots
+    Math.max(dailySlotsUsed(store, spread, d), retainedSlotsUsed) >= maxDailySlots
   ) {
     return { state: "exhausted" };
   }
@@ -312,9 +321,9 @@ export function blockingReading(
 }
 
 /** 병합/동기화 결과를 로컬 스토어에 반영한다(부작용). */
-export function setLocalStore(store: ArcanaStore): void {
+export function setLocalStore(store: ArcanaStore): boolean {
   pruneUnreadCollection(store);
-  saveStore(store);
+  return saveStore(store);
 }
 
 /** 이 기기의 리딩·도감을 지운다(로그아웃). 서버 사본은 건드리지 않는다. */

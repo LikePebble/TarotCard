@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { X } from "@phosphor-icons/react";
 import {
   dismissPopup,
   isDismissed,
@@ -11,13 +12,13 @@ import {
 } from "@/lib/popup";
 import { localDateOf } from "@/lib/period";
 import { fetchHomePopup } from "@/lib/popup-remote";
+import { useModalBehavior } from "@/lib/use-modal-behavior";
 
 export function HomePopup() {
   const reducedMotion = useReducedMotion();
   const { store } = usePopup();
   const [popup, setPopup] = useState<PopupRecord | null>(null);
   const [todayIso, setTodayIso] = useState<string | null>(null);
-  const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setTodayIso(localDateOf(new Date()));
@@ -25,21 +26,10 @@ export function HomePopup() {
   }, []);
 
   const visible = popup !== null && store !== null && todayIso !== null && !isDismissed(store, popup.id, todayIso);
-
-  useEffect(() => {
-    if (!visible) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeRef.current?.focus();
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setPopup(null);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = previous;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [visible]);
+  const { dialogRef, initialFocusRef } = useModalBehavior({
+    active: visible,
+    onClose: () => setPopup(null),
+  });
 
   if (!visible || !popup || !todayIso) return null;
   const linkTarget = popup.linkUrl ? popupLinkTarget(popup.linkUrl) : undefined;
@@ -51,6 +41,7 @@ export function HomePopup() {
 
   return (
     <motion.div
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-label={popup.imageAlt}
@@ -64,20 +55,31 @@ export function HomePopup() {
       <motion.div
         initial={reducedMotion ? false : { opacity: 0, y: 12, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        className="relative max-h-[90vh] w-full max-w-[520px] rounded-2xl border border-line-gold bg-ink-1 p-3 shadow-2xl"
+        className="flex max-h-[90dvh] w-full max-w-[520px] flex-col rounded-2xl border border-line-gold bg-ink-1 p-3 shadow-2xl"
       >
-        <button ref={closeRef} type="button" onClick={close} aria-label="팝업 닫기" className="absolute right-2 top-2 z-10 rounded-full px-2 py-1 text-lg text-muted hover:text-cream">×</button>
+        <div className="flex shrink-0 justify-end">
+          <button
+            ref={initialFocusRef}
+            type="button"
+            onClick={close}
+            aria-label="팝업 닫기"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-muted transition-colors hover:text-cream focus-visible:ring-2 focus-visible:ring-gold-soft"
+          >
+            <X size={20} aria-hidden />
+          </button>
+        </div>
         {/* Supabase URL is runtime-only, so avoid build-time next/image remotePatterns. */}
         {popup.linkUrl ? (
           <a
             href={popup.linkUrl}
             target={linkTarget}
             rel={linkTarget === "_blank" ? "noopener noreferrer" : undefined}
+            className="min-h-0 flex-1"
           >
-            <img src={popup.imageUrl} alt={popup.imageAlt} className="mx-auto max-h-[70vh] w-auto object-contain" />
+            <img src={popup.imageUrl} alt={popup.imageAlt} className="mx-auto h-full max-h-[70vh] w-auto object-contain" />
           </a>
         ) : (
-          <img src={popup.imageUrl} alt={popup.imageAlt} className="mx-auto max-h-[70vh] w-auto object-contain" />
+          <img src={popup.imageUrl} alt={popup.imageAlt} className="mx-auto min-h-0 max-h-[70vh] w-auto flex-1 object-contain" />
         )}
         {/* .btn(높이 52px·좌우 패딩 30px)을 쓰면 두 개가 좁은 폭에서 넘친다.
             .btn은 white-space: nowrap이라 넘칠 때 접히지 않고 삐져나온다.
