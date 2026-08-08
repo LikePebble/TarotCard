@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CaretLeft } from "@phosphor-icons/react/dist/ssr";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { CardArtViewer } from "@/components/CardArtViewer";
 import { CollectHistory } from "@/components/CollectHistory";
 import { CollectedCardNav } from "@/components/CollectedCardNav";
@@ -12,6 +12,7 @@ import { cardBySlug, cards, romanNumeral } from "@/data/cards";
 import { deckArtSrc, decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
 import { reversedCards } from "@/data/reversed";
+import { cardIndexLabel, suitNeighbors } from "@/lib/card-index";
 import { cardMetaDescription, cardMetaTitle } from "@/lib/card-meta";
 import { validReadingId } from "@/lib/card-detail-nav";
 import { catalogFilterOf, filterForCard } from "@/lib/catalog-filter";
@@ -66,6 +67,9 @@ export async function generateMetadata({
   return {
     title: { absolute: title },
     description,
+    // 페이지는 색인하되 아트는 이미지 검색에 싣지 않는다. 이 쪽 78장을
+    // 검색에 올리는 것과 아트를 지키는 것은 서로 부딪히지 않는다.
+    robots: { index: true, follow: true, noimageindex: true },
     alternates: { canonical },
     openGraph: {
       type: "article",
@@ -110,6 +114,12 @@ export default async function CardDetailPage({
    * 역방향 해석. 리딩 결과 화면에만 있어서 검색 엔진이 볼 수 없던 글이다.
    * 새로 쓰는 것이 아니라 이미 원전 감사를 통과한 정본을 그대로 꺼내 온다.
    */
+  /*
+   * 같은 무리의 앞뒤 카드. 도감의 CollectedCardNav와 달리 수집과 무관하게
+   * 항상 같은 이웃을 가리키는 **서버 렌더 링크**다. 카드 상세 78쪽이 서로
+   * 이어져 있어야 크롤러가 목록을 거치지 않고도 옆으로 걸어갈 수 있다.
+   */
+  const neighbors = suitNeighbors(card.slug);
   const reversed = reversedCards[card.slug];
   const reversedParagraphs = reversed ? reversed.ko.split("\n\n") : [];
   const reversedEnParagraphs = reversed ? reversed.en.split("\n\n") : [];
@@ -202,6 +212,39 @@ export default async function CardDetailPage({
                 </details>
               </section>
             ) : null}
+            <nav
+              aria-label="같은 무리의 다른 카드"
+              className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5 lg:mt-9 lg:pt-6"
+            >
+              {neighbors.prev ? (
+                <Link
+                  href={`/collection/classic/${neighbors.prev.slug}`}
+                  className="inline-flex min-h-11 items-center gap-1.5 text-[13.5px] text-muted hover:text-gold-soft lg:text-[14.5px]"
+                >
+                  <CaretLeft size={15} aria-hidden />
+                  {cardIndexLabel(neighbors.prev).ko}
+                </Link>
+              ) : (
+                <span />
+              )}
+              <Link
+                href="/card-meanings"
+                className="inline-flex min-h-11 items-center text-[13.5px] text-muted underline underline-offset-4 hover:text-cream lg:text-[14.5px]"
+              >
+                78장 전체 보기
+              </Link>
+              {neighbors.next ? (
+                <Link
+                  href={`/collection/classic/${neighbors.next.slug}`}
+                  className="inline-flex min-h-11 items-center gap-1.5 text-[13.5px] text-muted hover:text-gold-soft lg:text-[14.5px]"
+                >
+                  {cardIndexLabel(neighbors.next).ko}
+                  <CaretRight size={15} aria-hidden />
+                </Link>
+              ) : (
+                <span />
+              )}
+            </nav>
             <LoreSections slug={card.slug} deckId={deck.id} />
             <CollectHistory slug={card.slug} deckId={deck.id} />
             <CollectedCardNav
