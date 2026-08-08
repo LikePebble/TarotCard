@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CaretLeft } from "@phosphor-icons/react/dist/ssr";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { CardArtViewer } from "@/components/CardArtViewer";
 import { CollectHistory } from "@/components/CollectHistory";
 import { CollectedCardNav } from "@/components/CollectedCardNav";
@@ -11,6 +11,9 @@ import { LoreSections } from "@/components/LoreSections";
 import { cardBySlug, cards, romanNumeral } from "@/data/cards";
 import { deckArtSrc, decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
+import { reversedCards } from "@/data/reversed";
+import { cardIndexLabel, suitNeighbors } from "@/lib/card-index";
+import { cardMetaDescription, cardMetaTitle } from "@/lib/card-meta";
 import { validReadingId } from "@/lib/card-detail-nav";
 import { catalogFilterOf, filterForCard } from "@/lib/catalog-filter";
 
@@ -35,24 +38,6 @@ const SITE_URL = "https://arca.realm.ai.kr";
 // 같은 사이트가 공유 카드마다 다른 이름으로 보인다.
 const SITE_NAME = "아르카 타로";
 
-/**
- * 해석문 앞부분을 검색결과 스니펫 길이로 자른다. 문장 중간에서 끊기지 않도록
- * 마지막 문장 끝을 찾고, 그마저 없으면 어절 경계에서 자른다.
- */
-function metaDescription(text: string, limit = 120): string {
-  const flat = text.replace(/\s+/g, " ").trim();
-  if (flat.length <= limit) return flat;
-  const window = flat.slice(0, limit);
-  const sentenceEnd = Math.max(
-    window.lastIndexOf("."),
-    window.lastIndexOf("!"),
-    window.lastIndexOf("?"),
-  );
-  if (sentenceEnd >= 40) return window.slice(0, sentenceEnd + 1);
-  const wordEnd = window.lastIndexOf(" ");
-  return `${(wordEnd >= 40 ? window.slice(0, wordEnd) : window).trimEnd()}…`;
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -65,13 +50,15 @@ export async function generateMetadata({
   // 여기서 만든 완성형 제목 뒤에 접미사가 한 번 더 붙지 않게 하려는 것이다.
   if (!card || !deck) return { title: { absolute: "아르카 | Arca" } };
   const nameKo = koCards[card.slug]?.nameKo ?? card.nameEn;
-  const description = metaDescription(
+  const description = cardMetaDescription(
+    nameKo,
+    card.nameEn,
     koCards[card.slug]?.description || card.en.description,
   );
   // 3개 덱은 아트만 다르고 해석 본문이 같다. 클래식을 정본으로 삼아
   // 프리미엄 덱 156장과 ?filter=/?readingId= 변종을 한 URL로 모은다.
   const canonical = `${SITE_URL}/collection/classic/${card.slug}`;
-  const title = `${nameKo} ${card.nameEn} 타로 카드 의미 · ${deck.nameKo} | 아르카`;
+  const title = cardMetaTitle(nameKo, card.nameEn, deck.nameKo);
   const image = {
     url: `${SITE_URL}${deckArtSrc(deck.id, card)}`,
     alt: `${deck.nameKo} ${nameKo} ${card.nameEn} 카드 아트`,
@@ -80,6 +67,9 @@ export async function generateMetadata({
   return {
     title: { absolute: title },
     description,
+    // 페이지는 색인하되 아트는 이미지 검색에 싣지 않는다. 이 쪽 78장을
+    // 검색에 올리는 것과 아트를 지키는 것은 서로 부딪히지 않는다.
+    robots: { index: true, follow: true, noimageindex: true },
     alternates: { canonical },
     openGraph: {
       type: "article",
@@ -120,6 +110,19 @@ export default async function CardDetailPage({
       : card.en.description;
   const paragraphs = description.split("\n\n");
   const enParagraphs = card.en.description.split("\n\n");
+  /*
+   * 역방향 해석. 리딩 결과 화면에만 있어서 검색 엔진이 볼 수 없던 글이다.
+   * 새로 쓰는 것이 아니라 이미 원전 감사를 통과한 정본을 그대로 꺼내 온다.
+   */
+  /*
+   * 같은 무리의 앞뒤 카드. 도감의 CollectedCardNav와 달리 수집과 무관하게
+   * 항상 같은 이웃을 가리키는 **서버 렌더 링크**다. 카드 상세 78쪽이 서로
+   * 이어져 있어야 크롤러가 목록을 거치지 않고도 옆으로 걸어갈 수 있다.
+   */
+  const neighbors = suitNeighbors(card.slug);
+  const reversed = reversedCards[card.slug];
+  const reversedParagraphs = reversed ? reversed.ko.split("\n\n") : [];
+  const reversedEnParagraphs = reversed ? reversed.en.split("\n\n") : [];
 
   const arcanaLabel =
     card.arcana === "major"
@@ -183,6 +186,65 @@ export default async function CardDetailPage({
                 ))}
               </div>
             </details>
+            {reversed ? (
+              <section className="mt-7 border-t border-line pt-6 lg:mt-9 lg:pt-7">
+                <h2 className="font-display text-[19px] font-semibold text-gold-soft lg:text-[22px]">
+                  역방향으로 나왔다면
+                </h2>
+                <p className="mt-1 text-[12.5px] text-muted lg:text-[13px]">
+                  역방향은 정방향의 반대가 아니라, 같은 힘이 지연되거나 안으로
+                  향하거나 과한 상태입니다.
+                </p>
+                <div className="mt-3 space-y-3 font-serif text-[15px] text-body lg:max-w-[560px] lg:text-base">
+                  {reversedParagraphs.map((paragraph) => (
+                    <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+                  ))}
+                </div>
+                <details className="mt-3.5 lg:mt-5">
+                  <summary className="inline-block min-h-11 cursor-pointer pt-2.5 text-[13.5px] text-muted underline underline-offset-4 hover:text-cream">
+                    영어 원문 보기
+                  </summary>
+                  <div className="mt-2 space-y-3 font-serif text-[14px] text-body lg:max-w-[560px]">
+                    {reversedEnParagraphs.map((paragraph) => (
+                      <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+                    ))}
+                  </div>
+                </details>
+              </section>
+            ) : null}
+            <nav
+              aria-label="같은 무리의 다른 카드"
+              className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5 lg:mt-9 lg:pt-6"
+            >
+              {neighbors.prev ? (
+                <Link
+                  href={`/collection/classic/${neighbors.prev.slug}`}
+                  className="inline-flex min-h-11 items-center gap-1.5 text-[13.5px] text-muted hover:text-gold-soft lg:text-[14.5px]"
+                >
+                  <CaretLeft size={15} aria-hidden />
+                  {cardIndexLabel(neighbors.prev).ko}
+                </Link>
+              ) : (
+                <span />
+              )}
+              <Link
+                href="/card-meanings"
+                className="inline-flex min-h-11 items-center text-[13.5px] text-muted underline underline-offset-4 hover:text-cream lg:text-[14.5px]"
+              >
+                78장 전체 보기
+              </Link>
+              {neighbors.next ? (
+                <Link
+                  href={`/collection/classic/${neighbors.next.slug}`}
+                  className="inline-flex min-h-11 items-center gap-1.5 text-[13.5px] text-muted hover:text-gold-soft lg:text-[14.5px]"
+                >
+                  {cardIndexLabel(neighbors.next).ko}
+                  <CaretRight size={15} aria-hidden />
+                </Link>
+              ) : (
+                <span />
+              )}
+            </nav>
             <LoreSections slug={card.slug} deckId={deck.id} />
             <CollectHistory slug={card.slug} deckId={deck.id} />
             <CollectedCardNav

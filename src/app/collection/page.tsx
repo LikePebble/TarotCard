@@ -77,6 +77,19 @@ export default function CollectionPage() {
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
           나만의 덱을 설정하고 78장의 타로카드를 수집해 보세요.
         </p>
+        {/*
+          카드 의미 색인으로 가는 길. 도감은 아직 만나지 않은 카드를 링크하지
+          않으므로(수집을 지키려는 결정), 카드 상세 78쪽으로 가는 내부 링크가
+          사이트에 하나도 없었다. 이 한 줄이 사람과 크롤러 양쪽의 입구다.
+        */}
+        <p className="mt-2 text-[13px] lg:text-[14px]">
+          <Link
+            href="/card-meanings"
+            className="text-gold-soft underline underline-offset-4 hover:text-cream"
+          >
+            78장의 의미를 먼저 찾아보기
+          </Link>
+        </p>
 
         {/*
           덱 목록보다 먼저 둔다. 아래 목록에서 프리미엄 덱이 모두 열린 것을 먼저

@@ -11,6 +11,7 @@ export type LocalChannel =
   | "store"
   | "journal"
   | "entitlements"
+  | "visit"
   | "auth"
   | "deck"
   | "draw-guard"
@@ -20,6 +21,7 @@ const subscribers: Record<LocalChannel, Set<() => void>> = {
   store: new Set(),
   journal: new Set(),
   entitlements: new Set(),
+  visit: new Set(),
   auth: new Set(),
   deck: new Set(),
   "draw-guard": new Set(),

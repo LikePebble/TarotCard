@@ -34,11 +34,15 @@ export function CardArt({
         alt={`${nameKo} ${card.nameEn}`}
         fill
         sizes={sizes}
-        className={
+        // 끌어놓기로 원본이 그대로 빠져나가는 가장 쉬운 경로를 막는다.
+        draggable={false}
+        className={`art-guard ${
           orientation === "reversed" ? "rotate-180 object-cover" : "object-cover"
-        }
+        }`}
         priority={priority}
       />
+      {/* 우클릭을 대신 받는 층. 자세한 이유는 globals.css의 art-guard 주석. */}
+      <span className="art-guard-veil" aria-hidden />
     </div>
   );
 }

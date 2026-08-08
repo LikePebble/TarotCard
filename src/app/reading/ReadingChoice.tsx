@@ -25,6 +25,8 @@ import {
 import { todayOneCardReadings } from "@/lib/today-readings";
 import { accountDataReady, useSyncStatus } from "@/lib/sync/status";
 import { usePeriodClock } from "@/lib/use-period-clock";
+import { localDateOf } from "@/lib/period";
+import { streakNoteOf, useVisitStreak } from "@/lib/visit-streak";
 import {
   isDevTools,
   resetCurrentReadings,
@@ -199,6 +201,7 @@ export function ReadingChoice() {
   const { deckId } = useSelectedDeck();
   const { initialSync } = useSyncStatus();
   const now = usePeriodClock();
+  const visit = useVisitStreak();
 
   const choose = (spread: SpreadType) => {
     track("reading_start", { spread });
@@ -258,7 +261,27 @@ export function ReadingChoice() {
     });
   }, [oneExhausted, now]);
 
+  /*
+   * 연속 방문은 마운트 뒤에야 알 수 있으므로(SSR 안전) visit이 null인 동안에는
+   * 자리를 잡지 않는다. 한 줄이 뒤늦게 끼어들며 아래 패널을 밀어내지 않도록
+   * 자리 자체를 만들지 않는 쪽을 택했다 — 값이 없을 때가 대부분이기도 하다.
+   */
+  const streak = visit ? streakNoteOf(visit, localDateOf(now)) : null;
+
   return (
+    <>
+      {streak ? (
+        <p className="mt-4 flex items-center gap-2 text-[13px] text-muted lg:mt-6 lg:text-[14px]">
+          <span
+            aria-hidden
+            className="inline-block size-1.5 rounded-full bg-gold-soft"
+          />
+          <span>{streak.text}</span>
+          {streak.isBest ? (
+            <span className="text-gold-soft">· 최장 기록입니다</span>
+          ) : null}
+        </p>
+      ) : null}
     <div className="mt-[18px] flex flex-col gap-[18px] lg:mt-12 lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-5">
       <TypeCard
         title="오늘의 카드"
@@ -358,5 +381,6 @@ export function ReadingChoice() {
         </button>
       ) : null}
     </div>
+    </>
   );
 }
