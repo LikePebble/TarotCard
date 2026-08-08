@@ -58,6 +58,14 @@ describe("ticketStateOf", () => {
       remaining: 0,
     });
   });
+
+  it("현재 리딩과 기기 표식에 같은 사용량이 있어도 한 번만 센다", () => {
+    expect(ticketStateOf(usedToday(1), today, false, 1)).toEqual({
+      total: 2,
+      used: 1,
+      remaining: 1,
+    });
+  });
 });
 
 describe("ticketStateOf", () => {

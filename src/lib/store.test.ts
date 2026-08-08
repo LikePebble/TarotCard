@@ -81,6 +81,14 @@ describe("migrateStore", () => {
     expect(migrateStore(null)).toEqual({ version: 2, collection: {}, readings: [] });
     expect(migrateStore({ version: 9 })).toEqual({ version: 2, collection: {}, readings: [] });
   });
+
+  it("v2 안의 형식이 잘못된 리딩은 제외한다", () => {
+    const valid = reading({ id: "valid", cards: ["the-fool"] });
+    const invalid = { ...valid, id: "bad", spread: "three", cards: ["the-fool"] };
+    expect(
+      migrateStore({ version: 2, collection: {}, readings: [valid, invalid] }).readings,
+    ).toEqual([valid]);
+  });
 });
 
 describe("slotState — 오늘의 타로 (카테고리별 일 1회, 기본 1슬롯)", () => {
@@ -112,6 +120,11 @@ describe("slotState — 오늘의 타로 (카테고리별 일 1회, 기본 1슬�
   it("로그아웃 전에 쓴 슬롯도 남은 하루 한도를 계산한다", () => {
     const s: Store = { version: 2, collection: {}, readings: [] };
     expect(slotState(s, "one", "day", day, 2, 2)).toEqual({ state: "exhausted" });
+  });
+
+  it("같은 사용량이 로컬 기록과 기기 표식에 함께 있어도 중복 계산하지 않는다", () => {
+    const s: Store = { version: 2, collection: {}, readings: [reading({ category: "love" })] };
+    expect(slotState(s, "one", "work", day, 2, 1)).toEqual({ state: "available" });
   });
 });
 

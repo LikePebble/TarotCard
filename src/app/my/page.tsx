@@ -1,18 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { CaretRight, Notebook, Sparkle } from "@phosphor-icons/react";
+import { CaretRight, ChatCircleDots, Notebook, Sparkle } from "@phosphor-icons/react";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { useJournal, writtenDates } from "@/lib/journal";
 import { togetherDays, useArcanaStore } from "@/lib/store";
 import { AccountCard } from "./AccountCard";
+import { InquiryModal } from "./InquiryModal";
 
 export default function MyPage() {
   const reducedMotion = useReducedMotion();
   const { store } = useArcanaStore();
   const { store: journal } = useJournal();
+  const [inquiryOpen, setInquiryOpen] = useState(false);
 
   const readings = store?.readings.length ?? 0;
   const together = togetherDays(store);
@@ -92,6 +95,25 @@ export default function MyPage() {
           </div>
 
           <AccountCard />
+
+          <button
+            type="button"
+            onClick={() => setInquiryOpen(true)}
+            className="flex w-full items-center justify-between rounded-2xl border border-line bg-ink-1 p-5 text-left transition-colors hover:border-line-gold active:scale-[0.99] lg:rounded-[14px] lg:p-6"
+          >
+            <span className="flex items-center gap-3.5">
+              <ChatCircleDots size={22} className="text-gold-soft" aria-hidden />
+              <span>
+                <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
+                  문의 및 개선 제안
+                </span>
+                <span className="text-[13px] text-muted lg:text-[14px]">
+                  불편한 점이나 바라는 점을 알려 주세요
+                </span>
+              </span>
+            </span>
+            <CaretRight size={18} className="text-muted" aria-hidden />
+          </button>
         </div>
 
         <nav
@@ -116,6 +138,7 @@ export default function MyPage() {
         </nav>
       </motion.main>
       <TabBar />
+      {inquiryOpen ? <InquiryModal onClose={() => setInquiryOpen(false)} /> : null}
     </div>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { cards } from "@/data/cards";
 import { useCallback, useEffect, useState } from "react";
 import { notifyLocal, subscribeLocal } from "@/lib/local-events";
 
@@ -11,9 +10,6 @@ export const EMPTY_ENTITLEMENTS: Entitlements = {
   ownedDeckIds: [],
   adFree: false,
 };
-
-/** 78장 전체 슬러그. 소유 덱의 도감 완성도 기준. */
-const ALL_SLUGS: ReadonlySet<string> = new Set(cards.map((c) => c.slug));
 
 /**
  * 출시 기념 한정 프로모션: 프리미엄 덱을 열어 드린다(순수 판정).
@@ -51,16 +47,6 @@ export function deckOwnedBy(
 /** 클래식은 모두 소유. 프리미엄은 entitlements에 있을 때만(프로모션 중에는 전부). */
 export function ownsDeck(deckId: string, ent: Entitlements): boolean {
   return deckOwnedBy(deckId, ent, LAUNCH_PROMO_DECKS);
-}
-
-/** 도감 완성도 = 소유면 78, 아니면 0(부분 수집 없음). */
-export function collectedCount(deckId: string, ent: Entitlements): number {
-  return ownsDeck(deckId, ent) ? ALL_SLUGS.size : 0;
-}
-
-/** 소유 덱은 전체 슬러그, 미소유는 빈 집합. */
-export function collectedSlugs(deckId: string, ent: Entitlements): Set<string> {
-  return ownsDeck(deckId, ent) ? new Set(ALL_SLUGS) : new Set();
 }
 
 const KEY = "arcana.entitlements.v1";

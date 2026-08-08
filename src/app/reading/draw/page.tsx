@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
 import { CaretLeft } from "@phosphor-icons/react";
@@ -15,23 +16,26 @@ import { fanRotation, fanStackOrder } from "@/lib/draw-fan";
 import { pickOrientations, secureRand } from "@/lib/orientation";
 import { useSession } from "@/lib/auth/session";
 import {
-  retainedDrawUsageAt,
   retainRecordedDrawUsage,
 } from "@/lib/draw-guard";
-import { localDateOf } from "@/lib/period";
-import { dailyTicketsFor } from "@/lib/tickets";
+import { currentDrawGate } from "@/lib/draw-policy";
+import { accountDataReady, useSyncStatus } from "@/lib/sync/status";
 import {
-  blockingReading,
   getPendingFocus,
   getPendingSpread,
   loadStore,
   recordReading,
-  slotState,
   useSelectedDeck,
   type ReadingRecord,
   type SpreadType,
 } from "@/lib/store";
-import { OneCardResult, ThreeCardResult } from "../ReadingResult";
+
+const OneCardResult = dynamic(() =>
+  import("../ReadingResult").then((module) => module.OneCardResult),
+);
+const ThreeCardResult = dynamic(() =>
+  import("../ReadingResult").then((module) => module.ThreeCardResult),
+);
 
 const POSITIONS = ["과거", "현재", "미래"] as const;
 const FAN_SIZE = 7;
@@ -100,7 +104,8 @@ export default function DrawPage() {
   const router = useRouter();
   const reducedMotion = useReducedMotion();
   const { deckId } = useSelectedDeck();
-  const { user, loading } = useSession();
+  const { user, loading, devSession } = useSession();
+  const { initialSync } = useSyncStatus();
   const [ready, setReady] = useState(false);
   const [spread, setSpread] = useState<SpreadType>("one");
   const [focus, setFocus] = useState("");
@@ -114,6 +119,7 @@ export default function DrawPage() {
   // 셔플 사이클 수. CSS(--shuf-cycles)와 타이머가 같은 값을 봐야 끊김이 없다.
   const [shuffleCycles, setShuffleCycles] = useState(2);
   const [readingRecord, setReadingRecord] = useState<ReadingRecord | null>(null);
+  const [storageError, setStorageError] = useState(false);
   const recordedRef = useRef(false);
   // 진입 판정은 한 번만. 세션(user)이 뒤늦게 바뀌어도 뽑는 도중에 다시 셔플되면
   // 안 된다.
@@ -186,6 +192,16 @@ export default function DrawPage() {
 
   useEffect(() => {
     if (initRef.current) return;
+    if (
+      !accountDataReady({
+        authLoading: loading,
+        signedIn: user !== null,
+        devSession,
+        initialSync,
+      })
+    ) {
+      return;
+    }
     const pendingSpread = getPendingSpread();
     const pendingFocus = getPendingFocus();
     if (!pendingSpread || !pendingFocus) {
@@ -195,51 +211,21 @@ export default function DrawPage() {
     // 이미 이번 주기에 뽑았으면(뒤로가기·직접 진입 등) 재기록을 막고 보낸다.
     const store = loadStore();
     const at = new Date();
-    if (pendingSpread === "one") {
-      // 티켓이 여러 장인 지금은 blockingReading만으로 부족하다 — 티켓이 남아
-      // 있으면 같은 테마를 오늘 또 뽑아 기록하게 된다. 테마 단위로 보는
-      // slotState가 completed(리롤)와 exhausted(티켓 소진)를 갈라 준다.
-      const slot = slotState(
-        store,
-        "one",
-        pendingFocus,
-        at,
-        dailyTicketsFor(user !== null),
-        user ? 0 : retainedDrawUsageAt(at).oneSlotsUsed,
-      );
-      if (slot.state === "completed") {
-        router.replace(`/reading/${slot.readingId}`);
-        return;
-      }
-      // 세션 조회 중이면 로그인 보너스(+1)를 아직 모른다. 그 한 장이 판정을
-      // 가르는 경우는 exhausted뿐이므로(completed는 티켓과 무관하고,
-      // available은 보너스가 붙어도 available이다) 그때만 기다린다. 세션이
-      // 끝내 응답하지 않아도 뽑기 화면이 통째로 멈추지 않는다.
-      if (loading && slot.state === "exhausted") return;
-      if (slot.state === "exhausted") {
-        // 오늘 받은 리딩이 여럿이라 "그 결과"를 하나로 지목할 수 없다.
-        // 그날 리딩이 전부 모여 있는 그날의 일기로 보낸다.
-        router.replace(`/my/journal/${localDateOf(at)}`);
-        return;
-      }
-    } else {
-      // 과거·현재·미래는 주 1회. 티켓과 무관하므로 케이던스만 본다.
-      const blocked = blockingReading(store, "three", at);
-      if (!user && retainedDrawUsageAt(at).threeUsed) {
-        router.replace("/reading");
-        return;
-      }
-      if (blocked) {
-        router.replace(`/reading/${blocked.id}`);
-        return;
-      }
+    const gate = currentDrawGate(store, pendingSpread, pendingFocus, at, user !== null);
+    if (gate.state === "redirect") {
+      router.replace(gate.href);
+      return;
     }
     initRef.current = true;
     setSpread(pendingSpread);
     setFocus(pendingFocus);
     setup();
     setReady(true);
-  }, [router, setup, loading, user]);
+  }, [router, setup, loading, user, devSession, initialSync]);
+
+  useEffect(() => {
+    if (ready) void import("../ReadingResult");
+  }, [ready]);
 
   const record = useCallback(
     (slugs: string[], s: SpreadType, f: string) => {
@@ -251,33 +237,10 @@ export default function DrawPage() {
       // 최신 스토어로 다시 판정해 그 창을 닫는다.
       const at = new Date();
       const fresh = loadStore();
-      if (s === "one") {
-        const slot = slotState(
-          fresh,
-          "one",
-          f,
-          at,
-          dailyTicketsFor(user !== null),
-          user ? 0 : retainedDrawUsageAt(at).oneSlotsUsed,
-        );
-        if (slot.state === "completed") {
-          router.replace(`/reading/${slot.readingId}`);
-          return;
-        }
-        if (slot.state === "exhausted") {
-          router.replace(`/my/journal/${localDateOf(at)}`);
-          return;
-        }
-      } else {
-        const blocked = blockingReading(fresh, "three", at);
-        if (!user && retainedDrawUsageAt(at).threeUsed) {
-          router.replace("/reading");
-          return;
-        }
-        if (blocked) {
-          router.replace(`/reading/${blocked.id}`);
-          return;
-        }
+      const gate = currentDrawGate(fresh, s, f, at, user !== null);
+      if (gate.state === "redirect") {
+        router.replace(gate.href);
+        return;
       }
       const result = recordReading({
         spread: s,
@@ -287,6 +250,13 @@ export default function DrawPage() {
         // 방향은 기록 시점에 뽑는다. uid()와 같은 이유로 보안 난수를 쓴다.
         orientations: pickOrientations(slugs.length, secureRand),
       });
+      if (!result.persisted) {
+        // 결과 자체는 이 세션에서 보여 주되 사용량 표식과 완료 계측은 남기지 않는다.
+        // 새로고침하면 다시 받을 수 있어야 "결과는 사라졌는데 횟수만 차감"되지 않는다.
+        setStorageError(true);
+        setReadingRecord(result.record);
+        return;
+      }
       retainRecordedDrawUsage(result.record.spread, new Date(result.record.at));
       // 퍼널의 전환 지점. 기록이 실제로 남은 뒤에만 보낸다 — 위의 두 갈래
       // (이미 뽑음 / 오늘 소진)는 여기까지 오지 않는다. recordedRef가 이
@@ -400,6 +370,14 @@ export default function DrawPage() {
 
   return (
     <div className="flex min-h-[100dvh] flex-col">
+      {storageError ? (
+        <p
+          role="alert"
+          className="fixed inset-x-4 top-4 z-[60] mx-auto max-w-[520px] rounded-xl border border-line-gold bg-ink-1 px-4 py-3 text-center text-[13px] text-gold-soft shadow-xl"
+        >
+          이 기기에 결과를 저장하지 못했습니다. 저장 공간을 확인한 뒤 다시 이용해 주세요.
+        </p>
+      ) : null}
       <DesktopNav active="reading" />
       {phase === "revealed" ? (
         <nav className="flex h-14 flex-none items-center px-5 lg:hidden">

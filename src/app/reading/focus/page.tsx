@@ -9,6 +9,8 @@ import { focusOptionsFor } from "@/data/focus";
 import { ticketsExhaustedKey, track, trackOnce } from "@/lib/analytics";
 import { useSession } from "@/lib/auth/session";
 import { useRetainedDrawUsage } from "@/lib/draw-guard";
+import { accountDataReady, useSyncStatus } from "@/lib/sync/status";
+import { usePeriodClock } from "@/lib/use-period-clock";
 import {
   getPendingSpread,
   setPendingFocus,
@@ -31,8 +33,9 @@ export default function FocusPage() {
   const router = useRouter();
   const [spread, setSpread] = useState<SpreadType | null>(null);
   const { store } = useArcanaStore();
-  const { user, loading } = useSession();
-  const [now] = useState(() => new Date());
+  const { user, loading, devSession } = useSession();
+  const { initialSync } = useSyncStatus();
+  const now = usePeriodClock();
 
   useEffect(() => {
     const pending = getPendingSpread();
@@ -57,7 +60,14 @@ export default function FocusPage() {
   // 스토어(오늘 쓴 장수)와 세션(로그인 보너스 +1)이 모두 정해져야 티켓 수가
   // 확정된다. 그 전에 그리면 잔량이 "2장 → 3장"으로 튀고 available/exhausted가
   // 뒤집혀 보이므로, 확정 전에는 목록 자체를 내보내지 않는다.
-  const ticketsReady = store !== null && !loading;
+  const ticketsReady =
+    store !== null &&
+    accountDataReady({
+      authLoading: loading,
+      signedIn: user !== null,
+      devSession,
+      initialSync,
+    });
   const retainedUsage = useRetainedDrawUsage(
     now,
     !loading && user === null,

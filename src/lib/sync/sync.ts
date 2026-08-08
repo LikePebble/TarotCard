@@ -55,7 +55,7 @@ export async function reconcileStore(
   if (isStale()) return "skipped";
   const local = loadStore(); // 네트워크 왕복 후 최신 로컬을 읽는다(왕복 중 기록 유실 방지).
   const merged = pulled.outcome === "ok" ? mergeStores(local, pulled.data) : local;
-  if (storeChanged(local, merged)) setLocalStore(merged);
+  if (storeChanged(local, merged) && !setLocalStore(merged)) return "failed";
   const pushed = await pushLocalStore(userId, merged);
   return pulled.outcome === "failed" ? "failed" : pushed;
 }

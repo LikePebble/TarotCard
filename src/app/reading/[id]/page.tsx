@@ -8,6 +8,8 @@ import { DesktopNav } from "@/components/SiteNav";
 import { cardBySlug, type Card } from "@/data/cards";
 import { useJournal } from "@/lib/journal";
 import { readingById, useArcanaStore } from "@/lib/store";
+import { accountDataReady, useSyncStatus } from "@/lib/sync/status";
+import { useSession } from "@/lib/auth/session";
 import { OneCardResult, ThreeCardResult } from "../ReadingResult";
 
 /**
@@ -23,6 +25,14 @@ export default function ReadingResultPage({
   const reducedMotion = useReducedMotion();
   const { store } = useArcanaStore();
   const { store: journal } = useJournal();
+  const { user, loading, devSession } = useSession();
+  const { initialSync } = useSyncStatus();
+  const accountReady = accountDataReady({
+    authLoading: loading,
+    signedIn: user !== null,
+    devSession,
+    initialSync,
+  });
 
   const backNav = (
     <nav className="flex h-14 flex-none items-center px-5 lg:hidden">
@@ -38,7 +48,7 @@ export default function ReadingResultPage({
 
   // SSR / mount 전에는 store·journal이 null. 빈 화면으로 깜빡임을 막는다
   // (journal도 같이 기다리지 않으면 라벨이 "쓰기"→"보기"로 깜빡인다).
-  if (store === null || journal === null) {
+  if (store === null || journal === null || !accountReady) {
     return (
       <div className="flex min-h-[100dvh] flex-col">
         <DesktopNav active="reading" />

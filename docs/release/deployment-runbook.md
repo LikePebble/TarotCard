@@ -27,7 +27,22 @@ Vercel Preview와 Production에 각각 아래 값을 관리한다.
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
 NEXT_PUBLIC_ENABLE_RELEASE_TEST_TOOLS
+RESEND_API_KEY
+INQUIRY_FROM_EMAIL
+INQUIRY_RECIPIENT_EMAIL
 ```
+
+문의 메일 환경변수의 원칙:
+
+- `RESEND_API_KEY`는 Resend 발송 API 키다.
+- `INQUIRY_FROM_EMAIL`은 Resend에서 인증된 도메인의 발신 주소다. 표시 이름을 포함한
+  `아르카 문의 <contact@realm.ai.kr>` 형식도 사용할 수 있다.
+- `INQUIRY_RECIPIENT_EMAIL`은 운영자가 문의를 받을 주소다. 생략하면 코드의 운영자
+  문의 주소를 사용한다.
+- 세 값은 서버 전용이므로 `NEXT_PUBLIC_` 접두사를 붙이지 않는다. Preview와
+  Production에 각각 등록한 뒤 회원 문의와 비회원 문의를 각각 1건 보내 수신과 회신
+  주소를 확인한다. 연락처를 비운 비회원 의견도 접수되는지 확인한다.
+- 문의는 Supabase에 별도 저장하지 않고 Resend 이메일로만 전달한다.
 
 `NEXT_PUBLIC_ENABLE_RELEASE_TEST_TOOLS`의 원칙:
 
