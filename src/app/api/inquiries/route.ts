@@ -65,7 +65,19 @@ export async function POST(request: Request) {
   }
 
   if (!response.ok) {
-    console.error(`[inquiry] 메일 발송 실패: ${response.status}`);
+    const error: { name?: unknown; message?: unknown } = await response
+      .json()
+      .then((value: unknown) =>
+        value && typeof value === "object"
+          ? (value as { name?: unknown; message?: unknown })
+          : {},
+      )
+      .catch(() => ({}));
+    const errorName = typeof error.name === "string" ? error.name : "unknown";
+    const errorMessage = typeof error.message === "string" ? error.message : "unknown";
+    console.error(
+      `[inquiry] 메일 발송 실패: ${response.status} ${errorName} ${errorMessage}`,
+    );
     return NextResponse.json(
       { error: "접수 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요." },
       { status: 502 },
