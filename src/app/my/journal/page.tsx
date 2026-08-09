@@ -6,27 +6,50 @@ import { motion, useReducedMotion } from "motion/react";
 import { CaretLeft, CaretRight, Notebook } from "@phosphor-icons/react";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
+import { useLocale } from "@/components/LocaleProvider";
 import { cardBySlug } from "@/data/cards";
 import { koCards } from "@/data/ko";
 import { useJournal, writtenDates } from "@/lib/journal";
 import { localDateOf } from "@/lib/period";
 import { useArcanaStore, type ReadingRecord } from "@/lib/store";
+import type { Locale } from "@/lib/locale";
 import { CalendarMonth } from "./CalendarMonth";
 
-function formatKoDate(date: string): string {
+function formatJournalDate(date: string, locale: Locale): string {
   const [y, m, d] = date.split("-");
+  if (locale === "en") {
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(Date.UTC(Number(y), Number(m) - 1, Number(d))));
+  }
   return `${y}년 ${Number(m)}월 ${Number(d)}일`;
 }
 
-function readingSummary(r: ReadingRecord): string {
-  const type = r.spread === "one" ? "오늘의 카드" : "과거·현재·미래";
+function readingSummary(r: ReadingRecord, locale: Locale): string {
+  const type =
+    locale === "en"
+      ? r.spread === "one"
+        ? "Card of the day"
+        : "Past · Present · Future"
+      : r.spread === "one"
+        ? "오늘의 카드"
+        : "과거·현재·미래";
   const names = r.cards
-    .map((slug) => koCards[slug]?.nameKo ?? cardBySlug.get(slug)?.nameEn ?? slug)
+    .map((slug) =>
+      locale === "en"
+        ? cardBySlug.get(slug)?.nameEn ?? slug
+        : koCards[slug]?.nameKo ?? cardBySlug.get(slug)?.nameEn ?? slug,
+    )
     .join(" · ");
   return `${type} — ${names}`;
 }
 
 export default function JournalPage() {
+  const locale = useLocale();
+  const english = locale === "en";
   const reducedMotion = useReducedMotion();
   const { store } = useArcanaStore();
   const { store: journal } = useJournal();
@@ -68,10 +91,12 @@ export default function JournalPage() {
         className="mx-auto w-full min-h-0 flex-1 overflow-y-auto px-5 pb-8 pt-1 lg:max-w-[760px] lg:overflow-visible lg:px-12 lg:pb-[88px] lg:pt-6"
       >
         <h1 className="font-display text-[27px] font-semibold lg:text-[36px]">
-          일별 기록
+          {english ? "Journal" : "일별 기록"}
         </h1>
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
-          매일의 카드와 마음을 달력에 모아 둡니다.
+          {english
+            ? "Keep each day's cards and reflections together on the calendar."
+            : "매일의 카드와 마음을 달력에 모아 둡니다."}
         </p>
 
         {loading ? (
@@ -85,25 +110,28 @@ export default function JournalPage() {
               readingDates={readingDates}
               journalDates={journalDates}
               todayIso={todayIso}
+              locale={locale}
             />
 
             {recent.length === 0 ? (
               <div className="mt-6 flex flex-col items-center rounded-2xl border border-line bg-ink-1 px-6 py-10 text-center lg:rounded-[18px]">
                 <Notebook size={28} className="text-gold-soft" aria-hidden />
                 <p className="mt-3 font-display text-lg font-semibold lg:text-[21px]">
-                  아직 기록이 없습니다
+                  {english ? "No entries yet" : "아직 기록이 없습니다"}
                 </p>
                 <p className="mt-1 max-w-[320px] text-[13.5px] text-muted lg:text-[15px]">
-                  리딩을 하면 그날이 달력에 표시되고, 어느 날이든 눌러 일기를 남길 수 있습니다.
+                  {english
+                    ? "A reading marks its date on the calendar, and you can open any day to leave a journal entry."
+                    : "리딩을 하면 그날이 달력에 표시되고, 어느 날이든 눌러 일기를 남길 수 있습니다."}
                 </p>
                 <Link href="/reading" className="btn btn-gold mt-5">
-                  리딩 시작하기
+                  {english ? "Start a reading" : "리딩 시작하기"}
                 </Link>
               </div>
             ) : (
               <section className="mt-7">
                 <h2 className="text-[13px] font-medium text-gold-soft lg:text-[14px]">
-                  최근 기록
+                  {english ? "Recent entries" : "최근 기록"}
                 </h2>
                 <div className="mt-2.5 divide-y divide-line overflow-hidden rounded-2xl border border-line bg-ink-1 lg:rounded-[14px]">
                   {recent.map((date) => {
@@ -117,11 +145,11 @@ export default function JournalPage() {
                       >
                         <span className="min-w-0">
                           <span className="font-display text-[15px] font-semibold lg:text-[16px]">
-                            {formatKoDate(date)}
+                            {formatJournalDate(date, locale)}
                           </span>
                           <span className="mt-0.5 block truncate text-[12.5px] text-muted lg:text-[13.5px]">
                             {readings.length > 0
-                              ? readingSummary(readings[0])
+                              ? readingSummary(readings[0], locale)
                               : note}
                           </span>
                         </span>

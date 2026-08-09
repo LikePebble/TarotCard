@@ -1,10 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
   formatLegalDate,
+  getLegalDocument,
   legalDocuments,
+  legalDocumentsByLocale,
   operator,
   privacyDocument,
+  privacyDocumentEn,
   termsDocument,
+  termsDocumentEn,
   type LegalDocument,
 } from "@/data/legal";
 
@@ -114,6 +118,12 @@ function bodyOf(doc: LegalDocument): string {
   return doc.sections
     .flatMap((s) => [s.heading, ...s.paragraphs, ...(s.bullets ?? [])])
     .join("\n");
+}
+
+function allTextOf(doc: LegalDocument): string {
+  return [doc.title, bodyOf(doc), ...doc.revisions.map((revision) => revision.summary)].join(
+    "\n",
+  );
 }
 
 /** 문서에 주어진 조각을 제목에 포함하는 섹션이 있는지. */
@@ -289,5 +299,114 @@ describe("formatLegalDate", () => {
   it("한국어 날짜로 바꾼다", () => {
     expect(formatLegalDate("2026-07-28")).toBe("2026년 7월 28일");
     expect(formatLegalDate("2026-12-01")).toBe("2026년 12월 1일");
+  });
+
+  it("영어 날짜로 바꾼다", () => {
+    expect(formatLegalDate("2026-07-28", "en")).toBe("July 28, 2026");
+    expect(formatLegalDate("2026-12-01", "en")).toBe("December 1, 2026");
+  });
+});
+
+describe("영문 법적 문서", () => {
+  const pairs = [
+    [termsDocument, termsDocumentEn],
+    [privacyDocument, privacyDocumentEn],
+  ] as const;
+
+  it("로케일과 문서 id로 정본을 선택한다", () => {
+    expect(legalDocumentsByLocale.ko).toBe(legalDocuments);
+    expect(getLegalDocument("terms", "ko")).toBe(termsDocument);
+    expect(getLegalDocument("privacy", "ko")).toBe(privacyDocument);
+    expect(getLegalDocument("terms", "en")).toBe(termsDocumentEn);
+    expect(getLegalDocument("privacy", "en")).toBe(privacyDocumentEn);
+  });
+
+  it.each(pairs)("$0.id: 한국어 정본과 판·시행일·구조가 같다", (ko, en) => {
+    expect(en.id).toBe(ko.id);
+    expect(en.version).toBe(ko.version);
+    expect(en.effectiveDate).toBe(ko.effectiveDate);
+    expect(en.revisions.map(({ version, effectiveDate }) => ({ version, effectiveDate })))
+      .toEqual(
+        ko.revisions.map(({ version, effectiveDate }) => ({ version, effectiveDate })),
+      );
+    expect(en.sections).toHaveLength(ko.sections.length);
+    expect(
+      en.sections.map((section) => ({
+        paragraphs: section.paragraphs.length,
+        bullets: section.bullets?.length ?? 0,
+      })),
+    ).toEqual(
+      ko.sections.map((section) => ({
+        paragraphs: section.paragraphs.length,
+        bullets: section.bullets?.length ?? 0,
+      })),
+    );
+  });
+
+  it.each(pairs)("$0.id: 영문 정본에 한국어가 섞이지 않는다", (_ko, en) => {
+    expect(allTextOf(en)).not.toMatch(/[가-힣]/);
+  });
+
+  it.each([termsDocumentEn, privacyDocumentEn])(
+    "$id: Article 번호가 1부터 빠짐없이 이어진다",
+    (doc) => {
+      const numbers = doc.sections
+        .map((section) => /^Article (\d+)/.exec(section.heading))
+        .filter((match): match is RegExpExecArray => match !== null)
+        .map((match) => Number(match[1]));
+      expect(numbers).toEqual(numbers.map((_, index) => index + 1));
+    },
+  );
+
+  it.each([termsDocumentEn, privacyDocumentEn])(
+    "$id: 본문의 Article 상호참조가 실제 조를 가리킨다",
+    (doc) => {
+      const existing = new Set(
+        doc.sections
+          .map((section) => /^Article (\d+)/.exec(section.heading))
+          .filter((match): match is RegExpExecArray => match !== null)
+          .map((match) => Number(match[1])),
+      );
+      const references = [...bodyOf(doc).matchAll(/Article (\d+)/g)].map((match) =>
+        Number(match[1]),
+      );
+      expect(references.length).toBeGreaterThan(0);
+      for (const reference of references) {
+        expect(existing).toContain(reference);
+      }
+    },
+  );
+
+  it("운영자 사실값을 두 영문 문서에 그대로 싣는다", () => {
+    for (const doc of [termsDocumentEn, privacyDocumentEn]) {
+      const body = bodyOf(doc);
+      expect(body).toContain(operator.operatorName);
+      expect(body).toContain(operator.contactEmail);
+      expect(body).toContain(operator.siteUrl);
+    }
+  });
+
+  it("영문 개인정보처리방침이 저장소 키·수탁자·보관기간을 보존한다", () => {
+    const body = bodyOf(privacyDocumentEn);
+    for (const fact of [
+      "arcana.v1",
+      "arcana.journal.v1",
+      "arcana.entitlements.v1",
+      "arcana.collection.unseen.v1",
+      "arcana.deck",
+      "arcana.reading.focus",
+      "arcana.reading.spread",
+      "Supabase",
+      "Vercel",
+      "Kakao",
+      "Google",
+      "Google Fonts",
+      "Google AdSense",
+      "Resend",
+      "1 year",
+      "7 days",
+    ]) {
+      expect(body).toContain(fact);
+    }
   });
 });

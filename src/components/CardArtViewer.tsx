@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "@phosphor-icons/react";
 import { DeckAwareArt } from "@/components/DeckAwareArt";
+import { useLocale } from "@/components/LocaleProvider";
 import type { Card } from "@/data/cards";
 import type { Orientation } from "@/lib/store";
 
@@ -49,6 +50,7 @@ export function CardArtViewer({
   priority?: boolean;
   orientation?: Orientation;
 }) {
+  const english = useLocale() === "en";
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -71,7 +73,7 @@ export function CardArtViewer({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        aria-label="카드 크게 보기"
+        aria-label={english ? "View card in full screen" : "카드 크게 보기"}
         className={triggerClassName}
       >
         <DeckAwareArt
@@ -88,6 +90,7 @@ export function CardArtViewer({
               card={card}
               deckOverride={deckOverride}
               orientation={orientation}
+              english={english}
               onClose={() => setOpen(false)}
             />,
             document.body,
@@ -101,11 +104,13 @@ function ViewerOverlay({
   card,
   deckOverride,
   orientation,
+  english,
   onClose,
 }: {
   card: Card;
   deckOverride?: string;
   orientation?: Orientation;
+  english: boolean;
   onClose: () => void;
 }) {
   const [scale, setScale] = useState(1);
@@ -275,7 +280,7 @@ function ViewerOverlay({
       <button
         type="button"
         onClick={onClose}
-        aria-label="닫기"
+        aria-label={english ? "Close" : "닫기"}
         className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-cream backdrop-blur transition-colors hover:bg-white/20"
       >
         <X size={22} aria-hidden />

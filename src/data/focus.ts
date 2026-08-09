@@ -4,6 +4,8 @@ import { koFocusSelf } from "./ko-focus-self";
 import { koFocusHealth } from "./ko-focus-health";
 import { koFocusMoney } from "./ko-focus-money";
 import type { SpreadType } from "@/lib/store";
+import type { Locale } from "@/lib/locale";
+import { enFocusParagraphOf } from "./en-reading";
 
 export type FocusId = "love" | "work" | "self" | "health" | "money" | "day";
 
@@ -18,6 +20,15 @@ export const FOCUS_OPTIONS: FocusOption[] = [
   { id: "money", label: "금전", desc: "돈을 대하는 마음가짐" },
 ];
 
+const EN_FOCUS_OPTIONS: FocusOption[] = [
+  { id: "day", label: "Today", desc: "The overall tone of your day" },
+  { id: "love", label: "Love", desc: "The movement of your heart and relationships" },
+  { id: "work", label: "Work", desc: "The direction of work and accomplishment" },
+  { id: "self", label: "Self", desc: "Your inner state and balance" },
+  { id: "health", label: "Health", desc: "The condition of body and mind" },
+  { id: "money", label: "Money", desc: "Your relationship with money" },
+];
+
 /** 오늘 하루는 오늘의 카드 전용. */
 export function focusOptionsFor(spread: SpreadType): FocusOption[] {
   return spread === "three"
@@ -25,9 +36,20 @@ export function focusOptionsFor(spread: SpreadType): FocusOption[] {
     : FOCUS_OPTIONS;
 }
 
+export function localizedFocusOptionsFor(
+  spread: SpreadType,
+  locale: Locale,
+): FocusOption[] {
+  const options = locale === "en" ? EN_FOCUS_OPTIONS : FOCUS_OPTIONS;
+  return spread === "three"
+    ? options.filter((option) => option.id !== "day")
+    : options;
+}
+
 /** id -> 표시 라벨. 구버전 세션이 한글 라벨을 저장했어도 그대로 보여준다. */
-export function focusLabelOf(id: string): string {
-  return FOCUS_OPTIONS.find((option) => option.id === id)?.label ?? id;
+export function focusLabelOf(id: string, locale: Locale = "ko"): string {
+  const options = locale === "en" ? EN_FOCUS_OPTIONS : FOCUS_OPTIONS;
+  return options.find((option) => option.id === id)?.label ?? id;
 }
 
 /** 테마별 카드 해석. day는 기본 해석만 사용하므로 레코드가 없다. */
@@ -42,6 +64,8 @@ const KO_FOCUS: Partial<Record<FocusId, Record<string, string>>> = {
 export function focusParagraphOf(
   focusId: string,
   slug: string,
+  locale: Locale = "ko",
 ): string | null {
+  if (locale === "en") return enFocusParagraphOf(focusId, slug);
   return KO_FOCUS[focusId as FocusId]?.[slug] ?? null;
 }

@@ -9,6 +9,7 @@ import { CaretLeft } from "@phosphor-icons/react";
 import { CardArt } from "@/components/CardArt";
 import { CardBack } from "@/components/CardBack";
 import { DesktopNav } from "@/components/SiteNav";
+import { useLocale } from "@/components/LocaleProvider";
 import { cards, type Card } from "@/data/cards";
 import { focusLabelOf } from "@/data/focus";
 import { track } from "@/lib/analytics";
@@ -38,6 +39,7 @@ const ThreeCardResult = dynamic(() =>
 );
 
 const POSITIONS = ["과거", "현재", "미래"] as const;
+const EN_POSITIONS = ["Past", "Present", "Future"] as const;
 const FAN_SIZE = 7;
 
 /*
@@ -101,6 +103,8 @@ function GachaGlow() {
 }
 
 export default function DrawPage() {
+  const english = useLocale() === "en";
+  const positionLabels = english ? EN_POSITIONS : POSITIONS;
   const router = useRouter();
   const reducedMotion = useReducedMotion();
   const { deckId } = useSelectedDeck();
@@ -366,7 +370,7 @@ export default function DrawPage() {
     return <div className="min-h-[100dvh]" />;
   }
 
-  const spreadLabel = spread === "one" ? "오늘의 카드" : "과거 · 현재 · 미래";
+  const spreadLabel = spread === "one" ? (english ? "Daily card" : "오늘의 카드") : (english ? "Past · Present · Future" : "과거 · 현재 · 미래");
 
   return (
     <div className="flex min-h-[100dvh] flex-col">
@@ -375,7 +379,7 @@ export default function DrawPage() {
           role="alert"
           className="fixed inset-x-4 top-4 z-[60] mx-auto max-w-[520px] rounded-xl border border-line-gold bg-ink-1 px-4 py-3 text-center text-[13px] text-gold-soft shadow-xl"
         >
-          이 기기에 결과를 저장하지 못했습니다. 저장 공간을 확인한 뒤 다시 이용해 주세요.
+          {english ? "We could not save this result on this device. Check available storage and try again." : "이 기기에 결과를 저장하지 못했습니다. 저장 공간을 확인한 뒤 다시 이용해 주세요."}
         </p>
       ) : null}
       <DesktopNav active="reading" />
@@ -386,7 +390,7 @@ export default function DrawPage() {
             className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted hover:text-cream"
           >
             <CaretLeft size={16} aria-hidden />
-            리딩
+            {english ? "Reading" : "리딩"}
           </Link>
         </nav>
       ) : (
@@ -396,7 +400,7 @@ export default function DrawPage() {
             className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted hover:text-cream"
           >
             <CaretLeft size={16} aria-hidden />
-            질문
+            {english ? "Focus" : "질문"}
           </Link>
           <span className="text-[13px] text-muted">3 / 3</span>
         </nav>
@@ -417,18 +421,18 @@ export default function DrawPage() {
             </p>
             <h1 className="mt-1.5 px-6 font-display text-[27px] font-semibold leading-[1.35] lg:text-[40px]">
               {phase === "shuffling"
-                ? "카드를 섞고 있습니다"
+                ? english ? "Shuffling the cards" : "카드를 섞고 있습니다"
                 : phase === "flipping" ||
                     (spread === "one" && chargingFanId !== null)
-                  ? "카드를 공개합니다"
+                  ? english ? "Revealing the cards" : "카드를 공개합니다"
                   : spread === "three" && pickedFanIds.length > 0
-                    ? "한 장 더 고르세요"
-                    : "마음이 가는 카드를 고르세요"}
+                    ? english ? "Choose one more card" : "한 장 더 고르세요"
+                    : english ? "Choose the card that draws you" : "마음이 가는 카드를 고르세요"}
             </h1>
 
             {spread === "three" && phase !== "shuffling" ? (
               <div className="mt-[22px] flex justify-center gap-3.5 px-6">
-                {POSITIONS.map((position, i) => {
+                {positionLabels.map((position, i) => {
                   const card = picked[i];
                   return (
                     <div key={position} className="w-[86px] lg:w-[110px]">
@@ -550,7 +554,7 @@ export default function DrawPage() {
                       }
                       onClick={() => pick(fanId)}
                       disabled={phase !== "picking" || chargingFanId !== null}
-                      aria-label={`덮인 카드 ${i + 1}`}
+                      aria-label={english ? `Face-down card ${i + 1}` : `덮인 카드 ${i + 1}`}
                       animate={
                         spread === "three"
                           ? {
@@ -635,10 +639,10 @@ export default function DrawPage() {
             </div>
             <p className="px-6 text-[13px] text-muted lg:hidden">
               {phase === "shuffling"
-                ? "화면을 누르면 바로 펼칩니다"
+                ? english ? "Tap the screen to reveal now" : "화면을 누르면 바로 펼칩니다"
                 : spread === "three"
-                  ? "고른 카드는 슬롯으로 이동합니다"
-                  : "카드를 눌러 뒤집습니다"}
+                  ? english ? "Your chosen card will move into its slot" : "고른 카드는 슬롯으로 이동합니다"
+                  : english ? "Tap a card to turn it over" : "카드를 눌러 뒤집습니다"}
             </p>
           </main>
         ) : spread === "one" ? (

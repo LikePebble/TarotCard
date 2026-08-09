@@ -4,8 +4,11 @@ import {
   DAILY_TICKETS_BASE,
   SIGNED_IN_BONUS,
   TICKET_BONUS_HINT,
+  TICKET_BONUS_HINT_EN,
   TICKET_RESET_NOTE,
+  TICKET_RESET_NOTE_EN,
   dailyTicketsFor,
+  ticketBonusHint,
   ticketNoticeLinesOf,
   ticketNoticeOf,
   ticketStateOf,
@@ -162,6 +165,15 @@ describe("ticketNoticeOf", () => {
     );
   });
 
+  it("영어 잔량과 완료 상태를 알린다", () => {
+    expect(ticketNoticeOf({ total: 2, used: 1, remaining: 1 }, "en")).toBe(
+      "You can receive 1 more reading today",
+    );
+    expect(ticketNoticeOf({ total: 2, used: 2, remaining: 0 }, "en")).toBe(
+      "You have received all of today's available tarot readings",
+    );
+  });
+
   // 하루 횟수를 재화처럼 부르지 않기로 했다. 문구가 다시 그쪽으로 돌아가지
   // 않도록 고정한다.
   it("재화 어휘를 쓰지 않는다", () => {
@@ -193,10 +205,24 @@ describe("ticketNoticeLinesOf", () => {
     expect(lines[0]).toBe("오늘 받으실 수 있는 타로는 모두 받으셨습니다.");
     expect(lines[1]).toBe(TICKET_RESET_NOTE);
   });
+
+  it("영어 소진 안내도 회복 시점을 다음 줄에 둔다", () => {
+    const lines = ticketNoticeLinesOf(
+      { total: 2, used: 2, remaining: 0 },
+      "en",
+    ).split("\n");
+    expect(lines[0]).toBe("You have received all of today's available tarot readings.");
+    expect(lines[1]).toBe(TICKET_RESET_NOTE_EN);
+  });
 });
 
 describe("TICKET_BONUS_HINT", () => {
   it("보너스 횟수를 상수에서 파생한다", () => {
     expect(TICKET_BONUS_HINT).toContain(`${SIGNED_IN_BONUS}번 더`);
+  });
+
+  it("locale별 보너스 안내를 돌려준다", () => {
+    expect(ticketBonusHint()).toBe(TICKET_BONUS_HINT);
+    expect(ticketBonusHint("en")).toBe(TICKET_BONUS_HINT_EN);
   });
 });

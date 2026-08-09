@@ -38,6 +38,21 @@ describe("cardSharePayload", () => {
     expect(p.text).toContain("클래식 덱");
     expect(p.url).toBe("https://arca.realm.ai.kr/collection/classic/the-fool");
   });
+
+  it("영어 공유 문구에는 영문 카드명과 덱 이름만 담는다", () => {
+    const p = cardSharePayload(
+      ORIGIN,
+      "classic",
+      "the-fool",
+      "바보",
+      "The Fool",
+      "en",
+    );
+    expect(p.title).toBe("The Fool · Arca Tarot");
+    expect(p.text).toContain("The Fool");
+    expect(p.text).toContain("Classic deck");
+    expect(p.title + p.text).not.toMatch(/[가-힣]/);
+  });
 });
 
 describe("runShare", () => {
@@ -127,5 +142,10 @@ describe("shareNoticeOf", () => {
   it("복사와 실패는 알린다", () => {
     expect(shareNoticeOf("copied")).toBe("링크를 복사했습니다");
     expect(shareNoticeOf("failed")).toContain("공유하지 못했습니다");
+  });
+
+  it("영어 결과 안내를 돌려준다", () => {
+    expect(shareNoticeOf("copied", "en")).toBe("Link copied");
+    expect(shareNoticeOf("failed", "en")).toContain("Unable to share");
   });
 });

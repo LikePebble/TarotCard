@@ -1,4 +1,5 @@
 import { focusLabelOf } from "@/data/focus";
+import type { Locale } from "@/lib/locale";
 import type { SpreadType } from "@/lib/store";
 
 /**
@@ -39,7 +40,13 @@ export function orderedDayReadings<T extends DayReading>(readings: T[]): Ordered
 }
 
 /** 리딩 유형(스프레드) 이름. */
-export function readingTypeLabel(spread: SpreadType): string {
+export function readingTypeLabel(
+  spread: SpreadType,
+  locale: Locale = "ko",
+): string {
+  if (locale === "en") {
+    return spread === "one" ? "Card of the day" : "Past · Present · Future";
+  }
   return spread === "one" ? "오늘의 카드" : "과거 · 현재 · 미래";
 }
 
@@ -50,8 +57,9 @@ export function readingTypeLabel(spread: SpreadType): string {
  * "오늘"이 어제를 가리키게 된다. 일기는 과거 날짜를 여는 화면이므로 여기서만
  * 시점을 뺀 "하루"로 부른다. 나머지 주제는 시점어가 없어 그대로 쓴다.
  */
-function tabTopicLabel(category: string): string {
-  return category === "day" ? "하루" : focusLabelOf(category);
+function tabTopicLabel(category: string, locale: Locale): string {
+  if (category === "day") return locale === "en" ? "Day" : "하루";
+  return focusLabelOf(category, locale);
 }
 
 /**
@@ -59,12 +67,15 @@ function tabTopicLabel(category: string): string {
  * 쓴다. 3장 리딩은 한눈에 유형을 알 수 있도록 "3장"을 덧붙인다.
  * 같은 유형 안에서 주제가 겹치면 순번을 붙여 탭 이름이 중복되지 않게 한다.
  */
-export function readingTabLabels(readings: DayReading[]): string[] {
+export function readingTabLabels(
+  readings: DayReading[],
+  locale: Locale = "ko",
+): string[] {
   const ordered = orderedDayReadings(readings).readings;
   const labels = ordered.map((reading) =>
     reading.spread === "three"
-      ? `${tabTopicLabel(reading.category)} 3장`
-      : tabTopicLabel(reading.category),
+      ? `${tabTopicLabel(reading.category, locale)} ${locale === "en" ? "3 cards" : "3장"}`
+      : tabTopicLabel(reading.category, locale),
   );
   const labelCount = countBy(labels);
   const seen = new Map<string, number>();

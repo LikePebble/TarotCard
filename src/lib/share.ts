@@ -1,4 +1,5 @@
-import { deckById } from "@/data/decks";
+import { deckById, deckName } from "@/data/decks";
+import type { Locale } from "@/lib/locale";
 
 export type SharePayload = { title: string; text: string; url: string };
 
@@ -24,11 +25,19 @@ export function cardSharePayload(
   slug: string,
   nameKo: string,
   nameEn: string,
+  locale: Locale = "ko",
 ): SharePayload {
-  const deckName = deckById(deckId).nameKo;
+  const selectedDeckName = deckName(deckById(deckId), locale);
+  if (locale === "en") {
+    return {
+      title: `${nameEn} · Arca Tarot`,
+      text: `The card I met today is ${nameEn}. I drew it from the ${selectedDeckName}.`,
+      url: shareCardUrl(origin, deckId, slug),
+    };
+  }
   return {
     title: `${nameKo} ${nameEn} · 아르카 타로`,
-    text: `오늘 제가 만난 카드는 ${nameKo}입니다. ${deckName}으로 뽑았어요.`,
+    text: `오늘 제가 만난 카드는 ${nameKo}입니다. ${selectedDeckName}으로 뽑았어요.`,
     url: shareCardUrl(origin, deckId, slug),
   };
 }
@@ -76,12 +85,17 @@ export async function runShare(
 }
 
 /** 결과별 안내 문구. cancelled는 아무 말도 하지 않는다. */
-export function shareNoticeOf(outcome: ShareOutcome): string | null {
+export function shareNoticeOf(
+  outcome: ShareOutcome,
+  locale: Locale = "ko",
+): string | null {
   switch (outcome) {
     case "copied":
-      return "링크를 복사했습니다";
+      return locale === "en" ? "Link copied" : "링크를 복사했습니다";
     case "failed":
-      return "공유하지 못했습니다. 주소창의 링크를 복사해 주세요";
+      return locale === "en"
+        ? "Unable to share. Please copy the link from your address bar"
+        : "공유하지 못했습니다. 주소창의 링크를 복사해 주세요";
     default:
       return null;
   }

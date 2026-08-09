@@ -22,6 +22,11 @@ describe("readingTypeLabel", () => {
     expect(readingTypeLabel("one")).toBe("오늘의 카드");
     expect(readingTypeLabel("three")).toBe("과거 · 현재 · 미래");
   });
+
+  it("영어 스프레드 이름을 돌려준다", () => {
+    expect(readingTypeLabel("one", "en")).toBe("Card of the day");
+    expect(readingTypeLabel("three", "en")).toBe("Past · Present · Future");
+  });
 });
 
 describe("readingTabLabels", () => {
@@ -71,6 +76,18 @@ describe("readingTabLabels", () => {
         reading("2", "love", "three", "2026-07-28T02:00:00.000Z"),
       ]),
     ).toEqual(["하루 3장", "사랑 3장"]);
+  });
+
+  it("영어 주제와 3장 표기를 사용한다", () => {
+    expect(
+      readingTabLabels(
+        [
+          reading("1", "day", "one", "2026-07-28T01:00:00.000Z"),
+          reading("2", "love", "three", "2026-07-28T02:00:00.000Z"),
+        ],
+        "en",
+      ),
+    ).toEqual(["Day", "Love 3 cards"]);
   });
 });
 

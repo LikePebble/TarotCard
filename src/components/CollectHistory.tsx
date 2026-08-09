@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useArcanaStore } from "@/lib/store";
 import { useSession } from "@/lib/auth/session";
 import { shouldPromptGuestCollection } from "@/lib/collection-access";
+import { useLocale } from "@/components/LocaleProvider";
 
 function formatKoDate(iso: string): string {
   const d = new Date(iso);
@@ -19,6 +20,7 @@ export function CollectHistory({
   slug: string;
   deckId: string;
 }) {
+  const english = useLocale() === "en";
   const { store } = useArcanaStore();
   const { user, loading } = useSession();
   const entry = store?.collection[deckId]?.[slug];
@@ -38,31 +40,31 @@ export function CollectHistory({
       ) : promptGuestCollection ? (
         <div>
           <span className="inline-block rounded-full border border-line px-3 py-1 text-[12px] text-muted">
-            미수집
+            {english ? "Not collected" : "미수집"}
           </span>
           <p className="mt-2.5 text-[14px] text-muted">
-            로그인하면 이 카드가 도감에 수집됩니다.
+            {english ? "Sign in to collect this card in your catalog." : "로그인하면 이 카드가 도감에 수집됩니다."}
           </p>
           <Link
             href="/login"
             className="btn btn-gold mt-3.5 w-full sm:w-auto sm:px-8"
           >
-            로그인하고 수집하기
+            {english ? "Sign in to collect" : "로그인하고 수집하기"}
           </Link>
         </div>
       ) : entry ? (
         <div>
           <div className="flex gap-10 lg:gap-14">
             <div>
-              <p className="text-[12.5px] text-muted lg:text-[13px]">첫 수집</p>
+              <p className="text-[12.5px] text-muted lg:text-[13px]">{english ? "First collected" : "첫 수집"}</p>
               <p className="font-display text-[17px] lg:text-[19px]">
-                {formatKoDate(entry.firstAt)}
+                {english ? new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(new Date(entry.firstAt)) : formatKoDate(entry.firstAt)}
               </p>
             </div>
             <div>
-              <p className="text-[12.5px] text-muted lg:text-[13px]">뽑은 횟수</p>
+              <p className="text-[12.5px] text-muted lg:text-[13px]">{english ? "Draws" : "뽑은 횟수"}</p>
               <p className="font-display text-[17px] lg:text-[19px]">
-                {entry.count}회
+                {entry.count}{english ? "" : "회"}
               </p>
             </div>
           </div>
@@ -70,10 +72,10 @@ export function CollectHistory({
       ) : (
         <div>
           <span className="inline-block rounded-full border border-line px-3 py-1 text-[12px] text-muted">
-            미수집
+            {english ? "Not collected" : "미수집"}
           </span>
           <p className="mt-2.5 text-[14px] text-muted">
-            아직 이 덱에서 만나지 않은 카드입니다.
+            {english ? "You have not met this card in this deck yet." : "아직 이 덱에서 만나지 않은 카드입니다."}
           </p>
         </div>
       )}

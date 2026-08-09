@@ -7,7 +7,8 @@ import { DeckCard } from "@/components/DeckCard";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { TabBar } from "@/components/TabBar";
 import { cards } from "@/data/cards";
-import { decks, decksByDefaultFirst } from "@/data/decks";
+import { deckName, decks, decksByDefaultFirst } from "@/data/decks";
+import { useLocale } from "@/components/LocaleProvider";
 import { isDevTools } from "@/lib/dev-reset";
 import {
   LAUNCH_PROMO_DECKS,
@@ -28,6 +29,7 @@ import { useSession } from "@/lib/auth/session";
 import { collectionVisibility } from "@/lib/collection-access";
 
 export default function CollectionPage() {
+  const english = useLocale() === "en";
   const router = useRouter();
   const { store } = useArcanaStore();
   const unreadByDeck = useUnreadCollections();
@@ -38,7 +40,9 @@ export default function CollectionPage() {
   const premiumDecks = list.filter((deck) => deck.id !== "classic");
   // 기본 덱 설정에 따라 문구의 이름 순서가 흔들리지 않도록 원본 순서를 쓴다.
   const promoDecks = promoDeckNames(decks);
-  const promoNames = joinDeckNames(promoDecks);
+  const promoNames = english
+    ? promoDecks.map((name) => deckName(decks.find((deck) => deck.nameKo === name) ?? decks[0], "en")).join(", ")
+    : joinDeckNames(promoDecks);
   const promoVariant = launchPromoVariant(
     LAUNCH_PROMO_DECKS,
     sessionLoading,
@@ -72,10 +76,10 @@ export default function CollectionPage() {
       <MobileTopBar />
       <main className="mx-auto w-full min-h-0 flex-1 overflow-y-auto px-5 pb-8 pt-2 lg:max-w-[1060px] lg:overflow-visible lg:px-12 lg:pb-[88px] lg:pt-[72px]">
         <h1 className="font-display text-[27px] font-semibold lg:text-[40px]">
-          컬렉션
+          {english ? "Collection" : "컬렉션"}
         </h1>
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
-          나만의 덱을 설정하고 78장의 타로카드를 수집해 보세요.
+          {english ? "Choose your deck and collect all 78 tarot cards." : "나만의 덱을 설정하고 78장의 타로카드를 수집해 보세요."}
         </p>
         {/*
           카드 의미 색인으로 가는 길. 도감은 아직 만나지 않은 카드를 링크하지
@@ -87,7 +91,7 @@ export default function CollectionPage() {
             href="/card-meanings"
             className="text-gold-soft underline underline-offset-4 hover:text-cream"
           >
-            78장의 의미를 먼저 찾아보기
+            {english ? "Explore the meanings of all 78 cards" : "78장의 의미를 먼저 찾아보기"}
           </Link>
         </p>
 
@@ -114,20 +118,21 @@ export default function CollectionPage() {
               id="launch-promo-title"
               className="font-display text-[16px] font-semibold text-gold-soft lg:text-[18px]"
             >
-              로그인하시면 프리미엄 덱을 드립니다
+              {english ? "Sign in to receive premium decks" : "로그인하시면 프리미엄 덱을 드립니다"}
             </h2>
             <p className="mt-1.5 text-[13px] leading-relaxed text-body lg:text-[14px]">
-              출시를 기념하여, 한정 기간 동안 로그인하신 분께 {promoNames}{" "}
-              프리미엄 덱을 드립니다.
+              {english
+                ? `For a limited time, signing in gives you ${promoNames}.`
+                : <>출시를 기념하여, 한정 기간 동안 로그인하신 분께 {promoNames} 프리미엄 덱을 드립니다.</>}
             </p>
             <p className="mt-1 text-[12.5px] leading-relaxed text-muted lg:text-[13px]">
-              한정 기간 동안 드리는 것이라 기간이 끝나면 이 안내는 사라집니다.
+              {english ? "This notice will disappear when the limited promotion ends." : "한정 기간 동안 드리는 것이라 기간이 끝나면 이 안내는 사라집니다."}
             </p>
             <Link
               href="/login?next=/collection"
               className="btn btn-gold mt-4 w-full sm:w-auto"
             >
-              로그인하고 덱 받기
+              {english ? "Sign in and receive decks" : "로그인하고 덱 받기"}
             </Link>
           </section>
         ) : promoVariant === "member" ? (
@@ -139,11 +144,12 @@ export default function CollectionPage() {
               id="launch-promo-title"
               className="font-display text-[15px] font-semibold text-gold-soft lg:text-[16px]"
             >
-              출시 기념 한정 프로모션
+              {english ? "Limited launch promotion" : "출시 기념 한정 프로모션"}
             </h2>
             <p className="mt-1 text-[12.5px] leading-relaxed text-muted lg:text-[13px]">
-              로그인해 주신 분께 {promoNames} 프리미엄 덱을 열어 드렸습니다.
-              한정 기간 동안 드리는 프로모션입니다.
+              {english
+                ? `You've received ${promoNames} as part of this limited launch promotion.`
+                : <>로그인해 주신 분께 {promoNames} 프리미엄 덱을 열어 드렸습니다. 한정 기간 동안 드리는 프로모션입니다.</>}
             </p>
           </section>
         ) : null}
@@ -189,7 +195,7 @@ export default function CollectionPage() {
                     onClick={() => selectDefaultDeck(deck.id)}
                     className="mt-3 min-h-11 text-[13px] text-muted underline underline-offset-4 hover:text-cream"
                   >
-                    기본 덱으로 설정
+                    {english ? "Set as default" : "기본 덱으로 설정"}
                   </button>
                 ) : null}
               </div>
@@ -205,10 +211,10 @@ export default function CollectionPage() {
               id="release-tools-title"
               className="font-display text-[16px] font-semibold text-gold-soft"
             >
-              출시 테스트 도구
+              {english ? "Launch test tools" : "출시 테스트 도구"}
             </h2>
             <p className="mt-1 text-[12.5px] leading-relaxed text-muted">
-              결제 연동 전 프리미엄 덱의 전체 도감 지급·회수를 검증합니다.
+              {english ? "Verify premium-deck grants and revocations before payment integration." : "결제 연동 전 프리미엄 덱의 전체 도감 지급·회수를 검증합니다."}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {premiumDecks.map((deck) => {
@@ -220,7 +226,7 @@ export default function CollectionPage() {
                     onClick={() => toggleReleaseDeck(deck.id)}
                     className="min-h-11 rounded-xl border border-line px-4 text-[13px] text-body transition-colors hover:border-line-gold hover:text-cream"
                   >
-                    {deck.nameKo} 테스트 {owned ? "회수" : "지급"}
+                    {deckName(deck, english ? "en" : "ko")} {english ? (owned ? "revoke test" : "grant test") : `테스트 ${owned ? "회수" : "지급"}`}
                   </button>
                 );
               })}

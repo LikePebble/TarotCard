@@ -11,6 +11,7 @@ import { readingById, useArcanaStore } from "@/lib/store";
 import { accountDataReady, useSyncStatus } from "@/lib/sync/status";
 import { useSession } from "@/lib/auth/session";
 import { OneCardResult, ThreeCardResult } from "../ReadingResult";
+import { useLocale } from "@/components/LocaleProvider";
 
 /**
  * 저장된 리딩 결과를 id로 재열람한다. draw의 갓-뽑은 리빌과 같은 결과
@@ -22,6 +23,7 @@ export default function ReadingResultPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const english = useLocale() === "en";
   const reducedMotion = useReducedMotion();
   const { store } = useArcanaStore();
   const { store: journal } = useJournal();
@@ -41,7 +43,7 @@ export default function ReadingResultPage({
         className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted hover:text-cream"
       >
         <CaretLeft size={16} aria-hidden />
-        리딩
+        {english ? "Readings" : "리딩"}
       </Link>
     </nav>
   );
@@ -71,13 +73,13 @@ export default function ReadingResultPage({
         {backNav}
         <main className="mx-auto flex w-full max-w-[520px] flex-1 flex-col items-center justify-center px-6 text-center">
           <p className="font-display text-[21px] font-semibold">
-            리딩을 찾을 수 없습니다
+            {english ? "Reading not found" : "리딩을 찾을 수 없습니다"}
           </p>
           <p className="mt-1.5 text-[14px] text-muted">
-            이 결과는 이 기기에 저장되어 있지 않습니다.
+            {english ? "This result is not saved on this device." : "이 결과는 이 기기에 저장되어 있지 않습니다."}
           </p>
           <Link href="/reading" className="btn btn-gold mt-6">
-            리딩 시작하기
+            {english ? "Start a reading" : "리딩 시작하기"}
           </Link>
         </main>
       </div>

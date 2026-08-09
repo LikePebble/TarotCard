@@ -11,9 +11,11 @@ import {
 } from "@phosphor-icons/react";
 import { SignInButtons } from "@/components/SignInButtons";
 import { signOutAndClear, useSession } from "@/lib/auth/session";
+import { useLocale } from "@/components/LocaleProvider";
 
 /** 로그인 페이지: 구글 및 카카오톡 소셜 로그인 지원 및 계정 상태 안내 */
 export default function LoginPage() {
+  const english = useLocale() === "en";
   const { user, loading } = useSession();
 
   return (
@@ -35,7 +37,7 @@ export default function LoginPage() {
           className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted transition-colors hover:text-cream focus-visible:text-cream"
         >
           <CaretLeft size={18} aria-hidden />
-          <span>돌아가기</span>
+          <span>{english ? "Back" : "돌아가기"}</span>
         </Link>
         <span className="font-display text-xs tracking-wider text-gold-soft/60 uppercase">
           Arca Account
@@ -48,7 +50,7 @@ export default function LoginPage() {
         <div className="relative mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-line-gold bg-ink-1/90 shadow-xl shadow-black/40 backdrop-blur-md">
           <Image
             src="/icon.png"
-            alt="아르카 아이콘"
+            alt={english ? "Arca icon" : "아르카 아이콘"}
             width={64}
             height={64}
             className="h-12 w-12 rounded-xl object-cover"
@@ -58,12 +60,12 @@ export default function LoginPage() {
 
         <div className="mb-8 text-center">
           <h1 className="font-display text-[28px] font-bold tracking-tight text-cream sm:text-[30px]">
-            {user ? "반갑습니다!" : "소셜 로그인"}
+            {user ? (english ? "Welcome back" : "반갑습니다!") : (english ? "Sign in" : "소셜 로그인")}
           </h1>
           <p className="mx-auto mt-2 max-w-[340px] text-sm leading-relaxed text-muted">
             {user
-              ? "계정이 연결되어 기록과 수집 카드가 안전하게 보관됩니다."
-              : "카카오 및 Google 계정으로 간편하게 시작하세요. 나만의 리딩 기록을 기기 간에 자유롭게 이어가세요."}
+              ? (english ? "Your account is connected, so your readings and collection are kept safely." : "계정이 연결되어 기록과 수집 카드가 안전하게 보관됩니다.")
+              : (english ? "Continue with Kakao or Google to keep your readings across devices." : "카카오 및 Google 계정으로 간편하게 시작하세요. 나만의 리딩 기록을 기기 간에 자유롭게 이어가세요.")}
           </p>
         </div>
 
@@ -75,7 +77,7 @@ export default function LoginPage() {
           {loading ? (
             <div className="flex min-h-[220px] flex-col items-center justify-center gap-3">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold-soft border-t-transparent" />
-              <p className="text-xs text-muted">계정 정보를 불러오는 중…</p>
+              <p className="text-xs text-muted">{english ? "Loading account…" : "계정 정보를 불러오는 중…"}</p>
             </div>
           ) : user ? (
             <div className="flex flex-col gap-6 py-2">
@@ -86,7 +88,7 @@ export default function LoginPage() {
                 />
                 <div className="min-w-0 flex-1">
                   <span className="block text-xs text-muted">
-                    현재 로그인된 계정
+                    {english ? "Signed-in account" : "현재 로그인된 계정"}
                   </span>
                   <span className="block truncate font-medium text-cream text-[15px]">
                     {user.email ?? user.id}
@@ -99,14 +101,14 @@ export default function LoginPage() {
                   href="/my"
                   className="btn btn-gold w-full text-center shadow-lg shadow-gold/10"
                 >
-                  마이페이지(MY)로 이동
+                  {english ? "Go to MY" : "마이페이지(MY)로 이동"}
                 </Link>
                 <button
                   type="button"
                   onClick={() => void signOutAndClear()}
                   className="w-full py-3 text-center text-xs text-muted underline underline-offset-4 hover:text-cream transition-colors"
                 >
-                  로그아웃
+                  {english ? "Sign out" : "로그아웃"}
                 </button>
               </div>
             </div>
@@ -119,7 +121,7 @@ export default function LoginPage() {
               <div className="border-t border-line/60 pt-5">
                 <h2 className="text-xs font-semibold text-gold-soft tracking-wider uppercase mb-3 flex items-center gap-1.5">
                   <CheckCircle size={14} aria-hidden />
-                  로그인 시 혜택
+                  {english ? "Benefits of signing in" : "로그인 시 혜택"}
                 </h2>
                 <ul className="space-y-2.5 text-[13px] text-body">
                   <li className="flex items-start gap-2.5">
@@ -129,7 +131,7 @@ export default function LoginPage() {
                       aria-hidden
                     />
                     <span>
-                      기기 변경 시에도 타로 일지 및 뽑은 카드 자동 동기화
+                      {english ? "Sync your journal and drawn cards across devices" : "기기 변경 시에도 타로 일지 및 뽑은 카드 자동 동기화"}
                     </span>
                   </li>
                   <li className="flex items-start gap-2.5">
@@ -138,7 +140,7 @@ export default function LoginPage() {
                       className="text-gold-soft flex-shrink-0 mt-0.5"
                       aria-hidden
                     />
-                    <span>78장 타로 카드 도감 컬렉션 영구 보관</span>
+                    <span>{english ? "Keep your 78-card collection" : "78장 타로 카드 도감 컬렉션 영구 보관"}</span>
                   </li>
                 </ul>
               </div>
@@ -149,8 +151,7 @@ export default function LoginPage() {
         {/* 하단 캡션 */}
         {!user && (
           <p className="mt-6 text-center text-[12.5px] text-muted/80 leading-relaxed px-2">
-            로그인 없이도 기본 타로 리딩을 이용할 수 있으며,<br></br>
-            모든 기록은 기기에 저장됩니다.
+            {english ? <>You can use the basic tarot reading without signing in.<br />Your records stay on this device.</> : <>로그인 없이도 기본 타로 리딩을 이용할 수 있으며,<br />모든 기록은 기기에 저장됩니다.</>}
           </p>
         )}
       </main>

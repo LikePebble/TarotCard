@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { entryOf, setEntry, useJournal } from "@/lib/journal";
+import { useLocale } from "@/components/LocaleProvider";
 
 /**
  * 리딩 결과 아래에서 그날 일기를 **바로** 받는 입력란.
@@ -16,6 +17,7 @@ import { entryOf, setEntry, useJournal } from "@/lib/journal";
  * 재열람이 숙제처럼 느껴진다 — 그때는 쓴 글을 보여 주고 고치러 갈 길만 준다.
  */
 export function JournalQuickNote({ localDate }: { localDate: string }) {
+  const english = useLocale() === "en";
   const { store: journal } = useJournal();
   const [draft, setDraft] = useState("");
   const [saved, setSaved] = useState(false);
@@ -39,7 +41,7 @@ export function JournalQuickNote({ localDate }: { localDate: string }) {
     return (
       <section className="mt-5 rounded-2xl border border-line bg-ink-1 p-5 lg:rounded-[14px]">
         <h2 className="font-display text-[15px] font-semibold lg:text-[16px]">
-          이날의 일기
+          {english ? "Journal for this day" : "이날의 일기"}
         </h2>
         <p className="mt-2 whitespace-pre-wrap font-serif text-[14.5px] leading-[1.8] text-body lg:text-[15px]">
           {existing.body}
@@ -48,7 +50,7 @@ export function JournalQuickNote({ localDate }: { localDate: string }) {
           href={`/my/journal/${localDate}`}
           className="mt-3 inline-flex min-h-11 items-center text-[13.5px] text-muted underline underline-offset-4 hover:text-cream"
         >
-          이어서 고치기
+          {english ? "Continue editing" : "이어서 고치기"}
         </Link>
       </section>
     );
@@ -63,18 +65,18 @@ export function JournalQuickNote({ localDate }: { localDate: string }) {
   return (
     <section className="mt-5 rounded-2xl border border-line bg-ink-1 p-5 lg:rounded-[14px]">
       <h2 className="font-display text-[15px] font-semibold lg:text-[16px]">
-        오늘 떠오른 것을 한 줄 남겨 보세요
+        {english ? "Leave a line about what stays with you today" : "오늘 떠오른 것을 한 줄 남겨 보세요"}
       </h2>
       <p className="mt-1 text-[12.5px] text-muted lg:text-[13px]">
-        나중에 이 카드를 다시 만났을 때, 오늘 무엇을 생각했는지 함께 보입니다.
+        {english ? "When you meet this card again, you can return to what it meant to you today." : "나중에 이 카드를 다시 만났을 때, 오늘 무엇을 생각했는지 함께 보입니다."}
       </p>
       <textarea
         ref={areaRef}
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         rows={3}
-        placeholder="한 줄이어도 좋습니다"
-        aria-label="이날의 일기"
+        placeholder={english ? "A single line is enough" : "한 줄이어도 좋습니다"}
+        aria-label={english ? "Journal for this day" : "이날의 일기"}
         className="mt-3 w-full resize-y rounded-xl border border-line bg-ink-0 p-3.5 font-serif text-[14.5px] leading-[1.8] text-body outline-none placeholder:text-muted focus-visible:border-line-gold lg:text-[15px]"
       />
       <div className="mt-2.5 flex items-center gap-3">
@@ -84,10 +86,10 @@ export function JournalQuickNote({ localDate }: { localDate: string }) {
           disabled={draft.trim() === ""}
           className="btn btn-ghost disabled:cursor-not-allowed disabled:opacity-40"
         >
-          저장하기
+          {english ? "Save" : "저장하기"}
         </button>
         <span aria-live="polite" className="text-[12.5px] text-muted">
-          {saved ? "저장되었습니다" : ""}
+          {saved ? (english ? "Saved" : "저장되었습니다") : ""}
         </span>
       </div>
     </section>

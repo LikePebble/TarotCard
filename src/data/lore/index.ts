@@ -1,10 +1,16 @@
 import { cardBySlug } from "../cards";
 import { loreCups } from "./cups";
+import { loreCupsEn } from "./en-cups";
+import { loreMajorEn } from "./en-major";
+import { lorePentaclesEn } from "./en-pentacles";
+import { loreSwordsEn } from "./en-swords";
+import { loreWandsEn } from "./en-wands";
 import { loreMajor } from "./major";
 import { lorePentacles } from "./pentacles";
 import { loreSwords } from "./swords";
 import { loreWands } from "./wands";
 import type { CardLore, LoreSymbol } from "./types";
+import type { Locale } from "@/lib/locale";
 
 export type { CardLore, LoreSymbol } from "./types";
 
@@ -14,6 +20,14 @@ export const loreBySlug: Record<string, CardLore> = {
   ...loreCups,
   ...loreSwords,
   ...lorePentacles,
+};
+
+export const loreEnBySlug: Record<string, CardLore> = {
+  ...loreMajorEn,
+  ...loreWandsEn,
+  ...loreCupsEn,
+  ...loreSwordsEn,
+  ...lorePentaclesEn,
 };
 
 const SUIT_ELEMENT = {
@@ -37,6 +51,19 @@ const NUMBER_MEANING: Record<number, string> = {
   10: "완성 · 전환",
 };
 
+const NUMBER_MEANING_EN: Record<number, string> = {
+  1: "Beginnings",
+  2: "Balance · Choice",
+  3: "Growth · Connection",
+  4: "Stability · Structure",
+  5: "Conflict · Change",
+  6: "Harmony · Recovery",
+  7: "Reflection · Trial",
+  8: "Mastery · Movement",
+  9: "Fulfillment · Maturity",
+  10: "Completion · Transition",
+};
+
 export type CardLoreView = {
   symbols: LoreSymbol[];
   story: string;
@@ -44,10 +71,24 @@ export type CardLoreView = {
 };
 
 /** 상세 화면이 쓰는 단일 진입점. lore 데이터 + 규칙 산출값(원소·수비학)을 합친다. */
-export function cardLore(slug: string): CardLoreView | null {
-  const lore = loreBySlug[slug];
+export function cardLore(slug: string, locale: Locale = "ko"): CardLoreView | null {
+  const lore = locale === "en" ? loreEnBySlug[slug] : loreBySlug[slug];
   const card = cardBySlug.get(slug);
   if (!lore || !card) return null;
+
+  if (locale === "en") {
+    const correspondence: { label: string; value: string }[] = [];
+    if (card.suit) {
+      const elements = { wands: "Fire", cups: "Water", swords: "Air", pentacles: "Earth" };
+      correspondence.push({ label: "Element", value: elements[card.suit] });
+      const numerology = NUMBER_MEANING_EN[card.number];
+      if (numerology) correspondence.push({ label: "Number", value: numerology });
+    }
+    if (lore.astrology) {
+      correspondence.push({ label: "Astrology", value: lore.astrology });
+    }
+    return { symbols: lore.symbols, story: lore.story, correspondence };
+  }
 
   const correspondence: { label: string; value: string }[] = [];
   if (card.suit) {

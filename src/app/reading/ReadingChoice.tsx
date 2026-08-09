@@ -18,7 +18,7 @@ import {
   type SpreadType,
 } from "@/lib/store";
 import {
-  TICKET_BONUS_HINT,
+  ticketBonusHint,
   ticketNoticeLinesOf,
   ticketStateOf,
 } from "@/lib/tickets";
@@ -27,6 +27,7 @@ import { accountDataReady, useSyncStatus } from "@/lib/sync/status";
 import { usePeriodClock } from "@/lib/use-period-clock";
 import { localDateOf } from "@/lib/period";
 import { streakNoteOf, useVisitStreak } from "@/lib/visit-streak";
+import { useLocale } from "@/components/LocaleProvider";
 import {
   isDevTools,
   resetCurrentReadings,
@@ -195,6 +196,8 @@ function TypeCard({
 }
 
 export function ReadingChoice() {
+  const locale = useLocale();
+  const english = locale === "en";
   const router = useRouter();
   const { store } = useArcanaStore();
   const { user, loading, devSession } = useSession();
@@ -237,7 +240,7 @@ export function ReadingChoice() {
     key: r.id,
     slug: r.cards[0],
     deckId: r.deckId,
-    label: focusLabelOf(r.category),
+    label: focusLabelOf(r.category, locale),
   }));
 
   // 과거·현재·미래는 주 1회라 티켓과 무관하다 — maxDailySlots를 넘기지 않는다.
@@ -266,7 +269,7 @@ export function ReadingChoice() {
    * 자리를 잡지 않는다. 한 줄이 뒤늦게 끼어들며 아래 패널을 밀어내지 않도록
    * 자리 자체를 만들지 않는 쪽을 택했다 — 값이 없을 때가 대부분이기도 하다.
    */
-  const streak = visit ? streakNoteOf(visit, localDateOf(now)) : null;
+  const streak = visit ? streakNoteOf(visit, localDateOf(now), locale) : null;
 
   return (
     <>
@@ -278,33 +281,33 @@ export function ReadingChoice() {
           />
           <span>{streak.text}</span>
           {streak.isBest ? (
-            <span className="text-gold-soft">· 최장 기록입니다</span>
+            <span className="text-gold-soft">{english ? "· Your longest streak" : "· 최장 기록입니다"}</span>
           ) : null}
         </p>
       ) : null}
     <div className="mt-[18px] flex flex-col gap-[18px] lg:mt-12 lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-5">
       <TypeCard
-        title="오늘의 카드"
-        cadenceLabel="매일"
+        title={english ? "Card of the day" : "오늘의 카드"}
+        cadenceLabel={english ? "Daily" : "매일"}
         // 소진이든 아니든 언제나 테마 선택 화면으로 보낸다. 그 화면이 테마마다
         // 받음/받을 수 있음/티켓 소진을 이미 갈라 보여 주고, 받은 테마는 그
         // 결과로 이어 준다. 여기서 리딩 하나를 골라 줄 이유가 없다.
         note={
           oneExhausted
-            ? "오늘의 흐름은 이미 받으셨습니다 · 다시 보기"
-            : "한 장의 카드를 뽑아 오늘 하루 흐름을 살펴 보세요."
+            ? (english ? "You've already received today's reading · view it again" : "오늘의 흐름은 이미 받으셨습니다 · 다시 보기")
+            : (english ? "Draw one card to reflect on the current of your day." : "한 장의 카드를 뽑아 오늘 하루 흐름을 살펴 보세요.")
         }
         noteToned={oneExhausted}
-        ticketNote={ticketsReady ? ticketNoticeLinesOf(tickets) : null}
+        ticketNote={ticketsReady ? ticketNoticeLinesOf(tickets, locale) : null}
         faces={todayFaces}
         // 티켓이 남았으면 뒷면 한 장을 덧붙여 "아직 뽑을 수 있다"를 카드 행에서도 보인다.
         pendingBacks={oneExhausted ? 0 : 1}
         aria={
           oneExhausted
-            ? `오늘의 카드, 오늘 받으신 ${todayFaces.length}장 다시 보기`
+            ? (english ? `Card of the day, view ${todayFaces.length} card${todayFaces.length === 1 ? "" : "s"} received today` : `오늘의 카드, 오늘 받으신 ${todayFaces.length}장 다시 보기`)
             : todayFaces.length > 0
-              ? `오늘의 카드, 오늘 ${todayFaces.length}장 받으셨습니다 · 새로 뽑기`
-              : "오늘의 카드"
+              ? (english ? `Card of the day, ${todayFaces.length} card${todayFaces.length === 1 ? "" : "s"} received today · draw again` : `오늘의 카드, 오늘 ${todayFaces.length}장 받으셨습니다 · 새로 뽑기`)
+              : (english ? "Card of the day" : "오늘의 카드")
         }
         onStart={() => choose("one")}
         deckId={deckId}
@@ -314,9 +317,9 @@ export function ReadingChoice() {
       />
 
       <TypeCard
-        title="과거 · 현재 · 미래"
+        title={english ? "Past · Present · Future" : "과거 · 현재 · 미래"}
         titleClass="whitespace-nowrap"
-        cadenceLabel="이번 주"
+        cadenceLabel={english ? "Weekly" : "이번 주"}
         note={
           blockedThree
             // 3카드는 "운명"으로 부른다. 1장이 이미 "오늘의 흐름"이라 같은 말을
@@ -324,10 +327,10 @@ export function ReadingChoice() {
             // 카드로 결정됐다")은 여전히 금지지만, 명사 자체는 사주·타로에서
             // 관용적으로 쓰는 말이라 서비스 안에서 허용한다. 예측하지 않는다는
             // 고지는 약관 제5조가 맡는다.
-            ? "이번 주의 운명은 이미 받으셨습니다 · 결과 보기"
+            ? (english ? "You've already received this week's reading · view it" : "이번 주의 운명은 이미 받으셨습니다 · 결과 보기")
             : retainedThree
-              ? "이번 주의 운명은 이미 받으셨습니다"
-              : "세 장의 카드를 뽑아 과거와 현재, 미래의 운명을 읽어 보세요."
+              ? (english ? "You've already received this week's reading" : "이번 주의 운명은 이미 받으셨습니다")
+              : (english ? "Draw three cards to reflect on your past, present, and future." : "세 장의 카드를 뽑아 과거와 현재, 미래의 운명을 읽어 보세요.")
         }
         noteToned={blockedThree !== undefined || retainedThree}
         faces={
@@ -343,10 +346,10 @@ export function ReadingChoice() {
         locked={!blockedThree && retainedThree}
         aria={
           blockedThree
-            ? "과거 현재 미래 결과 보기"
+            ? (english ? "View past, present, and future result" : "과거 현재 미래 결과 보기")
             : retainedThree
-              ? "과거 현재 미래, 이번 주는 이미 받았습니다"
-              : "과거 현재 미래"
+              ? (english ? "Past, present, and future already received this week" : "과거 현재 미래, 이번 주는 이미 받았습니다")
+              : (english ? "Past, present, and future" : "과거 현재 미래")
         }
         onStart={() => choose("three")}
         deckId={deckId}
@@ -363,10 +366,10 @@ export function ReadingChoice() {
           className="flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-line bg-ink-1 px-5 py-3.5 hover:border-line-gold lg:col-span-2 lg:rounded-[14px] lg:px-6"
         >
           <span className="text-[13px] text-muted lg:text-[14px]">
-            {TICKET_BONUS_HINT}
+            {ticketBonusHint(locale)}
           </span>
           <span className="flex-none text-[13px] text-gold-soft lg:text-[14px]">
-            로그인
+            {english ? "Sign in" : "로그인"}
           </span>
         </Link>
       ) : null}

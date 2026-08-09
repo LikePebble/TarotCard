@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import { Nanum_Myeongjo } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
@@ -6,7 +7,9 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SyncBridge } from "@/components/SyncBridge";
+import { LocaleProvider } from "@/components/LocaleProvider";
 import { ADSENSE_CLIENT, GA_ID } from "@/lib/analytics";
+import { localeFromHeaders } from "@/lib/locale";
 import "./globals.css";
 
 const SITE_URL = "https://arca.realm.ai.kr";
@@ -45,6 +48,10 @@ const SITE_NAME = "아르카 타로";
 const SITE_TITLE = "아르카 타로 — 하루 한 장, 나를 비추는 카드 78장";
 const SITE_DESCRIPTION =
   "78장의 타로 카드를 정방향과 역방향으로, 사랑·일·나 자신·건강·금전 다섯 가지 주제에 맞추어 한국어로 풀어냅니다. 오늘의 카드를 무료로 뽑고, 조용히 나를 돌아보는 시간을 가져 보세요.";
+const EN_SITE_NAME = "Arca Tarot";
+const EN_SITE_TITLE = "Arca Tarot — One card a day, 78 cards for reflection";
+const EN_SITE_DESCRIPTION =
+  "Draw from 78 tarot cards and explore upright and reversed meanings through love, work, self, health, and money. Take a quiet moment to reflect with a free daily reading.";
 // 공유 카드 전용 가로 이미지. 1200×630은 페이스북·X·카카오톡이 큰 카드로
 // 렌더하는 규격이다. 이전에 쓰던 덱 표지는 800×1360 세로라 가로 띠로 잘렸다.
 // webp 대신 jpg인 이유: 일부 메신저 크롤러가 webp 미리보기를 만들지 못한다.
@@ -62,10 +69,16 @@ const SITE_OG_IMAGE = {
 const GOOGLE_SITE_VERIFICATION =
   (process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? "").trim() || null;
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = localeFromHeaders(await headers());
+  const english = locale === "en";
+  const siteName = english ? EN_SITE_NAME : SITE_NAME;
+  const title = english ? EN_SITE_TITLE : SITE_TITLE;
+  const description = english ? EN_SITE_DESCRIPTION : SITE_DESCRIPTION;
+  return {
   metadataBase: new URL(SITE_URL),
-  title: SITE_TITLE,
-  description: SITE_DESCRIPTION,
+  title,
+  description,
   // URL 인스턴스로 두면 next/font가 아닌 metadata 리졸버가 각 페이지의 pathname으로
   // 다시 계산해 준다(resolveAlternateUrl). 문자열 "/"를 쓰면 이 값이 하위 세그먼트로
   // 그대로 상속돼 모든 페이지의 canonical이 홈을 가리킨다.
@@ -96,19 +109,20 @@ export const metadata: Metadata = {
   // 정확한 url을 넣는다.
   openGraph: {
     type: "website",
-    locale: "ko_KR",
-    siteName: SITE_NAME,
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
+    locale: english ? "en_US" : "ko_KR",
+    siteName,
+    title,
+    description,
     images: [SITE_OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
+    title,
+    description,
     images: [SITE_OG_IMAGE],
   },
-};
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#14110d",
@@ -116,34 +130,37 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const locale = localeFromHeaders(await headers());
   return (
     <html
-      lang="ko"
+      lang={locale}
       className={`${heirOfLight.variable} ${nanumMyeongjo.variable} ${chosun.variable}`}
     >
       <body className="font-sans antialiased">
-        <SyncBridge />
-        {children}
-        <Analytics />
-        <SpeedInsights />
+        <LocaleProvider locale={locale}>
+          <SyncBridge />
+          {children}
+          <Analytics />
+          <SpeedInsights />
         {/* GA4. 측정 ID가 없으면 스크립트도 dataLayer도 만들지 않는다.
             @next/third-parties는 Next 15가 권장하는 경로로, 스크립트 로딩
             전략(afterInteractive)과 라우트 변경 시 page_view 전송을 대신 맡는다. */}
-        {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
+          {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
         {/* AdSense 라이브러리. 심사 신청 시점에 사이트에 스니펫이 있어야 해서
             미리 넣지만, 게시자 ID가 없으면 렌더하지 않는다. 슬롯 배치는 여기서
             하지 않는다 — 광고 단위는 별도 컴포넌트의 몫이다. */}
-        {ADSENSE_CLIENT ? (
-          <Script
-            id="adsbygoogle-init"
-            strategy="afterInteractive"
-            crossOrigin="anonymous"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-          />
-        ) : null}
+          {ADSENSE_CLIENT ? (
+            <Script
+              id="adsbygoogle-init"
+              strategy="afterInteractive"
+              crossOrigin="anonymous"
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+            />
+          ) : null}
+        </LocaleProvider>
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ import { koCards } from "@/data/ko";
 import { cardBySlug } from "@/data/cards";
 import { track, type ShareSurface } from "@/lib/analytics";
 import { cardSharePayload, runShare, shareNoticeOf } from "@/lib/share";
+import { useLocale } from "@/components/LocaleProvider";
 
 /**
  * 카드 상세 주소를 공유한다. 리딩 주소가 아니라 카드 주소를 보내는 이유는
@@ -48,6 +49,8 @@ export function ShareCardButton({
   /** 이 버튼이 놓인 화면. 계측에서 자리를 구분하는 데만 쓴다. */
   surface?: ShareSurface;
 }) {
+  const locale = useLocale();
+  const english = locale === "en";
   const [notice, setNotice] = useState<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -67,6 +70,7 @@ export function ShareCardButton({
       slug,
       nameKo,
       card.nameEn,
+      locale,
     );
     const outcome = await runShare(navigator, payload, legacyCopy);
     // 결말까지 한 건에 담는다. 누른 횟수는 outcome을 합치면 나오고, 이렇게
@@ -74,18 +78,18 @@ export function ShareCardButton({
     // 클릭 시점과 결말 시점에 각각 보내면 시트를 열어 둔 채 이탈한 경우가
     // 두 이벤트 사이에 끼어 계산이 어긋난다.
     track("share_clicked", { surface, outcome, deck_id: deckId });
-    const message = shareNoticeOf(outcome);
+    const message = shareNoticeOf(outcome, locale);
     if (!message) return;
     setNotice(message);
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => setNotice(null), 2400);
-  }, [deckId, slug, surface]);
+  }, [deckId, locale, slug, surface]);
 
   return (
     <>
       <button type="button" onClick={onShare} className={className}>
         <ShareNetwork size={17} aria-hidden />
-        공유하기
+        {english ? "Share" : "공유하기"}
       </button>
       {/* 조용히 사라지는 안내. 화면 낭독기에도 한 번은 전달되도록 live 영역에 둔다. */}
       <p

@@ -10,8 +10,10 @@ import { useJournal, writtenDates } from "@/lib/journal";
 import { togetherDays, useArcanaStore } from "@/lib/store";
 import { AccountCard } from "./AccountCard";
 import { InquiryModal } from "./InquiryModal";
+import { useLocale } from "@/components/LocaleProvider";
 
 export default function MyPage() {
+  const english = useLocale() === "en";
   const reducedMotion = useReducedMotion();
   const { store } = useArcanaStore();
   const { store: journal } = useJournal();
@@ -23,9 +25,9 @@ export default function MyPage() {
   const days = journal ? writtenDates(journal).length : 0;
 
   const stats = [
-    { label: "함께한 날", value: together, unit: "" },
-    { label: "리딩", value: readings, unit: "회" },
-    { label: "기록", value: days, unit: "일" },
+    { label: english ? "Days together" : "함께한 날", value: together, unit: "" },
+    { label: english ? "Readings" : "리딩", value: readings, unit: english ? "" : "회" },
+    { label: english ? "Journal days" : "기록", value: days, unit: english ? "" : "일" },
   ];
 
   return (
@@ -42,7 +44,7 @@ export default function MyPage() {
           MY
         </h1>
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
-          당신이 만난 카드와 하루의 기록이 이곳에 쌓입니다.
+          {english ? "The cards you meet and the days you record gather here." : "당신이 만난 카드와 하루의 기록이 이곳에 쌓입니다."}
         </p>
 
         <div className="mt-5 grid grid-cols-3 divide-x divide-line rounded-2xl border border-line bg-ink-1 lg:mt-8 lg:rounded-[16px]">
@@ -68,12 +70,12 @@ export default function MyPage() {
               <Notebook size={22} className="text-gold-soft" aria-hidden />
               <span>
                 <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
-                  일별 기록
+                  {english ? "Daily journal" : "일별 기록"}
                 </span>
                 <span className="text-[13px] text-muted lg:text-[14px]">
                   {days > 0
-                    ? `달력에서 ${days}일의 기록과 일기를 봅니다`
-                    : "달력에서 리딩과 그날의 일기를 봅니다"}
+                    ? (english ? `View ${days} days of readings and notes in the calendar.` : `달력에서 ${days}일의 기록과 일기를 봅니다`)
+                    : (english ? "View readings and notes in the calendar." : "달력에서 리딩과 그날의 일기를 봅니다")}
                 </span>
               </span>
             </span>
@@ -85,10 +87,10 @@ export default function MyPage() {
               <Sparkle size={22} className="text-muted" aria-hidden />
               <span>
                 <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
-                  사주 프로필
+                  {english ? "Saju profile" : "사주 프로필"}
                 </span>
                 <span className="text-[13px] text-muted lg:text-[14px]">
-                  생년월일시를 반영한 개인화 · 준비 중
+                  {english ? "Birth-date personalization · Coming soon" : "생년월일시를 반영한 개인화 · 준비 중"}
                 </span>
               </span>
             </span>
@@ -105,10 +107,10 @@ export default function MyPage() {
               <ChatCircleDots size={22} className="text-gold-soft" aria-hidden />
               <span>
                 <span className="block font-display text-[17px] font-semibold lg:text-[19px]">
-                  문의 및 개선 제안
+                  {english ? "Questions and feedback" : "문의 및 개선 제안"}
                 </span>
                 <span className="text-[13px] text-muted lg:text-[14px]">
-                  불편한 점이나 바라는 점을 알려 주세요
+                  {english ? "Tell us what could be better." : "불편한 점이나 바라는 점을 알려 주세요"}
                 </span>
               </span>
             </span>
@@ -117,14 +119,14 @@ export default function MyPage() {
         </div>
 
         <nav
-          aria-label="약관 및 정책"
+          aria-label={english ? "Terms and policies" : "약관 및 정책"}
           className="mt-4 flex items-center justify-center gap-1 text-[12.5px] text-muted lg:mt-6 lg:text-[13.5px]"
         >
           <Link
             href="/terms"
             className="inline-flex min-h-11 items-center px-2 transition-colors hover:text-cream"
           >
-            이용약관
+            {english ? "Terms" : "이용약관"}
           </Link>
           <span aria-hidden className="text-line">
             ·
@@ -133,7 +135,7 @@ export default function MyPage() {
             href="/privacy"
             className="inline-flex min-h-11 items-center px-2 transition-colors hover:text-cream"
           >
-            개인정보처리방침
+            {english ? "Privacy" : "개인정보처리방침"}
           </Link>
         </nav>
       </motion.main>

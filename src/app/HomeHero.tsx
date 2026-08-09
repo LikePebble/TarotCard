@@ -1,15 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import { useLocale } from "@/components/LocaleProvider";
 
 export function HomeHero() {
+  const english = useLocale() === "en";
   return (
     <div className="mt-4 flex flex-1 items-center justify-center px-4 lg:mt-0 lg:min-h-[650px] lg:flex-none">
       <div className="home-hero-frame relative aspect-[3/4] w-full max-w-[340px] md:max-w-[384px] lg:max-w-[460px]">
         <div className="home-hero-media absolute inset-0 overflow-hidden">
           <Image
             src="/hero/concept_candles.jpg"
-            alt="달빛과 촛불이 비추는 타로 카드"
+            alt={english ? "Tarot cards lit by moonlight and candles" : "달빛과 촛불이 비추는 타로 카드"}
             fill
             sizes="(min-width: 1024px) 460px, (min-width: 768px) 384px, 340px"
             className="object-cover object-center"

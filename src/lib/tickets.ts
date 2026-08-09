@@ -1,4 +1,5 @@
 import { dailySlotsUsed, type ArcanaStore } from "@/lib/store";
+import type { Locale } from "@/lib/locale";
 
 /**
  * 티켓 — "오늘의 카드"(spread="one")를 뽑을 수 있는 하루치 횟수.
@@ -26,12 +27,18 @@ export const SIGNED_IN_BONUS = 1;
  * 세는 일은 숫자에 맡기고, 말은 받는 쪽으로 한다.
  */
 export const TICKET_RESET_NOTE = "자정이 지나면 다시 열립니다";
+export const TICKET_RESET_NOTE_EN = "It will open again after midnight";
 
 /**
  * 비로그인 사용자에게 보여 주는 로그인 유도 문구.
  * 횟수는 상수에서 파생한다 — 지급량이 바뀌어도 문구가 거짓말을 하지 않게.
  */
 export const TICKET_BONUS_HINT = `로그인하시면 매일 ${SIGNED_IN_BONUS}번 더 받으실 수 있습니다`;
+export const TICKET_BONUS_HINT_EN = `Sign in to receive ${SIGNED_IN_BONUS} more reading each day`;
+
+export function ticketBonusHint(locale: Locale = "ko"): string {
+  return locale === "en" ? TICKET_BONUS_HINT_EN : TICKET_BONUS_HINT;
+}
 
 export function dailyTicketsFor(signedIn: boolean): number {
   return DAILY_TICKETS_BASE + (signedIn ? SIGNED_IN_BONUS : 0);
@@ -76,7 +83,15 @@ export function ticketStateOf(
 }
 
 /** 잔량 안내 문구. TICKET_RESET_NOTE와 같은 이유로 "티켓"을 말하지 않는다. */
-export function ticketNoticeOf(state: TicketState): string {
+export function ticketNoticeOf(
+  state: TicketState,
+  locale: Locale = "ko",
+): string {
+  if (locale === "en") {
+    return state.remaining > 0
+      ? `You can receive ${state.remaining} more reading${state.remaining === 1 ? "" : "s"} today`
+      : "You have received all of today's available tarot readings";
+  }
   return state.remaining > 0
     ? `오늘 ${state.remaining}번 더 받으실 수 있습니다`
     : "오늘 받으실 수 있는 타로는 모두 받으셨습니다";
@@ -87,8 +102,12 @@ export function ticketNoticeOf(state: TicketState): string {
  * 나눈다 — 한 줄로 이으면 가운뎃점 뒤가 앞 문장의 조건처럼 붙어 읽힌다.
  * 개행을 살리려면 보여 주는 쪽에 whitespace-pre-line이 있어야 한다.
  */
-export function ticketNoticeLinesOf(state: TicketState): string {
+export function ticketNoticeLinesOf(
+  state: TicketState,
+  locale: Locale = "ko",
+): string {
+  const notice = ticketNoticeOf(state, locale);
   return state.remaining > 0
-    ? ticketNoticeOf(state)
-    : `${ticketNoticeOf(state)}.\n${TICKET_RESET_NOTE}`;
+    ? notice
+    : `${notice}.\n${locale === "en" ? TICKET_RESET_NOTE_EN : TICKET_RESET_NOTE}`;
 }

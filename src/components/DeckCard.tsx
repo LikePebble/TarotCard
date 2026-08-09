@@ -1,5 +1,6 @@
 import Image from "next/image";
-import type { Deck } from "@/data/decks";
+import { deckName, type Deck } from "@/data/decks";
+import { useLocale } from "@/components/LocaleProvider";
 
 /**
  * 덱 한 장의 표시. 링크도 버튼도 아니다 — 이동이냐 선택이냐는 쓰는 쪽이
@@ -19,6 +20,7 @@ export function DeckCard({
   isDefault: boolean;
   hasUnread: boolean;
 }) {
+  const english = useLocale() === "en";
   const percent = (collected / 78) * 100;
 
   return (
@@ -40,17 +42,17 @@ export function DeckCard({
       <span className="block min-w-0 flex-1">
         <span className="flex items-center gap-2">
           <span className="font-display text-[17px] font-semibold lg:text-[19px]">
-            {deck.nameKo}
+            {deckName(deck, english ? "en" : "ko")}
           </span>
           {hasUnread ? (
             <span
               className="relative -top-1 size-1.5 rounded-full bg-notice"
-              aria-label="새 카드 수집됨"
+              aria-label={english ? "Newly collected card" : "새 카드 수집됨"}
             />
           ) : null}
           {isDefault ? (
             <span className="flex-none rounded-full border border-line-gold px-2 py-0.5 text-[11px] text-gold-soft">
-              기본
+              {english ? "Default" : "기본"}
             </span>
           ) : null}
         </span>

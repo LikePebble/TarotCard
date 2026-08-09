@@ -4,6 +4,7 @@ import Link from "next/link";
 import { cardDetailHref } from "@/lib/card-detail-nav";
 import { ShareCardButton } from "@/components/ShareCardButton";
 import { JournalLink } from "./JournalLink";
+import { useLocale } from "@/components/LocaleProvider";
 
 /**
  * 결과 화면 공용 액션 버튼. 네 호출부(draw x2, /reading/[id] x2)가 각자
@@ -22,16 +23,17 @@ export function ResultActions({
   readingId: string | null;
   localDate: string | null;
 }) {
+  const english = useLocale() === "en";
   return (
     <>
       <Link
         href={cardDetailHref(deckId, slug, readingId)}
         className="btn btn-gold w-full lg:w-auto"
       >
-        카드 자세히 보기
+        {english ? "Card details" : "카드 자세히 보기"}
       </Link>
       <Link href="/collection" className="btn btn-ghost w-full lg:w-auto">
-        컬렉션 보기
+        {english ? "View collection" : "컬렉션 보기"}
       </Link>
       <ShareCardButton deckId={deckId} slug={slug} />
       {localDate ? <JournalLink localDate={localDate} /> : null}

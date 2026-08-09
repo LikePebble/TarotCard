@@ -13,8 +13,10 @@ import {
 import { localDateOf } from "@/lib/period";
 import { fetchHomePopup } from "@/lib/popup-remote";
 import { useModalBehavior } from "@/lib/use-modal-behavior";
+import { useLocale } from "@/components/LocaleProvider";
 
 export function HomePopup() {
+  const english = useLocale() === "en";
   const reducedMotion = useReducedMotion();
   const { store } = usePopup();
   const [popup, setPopup] = useState<PopupRecord | null>(null);
@@ -22,8 +24,8 @@ export function HomePopup() {
 
   useEffect(() => {
     setTodayIso(localDateOf(new Date()));
-    void fetchHomePopup().then(setPopup);
-  }, []);
+    if (!english) void fetchHomePopup().then(setPopup);
+  }, [english]);
 
   const visible = popup !== null && store !== null && todayIso !== null && !isDismissed(store, popup.id, todayIso);
   const { dialogRef, initialFocusRef } = useModalBehavior({
@@ -31,7 +33,7 @@ export function HomePopup() {
     onClose: () => setPopup(null),
   });
 
-  if (!visible || !popup || !todayIso) return null;
+  if (english || !visible || !popup || !todayIso) return null;
   const linkTarget = popup.linkUrl ? popupLinkTarget(popup.linkUrl) : undefined;
   const close = () => setPopup(null);
   const dismiss = (mode: "forever" | "today") => {

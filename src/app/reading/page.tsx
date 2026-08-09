@@ -7,8 +7,10 @@ import { DesktopNav } from "@/components/SiteNav";
 import { deckById } from "@/data/decks";
 import { useSelectedDeck } from "@/lib/store";
 import { ReadingChoice } from "./ReadingChoice";
+import { useLocale } from "@/components/LocaleProvider";
 
 export default function ReadingPage() {
+  const english = useLocale() === "en";
   const { deckId, ready } = useSelectedDeck();
   const deck = deckById(deckId);
 
@@ -17,15 +19,15 @@ export default function ReadingPage() {
       <DesktopNav active="reading" />
       <FlowHeader
         backHref="/"
-        backLabel="홈"
+        backLabel={english ? "Home" : "홈"}
         step="1 / 3"
         contentClassName="max-w-[1060px]"
       />
       <main className="mx-auto w-full max-w-[1060px] px-6 pb-8 pt-3 lg:px-12 lg:pb-24 lg:pt-[88px]">
         <h1 className="font-display text-[27px] font-semibold leading-[1.35] lg:text-[40px] lg:leading-[1.3]">
-          어떤 리딩을{" "}
+          {english ? "Which reading" : "어떤 리딩을"}{" "}
           <br className="lg:hidden" />
-          할까요
+          {english ? "would you like?" : "할까요"}
         </h1>
         {/* hydration 전에는 classic이 잠정값이므로, 확정된 덱만 표시해 이름이 튀지 않게 한다. */}
         {ready ? (
@@ -34,20 +36,20 @@ export default function ReadingPage() {
               <CardBack deckId={deck.id} sizes="50px" className="absolute inset-0" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[12px] text-muted">이번 리딩에 사용할 덱</p>
+              <p className="text-[12px] text-muted">{english ? "Deck for this reading" : "이번 리딩에 사용할 덱"}</p>
               <p className="mt-0.5 font-display text-[17px] font-semibold text-cream lg:text-[19px]">
-                {deck.nameKo}
+                {english ? deck.id === "classic" ? "Classic deck" : deck.nameKo : deck.nameKo}
               </p>
             </div>
             <div className="flex flex-none flex-col items-end gap-1.5">
               <p className="whitespace-nowrap text-[11px] text-gold-soft">
-                모든 프리미엄 덱 이용 가능
+                {english ? "All premium decks available" : "모든 프리미엄 덱 이용 가능"}
               </p>
               <Link
                 href="/collection?from=reading"
                 className="inline-flex min-h-11 items-center rounded-lg border border-line-gold px-3 text-[13px] text-gold-soft hover:text-cream"
               >
-                덱 바꾸기
+                {english ? "Change deck" : "덱 바꾸기"}
               </Link>
             </div>
           </section>

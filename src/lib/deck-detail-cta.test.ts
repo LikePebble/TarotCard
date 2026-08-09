@@ -21,4 +21,11 @@ describe("deckReadingCtaLabel", () => {
     expect(deckReadingCtaLabel(true)).toBe("지금 리딩받기");
     expect(deckReadingCtaLabel(false)).toBe("기본 덱 설정하고 리딩받기");
   });
+
+  it("영어 CTA를 기본 덱 여부에 따라 구분한다", () => {
+    expect(deckReadingCtaLabel(true, "en")).toBe("Start a reading");
+    expect(deckReadingCtaLabel(false, "en")).toBe(
+      "Set as default and start a reading",
+    );
+  });
 });

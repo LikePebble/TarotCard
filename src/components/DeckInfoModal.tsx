@@ -3,9 +3,10 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { CheckCircle, X } from "@phosphor-icons/react";
-import type { Deck } from "@/data/decks";
+import { deckInfo, deckName, type Deck } from "@/data/decks";
 import { track } from "@/lib/analytics";
 import { useModalBehavior } from "@/lib/use-modal-behavior";
+import { useLocale } from "@/components/LocaleProvider";
 
 /** 덱 상품 정보 모달. 첫 이미지는 10:17(800×1360) 규격, 나머지는 아래로 이어 스크롤. */
 export function DeckInfoModal({
@@ -15,6 +16,9 @@ export function DeckInfoModal({
   deck: Deck;
   onClose: () => void;
 }) {
+  const english = useLocale() === "en";
+  const locale = english ? "en" : "ko";
+  const info = deckInfo(deck, locale);
   const trackedDeckRef = useRef<string | null>(null);
   const { dialogRef, initialFocusRef } = useModalBehavior({ onClose });
 
@@ -27,7 +31,7 @@ export function DeckInfoModal({
     track("deck_modal_opened", { deck_id: deck.id });
   }, [deck.id]);
 
-  const images = deck.info.productImages ?? [];
+  const images = info.productImages ?? deck.info.productImages ?? [];
   const titleId = `deck-info-${deck.id}-title`;
   const showPrice = deck.info.price !== undefined || deck.id === "classic";
 
@@ -50,13 +54,13 @@ export function DeckInfoModal({
             id={titleId}
             className="font-display text-[17px] font-semibold"
           >
-            {deck.nameKo}
+            {deckName(deck, locale)}
           </h2>
           <button
             ref={initialFocusRef}
             type="button"
             onClick={onClose}
-            aria-label="닫기"
+            aria-label={english ? "Close" : "닫기"}
             className="flex min-h-11 min-w-11 items-center justify-center rounded-full text-muted hover:text-cream focus-visible:ring-2 focus-visible:ring-gold-soft"
           >
             <X size={20} aria-hidden />
@@ -70,12 +74,12 @@ export function DeckInfoModal({
                   key={src}
                   className="relative w-full overflow-hidden rounded-xl bg-ink-2"
                   style={{
-                    aspectRatio: deck.info.productImageAspectRatio ?? "10 / 17",
+                    aspectRatio: info.productImageAspectRatio ?? deck.info.productImageAspectRatio ?? "10 / 17",
                   }}
                 >
                   <Image
                     src={src}
-                    alt={i === 0 ? `${deck.nameKo} 덱 커버` : ""}
+                    alt={i === 0 ? `${deckName(deck, locale)} ${english ? "deck cover" : "덱 커버"}` : ""}
                     fill
                     sizes="440px"
                     className="object-cover"
@@ -85,28 +89,28 @@ export function DeckInfoModal({
               ))}
             </div>
           ) : null}
-          {deck.info.eyebrow ? (
+          {info.eyebrow ? (
             <p className="mt-6 text-[11px] font-semibold tracking-[0.18em] text-gold-soft">
-              {deck.info.eyebrow}
+              {info.eyebrow}
             </p>
           ) : null}
-          {deck.info.headline ? (
+          {info.headline ? (
             <h3 className="mt-2 whitespace-pre-line font-display text-[23px] font-semibold leading-[1.4] text-cream">
-              {deck.info.headline}
+              {info.headline}
             </h3>
           ) : null}
           <div
             className={`space-y-3 font-serif text-[14.5px] leading-relaxed text-body ${
-              deck.info.headline ? "mt-4" : "mt-5"
+              info.headline ? "mt-4" : "mt-5"
             }`}
           >
-            {deck.info.description.map((p) => (
+            {info.description.map((p) => (
               <p key={p.slice(0, 24)}>{p}</p>
             ))}
           </div>
-          {deck.info.highlights?.length ? (
+          {info.highlights?.length ? (
             <ul className="mt-5 space-y-2.5 rounded-xl border border-line bg-ink-2/70 p-4 text-[13.5px] text-body">
-              {deck.info.highlights.map((highlight) => (
+              {info.highlights.map((highlight) => (
                 <li key={highlight} className="flex items-start gap-2.5">
                   <CheckCircle
                     size={16}
@@ -120,11 +124,11 @@ export function DeckInfoModal({
           ) : null}
           {showPrice ? (
             <div className="mt-5 flex items-baseline justify-between border-t border-line pt-4">
-              <span className="text-[13px] text-muted">가격</span>
+              <span className="text-[13px] text-muted">{english ? "Price" : "가격"}</span>
               <span className="font-display text-[17px] text-gold-soft">
                 {deck.info.price !== undefined
-                  ? `${deck.info.price.toLocaleString()}원`
-                  : "무료"}
+                  ? english ? `KRW ${deck.info.price.toLocaleString("en-US")}` : `${deck.info.price.toLocaleString()}원`
+                  : english ? "Free" : "무료"}
               </span>
             </div>
           ) : null}

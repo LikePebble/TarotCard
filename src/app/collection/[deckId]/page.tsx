@@ -8,9 +8,10 @@ import { CardArt } from "@/components/CardArt";
 import { CardBack } from "@/components/CardBack";
 import { DeckInfoModal } from "@/components/DeckInfoModal";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
+import { useLocale } from "@/components/LocaleProvider";
 import { TabBar } from "@/components/TabBar";
 import { cards } from "@/data/cards";
-import { decks } from "@/data/decks";
+import { deckName, decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
 import { ownsDeck, useEntitlements } from "@/lib/entitlements";
 import {
@@ -49,6 +50,8 @@ export default function DeckCatalogPage({
 }: {
   params: Promise<{ deckId: string }>;
 }) {
+  const locale = useLocale();
+  const english = locale === "en";
   const router = useRouter();
   const searchParams = useSearchParams();
   const { deckId } = use(params);
@@ -102,7 +105,7 @@ export default function DeckCatalogPage({
           className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted hover:text-cream"
         >
           <CaretLeft size={16} aria-hidden />
-          컬렉션
+          {english ? "Collection" : "컬렉션"}
         </Link>
 
         <div className="lg:flex lg:items-end lg:justify-between">
@@ -110,14 +113,14 @@ export default function DeckCatalogPage({
             <div className="flex items-end justify-between lg:block">
               <div className="flex items-center gap-1">
                 <h1 className="font-display text-[27px] font-semibold lg:text-[40px]">
-                  {deck.nameKo}
+                  {deckName(deck, english ? "en" : "ko")}
                 </h1>
                 <button
                   type="button"
                   onClick={() => setInfoOpen(true)}
                   className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-muted transition-colors hover:text-gold-soft"
-                  aria-label={`${deck.nameKo} 덱 정보 보기`}
-                  title="덱 정보 보기"
+                  aria-label={`${deckName(deck, english ? "en" : "ko")} ${english ? "deck information" : "덱 정보 보기"}`}
+                  title={english ? "Deck information" : "덱 정보 보기"}
                 >
                   <Info size={19} aria-hidden />
                 </button>
@@ -130,16 +133,16 @@ export default function DeckCatalogPage({
             <div className="mt-2 flex flex-wrap items-center gap-2">
               {isDefault ? (
                 <span className="rounded-full border border-line-gold px-2.5 py-1 text-[12px] text-gold-soft">
-                  기본 덱
+                  {english ? "Default deck" : "기본 덱"}
                 </span>
               ) : null}
               {isPremium ? (
                 <span className="rounded-full border border-line px-2.5 py-1 text-[12px] text-muted">
                   {ctaState === "guest"
-                    ? "로그인 후 수집"
+                    ? english ? "Sign in to collect" : "로그인 후 수집"
                     : owned
-                      ? "소장 중"
-                      : "리딩으로 수집 중"}
+                      ? english ? "Owned" : "소장 중"
+                      : english ? "Collecting through readings" : "리딩으로 수집 중"}
                 </span>
               ) : null}
             </div>
@@ -170,21 +173,21 @@ export default function DeckCatalogPage({
             onClick={startReading}
             className="btn btn-gold w-full sm:w-auto"
           >
-            {deckReadingCtaLabel(isDefault)}
+            {deckReadingCtaLabel(isDefault, locale)}
           </button>
           {promptGuestCollection && ctaState === "guest" ? (
             <Link href="/login" className="btn btn-ghost w-full sm:w-auto">
-              로그인하고 카드 수집하기
+              {english ? "Sign in to collect cards" : "로그인하고 카드 수집하기"}
             </Link>
           ) : ctaState === "member-unowned" ? (
             <button
               type="button"
               disabled
-              aria-label="모든 카드 해금하기, 준비 중"
-              title="결제 기능 준비 중"
+              aria-label={english ? "Unlock all cards, coming soon" : "모든 카드 해금하기, 준비 중"}
+              title={english ? "Payments coming soon" : "결제 기능 준비 중"}
               className="btn btn-ghost w-full cursor-not-allowed opacity-45 sm:w-auto"
             >
-              모든 카드 해금하기
+              {english ? "Unlock all cards" : "모든 카드 해금하기"}
             </button>
           ) : null}
         </div>
@@ -192,7 +195,7 @@ export default function DeckCatalogPage({
         <div
           className="-mx-5 mt-[18px] flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:mt-8 lg:flex-wrap lg:overflow-visible lg:px-0"
         >
-          <div className="contents" role="tablist" aria-label="아르카나 필터">
+          <div className="contents" role="tablist" aria-label={english ? "Arcana filters" : "아르카나 필터"}>
             {FILTERS.map((item) => {
               const hasUnread = visibleCards(cards, item.id).some((card) =>
                 unreadSet.has(card.slug),
@@ -215,11 +218,11 @@ export default function DeckCatalogPage({
                     : "border-line text-muted hover:text-cream"
                 }`}
               >
-                {item.label}
+                {english ? item.id === "major" ? "Major Arcana" : item.id === "cups" ? "Cups" : item.id === "wands" ? "Wands" : item.id === "swords" ? "Swords" : "Pentacles" : item.label}
                 {hasUnread ? (
                   <span
                     className="relative -top-1 ml-1 inline-block size-1.5 rounded-full bg-notice"
-                    aria-label="새 카드 수집됨"
+                    aria-label={english ? "Newly collected card" : "새 카드 수집됨"}
                   />
                 ) : null}
               </Link>
@@ -236,6 +239,7 @@ export default function DeckCatalogPage({
               card.slug,
             );
             const nameKo = koCards[card.slug]?.nameKo ?? card.nameEn;
+            const displayName = english ? card.nameEn : nameKo;
             const label = (
               <p
                 className={`mt-[7px] text-center text-[11px] leading-[1.4] lg:mt-2.5 lg:text-[13px] ${
@@ -243,7 +247,7 @@ export default function DeckCatalogPage({
                 }`}
               >
                 <span className="relative inline-block">
-                  {nameKo}
+                  {displayName}
                   {collected && unreadSet.has(card.slug) ? (
                     <span
                       className="absolute -right-2 -top-0.5 size-1.5 rounded-full bg-notice"
@@ -252,9 +256,7 @@ export default function DeckCatalogPage({
                   ) : null}
                 </span>
                 <br />
-                <span className={collected ? "text-muted" : ""}>
-                  {card.nameEn}
-                </span>
+                {!english ? <span className={collected ? "text-muted" : ""}>{card.nameEn}</span> : null}
               </p>
             );
             // 아직 만나지 않은 카드는 상세로 들어갈 수 없다. 뒤집힌 카드를
@@ -267,8 +269,8 @@ export default function DeckCatalogPage({
                 className="group block"
                 aria-label={
                   unreadSet.has(card.slug)
-                    ? `${nameKo}, 새로 수집됨`
-                    : nameKo
+                    ? `${displayName}, ${english ? "newly collected" : "새로 수집됨"}`
+                    : displayName
                 }
               >
                 <div className="relative aspect-[2/3.4] overflow-hidden rounded-xl bg-ink-2 transition-transform duration-300 group-hover:scale-[1.03]">
@@ -281,7 +283,7 @@ export default function DeckCatalogPage({
                 {label}
               </Link>
             ) : (
-              <div key={card.slug} aria-label={`${nameKo}, 아직 수집하지 않음`}>
+              <div key={card.slug} aria-label={`${displayName}, ${english ? "not collected yet" : "아직 수집하지 않음"}`}>
                 <CardBack
                   deckId={deck.id}
                   sizes="(min-width: 1024px) 190px, 33vw"

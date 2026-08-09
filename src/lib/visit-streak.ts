@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { localDateOf } from "@/lib/period";
 import { notifyLocal, subscribeLocal } from "@/lib/local-events";
+import type { Locale } from "@/lib/locale";
 
 /**
  * 방문 연속 기록.
@@ -99,17 +100,18 @@ export type StreakNote = { text: string; isBest: boolean };
 export function streakNoteOf(
   state: VisitState,
   today: string,
+  locale: Locale = "ko",
 ): StreakNote | null {
   if (!streakAliveOn(state, today)) return null;
   if (state.streak >= 2) {
     return {
-      text: `${state.streak}일째 이어서 오고 계십니다`,
+      text: locale === "en" ? `You have visited for ${state.streak} days in a row` : `${state.streak}일째 이어서 오고 계십니다`,
       // 최장과 나란한 순간에만 표시한다. 매일 "최장 기록"이라고 하면 말이 닳는다.
       isBest: state.streak >= 3 && state.streak === state.best,
     };
   }
   // 한 번이라도 이어 본 적이 있는 사람에게만 다시 시작을 알린다.
-  if (state.best >= 2) return { text: "오늘부터 다시 이어 갑니다", isBest: false };
+  if (state.best >= 2) return { text: locale === "en" ? "Starting your streak again today" : "오늘부터 다시 이어 갑니다", isBest: false };
   return null;
 }
 

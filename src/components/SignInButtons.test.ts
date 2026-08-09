@@ -13,6 +13,13 @@ vi.mock("@/lib/supabase/client", () => ({
 }));
 
 import { SignInButtons } from "@/components/SignInButtons";
+import { LocaleProvider } from "@/components/LocaleProvider";
+
+function renderKorean() {
+  return renderToStaticMarkup(
+    React.createElement(LocaleProvider, { locale: "ko", children: React.createElement(SignInButtons) }),
+  );
+}
 
 /**
  * 약관 동의를 가입 행위로 갈음하는 방식이므로, 동의 문구와 두 문서 링크가
@@ -21,20 +28,20 @@ import { SignInButtons } from "@/components/SignInButtons";
  */
 describe("SignInButtons", () => {
   it("소셜 로그인 버튼을 보여준다", () => {
-    const html = renderToStaticMarkup(React.createElement(SignInButtons));
+    const html = renderKorean();
 
     expect(html).toContain("카카오로 시작하기");
     expect(html).toContain("Google로 시작하기");
   });
 
   it("가입 행위가 약관 동의로 갈음됨을 밝힌다", () => {
-    const html = renderToStaticMarkup(React.createElement(SignInButtons));
+    const html = renderKorean();
 
     expect(html).toContain("동의하는 것으로 봅니다");
   });
 
   it("이용약관과 개인정보처리방침으로 가는 링크를 함께 둔다", () => {
-    const html = renderToStaticMarkup(React.createElement(SignInButtons));
+    const html = renderKorean();
 
     expect(html).toContain('href="/terms"');
     expect(html).toContain('href="/privacy"');
@@ -46,7 +53,7 @@ describe("SignInButtons", () => {
   // 아니다. 두 문서를 "~과 ~에 동의"로 묶으면 방침까지 동의 대상으로 표시하는
   // 것이 되어 부정확하다. 동의는 약관에만 걸리고, 방침은 확인 안내여야 한다.
   it("개인정보처리방침을 동의 대상으로 표시하지 않는다", () => {
-    const html = renderToStaticMarkup(React.createElement(SignInButtons));
+    const html = renderKorean();
     const text = html.replace(/<[^>]+>/g, "");
 
     expect(text).toMatch(/이용약관에 동의하는 것으로 봅니다/);

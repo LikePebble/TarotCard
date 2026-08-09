@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FlowHeader } from "@/components/FlowHeader";
 import { DesktopNav } from "@/components/SiteNav";
-import { focusOptionsFor } from "@/data/focus";
+import { localizedFocusOptionsFor } from "@/data/focus";
+import { useLocale } from "@/components/LocaleProvider";
 import { ticketsExhaustedKey, track, trackOnce } from "@/lib/analytics";
 import { useSession } from "@/lib/auth/session";
 import { useRetainedDrawUsage } from "@/lib/draw-guard";
@@ -30,6 +31,8 @@ const labelClass = "font-display text-[21px] font-medium lg:text-[26px]";
 const noteClass = "flex-none text-[13px] lg:text-[14.5px]";
 
 export default function FocusPage() {
+  const locale = useLocale();
+  const english = locale === "en";
   const router = useRouter();
   const [spread, setSpread] = useState<SpreadType | null>(null);
   const { store } = useArcanaStore();
@@ -74,7 +77,7 @@ export default function FocusPage() {
   );
   const tickets = ticketStateOf(store, now, user !== null, retainedUsage.oneSlotsUsed);
   const ready = spread !== null && (!usesTickets || ticketsReady);
-  const options = ready && spread ? focusOptionsFor(spread) : [];
+  const options = ready && spread ? localizedFocusOptionsFor(spread, locale) : [];
 
   // "오늘은 여기까지" 행과 소진 안내문이 실제로 그려지는 조건. ticketsReady를
   // 포함하므로 확정 전 잠정 상태로는 나가지 않는다. ReadingChoice와 같은
@@ -93,7 +96,7 @@ export default function FocusPage() {
       <DesktopNav active="reading" />
       <FlowHeader
         backHref="/reading"
-        backLabel="리딩"
+        backLabel={english ? "Reading" : "리딩"}
         step="2 / 3"
         contentClassName="max-w-[860px]"
       />
@@ -101,23 +104,23 @@ export default function FocusPage() {
         <p className="min-h-[21px] text-[13px] text-muted lg:mb-3.5 lg:text-[14px]">
           {spread === "three" ? (
             <>
-              <b className="font-medium text-gold">과거 · 현재 · 미래</b> 카드를
-              뽑습니다
+              <b className="font-medium text-gold">{english ? "Past · Present · Future" : "과거 · 현재 · 미래"}</b>{" "}
+              {english ? "cards" : "카드를 뽑습니다"}
             </>
           ) : spread === "one" ? (
             <>
-              <b className="font-medium text-gold">오늘의 카드</b>를 뽑습니다
+              <b className="font-medium text-gold">{english ? "Daily card" : "오늘의 카드"}</b>{english ? "" : "를 뽑습니다"}
             </>
           ) : null}
         </p>
         <h1 className="mt-1 font-display text-[27px] font-semibold leading-[1.35] lg:mt-0 lg:text-[40px] lg:leading-[1.3]">
-          무엇이 궁금한가요
+          {english ? "What would you like to explore?" : "무엇이 궁금한가요"}
         </h1>
         {usesTickets ? (
           // 자리는 늘 잡아 두고 문구만 채운다 — 확정되는 순간 목록이 밀려
           // 내려가지 않게.
           <p className="mt-2.5 min-h-[19px] whitespace-pre-line text-[13px] text-muted lg:mt-3.5 lg:text-[14px]">
-            {ticketsReady ? ticketNoticeLinesOf(tickets) : ""}
+            {ticketsReady ? ticketNoticeLinesOf(tickets, locale) : ""}
           </p>
         ) : null}
         <div className="mt-[22px] min-h-[330px] border-t border-line lg:mt-10">
@@ -140,7 +143,7 @@ export default function FocusPage() {
                 <Link
                   key={option.id}
                   href={`/reading/${slot.readingId}`}
-                  aria-label={`${option.label}, 오늘 받은 결과 보기`}
+                  aria-label={english ? `${option.label}, view today's result` : `${option.label}, 오늘 받은 결과 보기`}
                   className={row}
                 >
                   <span
@@ -149,7 +152,7 @@ export default function FocusPage() {
                     {option.label}
                   </span>
                   <span className={`${noteClass} text-gold-soft`}>
-                    오늘 받았습니다 · 결과 보기
+                    {english ? "Received today · View result" : "오늘 받았습니다 · 결과 보기"}
                   </span>
                 </Link>
               );
@@ -163,11 +166,11 @@ export default function FocusPage() {
                   key={option.id}
                   type="button"
                   disabled
-                  aria-label={`${option.label}, 오늘은 여기까지입니다`}
+                  aria-label={english ? `${option.label}, no more readings today` : `${option.label}, 오늘은 여기까지입니다`}
                   className={`${row} cursor-not-allowed opacity-45`}
                 >
                   <span className={labelClass}>{option.label}</span>
-                  <span className={`${noteClass} text-muted`}>오늘은 여기까지</span>
+                  <span className={`${noteClass} text-muted`}>{english ? "That's all for today" : "오늘은 여기까지"}</span>
                 </button>
               );
             }

@@ -1,4 +1,5 @@
 import { formatLegalDate, type LegalDocument } from "@/data/legal";
+import type { Locale } from "@/lib/locale";
 
 /**
  * 이용약관·개인정보처리방침 공통 렌더러. 서버 컴포넌트.
@@ -6,7 +7,15 @@ import { formatLegalDate, type LegalDocument } from "@/data/legal";
  * 본문은 `src/data/legal`의 데이터에서 오고, 이 컴포넌트는 배치만 맡는다.
  * 버전과 시행일, 개정 이력은 문서마다 반드시 보이도록 여기서 렌더한다.
  */
-export function LegalDocumentView({ doc }: { doc: LegalDocument }) {
+export function LegalDocumentView({
+  doc,
+  locale = "ko",
+}: {
+  doc: LegalDocument;
+  locale?: Locale;
+}) {
+  const english = locale === "en";
+
   return (
     <article className="pb-4">
       <header>
@@ -14,11 +23,14 @@ export function LegalDocumentView({ doc }: { doc: LegalDocument }) {
           {doc.title}
         </h1>
         <p className="mt-1.5 text-[12.5px] text-muted lg:text-[13.5px]">
-          <span>버전 {doc.version}</span>
+          <span>{english ? "Version" : "버전"} {doc.version}</span>
           <span aria-hidden className="mx-2 text-line">
             ·
           </span>
-          <span>시행일 {formatLegalDate(doc.effectiveDate)}</span>
+          <span>
+            {english ? "Effective" : "시행일"}{" "}
+            {formatLegalDate(doc.effectiveDate, locale)}
+          </span>
         </p>
       </header>
 
@@ -57,24 +69,27 @@ export function LegalDocumentView({ doc }: { doc: LegalDocument }) {
 
         <section>
           <h2 className="font-display text-[17px] font-semibold text-gold-soft lg:text-[20px]">
-            개정 이력
+            {english ? "Revision History" : "개정 이력"}
           </h2>
           <p className="mt-2.5 text-[14px] leading-[1.85] text-body lg:text-[15.5px]">
-            지금까지의 개정 내용입니다. 최신 판이 맨 위에 있습니다.
+            {english
+              ? "Previous revisions are listed below, with the latest version first."
+              : "지금까지의 개정 내용입니다. 최신 판이 맨 위에 있습니다."}
           </p>
           <ol className="mt-3 divide-y divide-line overflow-hidden rounded-2xl border border-line bg-ink-1 lg:rounded-[14px]">
             {doc.revisions.map((rev) => (
               <li key={rev.version} className="px-5 py-4 lg:px-6 lg:py-5">
                 <p className="font-display text-[15px] font-semibold lg:text-[16px]">
-                  버전 {rev.version}
+                  {english ? "Version" : "버전"} {rev.version}
                   {rev.version === doc.version ? (
                     <span className="ml-2 align-middle text-[11.5px] font-normal text-gold-soft">
-                      현재 판
+                      {english ? "Current" : "현재 판"}
                     </span>
                   ) : null}
                 </p>
                 <p className="mt-0.5 text-[12.5px] text-muted lg:text-[13.5px]">
-                  시행일 {formatLegalDate(rev.effectiveDate)}
+                  {english ? "Effective" : "시행일"}{" "}
+                  {formatLegalDate(rev.effectiveDate, locale)}
                 </p>
                 <p className="mt-1 text-[13.5px] leading-[1.8] text-body lg:text-[15px]">
                   {rev.summary}

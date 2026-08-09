@@ -33,6 +33,13 @@ vi.mock("@/lib/sync/status", () => ({
 }));
 
 import { AccountCard } from "@/app/my/AccountCard";
+import { LocaleProvider } from "@/components/LocaleProvider";
+
+function renderKorean() {
+  return renderToStaticMarkup(
+    React.createElement(LocaleProvider, { locale: "ko", children: React.createElement(AccountCard) }),
+  );
+}
 
 describe("AccountCard", () => {
   beforeEach(() => {
@@ -43,7 +50,7 @@ describe("AccountCard", () => {
   });
 
   it("미로그인 상태에서는 로그인 페이지로 가는 단일 CTA를 보여준다", () => {
-    const html = renderToStaticMarkup(React.createElement(AccountCard));
+    const html = renderKorean();
 
     expect(html).toContain('href="/login"');
     expect(html).toContain("로그인하러 가기");
@@ -57,7 +64,7 @@ describe("AccountCard", () => {
       app_metadata: { provider: "google" },
     };
 
-    const html = renderToStaticMarkup(React.createElement(AccountCard));
+    const html = renderKorean();
 
     expect(html).toContain("reader@example.com");
     expect(html).toContain("Google 계정");

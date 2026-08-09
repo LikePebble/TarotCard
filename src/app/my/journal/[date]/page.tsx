@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { DayReadingTabs } from "@/components/DayReadingTabs";
+import { useLocale } from "@/components/LocaleProvider";
 import { DesktopNav, MobileTopBar } from "@/components/SiteNav";
 import { entryOf, setEntry, useJournal } from "@/lib/journal";
 import { localDateOf } from "@/lib/period";
@@ -17,8 +18,14 @@ function addDays(iso: string, delta: number): string {
   const [y, m, d] = iso.split("-").map(Number);
   return localDateOf(new Date(y, m - 1, d + delta));
 }
-function weekdayOf(iso: string): string {
+function weekdayOf(iso: string, english: boolean): string {
   const [y, m, d] = iso.split("-").map(Number);
+  if (english) {
+    return new Intl.DateTimeFormat("en-US", {
+      weekday: "long",
+      timeZone: "UTC",
+    }).format(new Date(Date.UTC(y, m - 1, d)));
+  }
   return WEEKDAYS[new Date(y, m - 1, d).getDay()];
 }
 
@@ -27,6 +34,7 @@ export default function JournalDayPage({
 }: {
   params: Promise<{ date: string }>;
 }) {
+  const english = useLocale() === "en";
   const reducedMotion = useReducedMotion();
   const router = useRouter();
   const { date } = use(params);
@@ -120,7 +128,7 @@ export default function JournalDayPage({
           className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted hover:text-cream"
         >
           <CaretLeft size={16} aria-hidden />
-          일별 기록
+          {english ? "Journal" : "일별 기록"}
         </Link>
       </nav>
 
@@ -134,23 +142,37 @@ export default function JournalDayPage({
         <div className="flex items-center justify-between">
           <div className="flex items-baseline gap-2.5">
             <h1 className="font-display text-[24px] font-semibold lg:text-[32px]">
-              {Number(date.split("-")[1])}월 {Number(date.split("-")[2])}일
+              {english
+                ? new Intl.DateTimeFormat("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    timeZone: "UTC",
+                  }).format(
+                    new Date(
+                      Date.UTC(
+                        Number(date.split("-")[0]),
+                        Number(date.split("-")[1]) - 1,
+                        Number(date.split("-")[2]),
+                      ),
+                    ),
+                  )
+                : `${Number(date.split("-")[1])}월 ${Number(date.split("-")[2])}일`}
             </h1>
             <span className="text-[15px] text-muted lg:text-[17px]">
-              {weekdayOf(date)}요일
+              {weekdayOf(date, english)}{english ? "" : "요일"}
             </span>
             {isToday ? (
               <span className="rounded-full border border-line-gold px-2 py-0.5 text-[11px] text-gold-soft">
-                오늘
+                {english ? "Today" : "오늘"}
               </span>
             ) : null}
           </div>
           <div className="flex gap-2">
-            <Link href={`/my/journal/${addDays(date, -1)}`} aria-label="이전 날" className={dayNav}>
+            <Link href={`/my/journal/${addDays(date, -1)}`} aria-label={english ? "Previous day" : "이전 날"} className={dayNav}>
               <CaretLeft size={16} aria-hidden />
             </Link>
             {canGoNext ? (
-              <Link href={`/my/journal/${addDays(date, 1)}`} aria-label="다음 날" className={dayNav}>
+              <Link href={`/my/journal/${addDays(date, 1)}`} aria-label={english ? "Next day" : "다음 날"} className={dayNav}>
                 <CaretRight size={16} aria-hidden />
               </Link>
             ) : (
@@ -167,7 +189,9 @@ export default function JournalDayPage({
           <DayReadingTabs key={date} readings={readings} />
         ) : (
           <p className="mt-6 rounded-2xl border border-dashed border-line px-5 py-6 text-center text-[13.5px] text-muted lg:rounded-[14px]">
-            이날의 리딩은 없어요. 그날의 마음만 남겨도 좋아요.
+            {english
+              ? "There are no readings for this day. You can still leave a reflection."
+              : "이날의 리딩은 없어요. 그날의 마음만 남겨도 좋아요."}
           </p>
         )}
 
@@ -177,11 +201,11 @@ export default function JournalDayPage({
               htmlFor="journal-body"
               className="text-[13px] text-gold-soft lg:text-[14px]"
             >
-              그날의 일기
+              {english ? "Journal entry" : "그날의 일기"}
             </label>
             {savedAt ? (
               <span className="text-[11.5px] text-muted">
-                저장됨 · {savedAt.slice(0, 10)}
+                {english ? "Saved" : "저장됨"} · {savedAt.slice(0, 10)}
               </span>
             ) : null}
           </div>
@@ -192,7 +216,7 @@ export default function JournalDayPage({
               setBody(e.target.value);
               setConfirmingCancel(false);
             }}
-            placeholder="오늘 마음에 남은 것을 적어 보세요."
+            placeholder={english ? "Write down what stayed with you today." : "오늘 마음에 남은 것을 적어 보세요."}
             rows={8}
             className="mt-2 w-full resize-y rounded-2xl border border-line bg-ink-1 p-4 font-serif text-[15px] leading-[1.75] text-body transition-colors focus-visible:border-line-gold lg:rounded-[14px]"
           />
@@ -203,10 +227,12 @@ export default function JournalDayPage({
                 animate={{ opacity: 1 }}
                 className="flex flex-wrap items-center gap-x-3 gap-y-2"
                 role="alertdialog"
-                aria-label="취소 확인"
+                aria-label={english ? "Confirm cancellation" : "취소 확인"}
               >
                 <span className="text-[13px] text-body">
-                  쓴 내용을 저장하지 않고 나갈까요?
+                  {english
+                    ? "Leave without saving what you wrote?"
+                    : "쓴 내용을 저장하지 않고 나갈까요?"}
                 </span>
                 <button
                   type="button"
@@ -214,14 +240,14 @@ export default function JournalDayPage({
                   autoFocus
                   className="min-h-11 px-1 text-[13px] font-medium text-notice underline underline-offset-4"
                 >
-                  버리고 나가기
+                  {english ? "Discard and leave" : "버리고 나가기"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setConfirmingCancel(false)}
                   className="min-h-11 px-1 text-[13px] text-muted underline underline-offset-4 transition-colors hover:text-cream"
                 >
-                  계속 쓰기
+                  {english ? "Keep writing" : "계속 쓰기"}
                 </button>
               </motion.div>
             ) : (
@@ -232,7 +258,7 @@ export default function JournalDayPage({
                   disabled={!loaded}
                   className="btn btn-gold active:scale-[0.98] disabled:opacity-50"
                 >
-                  저장
+                  {english ? "Save" : "저장"}
                 </button>
                 {/* 나가는 길이므로 늘 보인다 — 고친 게 있든 없든 떠날 수는 있어야
                     하고, 있는 줄 몰라 못 찾는 편이 잘못 누르는 것보다 나쁘다.
@@ -242,7 +268,7 @@ export default function JournalDayPage({
                   onClick={cancel}
                   className="min-h-11 px-1 text-[13px] text-muted underline underline-offset-4 transition-colors hover:text-cream"
                 >
-                  취소
+                  {english ? "Cancel" : "취소"}
                 </button>
               </>
             )}

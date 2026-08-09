@@ -3,8 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import type { Locale } from "@/lib/locale";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
+const WEEKDAYS_EN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 function pad(n: number): string {
   return String(n).padStart(2, "0");
@@ -21,11 +23,14 @@ export function CalendarMonth({
   readingDates,
   journalDates,
   todayIso,
+  locale,
 }: {
   readingDates: Set<string>;
   journalDates: Set<string>;
   todayIso: string;
+  locale: Locale;
 }) {
+  const english = locale === "en";
   const [ty, tm] = todayIso.split("-").map(Number);
   const [view, setView] = useState({ y: ty, m: tm - 1 });
 
@@ -50,20 +55,26 @@ export function CalendarMonth({
     <section className="rounded-2xl border border-line bg-ink-1 p-5 lg:rounded-[18px] lg:p-7">
       <header className="flex items-center justify-between">
         <h2 className="font-display text-[20px] font-semibold lg:text-[24px]">
-          {view.y}년 {view.m + 1}월
+          {english
+            ? new Intl.DateTimeFormat("en-US", {
+                year: "numeric",
+                month: "long",
+                timeZone: "UTC",
+              }).format(new Date(Date.UTC(view.y, view.m, 1)))
+            : `${view.y}년 ${view.m + 1}월`}
         </h2>
         <div className="flex gap-2">
-          <button type="button" onClick={prev} aria-label="이전 달" className={navBtn}>
+          <button type="button" onClick={prev} aria-label={english ? "Previous month" : "이전 달"} className={navBtn}>
             <CaretLeft size={16} aria-hidden />
           </button>
-          <button type="button" onClick={next} aria-label="다음 달" className={navBtn}>
+          <button type="button" onClick={next} aria-label={english ? "Next month" : "다음 달"} className={navBtn}>
             <CaretRight size={16} aria-hidden />
           </button>
         </div>
       </header>
 
       <div className="mt-5 grid grid-cols-7 gap-1 lg:gap-1.5">
-        {WEEKDAYS.map((w, i) => (
+        {(english ? WEEKDAYS_EN : WEEKDAYS).map((w, i) => (
           <div
             key={w}
             className={`pb-1 text-center text-[11px] lg:text-[12px] ${
@@ -95,7 +106,15 @@ export function CalendarMonth({
             <Link
               key={date}
               href={`/my/journal/${date}`}
-              aria-label={`${view.m + 1}월 ${day}일${marked ? " 기록 있음" : ""}`}
+              aria-label={
+                english
+                  ? `${new Intl.DateTimeFormat("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      timeZone: "UTC",
+                    }).format(new Date(Date.UTC(view.y, view.m, day)))}${marked ? ", has an entry" : ""}`
+                  : `${view.m + 1}월 ${day}일${marked ? " 기록 있음" : ""}`
+              }
               className={`${cellBase} border active:scale-[0.96] ${
                 isToday
                   ? "border-gold bg-[rgba(201,162,75,0.08)]"
@@ -135,10 +154,10 @@ export function CalendarMonth({
 
       <footer className="mt-5 flex items-center gap-4 border-t border-line pt-3.5 text-[12px] text-muted">
         <span className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-gold" aria-hidden /> 리딩
+          <span className="h-1.5 w-1.5 rounded-full bg-gold" aria-hidden /> {english ? "Reading" : "리딩"}
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-gold-soft/50" aria-hidden /> 일기
+          <span className="h-1.5 w-1.5 rounded-full bg-gold-soft/50" aria-hidden /> {english ? "Journal" : "일기"}
         </span>
       </footer>
     </section>

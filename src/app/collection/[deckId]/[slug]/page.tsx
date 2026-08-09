@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react/dist/ssr";
@@ -9,13 +10,14 @@ import { MarkCollectionCardSeen } from "@/components/MarkCollectionCardSeen";
 import { DesktopNav } from "@/components/SiteNav";
 import { LoreSections } from "@/components/LoreSections";
 import { cardBySlug, cards, romanNumeral } from "@/data/cards";
-import { deckArtSrc, decks } from "@/data/decks";
+import { deckArtSrc, deckName, decks } from "@/data/decks";
 import { koCards } from "@/data/ko";
 import { reversedCards } from "@/data/reversed";
 import { cardIndexLabel, suitNeighbors } from "@/lib/card-index";
 import { cardMetaDescription, cardMetaTitle } from "@/lib/card-meta";
 import { validReadingId } from "@/lib/card-detail-nav";
 import { catalogFilterOf, filterForCard } from "@/lib/catalog-filter";
+import { localeFromHeaders } from "@/lib/locale";
 
 const SUIT_KO = {
   cups: "컵",
@@ -43,14 +45,17 @@ export async function generateMetadata({
 }: {
   params: Promise<{ deckId: string; slug: string }>;
 }): Promise<Metadata> {
+  const english = localeFromHeaders(await headers()) === "en";
   const { deckId, slug } = await params;
   const card = cardBySlug.get(slug);
   const deck = decks.find((d) => d.id === deckId && d.active);
   // title은 absolute로 둔다. 루트 layout에 title.template이 생기더라도
   // 여기서 만든 완성형 제목 뒤에 접미사가 한 번 더 붙지 않게 하려는 것이다.
-  if (!card || !deck) return { title: { absolute: "아르카 | Arca" } };
+  if (!card || !deck) return { title: { absolute: "Arca Tarot" } };
   const nameKo = koCards[card.slug]?.nameKo ?? card.nameEn;
-  const description = cardMetaDescription(
+  const description = english
+    ? card.en.description.split("\n\n")[0]
+    : cardMetaDescription(
     nameKo,
     card.nameEn,
     koCards[card.slug]?.description || card.en.description,
@@ -58,10 +63,12 @@ export async function generateMetadata({
   // 3개 덱은 아트만 다르고 해석 본문이 같다. 클래식을 정본으로 삼아
   // 프리미엄 덱 156장과 ?filter=/?readingId= 변종을 한 URL로 모은다.
   const canonical = `${SITE_URL}/collection/classic/${card.slug}`;
-  const title = cardMetaTitle(nameKo, card.nameEn, deck.nameKo);
+  const title = english
+    ? `${card.nameEn} Tarot Card Meaning | Arca Tarot`
+    : cardMetaTitle(nameKo, card.nameEn, deck.nameKo);
   const image = {
     url: `${SITE_URL}${deckArtSrc(deck.id, card)}`,
-    alt: `${deck.nameKo} ${nameKo} ${card.nameEn} 카드 아트`,
+    alt: english ? `${card.nameEn} tarot card art` : `${deck.nameKo} ${nameKo} ${card.nameEn} 카드 아트`,
   };
 
   return {
@@ -73,7 +80,7 @@ export async function generateMetadata({
     alternates: { canonical },
     openGraph: {
       type: "article",
-      siteName: SITE_NAME,
+      siteName: english ? "Arca Tarot" : SITE_NAME,
       title,
       description,
       url: canonical,
@@ -97,6 +104,7 @@ export default async function CardDetailPage({
   params: Promise<{ deckId: string; slug: string }>;
   searchParams: Promise<{ readingId?: string | string[]; filter?: string | string[] }>;
 }) {
+  const english = localeFromHeaders(await headers()) === "en";
   const [{ deckId, slug }, query] = await Promise.all([params, searchParams]);
   const deck = decks.find((d) => d.id === deckId && d.active);
   const card = cardBySlug.get(slug);
@@ -104,8 +112,11 @@ export default async function CardDetailPage({
 
   const ko = koCards[card.slug];
   const nameKo = ko?.nameKo ?? card.nameEn;
+  const displayName = english ? card.nameEn : nameKo;
   const description =
-    ko?.description && ko.description.length > 0
+    english
+      ? card.en.description
+      : ko?.description && ko.description.length > 0
       ? ko.description
       : card.en.description;
   const paragraphs = description.split("\n\n");
@@ -121,20 +132,22 @@ export default async function CardDetailPage({
    */
   const neighbors = suitNeighbors(card.slug);
   const reversed = reversedCards[card.slug];
-  const reversedParagraphs = reversed ? reversed.ko.split("\n\n") : [];
+  const reversedParagraphs = reversed ? (english ? reversed.en : reversed.ko).split("\n\n") : [];
   const reversedEnParagraphs = reversed ? reversed.en.split("\n\n") : [];
 
   const arcanaLabel =
     card.arcana === "major"
-      ? `메이저 아르카나 ${romanNumeral(card.number)}`
-      : `마이너 아르카나 · ${SUIT_KO[card.suit as keyof typeof SUIT_KO]}`;
+      ? english ? `Major Arcana ${romanNumeral(card.number)}` : `메이저 아르카나 ${romanNumeral(card.number)}`
+      : english
+        ? `Minor Arcana · ${card.suit === "cups" ? "Cups" : card.suit === "wands" ? "Wands" : card.suit === "swords" ? "Swords" : "Pentacles"}`
+        : `마이너 아르카나 · ${SUIT_KO[card.suit as keyof typeof SUIT_KO]}`;
 
   const readingId = validReadingId(query.readingId);
   const filter = catalogFilterOf(query.filter) ?? filterForCard(card);
   const backHref = readingId
     ? `/reading/${encodeURIComponent(readingId)}`
     : `/collection/${deck.id}?filter=${filter}`;
-  const backLabel = readingId ? "리딩으로 돌아가기" : deck.nameKo;
+  const backLabel = readingId ? (english ? "Back to reading" : "리딩으로 돌아가기") : deckName(deck, english ? "en" : "ko");
 
   return (
     <div className="flex min-h-[100dvh] flex-col">
@@ -166,17 +179,15 @@ export default async function CardDetailPage({
               {arcanaLabel}
             </p>
             <h1 className="mt-0.5 mb-[18px] text-center font-display text-[30px] font-semibold lg:mb-6 lg:text-left lg:text-[46px]">
-              {nameKo}
-              <span className="mt-1 block text-base font-normal text-muted lg:text-[22px]">
-                {card.nameEn}
-              </span>
+              {displayName}
+              {!english ? <span className="mt-1 block text-base font-normal text-muted lg:text-[22px]">{card.nameEn}</span> : null}
             </h1>
             <div className="space-y-3 font-serif text-[15px] text-body lg:max-w-[560px] lg:text-base">
               {paragraphs.map((paragraph) => (
                 <p key={paragraph.slice(0, 24)}>{paragraph}</p>
               ))}
             </div>
-            <details className="mt-3.5 lg:mt-5">
+            {!english ? <details className="mt-3.5 lg:mt-5">
               <summary className="inline-block min-h-11 cursor-pointer pt-2.5 text-[13.5px] text-muted underline underline-offset-4 hover:text-cream">
                 영어 원문 보기
               </summary>
@@ -185,22 +196,21 @@ export default async function CardDetailPage({
                   <p key={paragraph.slice(0, 24)}>{paragraph}</p>
                 ))}
               </div>
-            </details>
+            </details> : null}
             {reversed ? (
               <section className="mt-7 border-t border-line pt-6 lg:mt-9 lg:pt-7">
                 <h2 className="font-display text-[19px] font-semibold text-gold-soft lg:text-[22px]">
-                  역방향으로 나왔다면
+                  {english ? "If it appears reversed" : "역방향으로 나왔다면"}
                 </h2>
                 <p className="mt-1 text-[12.5px] text-muted lg:text-[13px]">
-                  역방향은 정방향의 반대가 아니라, 같은 힘이 지연되거나 안으로
-                  향하거나 과한 상태입니다.
+                  {english ? "A reversed card is not simply the opposite. It can show the same energy delayed, turned inward, or overextended." : "역방향은 정방향의 반대가 아니라, 같은 힘이 지연되거나 안으로 향하거나 과한 상태입니다."}
                 </p>
                 <div className="mt-3 space-y-3 font-serif text-[15px] text-body lg:max-w-[560px] lg:text-base">
                   {reversedParagraphs.map((paragraph) => (
                     <p key={paragraph.slice(0, 24)}>{paragraph}</p>
                   ))}
                 </div>
-                <details className="mt-3.5 lg:mt-5">
+                {!english ? <details className="mt-3.5 lg:mt-5">
                   <summary className="inline-block min-h-11 cursor-pointer pt-2.5 text-[13.5px] text-muted underline underline-offset-4 hover:text-cream">
                     영어 원문 보기
                   </summary>
@@ -209,11 +219,11 @@ export default async function CardDetailPage({
                       <p key={paragraph.slice(0, 24)}>{paragraph}</p>
                     ))}
                   </div>
-                </details>
+                </details> : null}
               </section>
             ) : null}
             <nav
-              aria-label="같은 무리의 다른 카드"
+              aria-label={english ? "Other cards in this group" : "같은 무리의 다른 카드"}
               className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5 lg:mt-9 lg:pt-6"
             >
               {neighbors.prev ? (
@@ -222,7 +232,7 @@ export default async function CardDetailPage({
                   className="inline-flex min-h-11 items-center gap-1.5 text-[13.5px] text-muted hover:text-gold-soft lg:text-[14.5px]"
                 >
                   <CaretLeft size={15} aria-hidden />
-                  {cardIndexLabel(neighbors.prev).ko}
+                  {english ? neighbors.prev.nameEn : cardIndexLabel(neighbors.prev).ko}
                 </Link>
               ) : (
                 <span />
@@ -231,14 +241,14 @@ export default async function CardDetailPage({
                 href="/card-meanings"
                 className="inline-flex min-h-11 items-center text-[13.5px] text-muted underline underline-offset-4 hover:text-cream lg:text-[14.5px]"
               >
-                78장 전체 보기
+                {english ? "View all 78 cards" : "78장 전체 보기"}
               </Link>
               {neighbors.next ? (
                 <Link
                   href={`/collection/classic/${neighbors.next.slug}`}
                   className="inline-flex min-h-11 items-center gap-1.5 text-[13.5px] text-muted hover:text-gold-soft lg:text-[14.5px]"
                 >
-                  {cardIndexLabel(neighbors.next).ko}
+                  {english ? neighbors.next.nameEn : cardIndexLabel(neighbors.next).ko}
                   <CaretRight size={15} aria-hidden />
                 </Link>
               ) : (

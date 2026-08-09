@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/locale";
+
 export type DeckDetailCtaState =
   | "guest"
   | "member-unowned"
@@ -13,7 +15,13 @@ export function deckDetailCtaState(
 }
 
 /** 이미 기본 덱이면 같은 설정을 반복한다고 안내하지 않는다. */
-export function deckReadingCtaLabel(isDefault: boolean): string {
+export function deckReadingCtaLabel(
+  isDefault: boolean,
+  locale: Locale = "ko",
+): string {
+  if (locale === "en") {
+    return isDefault ? "Start a reading" : "Set as default and start a reading";
+  }
   return isDefault
     ? "지금 리딩받기"
     : "기본 덱 설정하고 리딩받기";

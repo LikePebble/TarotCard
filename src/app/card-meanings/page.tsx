@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { DesktopNav } from "@/components/SiteNav";
 import { cards } from "@/data/cards";
 import { cardGroups, cardIndexLabel } from "@/lib/card-index";
+import { localeFromHeaders } from "@/lib/locale";
 
 /*
  * 카드 의미 색인.
@@ -24,21 +26,29 @@ const TITLE = "타로 카드 78장 의미 — 정방향·역방향 해석 | 아�
 const DESCRIPTION =
   "타로 카드 78장의 한국어 해석을 카드별로 정리했습니다. 메이저 아르카나 22장과 완드·컵·소드·펜타클 각 14장의 정방향·역방향 의미를 카드 이름으로 찾아보세요.";
 
-export const metadata: Metadata = {
-  title: { absolute: TITLE },
-  description: DESCRIPTION,
+export async function generateMetadata(): Promise<Metadata> {
+  const english = localeFromHeaders(await headers()) === "en";
+  const title = english ? "Tarot Card Meanings: All 78 Cards | Arca Tarot" : TITLE;
+  const description = english
+    ? "Explore upright and reversed meanings for all 78 tarot cards, from the Major Arcana to Wands, Cups, Swords, and Pentacles."
+    : DESCRIPTION;
+  return {
+  title: { absolute: title },
+  description,
   alternates: { canonical: `${SITE_URL}/card-meanings` },
   openGraph: {
     type: "website",
-    siteName: "아르카 타로",
-    title: TITLE,
-    description: DESCRIPTION,
+    siteName: english ? "Arca Tarot" : "아르카 타로",
+    title,
+    description,
     url: `${SITE_URL}/card-meanings`,
   },
-  twitter: { card: "summary", title: TITLE, description: DESCRIPTION },
-};
+  twitter: { card: "summary", title, description },
+  };
+}
 
-export default function CardsIndexPage() {
+export default async function CardsIndexPage() {
+  const english = localeFromHeaders(await headers()) === "en";
   const groups = cardGroups();
 
   return (
@@ -46,24 +56,22 @@ export default function CardsIndexPage() {
       <DesktopNav active="collection" />
       <main className="mx-auto w-full max-w-[1180px] flex-1 px-6 pb-16 pt-6 lg:px-[72px] lg:pb-[88px] lg:pt-14">
         <h1 className="font-display text-[28px] font-semibold lg:text-[40px]">
-          타로 카드 78장의 의미
+          {english ? "Meanings of all 78 tarot cards" : "타로 카드 78장의 의미"}
         </h1>
         <p className="mt-2.5 max-w-[64ch] font-serif text-[15px] leading-[1.85] text-body lg:text-base">
-          카드 이름을 누르면 그 카드의 한국어 해석을 볼 수 있습니다. 정방향과
-          역방향을 함께 담았고, 해석은 A.E. Waite의 『The Pictorial Key to the
-          Tarot』(1911)와 S.L. Mathers의 『The Tarot』(1888)에서 뜻만 가져와 새로
-          썼습니다. 겁주는 예언 대신, 지금 무엇을 살펴보면 좋을지를 말하는 쪽으로
-          쓰였습니다.
+          {english
+            ? "Select a card to explore its upright and reversed meanings. The interpretations are freshly written from the meanings in A.E. Waite's The Pictorial Key to the Tarot (1911) and S.L. Mathers's The Tarot (1888), with reflection rather than fearful prediction at their center."
+            : "카드 이름을 누르면 그 카드의 한국어 해석을 볼 수 있습니다. 정방향과 역방향을 함께 담았고, 해석은 A.E. Waite의 『The Pictorial Key to the Tarot』(1911)와 S.L. Mathers의 『The Tarot』(1888)에서 뜻만 가져와 새로 썼습니다. 겁주는 예언 대신, 지금 무엇을 살펴보면 좋을지를 말하는 쪽으로 쓰였습니다."}
         </p>
 
-        <nav aria-label="카드 무리 바로가기" className="mt-6 flex flex-wrap gap-2">
+        <nav aria-label={english ? "Jump to a card group" : "카드 무리 바로가기"} className="mt-6 flex flex-wrap gap-2">
           {groups.map((group) => (
             <a
               key={group.id}
               href={`#${group.id}`}
               className="rounded-full border border-line px-3.5 py-1.5 text-[13px] text-muted transition-colors hover:border-line-gold hover:text-cream lg:text-[14px]"
             >
-              {group.title.replace(/\s*\(.*\)$/, "")}
+              {english ? group.title.replace(/^.*\((.*)\)$/, "$1") : group.title.replace(/\s*\(.*\)$/, "")}
               <span className="ml-1.5 text-[11.5px] text-muted">
                 {group.cards.length}
               </span>
@@ -74,10 +82,10 @@ export default function CardsIndexPage() {
         {groups.map((group) => (
           <section key={group.id} id={group.id} className="mt-10 scroll-mt-6 lg:mt-14">
             <h2 className="font-display text-[20px] font-semibold text-gold-soft lg:text-[24px]">
-              {group.title}
+              {english ? group.title.replace(/^.*\((.*)\)$/, "$1") : group.title}
             </h2>
             <p className="mt-1.5 max-w-[62ch] text-[13.5px] leading-[1.8] text-muted lg:text-[14.5px]">
-              {group.blurb}
+              {english ? "Explore the cards in this group and their traditional symbolic meanings." : group.blurb}
             </p>
             <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-3 lg:grid-cols-4">
               {group.cards.map((card) => {
@@ -92,10 +100,8 @@ export default function CardsIndexPage() {
                         {label.ordinal}
                       </span>
                       <span>
-                        {label.ko}
-                        <span className="ml-1.5 text-[12px] text-muted lg:text-[13px]">
-                          {label.en}
-                        </span>
+                        {english ? label.en : label.ko}
+                        {!english ? <span className="ml-1.5 text-[12px] text-muted lg:text-[13px]">{label.en}</span> : null}
                       </span>
                     </Link>
                   </li>
@@ -106,15 +112,15 @@ export default function CardsIndexPage() {
         ))}
 
         <p className="mt-14 border-t border-line pt-6 text-[13.5px] text-muted lg:text-[14px]">
-          카드를 직접 뽑아 보고 싶으시면{" "}
+          {english ? "To draw a card yourself, start a " : "카드를 직접 뽑아 보고 싶으시면 "}
           <Link href="/reading" className="text-gold-soft underline underline-offset-4">
-            오늘의 리딩
+            {english ? "daily reading" : "오늘의 리딩"}
           </Link>
-          에서 시작하실 수 있습니다. 만난 카드는{" "}
+          {english ? ". Cards you meet are collected in your " : "에서 시작하실 수 있습니다. 만난 카드는 "}
           <Link href="/collection" className="text-gold-soft underline underline-offset-4">
-            컬렉션
+            {english ? "collection" : "컬렉션"}
           </Link>
-          에 차곡차곡 모입니다.
+          {english ? "." : "에 차곡차곡 모입니다."}
         </p>
 
         {/*
@@ -127,14 +133,14 @@ export default function CardsIndexPage() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "ItemList",
-              name: "타로 카드 78장의 의미",
+              name: english ? "Meanings of all 78 tarot cards" : "타로 카드 78장의 의미",
               numberOfItems: cards.length,
               itemListElement: groups
                 .flatMap((g) => g.cards)
                 .map((card, i) => ({
                   "@type": "ListItem",
                   position: i + 1,
-                  name: cardIndexLabel(card).ko,
+                  name: english ? card.nameEn : cardIndexLabel(card).ko,
                   url: `${SITE_URL}/collection/classic/${card.slug}`,
                 })),
             }),

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { cards } from "../cards";
-import { cardLore, loreBySlug } from "./index";
+import { cardLore, loreBySlug, loreEnBySlug } from "./index";
 import { loreCups } from "./cups";
 import { loreMajor } from "./major";
 import { lorePentacles } from "./pentacles";
@@ -10,6 +10,24 @@ import { loreWands } from "./wands";
 describe("cardLore", () => {
   it("lore가 없는 slug에 null을 돌려준다", () => {
     expect(cardLore("no-such-card")).toBeNull();
+  });
+
+  it("영문 요청은 영문 로어 뷰를 돌려준다", () => {
+    const view = cardLore("the-fool", "en");
+    expect(view?.story).toContain("Fool");
+    expect(view?.symbols[0]?.name).toBe("Step at the edge");
+    expect(view?.correspondence).toEqual([
+      { label: "Astrology", value: "Uranus · Air" },
+    ]);
+  });
+
+  it("영문 마이너 요청은 영문 원소·수비학·점성술 대응을 돌려준다", () => {
+    const view = cardLore("two-of-pentacles", "en");
+    expect(view?.correspondence).toEqual([
+      { label: "Element", value: "Earth" },
+      { label: "Number", value: "Balance · Choice" },
+      { label: "Astrology", value: "Jupiter · Capricorn" },
+    ]);
   });
 });
 // 규칙 매핑(원소·수비학·데칸 행 조립)의 실질 검증은 데이터가 생기는
@@ -125,6 +143,37 @@ describe("lore 형식", () => {
     );
     for (const card of noAstrology) {
       expect(loreBySlug[card.slug]?.astrology, `${card.slug} astrology 금지`).toBeUndefined();
+    }
+  });
+});
+
+describe("영문 lore", () => {
+  it("78장 전수의 카드별 영문 lore가 존재한다", () => {
+    expect(Object.keys(loreEnBySlug)).toHaveLength(78);
+    for (const card of cards) {
+      expect(loreEnBySlug[card.slug], `${card.slug} 영문 누락`).toBeDefined();
+    }
+  });
+
+  it("모든 영문 lore가 형식을 지키고 한국어를 포함하지 않는다", () => {
+    for (const [slug, lore] of Object.entries(loreEnBySlug)) {
+      expect(lore.symbols.length, `${slug} symbols 수`).toBeGreaterThanOrEqual(3);
+      expect(lore.symbols.length, `${slug} symbols 수`).toBeLessThanOrEqual(5);
+      for (const symbol of lore.symbols) {
+        expect(symbol.name.trim(), `${slug} symbol name`).not.toBe("");
+        expect(symbol.meaning.trim(), `${slug} symbol meaning`).not.toBe("");
+      }
+      const paragraphs = lore.story.split("\n\n");
+      expect(paragraphs.length, `${slug} story 문단 수`).toBeGreaterThanOrEqual(1);
+      expect(paragraphs.length, `${slug} story 문단 수`).toBeLessThanOrEqual(2);
+      expect(/[가-힣]/.test(JSON.stringify(lore)), `${slug} 한국어 혼입`).toBe(false);
+      expect(cards.some((card) => card.slug === slug), `${slug}는 실제 카드`).toBe(true);
+    }
+  });
+
+  it("한국어 정본 문장을 영문 lore로 재사용하지 않는다", () => {
+    for (const card of cards) {
+      expect(loreEnBySlug[card.slug]?.story).not.toBe(loreBySlug[card.slug]?.story);
     }
   });
 });

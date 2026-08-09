@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Cards, MoonStars, User } from "@phosphor-icons/react";
+import { useLocale } from "@/components/LocaleProvider";
 
 export function TabBar() {
   const pathname = usePathname();
+  const english = useLocale() === "en";
   // 약관·방침은 MY에서 들어가는 문서다. DesktopNav도 MY를 활성으로 표시한다.
   const legalActive =
     pathname.startsWith("/terms") || pathname.startsWith("/privacy");
@@ -16,7 +18,7 @@ export function TabBar() {
     "flex flex-1 flex-col items-center justify-center gap-[3px] text-[11px]";
   return (
     <nav
-      aria-label="하단 탭"
+      aria-label={english ? "Primary navigation" : "하단 탭"}
       className="flex h-[76px] flex-none border-t border-line bg-ink-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden"
     >
       <Link
@@ -24,14 +26,14 @@ export function TabBar() {
         className={`${item} ${readingActive ? "text-gold-soft" : "text-muted"}`}
       >
         <MoonStars size={22} aria-hidden />
-        리딩
+        {english ? "Reading" : "리딩"}
       </Link>
       <Link
         href="/collection"
         className={`${item} ${collectionActive ? "text-gold-soft" : "text-muted"}`}
       >
         <Cards size={22} aria-hidden />
-        컬렉션
+        {english ? "Collection" : "컬렉션"}
       </Link>
       <Link
         href="/my"

@@ -4,6 +4,7 @@ import { Fragment, useRef, useState } from "react";
 import Link from "next/link";
 import { CaretRight } from "@phosphor-icons/react";
 import { CardArt } from "@/components/CardArt";
+import { useLocale } from "@/components/LocaleProvider";
 import { cardBySlug } from "@/data/cards";
 import { koCards } from "@/data/ko";
 import {
@@ -20,6 +21,8 @@ import type { ReadingRecord } from "@/lib/store";
  * 탭 위치까지 주소에 남길 이유가 없다.
  */
 export function DayReadingTabs({ readings }: { readings: ReadingRecord[] }) {
+  const locale = useLocale();
+  const english = locale === "en";
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -30,7 +33,7 @@ export function DayReadingTabs({ readings }: { readings: ReadingRecord[] }) {
 
   // 탭 하나짜리 탭바는 군더더기다 — 리딩이 2개 이상일 때만 탭을 둔다.
   const tabbed = ordered.readings.length > 1;
-  const labels = readingTabLabels(ordered.readings);
+  const labels = readingTabLabels(ordered.readings, locale);
   const panelId = "journal-reading-panel";
 
   const moveTab = (next: number) => {
@@ -60,7 +63,7 @@ export function DayReadingTabs({ readings }: { readings: ReadingRecord[] }) {
       {tabbed ? (
         <div
           role="tablist"
-          aria-label="이날의 리딩"
+          aria-label={english ? "Readings from this day" : "이날의 리딩"}
           onKeyDown={onKeyDown}
           className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0"
         >
@@ -125,11 +128,15 @@ export function DayReadingTabs({ readings }: { readings: ReadingRecord[] }) {
           </span>
           <span className="min-w-0 flex-1">
             <span className="block text-[12px] text-gold-soft lg:text-[13px]">
-              {readingTypeLabel(active.spread)}
+              {readingTypeLabel(active.spread, locale)}
             </span>
             <span className="mt-0.5 block truncate text-[13.5px] text-body lg:text-[15px]">
               {active.cards
-                .map((slug) => koCards[slug]?.nameKo ?? slug)
+                .map((slug) =>
+                  english
+                    ? cardBySlug.get(slug)?.nameEn ?? slug
+                    : koCards[slug]?.nameKo ?? slug,
+                )
                 .join(" · ")}
             </span>
           </span>

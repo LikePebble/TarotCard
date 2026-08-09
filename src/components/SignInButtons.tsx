@@ -6,6 +6,7 @@ import { CircleNotch } from "@phosphor-icons/react";
 import { signInWithProvider } from "@/lib/auth/session";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { GoogleIcon, KakaoIcon } from "@/components/icons/OAuthLogos";
+import { useLocale } from "@/components/LocaleProvider";
 
 interface SignInButtonsProps {
   /** 버튼 세로 정렬 여부 (기본: flex-col gap-3) */
@@ -20,6 +21,7 @@ interface SignInButtonsProps {
 export function SignInButtons({
   className = "flex w-full flex-col gap-3",
 }: SignInButtonsProps) {
+  const english = useLocale() === "en";
   const [loadingProvider, setLoadingProvider] = useState<
     "kakao" | "google" | null
   >(null);
@@ -28,7 +30,9 @@ export function SignInButtons({
   const handleSignIn = async (provider: "kakao" | "google") => {
     if (!isSupabaseConfigured) {
       setNotice(
-        "현재 Supabase 환경 변수가 설정되지 않아 데모 모드로 동작 중입니다. .env.local 파일에 NEXT_PUBLIC_SUPABASE_URL과 NEXT_PUBLIC_SUPABASE_ANON_KEY를 추가하면 실제 소셜 로그인이 진행됩니다.",
+        english
+          ? "Supabase environment variables are not configured, so this page is running in demo mode. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local to enable social sign-in."
+          : "현재 Supabase 환경 변수가 설정되지 않아 데모 모드로 동작 중입니다. .env.local 파일에 NEXT_PUBLIC_SUPABASE_URL과 NEXT_PUBLIC_SUPABASE_ANON_KEY를 추가하면 실제 소셜 로그인이 진행됩니다.",
       );
       return;
     }
@@ -40,7 +44,7 @@ export function SignInButtons({
       await signInWithProvider(provider, next);
     } catch (err) {
       console.error(`${provider} 로그인 오류:`, err);
-      setNotice("로그인 요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      setNotice(english ? "Something went wrong while starting sign-in. Please try again." : "로그인 요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
       setLoadingProvider(null);
     }
   };
@@ -60,14 +64,14 @@ export function SignInButtons({
           onClick={() => void handleSignIn("kakao")}
           disabled={loadingProvider !== null}
           className="relative flex h-[52px] w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-[#FEE500] px-5 font-sans text-[15px] font-semibold text-[#191919] shadow-sm transition-all duration-200 hover:bg-[#fada0a] hover:shadow-md active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60"
-          aria-label="카카오계정으로 로그인"
+          aria-label={english ? "Continue with Kakao" : "카카오계정으로 로그인"}
         >
           {loadingProvider === "kakao" ? (
             <CircleNotch size={20} className="animate-spin text-[#191919]" />
           ) : (
             <KakaoIcon className="text-[#191919] flex-shrink-0" />
           )}
-          <span>카카오로 시작하기</span>
+          <span>{english ? "Continue with Kakao" : "카카오로 시작하기"}</span>
         </button>
 
         {/* 구글 로그인 버튼 (공식 Branding Guidelines 준수) */}
@@ -76,14 +80,14 @@ export function SignInButtons({
           onClick={() => void handleSignIn("google")}
           disabled={loadingProvider !== null}
           className="relative flex h-[52px] w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-[#DADCE0] bg-white px-5 font-sans text-[15px] font-medium text-[#1F1F1F] shadow-sm transition-all duration-200 hover:border-[#D2D5D9] hover:bg-[#F8F9FA] hover:shadow-md active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60"
-          aria-label="Google 계정으로 로그인"
+          aria-label={english ? "Continue with Google" : "Google 계정으로 로그인"}
         >
           {loadingProvider === "google" ? (
             <CircleNotch size={20} className="animate-spin text-[#1F1F1F]" />
           ) : (
             <GoogleIcon className="flex-shrink-0" />
           )}
-          <span>Google로 시작하기</span>
+          <span>{english ? "Continue with Google" : "Google로 시작하기"}</span>
         </button>
       </div>
 
@@ -97,21 +101,21 @@ export function SignInButtons({
           범위이므로 제15조 제1항 제4호로 별도 동의 없이 처리한다. 결제나 맞춤형
           광고를 도입하면 그 목적은 계약 이행이 아니므로 별도 동의가 필요해진다. */}
       <p className="px-1 text-center text-[12px] leading-relaxed text-muted">
-        계속하면{" "}
+        {english ? "By continuing, you agree to the " : "계속하면 "}
         <Link
           href="/terms"
           className="text-gold-soft underline underline-offset-2 hover:text-cream"
         >
-          이용약관
+          {english ? "Terms of Service" : "이용약관"}
         </Link>
-        에 동의하는 것으로 봅니다. 개인정보 처리에 관한 사항은{" "}
+        {english ? ". Information about personal-data handling is available in the " : "에 동의하는 것으로 봅니다. 개인정보 처리에 관한 사항은 "}
         <Link
           href="/privacy"
           className="text-gold-soft underline underline-offset-2 hover:text-cream"
         >
-          개인정보처리방침
+          {english ? "Privacy Policy" : "개인정보처리방침"}
         </Link>
-        에서 확인할 수 있습니다.
+        {english ? "." : "에서 확인할 수 있습니다."}
       </p>
     </div>
   );

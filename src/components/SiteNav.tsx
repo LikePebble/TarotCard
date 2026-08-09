@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useLocale } from "@/components/LocaleProvider";
 
 /** Desktop-only top navigation (lg and up). */
 export function DesktopNav({
@@ -7,19 +10,21 @@ export function DesktopNav({
 }: {
   active: "reading" | "collection" | "my";
 }) {
+  const locale = useLocale();
+  const english = locale === "en";
   return (
     <nav
-      aria-label="주요 메뉴"
+      aria-label={english ? "Main navigation" : "주요 메뉴"}
       className="hidden h-[68px] flex-none items-center justify-between border-b border-line px-12 lg:flex"
     >
       <Link
         href="/"
-        aria-label="아르카 홈"
+        aria-label={english ? "Arca home" : "아르카 홈"}
         className="inline-flex min-h-11 items-center"
       >
         <Image
           src="/brand/arca-logo.webp"
-          alt="아르카 타로"
+          alt={english ? "Arca Tarot" : "아르카 타로"}
           width={160}
           height={54}
           className="h-auto w-[148px]"
@@ -33,7 +38,7 @@ export function DesktopNav({
             active === "reading" ? "text-cream" : "text-muted hover:text-cream"
           }
         >
-          리딩
+          {english ? "Reading" : "리딩"}
         </Link>
         <Link
           href="/collection"
@@ -43,7 +48,7 @@ export function DesktopNav({
               : "text-muted hover:text-cream"
           }
         >
-          컬렉션
+          {english ? "Collection" : "컬렉션"}
         </Link>
         <Link
           href="/my"
@@ -60,16 +65,18 @@ export function DesktopNav({
 
 /** Mobile-only top bar with the wordmark. */
 export function MobileTopBar() {
+  const locale = useLocale();
+  const english = locale === "en";
   return (
     <header className="flex h-14 flex-none items-center px-5 lg:hidden">
       <Link
         href="/"
-        aria-label="아르카 홈"
+        aria-label={english ? "Arca home" : "아르카 홈"}
         className="inline-flex min-h-11 items-center"
       >
         <Image
           src="/brand/arca-logo.webp"
-          alt="아르카 타로"
+          alt={english ? "Arca Tarot" : "아르카 타로"}
           width={128}
           height={43}
           className="h-auto w-[124px]"
