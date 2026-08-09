@@ -226,3 +226,24 @@ UI 컴포넌트 32개는 손봤지만 **그 컴포넌트들이 호출하는 lib 
 - `./node_modules/.bin/tsc --noEmit`, `./node_modules/.bin/vitest run` 및
   `git diff --check` 재실행 결과 통과: 56개 파일, 572개 테스트. `local-events`
   테스트의 `boom` stderr는 오류 격리 동작을 검증하는 기존 기대 출력이다.
+
+## Vercel Preview 실검증 (2026-08-09)
+
+대상 배포: `codex/ip-locale-preview`의
+`https://arcatarot-29ppaqkyl-like-pebble.vercel.app/`
+(`6e8daad`, Vercel deployment `EdVwyuEYLabVtqiiepcU9TaXsK2N`).
+
+| 요청 경로 | 관측 결과 | 판정 |
+| --- | --- | --- |
+| 한국 리전 직접 요청 | `<html lang="ko">`, 한국어 title/description, `og:locale=ko_KR` | 통과 |
+| 비한국 외부 프록시 요청 | `Arca Tarot — One card a day, 78 cards for reflection`, 영문 내비게이션·CTA | 통과 |
+| 국가 미확인 | `src/lib/locale.test.ts`의 `defaults an unknown country to English` 포함 3/3 통과 | 통과 |
+
+Vercel은 클라이언트가 임의로 보낸 `x-vercel-ip-country` 헤더를 신뢰하지 않고
+접속 리전 값으로 다시 설정한다. 따라서 KR/US를 같은 `curl` 실행에서 위조해
+검증하는 방식은 유효하지 않았다. 한국 요청은 실제 Preview 직접 응답으로, 비한국
+요청은 외부 프록시가 Preview를 가져온 실제 응답으로 확인했다.
+
+검증 중 Preview의 Vercel Authentication을 잠시 해제했고, 완료 직후 다시
+활성화했다. 원복 후 비인증 `HEAD` 요청은 `302`와 `vercel.com/sso-api` 위치를
+반환해 보호가 재적용됐음을 확인했다.
