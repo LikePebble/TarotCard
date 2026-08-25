@@ -346,10 +346,10 @@ export function ReadingChoice() {
         locked={!blockedThree && retainedThree}
         aria={
           blockedThree
-            ? (english ? "View past, present, and future result" : "과거 현재 미래 결과 보기")
+            ? (english ? "View this week's past, present, and future result" : "이번 주 과거 현재 미래 결과 보기")
             : retainedThree
               ? (english ? "Past, present, and future already received this week" : "과거 현재 미래, 이번 주는 이미 받았습니다")
-              : (english ? "Past, present, and future" : "과거 현재 미래")
+              : (english ? "This week's past, present, and future" : "이번 주 과거 현재 미래")
         }
         onStart={() => choose("three")}
         deckId={deckId}
