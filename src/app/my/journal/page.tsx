@@ -44,7 +44,7 @@ function readingSummary(r: ReadingRecord, locale: Locale): string {
         : koCards[slug]?.nameKo ?? cardBySlug.get(slug)?.nameEn ?? slug,
     )
     .join(" · ");
-  return `${type} — ${names}`;
+  return `${type}: ${names}`;
 }
 
 export default function JournalPage() {

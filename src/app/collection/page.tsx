@@ -79,7 +79,7 @@ export default function CollectionPage() {
           {english ? "Collection" : "컬렉션"}
         </h1>
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
-          {english ? "Choose your deck and collect all 78 tarot cards." : "나만의 덱을 설정하고 78장의 타로카드를 수집해 보세요."}
+          {english ? "Choose your deck and collect all 78 tarot cards." : "마음에 드는 덱을 고르고, 만난 카드 78장을 컬렉션에 모아 보세요."}
         </p>
         {/*
           카드 의미 색인으로 가는 길. 도감은 아직 만나지 않은 카드를 링크하지

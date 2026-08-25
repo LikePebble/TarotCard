@@ -155,13 +155,13 @@ describe("ticketStateOf", () => {
 describe("ticketNoticeOf", () => {
   it("남은 횟수를 알린다", () => {
     expect(ticketNoticeOf({ total: 2, used: 1, remaining: 1 })).toBe(
-      "오늘 1번 더 받으실 수 있습니다",
+      "오늘 1번 더 받을 수 있습니다",
     );
   });
 
   it("0이면 모두 받으셨다고 알린다", () => {
     expect(ticketNoticeOf({ total: 2, used: 2, remaining: 0 })).toBe(
-      "오늘 받으실 수 있는 타로는 모두 받으셨습니다",
+      "오늘 받을 수 있는 타로는 모두 받았습니다",
     );
   });
 
@@ -202,7 +202,7 @@ describe("ticketNoticeLinesOf", () => {
   it("소진이면 마침표로 끊고 회복 안내를 다음 줄에 둔다", () => {
     const lines = ticketNoticeLinesOf({ total: 2, used: 2, remaining: 0 }).split("\n");
     expect(lines).toHaveLength(2);
-    expect(lines[0]).toBe("오늘 받으실 수 있는 타로는 모두 받으셨습니다.");
+    expect(lines[0]).toBe("오늘 받을 수 있는 타로는 모두 받았습니다.");
     expect(lines[1]).toBe(TICKET_RESET_NOTE);
   });
 

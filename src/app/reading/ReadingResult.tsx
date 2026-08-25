@@ -26,7 +26,7 @@ const POSITION_KEYS = ["past", "present", "future"] as const;
 // 카드별 역방향 해석문이 없을 때의 최후 폴백. 78장 모두 reversed.ts에 있으므로
 // 평소에는 쓰이지 않는다 — 새 카드가 추가됐는데 해석문이 아직 없을 때를 위한 그물.
 const REVERSED_FALLBACK =
-  "역방향으로 나온 카드는 본래 의미의 기운이 약해지거나 안으로 향해 있음을 뜻합니다. 위 해석을 바탕으로, 그 흐름이 지연되거나 억눌린 상태라는 관점에서 읽어 보세요.";
+  "역방향은 본래 의미가 약해지거나 안으로 향하고, 때로 지나치게 드러난 상태로 읽습니다. 위 해석에서 어느 흐름이 늦어지거나 눌려 있는지 살펴볼 수 있습니다.";
 
 /** 역방향 해석문 문단들. 정방향 해석과 같이 빈 줄로 나뉜다. */
 function reversedParagraphs(card: Card, locale: Locale): string[] {
@@ -495,13 +495,13 @@ export function ThreeCardResult({
                   />
                 ) : null}
                 <CanonicalDetails
-                  label={english ? "View the card's reversed meaning" : "카드 자체의 의미 보기"}
+                  label={english ? "View the card's reversed meaning" : "카드의 기본 의미 보기"}
                   paragraphs={reversedParagraphs(selected, locale)}
                 />
-                <UprightDetails locale={locale}>{uprightContent(english ? "The card's upright meaning" : "정방향 카드 자체의 의미")}</UprightDetails>
+                <UprightDetails locale={locale}>{uprightContent(english ? "The card's upright meaning" : "정방향 기본 의미")}</UprightDetails>
               </>
             ) : (
-              uprightContent(english ? "View the card's meaning" : "카드 자체의 의미 보기")
+              uprightContent(english ? "View the card's meaning" : "카드의 기본 의미 보기")
             )}
           </div>
         </motion.div>

@@ -127,7 +127,7 @@ export function AccountCard() {
             </span>
             <span className="text-[13px] text-muted lg:text-[14px]">
               {configured
-                ? (english ? "Sign in to keep your records safely across devices." : "로그인하고 기록을 기기 간에 안전하게 보관하세요.")
+                ? (english ? "Sign in to keep your records safely across devices." : "로그인하면 다른 기기에서도 기록을 이어서 볼 수 있습니다.")
                 : (english ? "You can check the sign-in configuration here." : "로그인 설정 상태를 확인할 수 있습니다.")}
             </span>
           </span>

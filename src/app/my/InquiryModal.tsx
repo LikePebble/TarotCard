@@ -148,7 +148,7 @@ export function InquiryModal({ onClose }: { onClose: () => void }) {
                       : "남겨 주신 연락처로 답변드리겠습니다."
                     : english
                       ? "Your feedback has been received."
-                      : "남겨 주신 의견이 정상적으로 접수되었습니다."}
+                      : "남겨 주신 의견을 접수했습니다."}
               </p>
               <button type="button" onClick={onClose} className="btn btn-gold mt-6 min-h-11 px-7">
                 {english ? "Done" : "확인"}
@@ -159,7 +159,7 @@ export function InquiryModal({ onClose }: { onClose: () => void }) {
               <p id="inquiry-modal-description" className="text-[13.5px] leading-relaxed text-muted">
                 {english
                   ? "Share your ideas for improving Arca or ask us about the service."
-                  : "더 나은 아르카를 위한 의견과 이용 중 궁금한 점을 남겨 주세요."}
+                  : "아르카를 쓰며 불편했거나 궁금했던 점을 남겨 주세요."}
               </p>
 
               <label htmlFor="inquiry-category" className="mt-5 block text-[13px] font-semibold text-body">

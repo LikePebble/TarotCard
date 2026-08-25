@@ -33,7 +33,7 @@ export const TICKET_RESET_NOTE_EN = "It will open again after midnight";
  * 비로그인 사용자에게 보여 주는 로그인 유도 문구.
  * 횟수는 상수에서 파생한다 — 지급량이 바뀌어도 문구가 거짓말을 하지 않게.
  */
-export const TICKET_BONUS_HINT = `로그인하시면 매일 ${SIGNED_IN_BONUS}번 더 받으실 수 있습니다`;
+export const TICKET_BONUS_HINT = `로그인하면 매일 ${SIGNED_IN_BONUS}번 더 받을 수 있습니다`;
 export const TICKET_BONUS_HINT_EN = `Sign in to receive ${SIGNED_IN_BONUS} more reading each day`;
 
 export function ticketBonusHint(locale: Locale = "ko"): string {
@@ -93,8 +93,8 @@ export function ticketNoticeOf(
       : "You have received all of today's available tarot readings";
   }
   return state.remaining > 0
-    ? `오늘 ${state.remaining}번 더 받으실 수 있습니다`
-    : "오늘 받으실 수 있는 타로는 모두 받으셨습니다";
+    ? `오늘 ${state.remaining}번 더 받을 수 있습니다`
+    : "오늘 받을 수 있는 타로는 모두 받았습니다";
 }
 
 /**

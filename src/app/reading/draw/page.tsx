@@ -641,7 +641,7 @@ export default function DrawPage() {
               {phase === "shuffling"
                 ? english ? "Tap the screen to reveal now" : "화면을 누르면 바로 펼칩니다"
                 : spread === "three"
-                  ? english ? "Your chosen card will move into its slot" : "고른 카드는 슬롯으로 이동합니다"
+                  ? english ? "Your chosen card will move into its slot" : "고른 카드가 자리에 놓입니다"
                   : english ? "Tap a card to turn it over" : "카드를 눌러 뒤집습니다"}
             </p>
           </main>

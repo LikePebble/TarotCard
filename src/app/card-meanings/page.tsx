@@ -22,9 +22,9 @@ import { localeFromHeaders } from "@/lib/locale";
  */
 
 const SITE_URL = "https://arca.realm.ai.kr";
-const TITLE = "타로 카드 78장 의미 — 정방향·역방향 해석 | 아르카";
+const TITLE = "타로 카드 78장 의미 | 정방향·역방향 해석 | 아르카";
 const DESCRIPTION =
-  "타로 카드 78장의 한국어 해석을 카드별로 정리했습니다. 메이저 아르카나 22장과 완드·컵·소드·펜타클 각 14장의 정방향·역방향 의미를 카드 이름으로 찾아보세요.";
+  "타로 카드 78장의 한국어 해석을 카드별로 정리했습니다. 메이저 아르카나 22장과 완드·컵·소드·펜타클 각 14장의 정방향·역방향 의미를 카드 이름으로 찾을 수 있습니다.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const english = localeFromHeaders(await headers()) === "en";
@@ -61,7 +61,7 @@ export default async function CardsIndexPage() {
         <p className="mt-2.5 max-w-[64ch] font-serif text-[15px] leading-[1.85] text-body lg:text-base">
           {english
             ? "Select a card to explore its upright and reversed meanings. The interpretations are freshly written from the meanings in A.E. Waite's The Pictorial Key to the Tarot (1911) and S.L. Mathers's The Tarot (1888), with reflection rather than fearful prediction at their center."
-            : "카드 이름을 누르면 그 카드의 한국어 해석을 볼 수 있습니다. 정방향과 역방향을 함께 담았고, 해석은 A.E. Waite의 『The Pictorial Key to the Tarot』(1911)와 S.L. Mathers의 『The Tarot』(1888)에서 뜻만 가져와 새로 썼습니다. 겁주는 예언 대신, 지금 무엇을 살펴보면 좋을지를 말하는 쪽으로 쓰였습니다."}
+            : "카드 이름을 누르면 그 카드의 한국어 해석을 볼 수 있습니다. 정방향과 역방향을 함께 담았고, 해석은 A.E. Waite의 『The Pictorial Key to the Tarot』(1911)와 S.L. Mathers의 『The Tarot』(1888)에서 뜻만 가져와 새로 썼습니다. 겁주는 예언 대신 현재 상황과 선택을 돌아보는 말로 풀었습니다."}
         </p>
 
         <nav aria-label={english ? "Jump to a card group" : "카드 무리 바로가기"} className="mt-6 flex flex-wrap gap-2">
@@ -112,11 +112,11 @@ export default async function CardsIndexPage() {
         ))}
 
         <p className="mt-14 border-t border-line pt-6 text-[13.5px] text-muted lg:text-[14px]">
-          {english ? "To draw a card yourself, start a " : "카드를 직접 뽑아 보고 싶으시면 "}
+          {english ? "To draw a card yourself, start a " : "카드를 직접 뽑고 싶다면 "}
           <Link href="/reading" className="text-gold-soft underline underline-offset-4">
             {english ? "daily reading" : "오늘의 리딩"}
           </Link>
-          {english ? ". Cards you meet are collected in your " : "에서 시작하실 수 있습니다. 만난 카드는 "}
+          {english ? ". Cards you meet are collected in your " : "에서 시작할 수 있습니다. 만난 카드는 "}
           <Link href="/collection" className="text-gold-soft underline underline-offset-4">
             {english ? "collection" : "컬렉션"}
           </Link>

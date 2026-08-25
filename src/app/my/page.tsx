@@ -44,7 +44,7 @@ export default function MyPage() {
           MY
         </h1>
         <p className="mt-1 text-[13px] text-muted lg:text-[14px]">
-          {english ? "The cards you meet and the days you record gather here." : "당신이 만난 카드와 하루의 기록이 이곳에 쌓입니다."}
+          {english ? "The cards you meet and the days you record gather here." : "만난 카드와 하루의 기록이 이곳에 쌓입니다."}
         </p>
 
         <div className="mt-5 grid grid-cols-3 divide-x divide-line rounded-2xl border border-line bg-ink-1 lg:mt-8 lg:rounded-[16px]">

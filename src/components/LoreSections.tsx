@@ -28,7 +28,7 @@ export function LoreSections({ slug, deckId }: { slug: string; deckId: string })
         <ul className="space-y-3 pb-5">
           {lore.symbols.map((symbol) => (
             <li key={symbol.name} className="font-serif text-[14.5px] text-body">
-              <span className="text-cream">{symbol.name}</span> — {symbol.meaning}
+              <span className="text-cream">{symbol.name}</span>: {symbol.meaning}
             </li>
           ))}
         </ul>

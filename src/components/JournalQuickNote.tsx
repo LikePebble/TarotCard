@@ -65,10 +65,10 @@ export function JournalQuickNote({ localDate }: { localDate: string }) {
   return (
     <section className="mt-5 rounded-2xl border border-line bg-ink-1 p-5 lg:rounded-[14px]">
       <h2 className="font-display text-[15px] font-semibold lg:text-[16px]">
-        {english ? "Leave a line about what stays with you today" : "오늘 떠오른 것을 한 줄 남겨 보세요"}
+        {english ? "Leave a line about what stays with you today" : "오늘 마음에 남은 것을 한 줄 적어 보세요"}
       </h2>
       <p className="mt-1 text-[12.5px] text-muted lg:text-[13px]">
-        {english ? "When you meet this card again, you can return to what it meant to you today." : "나중에 이 카드를 다시 만났을 때, 오늘 무엇을 생각했는지 함께 보입니다."}
+        {english ? "When you meet this card again, you can return to what it meant to you today." : "나중에 이 카드를 다시 만나면, 오늘 적은 마음도 함께 돌아볼 수 있습니다."}
       </p>
       <textarea
         ref={areaRef}

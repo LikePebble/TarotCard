@@ -45,9 +45,9 @@ const chosun = localFont({
 });
 
 const SITE_NAME = "아르카 타로";
-const SITE_TITLE = "아르카 타로 — 하루 한 장, 나를 비추는 카드 78장";
+const SITE_TITLE = "아르카 타로: 하루 한 장, 나를 비추는 카드 78장";
 const SITE_DESCRIPTION =
-  "78장의 타로 카드를 정방향과 역방향으로, 사랑·일·나 자신·건강·금전 다섯 가지 주제에 맞추어 한국어로 풀어냅니다. 오늘의 카드를 무료로 뽑고, 조용히 나를 돌아보는 시간을 가져 보세요.";
+  "78장의 타로 카드를 정방향과 역방향으로, 사랑·일·나 자신·건강·금전 다섯 가지 주제에 맞추어 한국어로 풀어냅니다. 오늘의 카드를 무료로 뽑으며 조용히 나를 돌아볼 수 있습니다.";
 const EN_SITE_NAME = "Arca Tarot";
 const EN_SITE_TITLE = "Arca Tarot — One card a day, 78 cards for reflection";
 const EN_SITE_DESCRIPTION =
@@ -59,7 +59,7 @@ const SITE_OG_IMAGE = {
   url: "/brand/og-cover.jpg",
   width: 1200,
   height: 630,
-  alt: "아르카 타로 — 하루 한 장, 나를 비추는 카드",
+  alt: "아르카 타로: 하루 한 장, 나를 비추는 카드",
 };
 
 /**

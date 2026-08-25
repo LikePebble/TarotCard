@@ -203,7 +203,7 @@ export default async function CardDetailPage({
                   {english ? "If it appears reversed" : "역방향으로 나왔다면"}
                 </h2>
                 <p className="mt-1 text-[12.5px] text-muted lg:text-[13px]">
-                  {english ? "A reversed card is not simply the opposite. It can show the same energy delayed, turned inward, or overextended." : "역방향은 정방향의 반대가 아니라, 같은 힘이 지연되거나 안으로 향하거나 과한 상태입니다."}
+                  {english ? "A reversed card is not simply the opposite. It can show the same energy delayed, turned inward, or overextended." : "역방향은 정방향과 정반대라는 뜻이 아닙니다. 같은 힘이 늦어지거나 안으로 향하거나, 지나치게 드러난 상태로 읽습니다."}
                 </p>
                 <div className="mt-3 space-y-3 font-serif text-[15px] text-body lg:max-w-[560px] lg:text-base">
                   {reversedParagraphs.map((paragraph) => (

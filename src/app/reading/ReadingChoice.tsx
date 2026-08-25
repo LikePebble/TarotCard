@@ -295,7 +295,7 @@ export function ReadingChoice() {
         note={
           oneExhausted
             ? (english ? "You've already received today's reading · view it again" : "오늘의 흐름은 이미 받으셨습니다 · 다시 보기")
-            : (english ? "Draw one card to reflect on the current of your day." : "한 장의 카드를 뽑아 오늘 하루 흐름을 살펴 보세요.")
+            : (english ? "Draw one card to reflect on the current of your day." : "한 장을 뽑아 오늘의 흐름을 가만히 들여다봅니다.")
         }
         noteToned={oneExhausted}
         ticketNote={ticketsReady ? ticketNoticeLinesOf(tickets, locale) : null}
@@ -330,7 +330,7 @@ export function ReadingChoice() {
             ? (english ? "You've already received this week's reading · view it" : "이번 주의 운명은 이미 받으셨습니다 · 결과 보기")
             : retainedThree
               ? (english ? "You've already received this week's reading" : "이번 주의 운명은 이미 받으셨습니다")
-              : (english ? "Draw three cards to reflect on your past, present, and future." : "세 장의 카드를 뽑아 과거와 현재, 미래의 운명을 읽어 보세요.")
+              : (english ? "Draw three cards to look back on your past and present, and read this week from several angles." : "세 장으로 과거와 현재를 돌아보고, 이번 주의 운명을 여러 각도에서 읽습니다.")
         }
         noteToned={blockedThree !== undefined || retainedThree}
         faces={

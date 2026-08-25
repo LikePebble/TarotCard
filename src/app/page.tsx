@@ -30,7 +30,7 @@ export default async function HomePage() {
           <p className="mt-3.5 max-w-[300px] text-[15px] text-muted lg:max-w-[560px] lg:text-[17px]">
             {english
               ? "Draw a card, read its meaning, and build your collection of 78 cards."
-              : "카드를 뽑고 해석을 읽으며 78장의 컬렉션을 완성해 보세요."}
+              : "카드를 뽑아 해석을 읽고, 만난 카드를 78장 컬렉션에 모아 보세요."}
           </p>
           <div className="mt-6 lg:mt-9 lg:flex lg:gap-3.5">
             <Link href="/reading" className="btn btn-gold w-full lg:w-auto">

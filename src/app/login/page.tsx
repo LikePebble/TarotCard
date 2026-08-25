@@ -64,8 +64,8 @@ export default function LoginPage() {
           </h1>
           <p className="mx-auto mt-2 max-w-[340px] text-sm leading-relaxed text-muted">
             {user
-              ? (english ? "Your account is connected, so your readings and collection are kept safely." : "계정이 연결되어 기록과 수집 카드가 안전하게 보관됩니다.")
-              : (english ? "Continue with Kakao or Google to keep your readings across devices." : "카카오 및 Google 계정으로 간편하게 시작하세요. 나만의 리딩 기록을 기기 간에 자유롭게 이어가세요.")}
+              ? (english ? "Your account is connected, so your readings and collection are kept safely." : "계정이 연결되었습니다. 리딩 기록과 수집한 카드를 다른 기기에서도 이어서 볼 수 있습니다.")
+              : (english ? "Continue with Kakao or Google to keep your readings across devices." : "카카오 또는 Google 계정으로 로그인하면 다른 기기에서도 리딩 기록을 이어서 볼 수 있습니다.")}
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export default function LoginPage() {
                       aria-hidden
                     />
                     <span>
-                      {english ? "Sync your journal and drawn cards across devices" : "기기 변경 시에도 타로 일지 및 뽑은 카드 자동 동기화"}
+                      {english ? "Sync your journal and drawn cards across devices" : "다른 기기에서도 타로 일지와 뽑은 카드 이어 보기"}
                     </span>
                   </li>
                   <li className="flex items-start gap-2.5">
@@ -140,7 +140,7 @@ export default function LoginPage() {
                       className="text-gold-soft flex-shrink-0 mt-0.5"
                       aria-hidden
                     />
-                    <span>{english ? "Keep your 78-card collection" : "78장 타로 카드 도감 컬렉션 영구 보관"}</span>
+                    <span>{english ? "Keep your 78-card collection" : "78장 타로 카드 컬렉션 계정에 보관"}</span>
                   </li>
                 </ul>
               </div>
