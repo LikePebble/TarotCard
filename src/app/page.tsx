@@ -43,6 +43,16 @@ export default async function HomePage() {
               {english ? "Collection" : "컬렉션"}
             </Link>
           </div>
+          <p className="mt-4 text-center text-[13px] text-muted lg:text-left lg:text-[14px]">
+            <Link
+              href="/card-meanings"
+              className="underline underline-offset-4 transition-colors hover:text-gold-soft"
+            >
+              {english
+                ? "Browse upright and reversed meanings for all 78 tarot cards"
+                : "타로 카드 78장의 정방향·역방향 의미 보기"}
+            </Link>
+          </p>
         </div>
         <HomeHero />
       </main>

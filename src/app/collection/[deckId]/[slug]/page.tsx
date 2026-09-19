@@ -134,6 +134,7 @@ export default async function CardDetailPage({
   const reversed = reversedCards[card.slug];
   const reversedParagraphs = reversed ? (english ? reversed.en : reversed.ko).split("\n\n") : [];
   const reversedEnParagraphs = reversed ? reversed.en.split("\n\n") : [];
+  const canonical = `${SITE_URL}/collection/classic/${card.slug}`;
 
   const arcanaLabel =
     card.arcana === "major"
@@ -182,11 +183,19 @@ export default async function CardDetailPage({
               {displayName}
               {!english ? <span className="mt-1 block text-base font-normal text-muted lg:text-[22px]">{card.nameEn}</span> : null}
             </h1>
-            <div className="space-y-3 font-serif text-[15px] text-body lg:max-w-[560px] lg:text-base">
-              {paragraphs.map((paragraph) => (
-                <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-              ))}
-            </div>
+            <section aria-labelledby="upright-meaning-title">
+              <h2
+                id="upright-meaning-title"
+                className="mb-3 font-display text-[19px] font-semibold text-gold-soft lg:text-[22px]"
+              >
+                {english ? `${displayName} upright meaning` : `${displayName} 정방향 의미`}
+              </h2>
+              <div className="space-y-3 font-serif text-[15px] text-body lg:max-w-[560px] lg:text-base">
+                {paragraphs.map((paragraph) => (
+                  <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+                ))}
+              </div>
+            </section>
             {!english ? <details className="mt-3.5 lg:mt-5">
               <summary className="inline-block min-h-11 cursor-pointer pt-2.5 text-[13.5px] text-muted underline underline-offset-4 hover:text-cream">
                 영어 원문 보기
@@ -265,6 +274,56 @@ export default async function CardDetailPage({
             />
           </div>
         </div>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "WebPage",
+                name: english
+                  ? `${card.nameEn} Tarot Card Meaning`
+                  : `${nameKo} ${card.nameEn} 타로 카드 의미`,
+                description,
+                inLanguage: english ? "en" : "ko",
+                url: canonical,
+                about: {
+                  "@type": "Thing",
+                  name: english ? card.nameEn : `${nameKo} (${card.nameEn})`,
+                },
+                isPartOf: {
+                  "@type": "WebSite",
+                  name: english ? "Arca Tarot" : SITE_NAME,
+                  url: SITE_URL,
+                },
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: english ? "Home" : "홈",
+                    item: `${SITE_URL}/`,
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: english ? "Tarot Card Meanings" : "타로 카드 78장 의미",
+                    item: `${SITE_URL}/card-meanings`,
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 3,
+                    name: displayName,
+                    item: canonical,
+                  },
+                ],
+              },
+            ]),
+          }}
+        />
       </main>
     </div>
   );
